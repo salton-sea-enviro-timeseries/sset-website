@@ -1,0 +1,45 @@
+import React from "react";
+import { makeStyles, Divider } from "@material-ui/core";
+import { orange } from "@material-ui/core/colors";
+import Footer from "./Footer";
+import Navbar from "./Navbar";
+
+const Layout: React.FC = ({ children }) => {
+  const classes = useStyles();
+  return (
+    <>
+      <Navbar />
+      <Divider className={classes.divider} variant="middle" />
+      <main className={classes.main}>{children}</main>
+      <Footer />
+    </>
+  );
+};
+
+const useStyles = makeStyles((theme) => ({
+  divider: {
+    // backgroundColor: theme.palette.secondary.main,
+    height: "2px"
+  },
+  header: {
+    fontWeight: theme.typography.fontWeightBold
+  },
+  main: {
+    flex: 1,
+    // display: "flex",
+    // flexDirection: "column",
+    // justifyContent: "center",
+    // alignItems: "center",
+    padding: theme.spacing(5, 0)
+  },
+  accentUnderline: {
+    boxShadow: `inset 0 -2px 0 ${orange[500]}`
+  },
+  accentWord: {
+    color: orange[500],
+    backgroundColor: orange[100],
+    padding: theme.spacing(0, 1)
+  }
+}));
+
+export default Layout;
