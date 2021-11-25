@@ -187,7 +187,6 @@ export const getStaticProps = async () => {
   const data = Object.keys(mergedData).reduce((acc, key) => {
     acc[key] = {
       site: key,
-      id: 0,
       // From Photometer
       ammonia: getAverage("Ammonia", mergedData[key]),
       nitrate: getAverage("Nitrate", mergedData[key]),

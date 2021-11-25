@@ -1,5 +1,4 @@
 export interface SiteData {
-  id: number;
   site: string;
   longitude: number;
   latitude: number;

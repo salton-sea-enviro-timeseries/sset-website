@@ -19,7 +19,6 @@ const formatValue = (value: any) => {
   return value.toFixed(2);
 };
 const columns = [
-  { field: "id", headerName: "ID", width: 90, editable: false },
   {
     field: "site",
     headerName: "Station",
@@ -126,28 +125,29 @@ const columns = [
 
 export default function Table(props: TableProps) {
   const classes = useStyles();
-  const rows = Object.values(props.data).map((row, index) => {
-    return (row = {
-      id: index,
-      site: row.site,
-      longitude: row.longitude,
-      latitude: row.latitude,
-      salinity: formatValue(row.salinity),
-      water_temperature: formatValue(row.water_temperature),
-      ph: formatValue(row.ph),
-      turbidity: formatValue(row.turbidity),
-      dissolved_oxygen: formatValue(row.dissolved_oxygen),
-      chlorophyll: formatValue(row.chlorophyll),
-      phycoerythrin: formatValue(row.phycoerythrin),
-      nitrate: formatValue(row.nitrate),
-      nitrite: formatValue(row.nitrite),
-      ammonia: formatValue(row.ammonia),
-      phosphate_hr: formatValue(row.phosphate_hr),
-      phosphate_lr: formatValue(row.phosphate_lr),
-      sulphate: formatValue(row.sulphate),
-      sulphide: formatValue(row.sulphide)
+  const data = Object.values(props.data).map((d) => {
+    return (d = {
+      site: d.site,
+      longitude: d.longitude,
+      latitude: d.latitude,
+      salinity: formatValue(d.salinity),
+      water_temperature: formatValue(d.water_temperature),
+      ph: formatValue(d.ph),
+      turbidity: formatValue(d.turbidity),
+      dissolved_oxygen: formatValue(d.dissolved_oxygen),
+      chlorophyll: formatValue(d.chlorophyll),
+      phycoerythrin: formatValue(d.phycoerythrin),
+      nitrate: formatValue(d.nitrate),
+      nitrite: formatValue(d.nitrite),
+      ammonia: formatValue(d.ammonia),
+      phosphate_hr: formatValue(d.phosphate_hr),
+      phosphate_lr: formatValue(d.phosphate_lr),
+      sulphate: formatValue(d.sulphate),
+      sulphide: formatValue(d.sulphide)
     });
   });
+
+  const rows = data.map((row, index) => ({ ...row, id: index }));
 
   return (
     <DataGrid
