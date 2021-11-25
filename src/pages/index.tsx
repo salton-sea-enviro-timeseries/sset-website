@@ -22,7 +22,7 @@ import {
   Data,
   SiteData
 } from "types";
-import { getAverage, getRange } from "utils";
+import { colorScale, getAverage, getColorFromScale, getRange } from "utils";
 
 const Home = ({ data }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const classes = useStyles();
@@ -73,12 +73,12 @@ const Home = ({ data }: InferGetStaticPropsType<typeof getStaticProps>) => {
                     activeRange.mid !== undefined &&
                     activeRange.max !== undefined && (
                       <ContinuousColorLegend
-                        endColor="#2a4858"
-                        endTitle={activeRange.max}
-                        midColor="#4abd8c"
-                        midTitle={activeRange.mid}
-                        startColor="#fafa6e"
+                        startColor={colorScale[0]}
                         startTitle={activeRange.min}
+                        midColor={colorScale[1]}
+                        midTitle={activeRange.mid}
+                        endColor={colorScale[2]}
+                        endTitle={activeRange.max}
                       />
                     )}
                 </Box>
@@ -127,7 +127,12 @@ const Home = ({ data }: InferGetStaticPropsType<typeof getStaticProps>) => {
               pins={Object.values(data).map((value) => {
                 return {
                   latitude: value.latitude as number,
-                  longitude: value.longitude as number
+                  longitude: value.longitude as number,
+                  color: getColorFromScale(
+                    value[parameter],
+                    activeRange.min as number,
+                    activeRange.max as number
+                  )
                 };
               })}
             />
