@@ -126,10 +126,9 @@ const columns = [
 
 export default function Table(props: TableProps) {
   const classes = useStyles();
-  let counter = 0;
-  const rows = Object.values(props.data).map((row) => {
+  const rows = Object.values(props.data).map((row, index) => {
     return (row = {
-      id: counter++,
+      id: index,
       site: row.site,
       longitude: row.longitude,
       latitude: row.latitude,
