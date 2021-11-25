@@ -1,6 +1,6 @@
 import React from "react";
 import ReactMapGL, { Marker, ViewportProps } from "react-map-gl";
-
+import "mapbox-gl/dist/mapbox-gl.css";
 const LATITUDE = 33.484689;
 const LONGITUDE = -116.059487;
 const SIZE = 20;
