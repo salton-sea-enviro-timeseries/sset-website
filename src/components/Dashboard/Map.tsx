@@ -7,7 +7,7 @@ const SIZE = 20;
 const ZOOM = 12;
 
 interface MapProps {
-  pins: { latitude: number; longitude: number }[];
+  pins: { latitude: number; longitude: number; color: string }[];
 }
 
 export default function Map({ pins }: MapProps) {
@@ -34,7 +34,7 @@ export default function Map({ pins }: MapProps) {
       mapboxApiAccessToken={process.env.NEXT_PUBLIC_MB_TOKEN}
       onViewportChange={onViewportChange}
     >
-      {pins.map(({ latitude, longitude }, i) => (
+      {pins.map(({ latitude, longitude, color }, i) => (
         <Marker
           key={`${i}-${latitude}-${longitude}`}
           latitude={latitude}
@@ -45,7 +45,7 @@ export default function Map({ pins }: MapProps) {
             viewBox="0 0 24 24"
             style={{
               cursor: "pointer",
-              fill: "#d00",
+              fill: color,
               stroke: "none",
               transform: `translate(${-SIZE / 2}px,${-SIZE}px)`
             }}
