@@ -27,13 +27,20 @@ const columns = [
   },
   {
     field: "latitude",
-    headerName: "Lat",
+    headerName: "Lat.",
+    sortable: false,
+    disableColumnMenu: true,
+    disableColumnFilter: true,
     width: 110,
     editable: false
   },
   {
     field: "longitude",
     headerName: "Lon.",
+    sortable: false,
+    disableColumnMenu: true,
+    disableColumnFilter: true,
+
     width: 110,
     editable: false
   },
