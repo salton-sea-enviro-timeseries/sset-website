@@ -2,6 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Data } from "types";
 import { DataGrid } from "@material-ui/data-grid";
+import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles({
   table: {
@@ -14,7 +15,7 @@ interface TableProps {
   data: Data;
 }
 
-const formatValue = (value: any) => {
+const formatValue = (value: number) => {
   if (!value) return "";
   return value.toFixed(2);
 };
@@ -133,7 +134,7 @@ const columns = [
 export default function Table(props: TableProps) {
   const classes = useStyles();
   const data = Object.values(props.data).map((d) => {
-    return (d = {
+    return {
       site: d.site,
       longitude: d.longitude,
       latitude: d.latitude,
@@ -151,19 +152,21 @@ export default function Table(props: TableProps) {
       phosphate_lr: formatValue(d.phosphate_lr),
       sulphate: formatValue(d.sulphate),
       sulphide: formatValue(d.sulphide)
-    });
+    };
   });
 
   const rows = data.map((row, index) => ({ ...row, id: index }));
 
   return (
-    <DataGrid
-      className={classes.table}
-      density="compact"
-      rows={rows}
-      autoPageSize
-      columns={columns}
-      disableSelectionOnClick
-    />
+    <Paper>
+      <DataGrid
+        className={classes.table}
+        density="compact"
+        rows={rows}
+        autoPageSize
+        columns={columns}
+        disableSelectionOnClick
+      />
+    </Paper>
   );
 }
