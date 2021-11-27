@@ -1,17 +1,12 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Table as MuiTable } from "@material-ui/core";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
 import { Data } from "types";
+import { DataGrid } from "@material-ui/data-grid";
 
 const useStyles = makeStyles({
   table: {
-    minWidth: 650
+    minWidth: 650,
+    minHeight: 500
   }
 });
 
@@ -19,74 +14,156 @@ interface TableProps {
   data: Data;
 }
 
-const formatValue = (value: number) => {
+const formatValue = (value: any) => {
   if (!value) return "";
   return value.toFixed(2);
 };
+const columns = [
+  {
+    field: "site",
+    headerName: "Station",
+    width: 150,
+    editable: false
+  },
+  {
+    field: "latitude",
+    headerName: "Lat.",
+    sortable: false,
+    disableColumnMenu: true,
+    disableColumnFilter: true,
+    width: 110,
+    editable: false
+  },
+  {
+    field: "longitude",
+    headerName: "Lon.",
+    sortable: false,
+    disableColumnMenu: true,
+    disableColumnFilter: true,
+
+    width: 110,
+    editable: false
+  },
+  {
+    field: "salinity",
+    headerName: "Salinity",
+    type: "number",
+    width: 130,
+    editable: false
+  },
+  {
+    field: "water_temperature",
+    headerName: "Temperature",
+    type: "number",
+    width: 160,
+    editable: false
+  },
+  {
+    field: "ph",
+    headerName: "pH",
+    type: "number",
+    width: 110,
+    editable: false
+  },
+  {
+    field: "turbidity",
+    headerName: "Turbidity",
+    type: "number",
+    width: 150,
+    editable: false
+  },
+  {
+    field: "dissolved_oxygen",
+    headerName: "Dissolved Oxygen",
+    type: "number",
+    width: 190,
+    editable: false
+  },
+  {
+    field: "chlorophyll",
+    headerName: "chlorophyll",
+    type: "number",
+    width: 150,
+    editable: false
+  },
+  {
+    field: "phycoerythrin",
+    headerName: "Phycoerythrin",
+    type: "number",
+    width: 190,
+    editable: false
+  },
+  {
+    field: "nitrate",
+    headerName: "Nitrate",
+    type: "number",
+    width: 130,
+    editable: false
+  },
+  {
+    field: "ammonia",
+    headerName: "Ammonia",
+    type: "number",
+    width: 150,
+    editable: false
+  },
+  {
+    field: "phosphate_hr",
+    headerName: "Phosphate",
+    type: "number",
+    width: 150,
+    editable: false
+  },
+  {
+    field: "sulphate",
+    headerName: "Sulphate",
+    type: "number",
+    width: 150,
+    editable: false
+  },
+  {
+    field: "sulphide",
+    headerName: "Sulphide",
+    type: "number",
+    width: 150,
+    editable: false
+  }
+];
 
 export default function Table(props: TableProps) {
   const classes = useStyles();
+  const data = Object.values(props.data).map((d) => {
+    return (d = {
+      site: d.site,
+      longitude: d.longitude,
+      latitude: d.latitude,
+      salinity: formatValue(d.salinity),
+      water_temperature: formatValue(d.water_temperature),
+      ph: formatValue(d.ph),
+      turbidity: formatValue(d.turbidity),
+      dissolved_oxygen: formatValue(d.dissolved_oxygen),
+      chlorophyll: formatValue(d.chlorophyll),
+      phycoerythrin: formatValue(d.phycoerythrin),
+      nitrate: formatValue(d.nitrate),
+      nitrite: formatValue(d.nitrite),
+      ammonia: formatValue(d.ammonia),
+      phosphate_hr: formatValue(d.phosphate_hr),
+      phosphate_lr: formatValue(d.phosphate_lr),
+      sulphate: formatValue(d.sulphate),
+      sulphide: formatValue(d.sulphide)
+    });
+  });
+
+  const rows = data.map((row, index) => ({ ...row, id: index }));
 
   return (
-    <TableContainer component={Paper}>
-      <MuiTable
-        className={classes.table}
-        size="small"
-        aria-label="a dense table"
-      >
-        <TableHead>
-          <TableRow>
-            <TableCell>Station</TableCell>
-            <TableCell align="right">Lat.</TableCell>
-            <TableCell align="right">Lon.</TableCell>
-            <TableCell align="right">Salinity</TableCell>
-            <TableCell align="right">Temperature</TableCell>
-            <TableCell align="right">pH</TableCell>
-            <TableCell align="right">Turbitdity</TableCell>
-            <TableCell align="right">Dissolved Oxygen</TableCell>
-            <TableCell align="right">Chlorophyll</TableCell>
-            <TableCell align="right">Phycoerythrin</TableCell>
-            <TableCell align="right">Nitrate</TableCell>
-            <TableCell align="right">Ammonia</TableCell>
-            <TableCell align="right">Phosphate</TableCell>
-            <TableCell align="right">Sulphate</TableCell>
-            <TableCell align="right">Sulphide</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {Object.values(props.data).map((row) => (
-            <TableRow key={row.site}>
-              <TableCell component="th" scope="row">
-                {row.site}
-              </TableCell>
-              <TableCell align="right">{row.latitude}</TableCell>
-              <TableCell align="right">{row.longitude}</TableCell>
-              <TableCell align="right">{formatValue(row.salinity)}</TableCell>
-              <TableCell align="right">
-                {formatValue(row.water_temperature)}
-              </TableCell>
-              <TableCell align="right">{formatValue(row.ph)}</TableCell>
-              <TableCell align="right">{formatValue(row.turbidity)}</TableCell>
-              <TableCell align="right">
-                {formatValue(row.dissolved_oxygen)}
-              </TableCell>
-              <TableCell align="right">
-                {formatValue(row.chlorophyll)}
-              </TableCell>
-              <TableCell align="right">
-                {formatValue(row.phycoerythrin)}
-              </TableCell>
-              <TableCell align="right">{formatValue(row.nitrate)}</TableCell>
-              <TableCell align="right">{formatValue(row.ammonia)}</TableCell>
-              <TableCell align="right">
-                {formatValue(row.phosphate_hr)}
-              </TableCell>
-              <TableCell align="right">{formatValue(row.sulphate)}</TableCell>
-              <TableCell align="right">{formatValue(row.sulphide)}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </MuiTable>
-    </TableContainer>
+    <DataGrid
+      className={classes.table}
+      density="compact"
+      rows={rows}
+      autoPageSize
+      columns={columns}
+      disableSelectionOnClick
+    />
   );
 }
