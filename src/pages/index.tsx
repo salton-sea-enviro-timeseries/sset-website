@@ -126,6 +126,7 @@ const Home = ({ data }: InferGetStaticPropsType<typeof getStaticProps>) => {
             <Map
               pins={Object.values(data).map((value) => {
                 return {
+                  site: value.site,
                   latitude: value.latitude as number,
                   longitude: value.longitude as number,
                   color: getColorFromScale(
