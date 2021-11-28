@@ -17,11 +17,11 @@ import { Box, Typography } from "@material-ui/core";
 const Links = [
   {
     href: "/",
-    label: "Dashboard 1"
+    label: "Home"
   },
   {
-    href: "/dashboard-2",
-    label: "Dashboard 2"
+    href: "/dashboard",
+    label: "Dashboard"
   }
 ];
 
