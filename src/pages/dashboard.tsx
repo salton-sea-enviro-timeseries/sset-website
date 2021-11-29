@@ -19,6 +19,7 @@ import {
   RawNutrientsData,
   RawPhotometerData,
   Parameter,
+  Units,
   Data,
   SiteData
 } from "types";
@@ -29,6 +30,8 @@ const Dashboard = ({
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const classes = useStyles();
   const [parameter, setParameter] = useState<Parameter>(Parameter.Chlorophyll);
+  const [units, setUnits] = useState<string>(Units.chlorophyll);
+
   const [activeRange, setActiveRange] = useState<ReturnType<typeof getRange>>(
     getRange(Parameter.Chlorophyll as keyof SiteData, data)
   );
@@ -41,6 +44,12 @@ const Dashboard = ({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setParameter(event.target.value as Parameter);
+    handleUnitsForLegend(event.target.value as keyof typeof Units);
+  };
+
+  const handleUnitsForLegend = (value: keyof typeof Units) => {
+    let u = value;
+    setUnits(Units[u]);
   };
 
   return (
@@ -76,11 +85,11 @@ const Dashboard = ({
                     activeRange.max !== undefined && (
                       <ContinuousColorLegend
                         startColor={colorScale[0]}
-                        startTitle={activeRange.min}
+                        startTitle={`${activeRange.min} ${units}`}
                         midColor={colorScale[1]}
-                        midTitle={activeRange.mid}
+                        midTitle={`${activeRange.mid} ${units}`}
                         endColor={colorScale[2]}
-                        endTitle={activeRange.max}
+                        endTitle={`${activeRange.max} ${units}`}
                       />
                     )}
                 </Box>

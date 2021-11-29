@@ -37,6 +37,20 @@ export enum Parameter {
   "Sulphide" = "sulphide"
 }
 
+export enum Units {
+  "salinity" = "PSU",
+  "water_temperature" = "°C",
+  "ph" = "ph",
+  "turbidity" = "FNU",
+  "dissolved_oxygen" = "mg/L",
+  "chlorophyll" = "μg/L",
+  "phycoerythrin" = "mg/L",
+  "nitrate" = "mg/L",
+  "ammonia" = "mg/L",
+  "sulphate" = "mg/L",
+  "sulphide" = "mg/L"
+}
+
 export interface RawPhotometerData {
   Date: string;
   "Sample ID"?: string;
