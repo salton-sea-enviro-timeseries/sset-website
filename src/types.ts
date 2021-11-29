@@ -44,7 +44,7 @@ export enum Units {
   "turbidity" = "FNU",
   "dissolved_oxygen" = "mg/L",
   "chlorophyll" = "μg/L",
-  "phycoerythrin" = "mg/L",
+  "phycoerythrin" = "μg/L",
   "nitrate" = "mg/L",
   "ammonia" = "mg/L",
   "phosphate" = "mg/L",

@@ -7,7 +7,8 @@ import {
   Grid,
   makeStyles,
   MenuItem,
-  TextField
+  TextField,
+  Typography
 } from "@material-ui/core";
 import DownloadIcon from "@material-ui/icons/CloudDownload";
 import { ContinuousColorLegend } from "react-vis";
@@ -30,7 +31,6 @@ const Dashboard = ({
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const classes = useStyles();
   const [parameter, setParameter] = useState<Parameter>(Parameter.Chlorophyll);
-  const [units, setUnits] = useState<string>(Units.chlorophyll);
 
   const [activeRange, setActiveRange] = useState<ReturnType<typeof getRange>>(
     getRange(Parameter.Chlorophyll as keyof SiteData, data)
@@ -44,12 +44,6 @@ const Dashboard = ({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setParameter(event.target.value as Parameter);
-    handleUnitsForLegend(event.target.value as keyof typeof Units);
-  };
-
-  const handleUnitsForLegend = (value: keyof typeof Units) => {
-    let u = value;
-    setUnits(Units[u]);
   };
 
   return (
@@ -57,7 +51,7 @@ const Dashboard = ({
       <Box px={1}>
         <Box pb={1}>
           <Grid container spacing={1}>
-            <Grid container item xs={12} md={6} spacing={1}>
+            <Grid container item xs={12} md={6} spacing={1} alignItems="center">
               <Grid item xs md={6}>
                 <TextField
                   fullWidth
@@ -80,22 +74,23 @@ const Dashboard = ({
               </Grid>
               <Grid item xs md={6}>
                 <Box className={classes.legend}>
+                  <Typography variant="caption">{Units[parameter]}</Typography>
                   {activeRange.min !== undefined &&
                     activeRange.mid !== undefined &&
                     activeRange.max !== undefined && (
                       <ContinuousColorLegend
                         startColor={colorScale[0]}
-                        startTitle={`${activeRange.min} ${units}`}
+                        startTitle={activeRange.min}
                         midColor={colorScale[1]}
-                        midTitle={`${activeRange.mid} ${units}`}
+                        midTitle={activeRange.mid}
                         endColor={colorScale[2]}
-                        endTitle={`${activeRange.max} ${units}`}
+                        endTitle={activeRange.max}
                       />
                     )}
                 </Box>
               </Grid>
             </Grid>
-            <Grid container item xs={12} md={6}>
+            <Grid container item xs={12} md={6} alignItems="center">
               <Grid item xs>
                 <Box
                   display="flex"
