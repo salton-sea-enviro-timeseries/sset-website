@@ -47,6 +47,7 @@ export enum Units {
   "phycoerythrin" = "mg/L",
   "nitrate" = "mg/L",
   "ammonia" = "mg/L",
+  "phosphate" = "mg/L",
   "sulphate" = "mg/L",
   "sulphide" = "mg/L"
 }
