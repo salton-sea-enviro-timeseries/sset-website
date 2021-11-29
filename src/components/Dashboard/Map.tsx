@@ -1,6 +1,10 @@
 import { Tooltip, makeStyles } from "@material-ui/core";
 import React from "react";
-import ReactMapGL, { Marker, ViewportProps } from "react-map-gl";
+import ReactMapGL, {
+  Marker,
+  NavigationControl,
+  ViewportProps
+} from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 const LATITUDE = 33.47634;
@@ -36,6 +40,7 @@ export default function Map({ pins }: MapProps) {
       mapStyle="mapbox://styles/mapbox/dark-v9"
       mapboxApiAccessToken={process.env.NEXT_PUBLIC_MB_TOKEN}
       onViewportChange={onViewportChange}
+      scrollZoom={false}
     >
       {pins.map(({ latitude, longitude, color, site }, i) => (
         <Marker
@@ -70,6 +75,13 @@ export default function Map({ pins }: MapProps) {
           </Tooltip>
         </Marker>
       ))}
+      <NavigationControl
+        showCompass={false}
+        style={{
+          right: 10,
+          top: 10
+        }}
+      />
     </ReactMapGL>
   );
 }
