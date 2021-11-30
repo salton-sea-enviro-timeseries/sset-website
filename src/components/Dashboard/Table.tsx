@@ -6,7 +6,7 @@ import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles({
   table: {
-    minWidth: 650,
+    width: "100%",
     minHeight: 500
   }
 });
@@ -82,7 +82,7 @@ const columns = [
   },
   {
     field: "chlorophyll",
-    headerName: "chlorophyll",
+    headerName: "Chlorophyll",
     type: "number",
     width: 150,
     editable: false
@@ -154,7 +154,6 @@ export default function Table(props: TableProps) {
       sulphide: formatValue(d.sulphide)
     };
   });
-
   const rows = data.map((row, index) => ({ ...row, id: index }));
 
   return (

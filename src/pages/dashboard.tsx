@@ -124,7 +124,7 @@ const Dashboard = ({
           </Grid>
         </Box>
         <Grid container spacing={1}>
-          <Grid item xs md={6}>
+          <Grid item xs={12} md={6}>
             <Map
               pins={Object.values(data).map((value) => {
                 return {
@@ -140,7 +140,7 @@ const Dashboard = ({
               })}
             />
           </Grid>
-          <Grid item xs md={6}>
+          <Grid item xs={12} md={6}>
             <Table data={data} />
           </Grid>
         </Grid>
