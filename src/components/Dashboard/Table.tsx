@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Data } from "types";
 import { DataGrid } from "@material-ui/data-grid";
 import Paper from "@material-ui/core/Paper";
+import { Units } from "types";
 
 const useStyles = makeStyles({
   table: {
@@ -47,86 +48,86 @@ const columns = [
   },
   {
     field: "salinity",
-    headerName: "Salinity",
+    headerName: `Salinity (${Units.salinity})`,
     type: "number",
-    width: 130,
+    width: 180,
     editable: false
   },
   {
     field: "water_temperature",
-    headerName: "Temperature",
+    headerName: `Temperature (${Units.water_temperature})`,
     type: "number",
-    width: 160,
+    width: 190,
     editable: false
   },
   {
     field: "ph",
     headerName: "pH",
     type: "number",
-    width: 110,
+    width: 100,
     editable: false
   },
   {
     field: "turbidity",
-    headerName: "Turbidity",
+    headerName: `Turbidity (${Units.turbidity})`,
     type: "number",
-    width: 150,
+    width: 180,
     editable: false
   },
   {
     field: "dissolved_oxygen",
-    headerName: "Dissolved Oxygen",
+    headerName: `Dissolved Oxygen (${Units["dissolved_oxygen"]})`,
     type: "number",
-    width: 190,
+    width: 240,
     editable: false
   },
   {
     field: "chlorophyll",
-    headerName: "Chlorophyll",
+    headerName: `Chlorophyll (${Units.chlorophyll})`,
     type: "number",
-    width: 150,
+    width: 200,
     editable: false
   },
   {
     field: "phycoerythrin",
-    headerName: "Phycoerythrin",
+    headerName: `Phycoerythrin (${Units.phycoerythrin})`,
+    type: "number",
+    width: 220,
+    editable: false
+  },
+  {
+    field: "nitrate",
+    headerName: `Nitrate (${Units.nitrate})`,
+    type: "number",
+    width: 170,
+    editable: false
+  },
+  {
+    field: "ammonia",
+    headerName: `Ammonia (${Units.ammonia})`,
     type: "number",
     width: 190,
     editable: false
   },
   {
-    field: "nitrate",
-    headerName: "Nitrate",
-    type: "number",
-    width: 130,
-    editable: false
-  },
-  {
-    field: "ammonia",
-    headerName: "Ammonia",
-    type: "number",
-    width: 150,
-    editable: false
-  },
-  {
     field: "phosphate_hr",
-    headerName: "Phosphate",
+    headerName: `Phosphate (${Units.phosphate})`,
     type: "number",
-    width: 150,
+    width: 200,
     editable: false
   },
   {
     field: "sulphate",
-    headerName: "Sulphate",
+    headerName: `Sulphate (${Units.sulphate})`,
     type: "number",
-    width: 150,
+    width: 180,
     editable: false
   },
   {
     field: "sulphide",
-    headerName: "Sulphide",
+    headerName: `Sulphide (${Units.sulphide})`,
     type: "number",
-    width: 150,
+    width: 180,
     editable: false
   }
 ];
