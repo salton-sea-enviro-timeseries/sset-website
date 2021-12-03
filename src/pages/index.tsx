@@ -1,13 +1,20 @@
 // import Head from "next/head";
-import { Box } from "@material-ui/core";
 import Layout from "components/Layout";
+import Hero from "components/Hero";
+import AboutSaltonSeaSection from "components/AboutSaltonSeaSection";
 
 const Home = () => {
   return (
     <Layout>
-      <Box px={1}>
-        <h1>Home Page</h1>
-      </Box>
+      <Hero
+        bgColor="primary"
+        size="large"
+        bgImage="/hero.jpg"
+        bgImageOpacity={0.75}
+        title="Your landing page title here"
+        subtitle="Some nice words here."
+      />
+      <AboutSaltonSeaSection />
     </Layout>
   );
 };

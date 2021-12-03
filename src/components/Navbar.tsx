@@ -42,7 +42,12 @@ function Navbar() {
   };
 
   return (
-    <AppBar className={classes.navbar} position="static" elevation={0}>
+    <AppBar
+      className={classes.navbar}
+      color="transparent"
+      position="static"
+      elevation={0}
+    >
       <Container disableGutters={true}>
         <Toolbar className={classes.toolbar}>
           <Box display="flex" alignItems="center" justifyContent="center">
@@ -119,7 +124,7 @@ const useStyles = makeStyles((theme) => ({
     // backgroundColor: "#181818"
   },
   navlink: {
-    color: "#fff",
+    // color: "#fff",
     height: "100%",
     borderRadius: 0,
     "&:hover, &.active": {

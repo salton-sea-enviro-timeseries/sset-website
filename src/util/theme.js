@@ -12,7 +12,7 @@ const globalTheme = createTheme({
       main: "#14202B"
     },
     secondary: {
-      main: "#22EDED"
+      main: "#ca6d68"
     },
     background: {
       // Background for <body>

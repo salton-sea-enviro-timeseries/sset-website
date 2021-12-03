@@ -48,7 +48,7 @@ const Dashboard = ({
 
   return (
     <Layout>
-      <Box px={1}>
+      <Box px={1} py={5}>
         <Box pb={1}>
           <Grid container spacing={1}>
             <Grid container item xs={12} md={6} spacing={1} alignItems="center">

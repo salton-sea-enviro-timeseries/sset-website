@@ -9,7 +9,6 @@ const Layout: React.FC = ({ children }) => {
   return (
     <>
       <Navbar />
-      <Divider className={classes.divider} variant="middle" />
       <main className={classes.main}>{children}</main>
       <Footer />
     </>
@@ -25,12 +24,12 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: theme.typography.fontWeightBold
   },
   main: {
-    flex: 1,
+    flex: 1
     // display: "flex",
     // flexDirection: "column",
     // justifyContent: "center",
     // alignItems: "center",
-    padding: theme.spacing(5, 0)
+    // padding: theme.spacing(5, 0)
   },
   accentUnderline: {
     boxShadow: `inset 0 -2px 0 ${orange[500]}`
