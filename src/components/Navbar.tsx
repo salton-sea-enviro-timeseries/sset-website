@@ -46,12 +46,12 @@ function Navbar() {
       className={classes.navbar}
       color="transparent"
       position="static"
-      elevation={0}
+      elevation={1}
     >
       <Container disableGutters={true}>
         <Toolbar className={classes.toolbar}>
           <Box display="flex" alignItems="center" justifyContent="center">
-            <Typography>SSET</Typography>
+            <Typography>LOGO</Typography>
           </Box>
           <div className={classes.spacer} />
           <Hidden smUp={true} implementation="css">
@@ -92,19 +92,20 @@ function Navbar() {
             </Menu>
           </Hidden>
           <Hidden xsDown={true} implementation="css">
-            {Links.map((link, index) => (
-              <Button
-                key={index}
-                href={link.href}
-                size="small"
-                className={clsx(
-                  classes.navlink,
-                  isActiveLink(link.href) ? "active" : undefined
-                )}
-              >
-                {link.label}
-              </Button>
-            ))}
+            <Box height="100%" display="flex" alignItems="center">
+              {Links.map((link, index) => (
+                <Button
+                  key={index}
+                  href={link.href}
+                  size="small"
+                  variant={isActiveLink(link.href) ? "outlined" : undefined}
+                  color={isActiveLink(link.href) ? "primary" : undefined}
+                  className={classes.navlink}
+                >
+                  {link.label}
+                </Button>
+              ))}
+            </Box>
           </Hidden>
         </Toolbar>
       </Container>
@@ -124,15 +125,16 @@ const useStyles = makeStyles((theme) => ({
     // backgroundColor: "#181818"
   },
   navlink: {
+    margin: theme.spacing(0, 0.25)
     // color: "#fff",
-    height: "100%",
-    borderRadius: 0,
-    "&:hover, &.active": {
-      "& .MuiButton-label": {
-        height: "100%",
-        boxShadow: `inset 0 -2px 0 ${theme.palette.secondary.light}`
-      }
-    }
+    // height: "100%",
+    // borderRadius: 0,
+    // "&:hover, &.active": {
+    //   "& .MuiButton-label": {
+    //     height: "100%",
+    //     boxShadow: `inset 0 -2px 0 ${theme.palette.secondary.light}`
+    //   }
+    // }
   },
   toolbar: {
     alignItems: "stretch"

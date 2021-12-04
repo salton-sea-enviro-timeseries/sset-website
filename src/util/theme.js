@@ -4,15 +4,18 @@ import {
   ThemeProvider as MuiThemeProvider
 } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import { colors } from "@material-ui/core";
 
 const globalTheme = createTheme({
   palette: {
     primary: {
       // Use hue from colors or hex
-      main: "#14202B"
+      // main: "#14202B"
+      main: colors.teal[500]
     },
     secondary: {
-      main: "#ca6d68"
+      // main: "#ca6d68"
+      main: "#fe657d"
     },
     background: {
       // Background for <body>

@@ -18,7 +18,7 @@ function Footer() {
   const classes = useStyles();
 
   return (
-    <Box component="footer" bgcolor="primary.main">
+    <Box component="footer" bgcolor="grey.900" color="white" py={2}>
       <Container>
         <Grid container={true} justifyContent="space-between" spacing={4}>
           <Grid item={true} xs={12} md={4}>
@@ -104,10 +104,7 @@ function Footer() {
         </Grid>
         <Box pt={10}>
           <Typography align="center" variant="caption" component="p">
-            Built in the Coachella Valley ☀️ by{" "}
-            <MuiLink style={{ fontWeight: 700 }} href="https://godiego.me">
-              Diego Bernal
-            </MuiLink>
+            Built in the Coachella Valley ☀️
           </Typography>
         </Box>
       </Container>
