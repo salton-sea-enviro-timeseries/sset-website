@@ -2,6 +2,7 @@
 import Layout from "components/Layout";
 import Hero from "components/Hero";
 import AboutSaltonSeaSection from "components/AboutSaltonSeaSection";
+import AboutUsSection from "components/AboutUsSection";
 
 const Home = () => {
   return (
@@ -15,6 +16,7 @@ const Home = () => {
         subtitle="Some nice words here."
       />
       <AboutSaltonSeaSection />
+      <AboutUsSection />
     </Layout>
   );
 };
