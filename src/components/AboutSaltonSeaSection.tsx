@@ -8,7 +8,7 @@ const AboutSaltonSeaSection = () => {
   const classes = useStyles();
 
   return (
-    <Section>
+    <Section bgImage="/curves.png">
       <Container>
         <Box>
           <SectionHeader
