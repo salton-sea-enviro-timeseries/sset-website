@@ -22,6 +22,10 @@ const Links = [
   {
     href: "/dashboard",
     label: "Dashboard"
+  },
+  {
+    href: "/in-the-news",
+    label: "Featured In"
   }
 ];
 
