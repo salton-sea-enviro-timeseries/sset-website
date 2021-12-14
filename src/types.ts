@@ -1,3 +1,5 @@
+import { Url } from "url";
+
 export interface SiteData {
   site: string;
   longitude: number;
@@ -20,9 +22,10 @@ export interface SiteData {
 
 export interface MediaObject {
   title?: string;
+  provider?: string;
   description?: string;
   imageUrl?: string;
-  link?: string;
+  link: Url;
 }
 
 export interface Data {

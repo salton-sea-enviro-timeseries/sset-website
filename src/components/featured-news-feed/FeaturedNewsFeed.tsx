@@ -1,19 +1,13 @@
 import useSWR from "swr";
+import { MediaObject } from "types";
+import NewsCard from "./NewsCard";
 
-interface MediaObject {
-  title?: string;
-  description?: string;
-  imageUrl?: string;
-  link?: string;
-}
-
-const fetcher = async (url) => {
+const fetcher = async (url: string) => {
   const res = await fetch(url);
-
   // If the status code is not in the range 200-299,
   // we still try to parse and throw it.
   if (!res.ok) {
-    const error = new Error("An error occurred while fetching the data.");
+    const error: any = new Error("An error occurred while fetching the data.");
     // Attach extra info to the error object.
     error.info = await res.json();
     error.status = res.status;
@@ -38,10 +32,13 @@ const FeaturedNewsFeed = () => {
 
   if (error) return <div>failed to load</div>;
   if (!data) return <div>loading...</div>;
+  // map through data
 
-  return <div>hello {data[0].link}!</div>;
+  return data.map((nd, index) => {
+    return <NewsCard key={index} newsData={nd} />;
+  });
 
-  return <p>In the News</p>;
+  // return <NewsCard newsData={data} />;
 };
 
 export default FeaturedNewsFeed;

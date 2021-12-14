@@ -1,7 +1,7 @@
 // import Head from "next/head";
 import { Box } from "@material-ui/core";
 import Layout from "components/Layout";
-import FeaturedNewsFeed from "components/FeaturedNewsFeed";
+import FeaturedNewsFeed from "components/featured-news-feed/FeaturedNewsFeed";
 
 const InTheNews = () => {
   return (

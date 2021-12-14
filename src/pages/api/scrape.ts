@@ -2,13 +2,6 @@ const getMetaData = require("metadata-scraper");
 import type { NextApiRequest, NextApiResponse } from "next";
 import { MediaObject } from "types";
 
-// interface MediaObject {
-//   title?: string;
-//   description?: string;
-//   imageUrl?: string;
-//   link?: string;
-// }
-
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<MediaObject[]>
@@ -28,9 +21,10 @@ async function handler(
   console.log(response);
 
   const feature = response.map((article: any) => {
-    const { title, description, image, url } = article;
+    const { title, description, image, url, provider } = article;
     return {
       title,
+      provider,
       description,
       imageUrl: image,
       link: url
