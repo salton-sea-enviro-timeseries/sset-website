@@ -18,6 +18,14 @@ export interface SiteData {
   phosphate_lr: number;
 }
 
+export interface MediaObject {
+  title?: string;
+  provider?: string;
+  description?: string;
+  imageUrl?: string;
+  link: string;
+}
+
 export interface Data {
   [key: string]: SiteData;
 }
