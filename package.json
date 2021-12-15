@@ -15,12 +15,14 @@
     "chroma-js": "^2.1.2",
     "csvtojson": "^2.0.10",
     "lodash": "^4.17.21",
+    "metadata-scraper": "^0.2.46",
     "next": "12.0.3",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-map-gl": "^6.1.17",
     "react-vis": "^1.11.7",
-    "sass": "^1.43.4"
+    "sass": "^1.43.4",
+    "swr": "^1.1.1"
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "^4.0.0-beta.4",

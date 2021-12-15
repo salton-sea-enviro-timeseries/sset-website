@@ -3,6 +3,7 @@ import Layout from "components/Layout";
 import Hero from "components/Hero";
 import AboutSaltonSeaSection from "components/AboutSaltonSeaSection";
 import AboutUsSection from "components/AboutUsSection";
+import InTheNewsSection from "components/InTheNewsSection";
 
 const Home = () => {
   return (
@@ -17,6 +18,7 @@ const Home = () => {
       />
       <AboutSaltonSeaSection />
       <AboutUsSection />
+      <InTheNewsSection />
     </Layout>
   );
 };
