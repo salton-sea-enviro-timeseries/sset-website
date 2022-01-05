@@ -37,7 +37,7 @@ export default function Map({ pins }: MapProps) {
         minHeight: "470px"
       }}
       height="100%"
-      mapStyle="mapbox://styles/mapbox/dark-v9"
+      // mapStyle="mapbox://styles/mapbox/dark-v9"
       mapboxApiAccessToken={process.env.NEXT_PUBLIC_MB_TOKEN}
       onViewportChange={onViewportChange}
       scrollZoom={false}

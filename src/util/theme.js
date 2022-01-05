@@ -15,7 +15,7 @@ const globalTheme = createTheme({
     },
     secondary: {
       // main: "#ca6d68"
-      main: "#fe657d"
+      main: "#f896a6"
     },
     background: {
       // Background for <body>

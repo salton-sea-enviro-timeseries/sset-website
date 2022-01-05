@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     ["default", theme.palette.background.default],
     ["light", emphasize(theme.palette.background.default, 0.03)],
     ["primary", theme.palette.primary.main],
-    ["secondary", theme.palette.secondary.main]
+    ["secondary", theme.palette.secondary.light]
   ].reduce((acc, [name, value]) => {
     acc[`color${capitalize(name)}`] = {
       backgroundColor: value,
