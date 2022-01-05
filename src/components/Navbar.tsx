@@ -22,6 +22,10 @@ const Links = [
   {
     href: "/dashboard",
     label: "Dashboard"
+  },
+  {
+    href: "/contact-us",
+    label: "Contact Us"
   }
 ];
 

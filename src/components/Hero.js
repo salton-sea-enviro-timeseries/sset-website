@@ -13,23 +13,18 @@ function Hero(props) {
       bgImage={props.bgImage}
       bgImageOpacity={props.bgImageOpacity}
     >
-      <Container>
-        <Box textAlign="center">
-          <SectionHeader
-            title={props.title}
-            subtitle={props.subtitle}
-            size={4}
-          />
-          {/* <Button
-            to={props.buttonPath}
-            variant="contained"
-            size="large"
-            color={props.buttonColor}
-          >
-            {props.buttonText}
-          </Button> */}
-        </Box>
-      </Container>
+      {(props.title || props.subtitle) && (
+        <Container>
+          <Box textAlign="center">
+            <SectionHeader
+              title={props.title}
+              subtitle={props.subtitle}
+              size={4}
+              {...props.sectionHeaderProps}
+            />
+          </Box>
+        </Container>
+      )}
     </Section>
   );
 }

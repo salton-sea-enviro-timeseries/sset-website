@@ -22,7 +22,7 @@
     "react-map-gl": "^6.1.17",
     "react-vis": "^1.11.7",
     "sass": "^1.43.4",
-    "swr": "^1.1.1"
+    "swr": "^1.1.2"
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "^4.0.0-beta.4",
