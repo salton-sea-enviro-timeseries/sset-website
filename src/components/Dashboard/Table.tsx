@@ -1,9 +1,10 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Data } from "types";
-import { DataGrid } from "@material-ui/data-grid";
+import { SiteData } from "types";
+import { DataGrid, GridColDef } from "@material-ui/data-grid";
 import Paper from "@material-ui/core/Paper";
 import { Units } from "types";
+import { isArray } from "lodash";
 
 const useStyles = makeStyles({
   table: {
@@ -13,14 +14,17 @@ const useStyles = makeStyles({
 });
 
 interface TableProps {
-  data: Data;
+  data: SiteData[];
 }
 
-const formatValue = (value: number) => {
-  if (!value) return "";
-  return value.toFixed(2);
-};
 const columns = [
+  {
+    field: "date",
+    headerName: "Date",
+    width: 110,
+    editable: false,
+    type: "date"
+  },
   {
     field: "site",
     headerName: "Station",
@@ -110,7 +114,7 @@ const columns = [
     editable: false
   },
   {
-    field: "phosphate_hr",
+    field: "phosphate",
     headerName: `Phosphate (${Units.phosphate})`,
     type: "number",
     width: 200,
@@ -134,29 +138,12 @@ const columns = [
 
 export default function Table(props: TableProps) {
   const classes = useStyles();
-  const data = Object.values(props.data).map((d) => {
-    return {
-      site: d.site,
-      longitude: d.longitude,
-      latitude: d.latitude,
-      salinity: formatValue(d.salinity),
-      water_temperature: formatValue(d.water_temperature),
-      ph: formatValue(d.ph),
-      turbidity: formatValue(d.turbidity),
-      dissolved_oxygen: formatValue(d.dissolved_oxygen),
-      chlorophyll: formatValue(d.chlorophyll),
-      phycoerythrin: formatValue(d.phycoerythrin),
-      nitrate: formatValue(d.nitrate),
-      nitrite: formatValue(d.nitrite),
-      ammonia: formatValue(d.ammonia),
-      phosphate_hr: formatValue(d.phosphate_hr),
-      phosphate_lr: formatValue(d.phosphate_lr),
-      sulphate: formatValue(d.sulphate),
-      sulphide: formatValue(d.sulphide)
-    };
-  });
-  const rows = data.map((row, index) => ({ ...row, id: index }));
-
+  // HACK: need to handle error when google api key isnt set
+  const rows = (isArray(props.data) ? props.data : []).map((row, index) => ({
+    ...row,
+    id: index,
+    date: new Date(row.date)
+  }));
   return (
     <Paper>
       <DataGrid
