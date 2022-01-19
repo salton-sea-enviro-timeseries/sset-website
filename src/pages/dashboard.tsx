@@ -16,14 +16,7 @@ import { groupBy } from "lodash";
 import Layout from "components/Layout";
 import Map from "components/Dashboard/Map";
 import Table from "components/Dashboard/Table";
-import {
-  RawNutrientsData,
-  RawPhotometerData,
-  Parameter,
-  Units,
-  Data,
-  SiteData
-} from "types";
+import { RawNutrientsData, Parameter, Units, Data, SiteData } from "types";
 import { colorScale, getAverage, getColorFromScale, getRange } from "utils";
 
 const Dashboard = ({
@@ -31,10 +24,12 @@ const Dashboard = ({
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const classes = useStyles();
   const [parameter, setParameter] = useState<Parameter>(Parameter.Chlorophyll);
-
   const [activeRange, setActiveRange] = useState<ReturnType<typeof getRange>>(
     getRange(Parameter.Chlorophyll as keyof SiteData, data)
   );
+
+  const [isTableDataLoading, setIsTableDataLoading] = useState(false);
+  const [tableData, setIsTableData] = useState<SiteData[]>([]);
 
   useEffect(() => {
     setActiveRange(getRange(parameter as keyof SiteData, data));
@@ -45,6 +40,17 @@ const Dashboard = ({
   ) => {
     setParameter(event.target.value as Parameter);
   };
+
+  // TODO: temporary. use useSWR after code is merged to main
+  useEffect(() => {
+    setIsTableDataLoading(true);
+    fetch("api/data")
+      .then((res) => res.json())
+      .then((data) => {
+        setIsTableData(data);
+        setIsTableDataLoading(false);
+      });
+  }, []);
 
   return (
     <Layout>
@@ -145,7 +151,8 @@ const Dashboard = ({
             />
           </Grid>
           <Grid item xs={12} md={6}>
-            <Table data={data} />
+            {isTableDataLoading && <p>Loading...</p>}
+            {!isTableDataLoading && <Table data={tableData} />}
           </Grid>
         </Grid>
       </Box>
@@ -160,7 +167,7 @@ export const getStaticProps = async () => {
   /**
    * convert csv data from file to json
    */
-  const photometerData: RawPhotometerData[] = await csv().fromFile(
+  const photometerData: any[] = await csv().fromFile(
     path.join(path.resolve(process.cwd()), "public/data/photometer.csv")
   );
   const nutrientsData: RawNutrientsData[] = await csv().fromFile(
@@ -184,7 +191,7 @@ export const getStaticProps = async () => {
    * Merge both data sets and group by "site"
    */
   const mergedData: {
-    [key: string]: (RawNutrientsData | RawPhotometerData)[];
+    [key: string]: (RawNutrientsData | any)[];
   } = groupBy([...mappedPhotometerData, ...nutrientsData], "site");
 
   /**
@@ -192,6 +199,7 @@ export const getStaticProps = async () => {
    * Calculate mean values for each parameter
    */
   const data = Object.keys(mergedData).reduce((acc, key) => {
+    // @ts-ignore
     acc[key] = {
       site: key,
       // From Photometer
@@ -200,22 +208,13 @@ export const getStaticProps = async () => {
       nitrite: getAverage("Nitrite", mergedData[key]),
       sulphate: getAverage("Sulphate", mergedData[key]),
       sulphide: getAverage("Sulphide", mergedData[key]),
-      phosphate_hr: getAverage("Phosphate HR", mergedData[key]),
-      phosphate_lr: getAverage("Phosphate LR", mergedData[key]),
+      phosphate: getAverage("Phosphate LR", mergedData[key]),
       // From Nutrients
       latitude: parseFloat(
-        (
-          mergedData[key].find(
-            (d) => (d as RawNutrientsData).Latitude
-          ) as RawNutrientsData
-        )?.Latitude
+        (mergedData[key].find((d) => (d as any).Latitude) as any)?.Latitude
       ),
       longitude: parseFloat(
-        (
-          mergedData[key].find(
-            (d) => (d as RawNutrientsData).Longitude
-          ) as RawNutrientsData
-        )?.Longitude
+        (mergedData[key].find((d) => (d as any).Longitude) as any)?.Longitude
       ),
       salinity: getAverage("sal", mergedData[key]),
       water_temperature: getAverage("temp", mergedData[key]),

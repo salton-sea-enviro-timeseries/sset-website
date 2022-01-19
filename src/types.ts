@@ -1,4 +1,5 @@
 export interface SiteData {
+  date: string;
   site: string;
   longitude: number;
   latitude: number;
@@ -14,8 +15,7 @@ export interface SiteData {
   turbidity: number;
   salinity: number;
   dissolved_oxygen: number;
-  phosphate_hr: number;
-  phosphate_lr: number;
+  phosphate: number;
 }
 
 export interface MediaObject {
@@ -40,7 +40,7 @@ export enum Parameter {
   "Phycoerythrin" = "phycoerythrin",
   "Nitrate" = "nitrate",
   "Ammonia" = "ammonia",
-  // "Phosphate" = "phosphate",
+  "Phosphate" = "phosphate",
   "Sulphate" = "sulphate",
   "Sulphide" = "sulphide"
 }
@@ -60,37 +60,30 @@ export enum Units {
   "sulphide" = "mg/L"
 }
 
-export interface RawPhotometerData {
-  Date: string;
-  "Sample ID"?: string;
-  Nitrite: string;
-  Nitrate: string;
-  Ammonia: string;
-  "Phosphate HR": string;
-  "Phosphate LR": string;
-  Sulphate: string;
-  Sulphide: string;
-  Skip: string;
+type NoValue = "-" | "" | "N/A" | "" | ">>" | "<<";
+type NumericDataPoint = number | NoValue;
+
+export interface RawProbeData {
+  DATE: string;
+  "site name"?: string;
+  "Sal (psu)": NumericDataPoint;
+  "Temp (F)": NumericDataPoint;
+  pH: NumericDataPoint;
+  "ODO (mg/L)": NumericDataPoint;
+  "Cholorophyll (μg/L)": NumericDataPoint;
+  "PE (μg/L)": NumericDataPoint;
+  "GPS Latitude": number;
+  "GPS Longitude": number;
 }
 
 export interface RawNutrientsData {
-  date: string;
-  time: string;
-  Latitude: string;
-  Longitude: string;
-  "Barometer (mmHg)": string;
-  sal: string;
-  tds: string;
-  temp: string;
-  sigmat: string;
-  sigma: string;
-  pH: string;
-  orp: string;
-  turbidity: string;
-  ODO_sat: string;
-  ODO_mgl: string;
-  Chl: string;
-  pe: string;
-  depth: string;
-  site: string;
+  Date: string;
+  "Sample ID"?: string;
+  nitrite: NumericDataPoint;
+  nitrate: NumericDataPoint;
+  ammonia: NumericDataPoint;
+  phosphate: NumericDataPoint;
+  sulphate: NumericDataPoint;
+  sulphide: NumericDataPoint;
+  turbidity: NumericDataPoint;
 }
