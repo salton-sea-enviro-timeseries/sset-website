@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { emphasize } from "@material-ui/core/styles/colorManipulator";
 import capitalize from "@material-ui/core/utils/capitalize";
 import BackgroundImage from "./BackgroundImage";
+import { CSSProperties } from "@material-ui/core/styles/withStyles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,8 +24,8 @@ const useStyles = makeStyles((theme) => ({
     ["light", emphasize(theme.palette.background.default, 0.03)],
     ["primary", theme.palette.primary.main],
     ["secondary", theme.palette.secondary.light]
-  ].reduce((acc: any, [name, value]) => {
-    acc[`color${capitalize(name)}` as keyof typeof acc] = {
+  ].reduce((acc, [name, value]) => {
+    acc[`color${capitalize(name)}`] = {
       backgroundColor: value,
       // Ensure text is legible on background
       color: theme.palette.getContrastText(value),
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
       }
     };
     return acc;
-  }, {}),
+  }, {} as { [key: string]: CSSProperties }),
 
   colorInherit: {
     color: "inherit"
@@ -48,15 +49,16 @@ const useStyles = makeStyles((theme) => ({
     color: "inherit"
   }
 }));
-
-function Section(props: {
-  bgColor: string;
-  bgImage: string;
-  bgImageOpacity: string;
-  size: string;
-  className: string;
-  children: string;
-}) {
+interface SectionProps {
+  bgColor?: string;
+  bgImage?: string;
+  bgImageOpacity?: string;
+  size?: string;
+  className?: string;
+  style?: Object;
+  children: JSX.Element;
+}
+function Section(props: SectionProps) {
   const classes = useStyles();
 
   const {
