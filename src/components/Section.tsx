@@ -23,8 +23,8 @@ const useStyles = makeStyles((theme) => ({
     ["light", emphasize(theme.palette.background.default, 0.03)],
     ["primary", theme.palette.primary.main],
     ["secondary", theme.palette.secondary.light]
-  ].reduce((acc, [name, value]) => {
-    acc[`color${capitalize(name)}`] = {
+  ].reduce((acc: any, [name, value]) => {
+    acc[`color${capitalize(name)}` as keyof typeof acc] = {
       backgroundColor: value,
       // Ensure text is legible on background
       color: theme.palette.getContrastText(value),
@@ -49,7 +49,14 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Section(props) {
+function Section(props: {
+  bgColor: string;
+  bgImage: string;
+  bgImageOpacity: string;
+  size: string;
+  className: string;
+  children: string;
+}) {
   const classes = useStyles();
 
   const {
@@ -77,7 +84,7 @@ function Section(props) {
       py={verticalPadding}
       className={
         classes.root +
-        ` ${classes[`color${capitalize(bgColor)}`]}` +
+        ` ${classes[`color${capitalize(bgColor)}` as keyof typeof classes]}` +
         (className ? ` ${className}` : "")
       }
       {...otherProps}
