@@ -1,5 +1,4 @@
 import { Grid } from "@material-ui/core";
-import Skeleton from "@material-ui/lab/Skeleton";
 import { MediaObject } from "types";
 import NewsCard from "./NewsCard";
 
@@ -15,22 +14,6 @@ const FeaturedNewsFeed = ({ mediaObjects }: FeaturedNewsFeedProps) => {
           <NewsCard media={media} />
         </Grid>
       ))}
-    </Grid>
-  );
-};
-
-export const FeaturedNewsFeedLoader = () => {
-  return (
-    <Grid container spacing={2}>
-      <Grid item xs={12} sm={6} md={4}>
-        <Skeleton variant="rect" height={450} />
-      </Grid>
-      <Grid item xs={12} sm={6} md={4}>
-        <Skeleton variant="rect" height={450} />
-      </Grid>
-      <Grid item xs={12} sm={6} md={4}>
-        <Skeleton variant="rect" height={450} />
-      </Grid>
     </Grid>
   );
 };
