@@ -3,29 +3,15 @@ import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import Section from "components/Section";
 import SectionHeader from "components/SectionHeader";
-import FeaturedNewsFeed, {
-  FeaturedNewsFeedLoader
-} from "components/InTheNews/FeaturedNewsFeed";
-import { Typography } from "@material-ui/core";
-import { Skeleton } from "@material-ui/lab";
+import FeaturedNewsFeed from "components/InTheNews/FeaturedNewsFeed";
+import { MediaObject } from "types";
 
-const InTheNewsSection = ({ mediaObjects }: any) => {
+interface FeaturedNewsFeedProps {
+  mediaObjects: MediaObject[];
+}
+
+const InTheNewsSection = ({ mediaObjects }: FeaturedNewsFeedProps) => {
   const classes = useStyles();
-
-  if (!mediaObjects)
-    return (
-      <Section bgImage="/curves.png">
-        <Container>
-          <Box display="flex" flexDirection="column" alignItems="center">
-            <Typography gutterBottom align="center" variant="h3">
-              <Skeleton variant="text" width={200} />
-            </Typography>
-            <FeaturedNewsFeedLoader />
-          </Box>
-        </Container>
-      </Section>
-    );
-
   return (
     <Section bgImage="/curves.png">
       <Container>
