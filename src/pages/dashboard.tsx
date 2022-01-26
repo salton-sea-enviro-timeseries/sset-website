@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import type { InferGetStaticPropsType } from "next";
 // import Head from "next/head";
 import {
   Box,
@@ -16,24 +15,60 @@ import { groupBy } from "lodash";
 import Layout from "components/Layout";
 import Map from "components/Dashboard/Map";
 import Table from "components/Dashboard/Table";
-import { RawNutrientsData, Parameter, Units, Data, SiteData } from "types";
+import { Parameter, Units, Data, SiteData } from "types";
 import { colorScale, getAverage, getColorFromScale, getRange } from "utils";
+import { Skeleton } from "@material-ui/lab";
 
-const Dashboard = ({
-  data
-}: InferGetStaticPropsType<typeof getStaticProps>) => {
+const getMapData = (data: SiteData[]) => {
+  const dataBySite = groupBy(data, "site");
+  const mapData = Object.keys(dataBySite).reduce((acc, key) => {
+    // @ts-ignore
+    acc[key] = {
+      site: key,
+      // From Photometer
+      ammonia: getAverage("ammonia", dataBySite[key]),
+      nitrate: getAverage("nitrate", dataBySite[key]),
+      nitrite: getAverage("nitrite", dataBySite[key]),
+      sulphate: getAverage("sulphate", dataBySite[key]),
+      sulphide: getAverage("sulphide", dataBySite[key]),
+      phosphate: getAverage("phosphate", dataBySite[key]),
+      latitude: parseFloat(
+        (dataBySite[key].find((d) => (d as any).latitude) as any)?.latitude
+      ),
+      longitude: parseFloat(
+        (dataBySite[key].find((d) => (d as any).longitude) as any)?.longitude
+      ),
+      salinity: getAverage("salinity", dataBySite[key]),
+      water_temperature: getAverage("water_temperature", dataBySite[key]),
+      ph: getAverage("ph", dataBySite[key]),
+      turbidity: getAverage("turbidity", dataBySite[key]),
+      dissolved_oxygen: getAverage("dissolved_oxygen", dataBySite[key]),
+      chlorophyll: getAverage("chlorophyll", dataBySite[key]),
+      phycoerythrin: getAverage("phycoerythrin", dataBySite[key])
+    };
+    return acc;
+  }, {} as Data);
+  return mapData;
+};
+
+const Dashboard = () => {
   const classes = useStyles();
   const [parameter, setParameter] = useState<Parameter>(Parameter.Chlorophyll);
-  const [activeRange, setActiveRange] = useState<ReturnType<typeof getRange>>(
-    getRange(Parameter.Chlorophyll as keyof SiteData, data)
-  );
+  const [activeRange, setActiveRange] = useState<ReturnType<typeof getRange>>({
+    min: 0,
+    max: 0,
+    mid: 0
+  });
 
-  const [isTableDataLoading, setIsTableDataLoading] = useState(false);
-  const [tableData, setIsTableData] = useState<SiteData[]>([]);
+  const [isDataLoading, setIsDataLoading] = useState(false);
+  const [tableData, setTableData] = useState<SiteData[]>([]);
+  const [mapData, setMapData] = useState<Data | undefined>();
 
   useEffect(() => {
-    setActiveRange(getRange(parameter as keyof SiteData, data));
-  }, [parameter]);
+    if (mapData) {
+      setActiveRange(getRange(parameter as keyof SiteData, mapData));
+    }
+  }, [parameter, mapData]);
 
   const handleChangeParameter = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -41,15 +76,16 @@ const Dashboard = ({
     setParameter(event.target.value as Parameter);
   };
 
-  // TODO: temporary. use useSWR after code is merged to main
   useEffect(() => {
-    setIsTableDataLoading(true);
+    setIsDataLoading(true);
     fetch("api/data")
       .then((res) => res.json())
       .then((data) => {
-        setIsTableData(data);
-        setIsTableDataLoading(false);
-      });
+        setTableData(data);
+        const mapData = getMapData(data);
+        setMapData(mapData);
+      })
+      .finally(() => setIsDataLoading(false));
   }, []);
 
   return (
@@ -59,41 +95,51 @@ const Dashboard = ({
           <Grid container spacing={1}>
             <Grid container item xs={12} md={6} spacing={1} alignItems="center">
               <Grid item xs md={6}>
-                <TextField
-                  fullWidth
-                  label="Parameter"
-                  select
-                  size="small"
-                  variant="outlined"
-                  value={parameter}
-                  onChange={handleChangeParameter}
-                >
-                  {Object.keys(Parameter).map((key) => (
-                    <MenuItem
-                      key={Parameter[key as keyof typeof Parameter]}
-                      value={Parameter[key as keyof typeof Parameter]}
-                    >
-                      {key}
-                    </MenuItem>
-                  ))}
-                </TextField>
+                {!isDataLoading ? (
+                  <TextField
+                    fullWidth
+                    label="Parameter"
+                    select
+                    size="small"
+                    variant="outlined"
+                    value={parameter}
+                    onChange={handleChangeParameter}
+                  >
+                    {Object.keys(Parameter).map((key) => (
+                      <MenuItem
+                        key={Parameter[key as keyof typeof Parameter]}
+                        value={Parameter[key as keyof typeof Parameter]}
+                      >
+                        {key}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                ) : (
+                  <Skeleton variant="rect" height={40} />
+                )}
               </Grid>
               <Grid item xs md={6}>
-                <Box className={classes.legend}>
-                  <Typography variant="caption">{Units[parameter]}</Typography>
-                  {activeRange.min !== undefined &&
-                    activeRange.mid !== undefined &&
-                    activeRange.max !== undefined && (
-                      <ContinuousColorLegend
-                        startColor={colorScale[0]}
-                        startTitle={activeRange.min}
-                        midColor={colorScale[1]}
-                        midTitle={activeRange.mid}
-                        endColor={colorScale[2]}
-                        endTitle={activeRange.max}
-                      />
-                    )}
-                </Box>
+                {!isDataLoading ? (
+                  <Box className={classes.legend}>
+                    <Typography variant="caption">
+                      {Units[parameter]}
+                    </Typography>
+                    {activeRange.min !== undefined &&
+                      activeRange.mid !== undefined &&
+                      activeRange.max !== undefined && (
+                        <ContinuousColorLegend
+                          startColor={colorScale[0]}
+                          startTitle={activeRange.min}
+                          midColor={colorScale[1]}
+                          midTitle={activeRange.mid}
+                          endColor={colorScale[2]}
+                          endTitle={activeRange.max}
+                        />
+                      )}
+                  </Box>
+                ) : (
+                  <Skeleton variant="rect" height={40} />
+                )}
               </Grid>
             </Grid>
             <Grid container item xs={12} md={6} alignItems="center">
@@ -107,26 +153,34 @@ const Dashboard = ({
                   alignItems="center"
                 >
                   <Box pr={0.5}>
-                    <Button
-                      startIcon={<DownloadIcon />}
-                      size="small"
-                      variant="contained"
-                      href="/data/photometer.csv"
-                      download
-                    >
-                      Sensor Data
-                    </Button>
+                    {!isDataLoading ? (
+                      <Button
+                        startIcon={<DownloadIcon />}
+                        size="small"
+                        variant="contained"
+                        href="/data/photometer.csv"
+                        download
+                      >
+                        Sensor Data
+                      </Button>
+                    ) : (
+                      <Skeleton variant="rect" height={30} width="130px" />
+                    )}
                   </Box>
                   <Box pl={0.5}>
-                    <Button
-                      startIcon={<DownloadIcon />}
-                      size="small"
-                      variant="contained"
-                      href="/data/nutrients.csv"
-                      download
-                    >
-                      Nutrients Data
-                    </Button>
+                    {!isDataLoading ? (
+                      <Button
+                        startIcon={<DownloadIcon />}
+                        size="small"
+                        variant="contained"
+                        href="/data/nutrients.csv"
+                        download
+                      >
+                        Nutrients Data
+                      </Button>
+                    ) : (
+                      <Skeleton variant="rect" height={30} width="130px" />
+                    )}
                   </Box>
                 </Box>
               </Grid>
@@ -135,103 +189,38 @@ const Dashboard = ({
         </Box>
         <Grid container spacing={1}>
           <Grid item xs={12} md={6}>
-            <Map
-              pins={Object.values(data).map((value) => {
-                return {
-                  site: value.site,
-                  latitude: value.latitude as number,
-                  longitude: value.longitude as number,
-                  color: getColorFromScale(
-                    value[parameter],
-                    activeRange.min as number,
-                    activeRange.max as number
-                  )
-                };
-              })}
-            />
+            {!isDataLoading ? (
+              mapData && (
+                <Map
+                  pins={Object.values(mapData).map((value) => {
+                    return {
+                      site: value.site,
+                      latitude: value.latitude as number,
+                      longitude: value.longitude as number,
+                      color: getColorFromScale(
+                        value[parameter],
+                        activeRange.min as number,
+                        activeRange.max as number
+                      )
+                    };
+                  })}
+                />
+              )
+            ) : (
+              <Skeleton variant="rect" height="500px" />
+            )}
           </Grid>
           <Grid item xs={12} md={6}>
-            {isTableDataLoading && <p>Loading...</p>}
-            {!isTableDataLoading && <Table data={tableData} />}
+            {!isDataLoading ? (
+              <Table data={tableData} />
+            ) : (
+              <Skeleton variant="rect" height="100%" />
+            )}
           </Grid>
         </Grid>
       </Box>
     </Layout>
   );
-};
-
-export const getStaticProps = async () => {
-  const csv = require("csvtojson/v2");
-  const path = require("path");
-
-  /**
-   * convert csv data from file to json
-   */
-  const photometerData: any[] = await csv().fromFile(
-    path.join(path.resolve(process.cwd()), "public/data/photometer.csv")
-  );
-  const nutrientsData: RawNutrientsData[] = await csv().fromFile(
-    path.join(path.resolve(process.cwd()), "public/data/nutrients.csv")
-  );
-
-  /**
-   * rename "Sample ID" property from photometer data to "site"
-   * to match on nutrients data "site".
-   */
-  const mappedPhotometerData = photometerData.map((o) => {
-    const item = {
-      ...o,
-      site: o["Sample ID"]
-    };
-    delete item["Sample ID"];
-    return item;
-  });
-
-  /**
-   * Merge both data sets and group by "site"
-   */
-  const mergedData: {
-    [key: string]: (RawNutrientsData | any)[];
-  } = groupBy([...mappedPhotometerData, ...nutrientsData], "site");
-
-  /**
-   * Sanitize data by converting numeric values to float
-   * Calculate mean values for each parameter
-   */
-  const data = Object.keys(mergedData).reduce((acc, key) => {
-    // @ts-ignore
-    acc[key] = {
-      site: key,
-      // From Photometer
-      ammonia: getAverage("Ammonia", mergedData[key]),
-      nitrate: getAverage("Nitrate", mergedData[key]),
-      nitrite: getAverage("Nitrite", mergedData[key]),
-      sulphate: getAverage("Sulphate", mergedData[key]),
-      sulphide: getAverage("Sulphide", mergedData[key]),
-      phosphate: getAverage("Phosphate LR", mergedData[key]),
-      // From Nutrients
-      latitude: parseFloat(
-        (mergedData[key].find((d) => (d as any).Latitude) as any)?.Latitude
-      ),
-      longitude: parseFloat(
-        (mergedData[key].find((d) => (d as any).Longitude) as any)?.Longitude
-      ),
-      salinity: getAverage("sal", mergedData[key]),
-      water_temperature: getAverage("temp", mergedData[key]),
-      ph: getAverage("pH", mergedData[key]),
-      turbidity: getAverage("turbidity", mergedData[key]),
-      dissolved_oxygen: getAverage("ODO_mgl", mergedData[key]),
-      chlorophyll: getAverage("Chl", mergedData[key]),
-      phycoerythrin: getAverage("pe", mergedData[key])
-    };
-    return acc;
-  }, {} as Data);
-
-  return {
-    props: {
-      data
-    }
-  };
 };
 
 const useStyles = makeStyles(() => ({
