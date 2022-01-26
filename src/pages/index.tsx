@@ -3,7 +3,7 @@ import Hero from "components/Hero";
 import AboutSaltonSeaSection from "components/AboutSaltonSeaSection";
 import AboutUsSection from "components/AboutUsSection";
 import InTheNewsSection from "components/InTheNewsSection";
-import getFeaturedMedia from "../lib/scrape";
+import scrape from "../lib/scrape";
 import type { InferGetStaticPropsType } from "next";
 
 const Home = ({
@@ -29,7 +29,13 @@ const Home = ({
 export default Home;
 
 export const getStaticProps = async () => {
-  const mediaData = await getFeaturedMedia();
+  const urls = [
+    "https://www.npr.org/podcasts/655974992/living-downstream",
+    "https://kesq.com/news/2021/07/07/changes-happening-at-the-salton-sea-on-a-state-federal-level/",
+    "https://www.cnbc.com/2021/11/06/californias-salton-sea-spewing-toxic-fumes-creating-ghost-towns-.html"
+  ];
+
+  const mediaData = await scrape(urls);
 
   return {
     props: {
