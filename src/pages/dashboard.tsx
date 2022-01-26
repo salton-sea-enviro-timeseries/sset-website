@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import {
   Box,
   Button,
+  Container,
   Grid,
   makeStyles,
   MenuItem,
@@ -91,133 +92,137 @@ const Dashboard = () => {
   return (
     <Layout>
       <Box px={1} py={5}>
-        <Box pb={1}>
-          <Grid container spacing={1}>
-            <Grid container item xs={12} md={6} spacing={1} alignItems="center">
-              <Grid item xs md={6}>
-                {!isDataLoading ? (
-                  <TextField
-                    fullWidth
-                    label="Parameter"
-                    select
-                    size="small"
-                    variant="outlined"
-                    value={parameter}
-                    onChange={handleChangeParameter}
-                  >
-                    {Object.keys(Parameter).map((key) => (
-                      <MenuItem
-                        key={Parameter[key as keyof typeof Parameter]}
-                        value={Parameter[key as keyof typeof Parameter]}
-                      >
-                        {key}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                ) : (
-                  <Skeleton variant="rect" height={40} />
-                )}
-              </Grid>
-              <Grid item xs md={6}>
-                {!isDataLoading ? (
-                  <Box className={classes.legend}>
-                    <Typography variant="caption">
-                      {Units[parameter]}
-                    </Typography>
-                    {activeRange.min !== undefined &&
-                      activeRange.mid !== undefined &&
-                      activeRange.max !== undefined && (
-                        <ContinuousColorLegend
-                          startColor={colorScale[0]}
-                          startTitle={activeRange.min}
-                          midColor={colorScale[1]}
-                          midTitle={activeRange.mid}
-                          endColor={colorScale[2]}
-                          endTitle={activeRange.max}
-                        />
-                      )}
-                  </Box>
-                ) : (
-                  <Skeleton variant="rect" height={40} />
-                )}
-              </Grid>
-            </Grid>
-            <Grid container item xs={12} md={6} alignItems="center">
-              <Grid item xs>
-                <Box
-                  display="flex"
-                  justifyContent={{
-                    xs: "space-between",
-                    md: "flex-end"
-                  }}
-                  alignItems="center"
-                >
+        <Container maxWidth="md">
+          <Box pb={1}>
+            <Grid container spacing={1}>
+              <Grid container item xs={12} md={6} alignItems="center">
+                <Grid item xs md={6}>
                   <Box pr={0.5}>
                     {!isDataLoading ? (
-                      <Button
-                        startIcon={<DownloadIcon />}
+                      <TextField
+                        fullWidth
+                        label="Parameter"
+                        select
                         size="small"
-                        variant="contained"
-                        href="/data/photometer.csv"
-                        download
+                        variant="outlined"
+                        value={parameter}
+                        onChange={handleChangeParameter}
                       >
-                        Sensor Data
-                      </Button>
+                        {Object.keys(Parameter).map((key) => (
+                          <MenuItem
+                            key={Parameter[key as keyof typeof Parameter]}
+                            value={Parameter[key as keyof typeof Parameter]}
+                          >
+                            {key}
+                          </MenuItem>
+                        ))}
+                      </TextField>
                     ) : (
-                      <Skeleton variant="rect" height={30} width="130px" />
+                      <Skeleton variant="rect" height={40} />
                     )}
                   </Box>
-                  <Box pl={0.5}>
-                    {!isDataLoading ? (
-                      <Button
-                        startIcon={<DownloadIcon />}
-                        size="small"
-                        variant="contained"
-                        href="/data/nutrients.csv"
-                        download
-                      >
-                        Nutrients Data
-                      </Button>
-                    ) : (
-                      <Skeleton variant="rect" height={30} width="130px" />
-                    )}
+                </Grid>
+                <Grid item xs md={6}>
+                  {!isDataLoading ? (
+                    <Box pl={0.5} className={classes.legend}>
+                      <Typography variant="caption">
+                        {Units[parameter]}
+                      </Typography>
+                      {activeRange.min !== undefined &&
+                        activeRange.mid !== undefined &&
+                        activeRange.max !== undefined && (
+                          <ContinuousColorLegend
+                            startColor={colorScale[0]}
+                            startTitle={activeRange.min}
+                            midColor={colorScale[1]}
+                            midTitle={activeRange.mid}
+                            endColor={colorScale[2]}
+                            endTitle={activeRange.max}
+                          />
+                        )}
+                    </Box>
+                  ) : (
+                    <Skeleton variant="rect" height={40} />
+                  )}
+                </Grid>
+              </Grid>
+              <Grid container item xs={12} md={6} alignItems="center">
+                <Grid item xs>
+                  <Box
+                    display="flex"
+                    justifyContent={{
+                      xs: "space-between",
+                      md: "flex-end"
+                    }}
+                    alignItems="center"
+                  >
+                    <Box pr={0.5}>
+                      {!isDataLoading ? (
+                        <Button
+                          startIcon={<DownloadIcon />}
+                          size="small"
+                          variant="contained"
+                          href="/api/download?range=nutrients&filename=nutrients-data.csv"
+                          download
+                        >
+                          Nutrients Data
+                        </Button>
+                      ) : (
+                        <Skeleton variant="rect" height={30} width="130px" />
+                      )}
+                    </Box>
+                    <Box pl={0.5}>
+                      {!isDataLoading ? (
+                        <Button
+                          startIcon={<DownloadIcon />}
+                          size="small"
+                          variant="contained"
+                          href="/api/download?range=probe_surface&filename=probe-data.csv"
+                          download
+                        >
+                          Sensor Data
+                        </Button>
+                      ) : (
+                        <Skeleton variant="rect" height={30} width="130px" />
+                      )}
+                    </Box>
                   </Box>
-                </Box>
+                </Grid>
               </Grid>
             </Grid>
+          </Box>
+          <Grid container spacing={1}>
+            <Grid item xs={12}>
+              {!isDataLoading ? (
+                mapData && (
+                  <Map
+                    pins={Object.values(mapData).map((value) => {
+                      return {
+                        site: value.site,
+                        latitude: value.latitude as number,
+                        longitude: value.longitude as number,
+                        color: getColorFromScale(
+                          value[parameter],
+                          activeRange.min as number,
+                          activeRange.max as number
+                        )
+                      };
+                    })}
+                  />
+                )
+              ) : (
+                <Skeleton variant="rect" height="500px" />
+              )}
+            </Grid>
+            <Grid item xs={12}>
+              {!isDataLoading ? (
+                <Table data={tableData} />
+              ) : (
+                <Skeleton variant="rect" height="500px" />
+              )}
+            </Grid>
           </Grid>
-        </Box>
-        <Grid container spacing={1}>
-          <Grid item xs={12} md={6}>
-            {!isDataLoading ? (
-              mapData && (
-                <Map
-                  pins={Object.values(mapData).map((value) => {
-                    return {
-                      site: value.site,
-                      latitude: value.latitude as number,
-                      longitude: value.longitude as number,
-                      color: getColorFromScale(
-                        value[parameter],
-                        activeRange.min as number,
-                        activeRange.max as number
-                      )
-                    };
-                  })}
-                />
-              )
-            ) : (
-              <Skeleton variant="rect" height="500px" />
-            )}
-          </Grid>
-          <Grid item xs={12} md={6}>
-            {!isDataLoading ? (
-              <Table data={tableData} />
-            ) : (
-              <Skeleton variant="rect" height="100%" />
-            )}
-          </Grid>
-        </Grid>
+        </Container>
       </Box>
     </Layout>
   );

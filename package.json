@@ -13,7 +13,7 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.60",
     "chroma-js": "^2.1.2",
-    "csvtojson": "^2.0.10",
+    "csv-stringify": "^6.0.5",
     "googleapis": "^92.0.0",
     "lodash": "^4.17.21",
     "metadata-scraper": "^0.2.46",

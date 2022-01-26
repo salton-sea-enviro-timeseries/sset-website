@@ -1,5 +1,4 @@
 import { getProbeData, getNutrientsData } from "lib/sheets";
-import { groupBy } from "lodash";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { SiteData } from "types";
 
