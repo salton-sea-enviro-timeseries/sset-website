@@ -1,4 +1,5 @@
 import { getProbeData, getNutrientsData } from "lib/sheets";
+import { groupBy } from "lodash";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { SiteData } from "types";
 
@@ -72,21 +73,43 @@ export default async function (
         date: o.DATE,
         salinity: o["Sal (psu)"] as number,
         water_temperature: o["Temp (F)"] as number,
-        chlorophyll: o["Cholorophyll (μg/L)"] as number,
+        chlorophyll: o["Chlorophyll (µg/L)"] as number,
         ph: o.pH as number,
         dissolved_oxygen: o["ODO (mg/L)"] as number,
-        phycoerythrin: o["PE (μg/L)"] as number
+        phycoerythrin: o["PE (ug/L)"] as number
       };
       return item;
     });
 
-    // @ts-ignore
-    const data: SiteData[] = mappedProbeData.map((d) => {
-      const match = mappedNutrientsData.find(
-        (p) =>
-          p.site.trim() === d.site.trim() && p.date.trim() === d.date.trim()
+    let data: SiteData[] = [];
+
+    const mergedData = [...mappedNutrientsData, ...mappedProbeData];
+
+    mergedData.forEach((o) => {
+      const base = mappedProbeData.find((p) => p.site === o.site);
+      const nutrientsDataBySiteAndDate = mappedNutrientsData.find(
+        (p) => p.site === o.site && p.date === o.date
       );
-      return { ...d, ...match };
+      const probeDataBySiteAndDate = mappedProbeData.find(
+        (p) => p.site === o.site && p.date === o.date
+      );
+
+      let push = {};
+
+      if (nutrientsDataBySiteAndDate) {
+        push = { ...push, ...nutrientsDataBySiteAndDate };
+      }
+
+      if (probeDataBySiteAndDate) {
+        push = { ...push, ...probeDataBySiteAndDate };
+      }
+
+      if (base) {
+        push = { ...push, latitude: base.latitude, longitude: base.longitude };
+      }
+
+      // @ts-ignore
+      data.push(push);
     });
 
     return res.status(200).json(data);

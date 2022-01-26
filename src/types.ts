@@ -70,8 +70,8 @@ export interface RawProbeData {
   "Temp (F)": NumericDataPoint;
   pH: NumericDataPoint;
   "ODO (mg/L)": NumericDataPoint;
-  "Cholorophyll (μg/L)": NumericDataPoint;
-  "PE (μg/L)": NumericDataPoint;
+  "Chlorophyll (µg/L)": NumericDataPoint;
+  "PE (ug/L)": NumericDataPoint;
   "GPS Latitude": number;
   "GPS Longitude": number;
 }

@@ -1,11 +1,11 @@
-import { maxBy, minBy, meanBy } from "lodash";
+import { maxBy, minBy, meanBy, isNumber } from "lodash";
 import chroma from "chroma-js";
 
 import { Data, SiteData } from "types";
 
 export const getAverage = (prop: string, collection: any[]) =>
   meanBy(collection, (o) => {
-    return o[prop] && o[prop] !== "NA" ? parseFloat(o[prop]) : 0;
+    return o[prop] && isNumber(o[prop]) ? parseFloat(o[prop]) : 0;
   });
 
 export const getRange = (prop: keyof SiteData, data: Data) => {
@@ -21,15 +21,7 @@ export const getRange = (prop: keyof SiteData, data: Data) => {
       ? Math.floor(minBy(values) as number)
       : undefined;
 
-  const length = values.length;
-  let mid: number | undefined;
-  if (length % 2 == 1) {
-    mid = values[length / 2 - 0.5];
-  } else {
-    mid = ((values[length / 2] ?? 0) + (values[length / 2 - 1] ?? 0)) / 2;
-  }
-
-  mid = mid ? Math.floor(mid) : undefined;
+  const mid = ((max ?? 0) - (min ?? 0)) / 2 + (min ?? 0);
 
   return {
     max,
