@@ -39,3 +39,17 @@ export const getColorFromScale = (value: number, min: number, max: number) => {
   const color = chromaScale(percent);
   return color.hex();
 };
+
+export const fetcher = async (url: string) => {
+  const res = await fetch(url);
+  if (!res.ok) {
+    const error = new Error("An error occurred while fetching the data.");
+    // @ts-ignore
+    error.info = await res.json();
+    // @ts-ignore
+    error.status = res.status;
+    throw error;
+  }
+
+  return res.json();
+};

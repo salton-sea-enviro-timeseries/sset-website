@@ -4,7 +4,10 @@ import stream from "stream";
 import { promisify } from "util";
 const pipeline = promisify(stream.pipeline);
 
-export default async function (req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const {
     method,
     query: { range, filename }

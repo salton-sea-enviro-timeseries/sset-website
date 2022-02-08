@@ -10,15 +10,17 @@ import {
   TextField,
   Typography
 } from "@material-ui/core";
+import { Skeleton } from "@material-ui/lab";
 import DownloadIcon from "@material-ui/icons/CloudDownload";
 import { ContinuousColorLegend } from "react-vis";
 import { groupBy } from "lodash";
+
+import { Parameter, Units, Data, SiteData } from "types";
+import { colorScale, getAverage, getColorFromScale, getRange } from "utils";
 import Layout from "components/Layout";
 import Map from "components/Dashboard/Map";
 import Table from "components/Dashboard/Table";
-import { Parameter, Units, Data, SiteData } from "types";
-import { colorScale, getAverage, getColorFromScale, getRange } from "utils";
-import { Skeleton } from "@material-ui/lab";
+import AirQualitySection from "components/AirQualitySection";
 
 const getMapData = (data: SiteData[]) => {
   const dataBySite = groupBy(data, "site");
@@ -93,6 +95,7 @@ const Dashboard = () => {
     <Layout>
       <Box px={1} py={5}>
         <Container maxWidth="md">
+          <AirQualitySection />
           <Box pb={1}>
             <Grid container spacing={1}>
               <Grid container item xs={12} md={6} alignItems="center">
