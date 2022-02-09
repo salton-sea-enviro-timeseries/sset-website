@@ -17,7 +17,7 @@ const Home = ({
         bgImage="/hero.jpg"
         bgImageOpacity={0.75}
         title="Salton Sea Environmental Timeseries"
-        subtitle=""
+        subtitle=<a href="https://saltonsea.netlify.app/dashboard">Go to the data</a>
       />
       <AboutSaltonSeaSection />
       <AboutUsSection />
