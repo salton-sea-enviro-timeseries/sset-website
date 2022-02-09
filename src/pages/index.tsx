@@ -16,8 +16,8 @@ const Home = ({
         size="large"
         bgImage="/hero.jpg"
         bgImageOpacity={0.75}
-        title="Your landing page title here"
-        subtitle="Some nice words here."
+        title="Salton Sea Environmental Timeseries"
+        subtitle=""
       />
       <AboutSaltonSeaSection />
       <AboutUsSection />
