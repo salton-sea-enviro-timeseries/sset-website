@@ -37,6 +37,49 @@ export const getForecast = async (
   });
   return await (await fetch(url.toString())).json();
 };
+
+export enum AirQualityIndex {
+  Good = 1,
+  Moderate = 2,
+  UnhealthyForSensitiveGroups = 3,
+  Unhealthy = 4,
+  VeryUnhealthy = 5,
+  Hazardous = 6
+}
+
+export const AirQualityMapping = {
+  [AirQualityIndex.Good]: {
+    color: "#689f38",
+    min: 0,
+    max: 50
+  },
+  [AirQualityIndex.Moderate]: {
+    color: "#fbc02d",
+    min: 51,
+    max: 100
+  },
+  [AirQualityIndex.UnhealthyForSensitiveGroups]: {
+    color: "#f57c00",
+    min: 101,
+    max: 150
+  },
+  [AirQualityIndex.Unhealthy]: {
+    color: "#c53929",
+    min: 151,
+    max: 200
+  },
+  [AirQualityIndex.VeryUnhealthy]: {
+    color: "#ad1457",
+    min: 201,
+    max: 300
+  },
+  [AirQualityIndex.Hazardous]: {
+    color: "#880e4f",
+    min: 301,
+    max: 500
+  }
+};
+
 export interface ForecastResponse {
   DateIssue: string;
   DateForecast: string;
@@ -47,7 +90,7 @@ export interface ForecastResponse {
   ParameterName: string;
   AQI: number; // -1 if not available
   Category: {
-    Number: number;
+    Number: AirQualityIndex;
     Name: string;
   };
   ActionDay: boolean;
