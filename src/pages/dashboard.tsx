@@ -5,6 +5,7 @@ import {
   Button,
   Container,
   Grid,
+  Icon,
   makeStyles,
   MenuItem,
   TextField,
@@ -15,12 +16,13 @@ import DownloadIcon from "@material-ui/icons/CloudDownload";
 import { ContinuousColorLegend } from "react-vis";
 import { groupBy } from "lodash";
 
-import { Parameter, Units, Data, SiteData } from "types";
+import { Parameter, ParameterMapping, Data, SiteData } from "types";
 import { colorScale, getAverage, getColorFromScale, getRange } from "utils";
 import Layout from "components/Layout";
 import Map from "components/Dashboard/Map";
 import Table from "components/Dashboard/Table";
 import AirQualitySection from "components/AirQualitySection";
+import { InfoOutlined } from "@material-ui/icons";
 
 const getMapData = (data: SiteData[]) => {
   const dataBySite = groupBy(data, "site");
@@ -79,6 +81,7 @@ const Dashboard = () => {
     setParameter(event.target.value as Parameter);
   };
 
+  // TODO: Refactor: use useSWR
   useEffect(() => {
     setIsDataLoading(true);
     fetch("api/data")
@@ -96,6 +99,7 @@ const Dashboard = () => {
       <Box px={1} py={5}>
         <Container maxWidth="md">
           <AirQualitySection />
+          {/* TODO: Refactor: Move to separate component */}
           <Box pb={1}>
             <Grid container spacing={1}>
               <Grid container item xs={12} md={6} alignItems="center">
@@ -129,7 +133,7 @@ const Dashboard = () => {
                   {!isDataLoading ? (
                     <Box pl={0.5} className={classes.legend}>
                       <Typography variant="caption">
-                        {Units[parameter]}
+                        {ParameterMapping[parameter].unit}
                       </Typography>
                       {activeRange.min !== undefined &&
                         activeRange.mid !== undefined &&
@@ -191,6 +195,19 @@ const Dashboard = () => {
                     </Box>
                   </Box>
                 </Grid>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography
+                  variant="caption"
+                  component="div"
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  {!isDataLoading ? (
+                    ParameterMapping[parameter].description
+                  ) : (
+                    <Skeleton width="100%" />
+                  )}
+                </Typography>
               </Grid>
             </Grid>
           </Box>

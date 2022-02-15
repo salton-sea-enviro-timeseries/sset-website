@@ -1,10 +1,13 @@
+import type { InferGetStaticPropsType } from "next";
+import { Button } from "@material-ui/core";
+import Link from "next/link";
+
 import Layout from "components/Layout";
 import Hero from "components/Hero";
 import AboutSaltonSeaSection from "components/AboutSaltonSeaSection";
 import AboutUsSection from "components/AboutUsSection";
 import InTheNewsSection from "components/InTheNewsSection";
 import scrape from "../lib/scrape";
-import type { InferGetStaticPropsType } from "next";
 
 const Home = ({
   mediaData
@@ -18,6 +21,13 @@ const Home = ({
         bgImageOpacity={0.75}
         title="Salton Sea Environmental Timeseries"
         subtitle=""
+        cta={
+          <Link href="/dashboard" passHref>
+            <Button variant="contained" color="primary">
+              View Data 📊
+            </Button>
+          </Link>
+        }
       />
       <AboutSaltonSeaSection />
       <AboutUsSection />
