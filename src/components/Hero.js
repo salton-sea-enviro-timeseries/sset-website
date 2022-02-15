@@ -1,7 +1,6 @@
 import React from "react";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
 import Section from "./Section";
 import SectionHeader from "./SectionHeader";
 
@@ -24,6 +23,11 @@ function Hero(props) {
             />
           </Box>
         </Container>
+      )}
+      {props.cta && (
+        <Box py={5} display="flex" justifyContent="center" alignItems="center">
+          {props.cta}
+        </Box>
       )}
     </Section>
   );
