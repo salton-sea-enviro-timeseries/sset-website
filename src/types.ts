@@ -47,7 +47,7 @@ export enum Parameter {
 
 export enum Units {
   "salinity" = "PSU",
-  "water_temperature" = "°C",
+  "water_temperature" = "°F",
   "ph" = "ph",
   "turbidity" = "FNU",
   "dissolved_oxygen" = "mg/L",
