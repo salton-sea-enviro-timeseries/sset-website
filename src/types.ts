@@ -95,7 +95,7 @@ export const ParameterMapping = {
     name: "Chlorophyll",
     unit: Units.chlorophyll,
     description:
-      "The image depicts chlorophyll concentrations at various depths per meter at each of the stations. Chlorophyll concentration is an indicator for the presence of photosynthetic phytoplankton or algae in the Salton Sea. High concentrations of chlorophyll in the water can indicate algal blooms."
+      "Chlorophyll concentration is an indicator for the presence of photosynthetic phytoplankton or algae in the Salton Sea. High concentrations of chlorophyll in the water can indicate algal blooms."
   },
   [Parameter.Phycoerythrin]: {
     name: "Phycoerythrin",
