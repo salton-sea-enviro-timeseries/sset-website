@@ -53,8 +53,8 @@ export enum Units {
   "dissolved_oxygen" = "mg/L",
   "chlorophyll" = "μg/L",
   "phycoerythrin" = "μg/L",
-  "nitrate" = "mg/L",
-  "ammonia" = "mg/L",
+  "nitrate" = "mg/L N",
+  "ammonia" = "mg/L N",
   "phosphate" = "mg/L",
   "sulphate" = "mg/L",
   "sulphide" = "mg/L"
@@ -65,19 +65,19 @@ export const ParameterMapping = {
     name: "Salinity",
     unit: Units.salinity,
     description:
-      "Salinity is the concentration of salt in the water. High salinity levels make the Salton Sea uninhabitable to many fish and as their fource source dwindles, an unreliable water source for many fish-eating birds. Currently, the Salton Sea's salinity has been increasing as the water evaporates and not enough water exists to replenish the Salton Sea."
+      "Salinity is the concentration of salt in the water. High salinity levels make the Salton Sea uninhabitable to many fish and as their food source dwindles, an unreliable water source for many fish-eating birds. Currently, the Salton Sea's salinity has been increasing as the water evaporates and not enough water exists to replenish the Salton Sea."
   },
   [Parameter["Water Temperature"]]: {
     name: "Water Temperature",
     unit: Units.water_temperature,
     description:
-      "Temperature can vary along with water depth. Higher temperatures can impact the levels of dissolved oxygen, rates of photosynthesis and can generally make an aquatic habitat uninhabitable if temperatures are high enough."
+      "Warmer temperatures can impact the levels of dissolved oxygen, rates of photosynthesis and can generally make an aquatic habitat uninhabitable if temperatures are high enough. Temperature can vary with water depth, with generally cooler temperatures below the surface."
   },
   [Parameter.pH]: {
     name: "pH",
     unit: Units.ph,
     description:
-      "pH indicates how acidic or basic is a body of water with 0 being extremely acidic, 7 being neutral and 14 being extremely basic. If pH levels are too high or too low, organisms living within the body of water may likely die if it is not within their tolerable threshold. Additionally, pH levels can affect the solubility of toxic chemicals and even metals with a body of water."
+      "pH indicates how acidic or basic a body of water is with 0 being extremely acidic, 7 being neutral and 14 being extremely basic. If pH levels are too high or too low, organisms living within the body of water may likely die if it is not within their tolerable threshold. Additionally, pH levels can affect the solubility of toxic chemicals and even metals with a body of water."
   },
   [Parameter.Turbidity]: {
     name: "Turbidity",
@@ -125,7 +125,7 @@ export const ParameterMapping = {
     name: "Sulphate",
     unit: Units.sulphate,
     description:
-      "Sulfate is another sulfuric salt, but the oxidized form. The sulfate concentration at the Salton Sea is about 10 times that of the modern ocean and has continued to increase annually as a result of agricultural runoff and internal cleaning efforts to curb eutrophication. Such human-induced elevated levels of sulfate in the lake implies inbalance of the water chemistry, which drives the oversaturation of sulfate leading to spontaneous gypsum crystal precipitation on surface waters, rapid crust formation on the lakeshore, and most importantly, favorable supply for microbial sulfate reduction leading to sulide accumulation and subsequent atmospheric release in the summer."
+      "Sulfate is another sulfuric salt, but the oxidized form. The sulfate concentration at the Salton Sea is about 10 times that of the modern ocean and has continued to increase annually as a result of agricultural runoff and internal cleaning efforts to curb eutrophication. Such human-induced elevated levels of sulfate in the lake implies imbalance of the water chemistry, which drives the over-saturation of sulfate leading to spontaneous gypsum crystal precipitation on surface waters, rapid crust formation on the lakeshore, and most importantly, favorable supply for microbial sulfate reduction leading to sulfide accumulation and subsequent atmospheric release in the summer."
   },
   [Parameter.Sulphide]: {
     name: "Sulphide",
