@@ -89,15 +89,6 @@ const ContactUsPage = () => {
                         secondary="rsinclair@llu.edu"
                       />
                     </ListItem>
-                    <ListItem
-                      dense
-                      button
-                      component="a"
-                      href="https://www.google.com/"
-                      target="_blank"
-                    >
-                      <ListItemText primary="www.somelink.org" />
-                    </ListItem>
                   </List>
                 </CardContent>
               </div>
@@ -117,7 +108,7 @@ const ContactUsPage = () => {
               </Typography>
               <Box pt={3} display="flex" justifyContent="center">
                 <Button size="large" variant="contained" color="primary">
-                  Register
+                  Coming Soon
                 </Button>
               </Box>
             </CardContent>
