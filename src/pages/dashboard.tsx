@@ -219,6 +219,7 @@ const Dashboard = () => {
                     pins={Object.values(mapData).map((value) => {
                       return {
                         site: value.site,
+                        value: value[parameter] as number,
                         latitude: value.latitude as number,
                         longitude: value.longitude as number,
                         color: getColorFromScale(

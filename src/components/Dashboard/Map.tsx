@@ -13,7 +13,8 @@ import React from "react";
 import ReactMapGL, {
   Marker,
   NavigationControl,
-  ViewportProps
+  ViewportProps,
+  Popup
 } from "react-map-gl";
 
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -23,8 +24,15 @@ const LONGITUDE = -116.03884;
 const SIZE = 20;
 const ZOOM = 12;
 
+type Pin = {
+  latitude: number;
+  longitude: number;
+  color: string;
+  site: string;
+  value: number;
+};
 interface MapProps {
-  pins: { latitude: number; longitude: number; color: string; site: string }[];
+  pins: Pin[];
 }
 
 export default function Map({ pins }: MapProps) {
@@ -36,6 +44,7 @@ export default function Map({ pins }: MapProps) {
   });
   const [showMoreInfo, setShowMoreInfo] = React.useState(false);
   const [transitionExited, setTransitionExited] = React.useState(false);
+  const [selectedPin, setSelectedPin] = React.useState<Pin | null>(null);
 
   function onViewportChange(viewport: ViewportProps) {
     const { height, width, ...rest } = viewport;
@@ -55,15 +64,16 @@ export default function Map({ pins }: MapProps) {
         mapboxApiAccessToken={process.env.NEXT_PUBLIC_MB_TOKEN}
         onViewportChange={onViewportChange}
         scrollZoom={false}
+        reuseMaps
       >
-        {pins.map(({ latitude, longitude, color, site }, i) => (
+        {pins.map(({ latitude, longitude, color, site, value }, i) => (
           <Marker
             key={`${i}-${latitude}-${longitude}`}
             latitude={latitude}
             longitude={longitude}
           >
             <Tooltip
-              title={site}
+              title={`${site} ${value.toFixed(2)}`}
               open={true}
               arrow
               placement="top-end"
@@ -71,7 +81,8 @@ export default function Map({ pins }: MapProps) {
                 disablePortal: true
               }}
               classes={{
-                popper: classes.popper
+                popper: classes.popper,
+                tooltip: classes.tooltip
               }}
             >
               <svg
@@ -83,12 +94,16 @@ export default function Map({ pins }: MapProps) {
                   stroke: "none",
                   transform: `translate(${-SIZE / 2}px,${-SIZE}px)`
                 }}
+                // onClick={() => {
+                //   setSelectedPin(pins[i]);
+                // }}
               >
                 <path d={ICON} />
               </svg>
             </Tooltip>
           </Marker>
         ))}
+
         <NavigationControl
           showCompass={false}
           style={{
@@ -148,6 +163,11 @@ const useStyles = makeStyles(() => ({
     top: "10px !important",
     cursor: "pointer",
     pointerEvents: "unset"
+  },
+  tooltip: {
+    fontSize: 10,
+    maxWidth: "none",
+    width: 70
   }
 }));
 
