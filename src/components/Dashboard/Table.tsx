@@ -38,7 +38,8 @@ const columns = [
     disableColumnMenu: true,
     disableColumnFilter: true,
     width: 110,
-    editable: false
+    editable: false,
+    filterable: false
   },
   {
     field: "longitude",
@@ -46,7 +47,7 @@ const columns = [
     sortable: false,
     disableColumnMenu: true,
     disableColumnFilter: true,
-
+    filterable: false,
     width: 110,
     editable: false
   },
@@ -55,84 +56,96 @@ const columns = [
     headerName: `Salinity (${Units.salinity})`,
     type: "number",
     width: 180,
-    editable: false
+    editable: false,
+    filterable: false
   },
   {
     field: "water_temperature",
     headerName: `Temperature (${Units.water_temperature})`,
     type: "number",
     width: 190,
-    editable: false
+    editable: false,
+    filterable: false
   },
   {
     field: "ph",
     headerName: "pH",
     type: "number",
     width: 100,
-    editable: false
+    editable: false,
+    filterable: false
   },
   {
     field: "turbidity",
     headerName: `Turbidity (${Units.turbidity})`,
     type: "number",
     width: 180,
-    editable: false
+    editable: false,
+    filterable: false
   },
   {
     field: "dissolved_oxygen",
     headerName: `Dissolved Oxygen (${Units["dissolved_oxygen"]})`,
     type: "number",
     width: 240,
-    editable: false
+    editable: false,
+    filterable: false
   },
   {
     field: "chlorophyll",
     headerName: `Chlorophyll (${Units.chlorophyll})`,
     type: "number",
     width: 200,
-    editable: false
+    editable: false,
+    filterable: false
   },
   {
     field: "phycoerythrin",
     headerName: `Phycoerythrin (${Units.phycoerythrin})`,
     type: "number",
     width: 220,
-    editable: false
+    editable: false,
+    filterable: false
   },
   {
     field: "nitrate",
     headerName: `Nitrate (${Units.nitrate})`,
     type: "number",
     width: 170,
-    editable: false
+    editable: false,
+    filterable: false
   },
   {
     field: "ammonia",
     headerName: `Ammonia (${Units.ammonia})`,
     type: "number",
     width: 190,
-    editable: false
+    editable: false,
+    filterable: false
   },
   {
     field: "phosphate",
     headerName: `Phosphate (${Units.phosphate})`,
     type: "number",
     width: 200,
-    editable: false
+    editable: false,
+    filterable: false
   },
   {
     field: "sulphate",
     headerName: `Sulphate (${Units.sulphate})`,
     type: "number",
     width: 180,
-    editable: false
+    editable: false,
+    filterable: false
   },
   {
     field: "sulphide",
     headerName: `Sulphide (${Units.sulphide})`,
     type: "number",
     width: 180,
-    editable: false
+    editable: false,
+    filterable: false
   }
 ];
 

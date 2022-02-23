@@ -5,7 +5,8 @@ import {
   Button,
   Container,
   Grid,
-  Icon,
+  Grow,
+  IconButton,
   makeStyles,
   MenuItem,
   TextField,
@@ -22,7 +23,6 @@ import Layout from "components/Layout";
 import Map from "components/Dashboard/Map";
 import Table from "components/Dashboard/Table";
 import AirQualitySection from "components/AirQualitySection";
-import { InfoOutlined } from "@material-ui/icons";
 
 const getMapData = (data: SiteData[]) => {
   const dataBySite = groupBy(data, "site");
@@ -219,6 +219,7 @@ const Dashboard = () => {
                     pins={Object.values(mapData).map((value) => {
                       return {
                         site: value.site,
+                        value: value[parameter] as number,
                         latitude: value.latitude as number,
                         longitude: value.longitude as number,
                         color: getColorFromScale(
