@@ -25,7 +25,7 @@ const InTheNewsSection = ({ mediaObjects }: FeaturedNewsFeedProps) => {
             }}
             display="flex"
             justifyContent="center"
-            size={4}
+            size={"h4"}
           />
           <FeaturedNewsFeed mediaObjects={mediaObjects} />
         </Box>

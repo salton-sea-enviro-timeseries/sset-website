@@ -27,7 +27,7 @@ const AboutUsSection = () => {
             }}
             display="flex"
             justifyContent="center"
-            size={4}
+            size={"h4"}
           />
           <p>
             We are a team of non-local scientists and community members (with

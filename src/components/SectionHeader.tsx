@@ -2,6 +2,7 @@ import React from "react";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import { TypographyVariant } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,7 +21,20 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function SectionHeader(props) {
+type variantText = TypographyVariant;
+
+interface SectionHeaderProps {
+  subtitle?: string;
+  subtitleProps?: string;
+  title?: string;
+  titleProps?: Object;
+  size?: variantText;
+  className?: string;
+  display?: string;
+  justifyContent?: string;
+}
+
+function SectionHeader(props: SectionHeaderProps) {
   const classes = useStyles();
 
   const {
@@ -46,7 +60,8 @@ function SectionHeader(props) {
     >
       {title && (
         <Typography
-          variant={`h${size}`}
+          variant={size}
+          // variant={`h${size}`}
           gutterBottom={props.subtitle ? true : false}
           {...titleProps}
         >
