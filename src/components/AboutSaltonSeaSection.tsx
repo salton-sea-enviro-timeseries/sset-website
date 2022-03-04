@@ -20,7 +20,7 @@ const AboutSaltonSeaSection = () => {
             }}
             display="flex"
             justifyContent="center"
-            size={4}
+            size={"h4"}
           />
           <p>
             The Salton Sea is a hypersaline inland lake that plays an important
