@@ -7,7 +7,7 @@ import SectionHeader from "./SectionHeader";
 interface HeroProps {
   bgColor?: string;
   bgImage?: string;
-  bgImageOpacity?: string;
+  bgImageOpacity?: number;
   size?: string;
   className?: string;
   style?: Object;
