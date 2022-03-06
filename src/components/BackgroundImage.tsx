@@ -14,8 +14,11 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 0
   }
 }));
-
-function BackgroundImage(props) {
+interface BackgroundImageProps {
+  image: string;
+  opacity: number;
+}
+function BackgroundImage(props: BackgroundImageProps) {
   const classes = useStyles();
 
   const { image, opacity, ...otherProps } = props;
