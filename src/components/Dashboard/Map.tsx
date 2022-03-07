@@ -44,7 +44,7 @@ export default function Map({ pins }: MapProps) {
   });
   const [showMoreInfo, setShowMoreInfo] = React.useState(false);
   const [transitionExited, setTransitionExited] = React.useState(false);
-  const [selectedPin, setSelectedPin] = React.useState<Pin | null>(null);
+  // const [selectedPin, setSelectedPin] = React.useState<Pin | null>(null);
 
   function onViewportChange(viewport: ViewportProps) {
     const { height, width, ...rest } = viewport;
@@ -60,7 +60,7 @@ export default function Map({ pins }: MapProps) {
           minHeight: "470px"
         }}
         height="500px"
-        // mapStyle="mapbox://styles/mapbox/dark-v9"
+        mapStyle="mapbox://styles/mapbox/satellite-v9"
         mapboxApiAccessToken={process.env.NEXT_PUBLIC_MB_TOKEN}
         onViewportChange={onViewportChange}
         scrollZoom={false}
@@ -73,7 +73,13 @@ export default function Map({ pins }: MapProps) {
             longitude={longitude}
           >
             <Tooltip
-              title={`${site} ${value.toFixed(2)}`}
+              title={
+                <>
+                  <b>{site}</b>
+                  &nbsp;
+                  {value.toPrecision(3)}
+                </>
+              }
               open={true}
               arrow
               placement="top-end"

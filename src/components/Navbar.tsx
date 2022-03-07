@@ -55,7 +55,12 @@ function Navbar() {
       <Container disableGutters={true}>
         <Toolbar className={classes.toolbar}>
           <Box display="flex" alignItems="center" justifyContent="center">
-            <Typography>LOGO</Typography>
+            <Link href="/" passHref>
+              <a>
+                {/* eslint-disable  @next/next/no-img-element */}
+                <img width={100} src="/logo-red.png" alt="SSET Logo" />
+              </a>
+            </Link>
           </Box>
           <div className={classes.spacer} />
           <Hidden smUp={true} implementation="css">

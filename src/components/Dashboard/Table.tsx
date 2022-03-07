@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { SiteData } from "types";
-import { DataGrid, GridColDef } from "@material-ui/data-grid";
+import { DataGrid } from "@material-ui/data-grid";
 import Paper from "@material-ui/core/Paper";
 import { Units } from "types";
 import { isArray } from "lodash";
@@ -163,9 +163,9 @@ export default function Table(props: TableProps) {
         className={classes.table}
         density="compact"
         rows={rows}
-        autoPageSize
         columns={columns}
         disableSelectionOnClick
+        pageSize={rows.length}
       />
     </Paper>
   );

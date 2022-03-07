@@ -2,7 +2,6 @@ import React from "react";
 import Link from "next/link";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import MuiLink from "@material-ui/core/Link";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import List from "@material-ui/core/List";
@@ -10,8 +9,6 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { makeStyles } from "@material-ui/core/styles";
-
-import logo from "../../public/logo.svg";
 import Image from "next/image";
 
 function Footer() {
@@ -24,14 +21,8 @@ function Footer() {
           <Grid item={true} xs={12} md={4}>
             <Link href="/">
               <a>
-                <Image
-                  src={"/logo"}
-                  height="60"
-                  width="120"
-                  alt="Logo Goes Here"
-                  //placeholder="blur"
-                  className={classes.brand}
-                />
+                {/* eslint-disable  @next/next/no-img-element */}
+                <img src={"/logo-alt.png"} width={100} alt="SSET Logo" />
               </a>
             </Link>
 
@@ -112,13 +103,9 @@ function Footer() {
   );
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   sticky: {
     marginTop: "auto"
-  },
-  brand: {
-    display: "block",
-    height: 32
   },
   listItem: {
     paddingTop: 2,

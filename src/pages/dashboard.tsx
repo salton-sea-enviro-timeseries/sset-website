@@ -141,9 +141,11 @@ const Dashboard = () => {
                           <ContinuousColorLegend
                             startColor={colorScale[0]}
                             startTitle={activeRange.min}
-                            midColor={colorScale[1]}
+                            midColor={
+                              colorScale[Math.floor(colorScale.length / 2)]
+                            }
                             midTitle={activeRange.mid}
-                            endColor={colorScale[2]}
+                            endColor={colorScale[colorScale.length - 1]}
                             endTitle={activeRange.max}
                           />
                         )}
@@ -216,19 +218,21 @@ const Dashboard = () => {
               {!isDataLoading ? (
                 mapData && (
                   <Map
-                    pins={Object.values(mapData).map((value) => {
-                      return {
-                        site: value.site,
-                        value: value[parameter] as number,
-                        latitude: value.latitude as number,
-                        longitude: value.longitude as number,
-                        color: getColorFromScale(
-                          value[parameter],
-                          activeRange.min as number,
-                          activeRange.max as number
-                        )
-                      };
-                    })}
+                    pins={Object.values(mapData)
+                      .filter((value) => value[parameter] > 0)
+                      .map((value) => {
+                        return {
+                          site: value.site.toUpperCase(),
+                          value: value[parameter] as number,
+                          latitude: value.latitude as number,
+                          longitude: value.longitude as number,
+                          color: getColorFromScale(
+                            value[parameter],
+                            activeRange.min as number,
+                            activeRange.max as number
+                          )
+                        };
+                      })}
                   />
                 )
               ) : (

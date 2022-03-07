@@ -3,10 +3,14 @@ import chroma from "chroma-js";
 
 import { Data, SiteData } from "types";
 
-export const getAverage = (prop: string, collection: any[]) =>
-  meanBy(collection, (o) => {
-    return o[prop] && isNumber(o[prop]) ? parseFloat(o[prop]) : 0;
+export const getAverage = (prop: string, collection: any[]) => {
+  const filteredCollection = collection.filter((item: any) =>
+    isNumber(item[prop])
+  );
+  return meanBy(filteredCollection, (o) => {
+    return parseFloat(o[prop]);
   });
+};
 
 export const getRange = (prop: keyof SiteData, data: Data) => {
   const values: Array<number | undefined> = Object.values(data)
@@ -30,7 +34,15 @@ export const getRange = (prop: keyof SiteData, data: Data) => {
   };
 };
 
-export const colorScale = ["#2a4858", "#4abd8c", "#fafa6e"];
+export const colorScale = [
+  "#00429d",
+  "#5681b9",
+  "#93c4d2",
+  "#ffffe0",
+  "#ffa59e",
+  "#dd4c65",
+  "#93003a"
+];
 const chromaScale = chroma.scale(colorScale);
 
 export const getColorFromScale = (value: number, min: number, max: number) => {
