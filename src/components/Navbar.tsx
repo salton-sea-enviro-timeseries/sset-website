@@ -58,7 +58,7 @@ function Navbar() {
             <Link href="/" passHref>
               <a>
                 {/* eslint-disable  @next/next/no-img-element */}
-                <img width={100} src="/logo-red.png" alt="SSET Logo" />
+                <img width={150} src="/logo-red.png" alt="SSET Logo" />
               </a>
             </Link>
           </Box>

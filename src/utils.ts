@@ -35,14 +35,30 @@ export const getRange = (prop: keyof SiteData, data: Data) => {
 };
 
 export const colorScale = [
-  "#00429d",
-  "#5681b9",
-  "#93c4d2",
-  "#ffffe0",
-  "#ffa59e",
-  "#dd4c65",
-  "#93003a"
+  "#440154",
+  "#482777",
+  "#3f4a8a",
+  "#31678e",
+  "#26838f",
+  "#1f9d8a",
+  "#6cce5a",
+  "#b6de2b",
+  "#fee825"
 ];
+
+// magma
+// [
+//   "#000004",
+//   "#180f3d",
+//   "#440f76",
+//   "#721f81",
+//   "#9e2f7f",
+//   "#cd4071",
+//   "#f1605d",
+//   "#fd9668",
+//   "#feca8d",
+//   "#fcfdbf"
+// ];
 const chromaScale = chroma.scale(colorScale);
 
 export const getColorFromScale = (value: number, min: number, max: number) => {

@@ -40,7 +40,6 @@ export default Home;
 
 export const getStaticProps = async () => {
   const urls = [
-    "https://www.npr.org/podcasts/655974992/living-downstream",
     "https://kesq.com/news/2021/07/07/changes-happening-at-the-salton-sea-on-a-state-federal-level/",
     "https://www.cnbc.com/2021/11/06/californias-salton-sea-spewing-toxic-fumes-creating-ghost-towns-.html"
   ];
