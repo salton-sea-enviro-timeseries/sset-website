@@ -202,10 +202,29 @@ const Dashboard = () => {
                 <Typography
                   variant="caption"
                   component="div"
-                  style={{ display: "flex", alignItems: "center" }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    paddingBottom: "10px"
+                  }}
                 >
                   {!isDataLoading ? (
                     ParameterMapping[parameter].description
+                  ) : (
+                    <Skeleton width="100%" />
+                  )}
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography
+                  variant="caption"
+                  component="p"
+                  style={{
+                    fontWeight: "bold"
+                  }}
+                >
+                  {!isDataLoading ? (
+                    "The values displayed on the map are averages."
                   ) : (
                     <Skeleton width="100%" />
                   )}
