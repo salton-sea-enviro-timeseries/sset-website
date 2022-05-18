@@ -71,7 +71,7 @@ export const ParameterMapping = {
     name: "Water Temperature",
     unit: Units.water_temperature,
     description:
-      "Warmer temperatures can impact the levels of dissolved oxygen, rates of photosynthesis (the process used by plants and algae to "make food") and can generally make an aquatic habitat uninhabitable if temperatures are high enough. Temperature can vary with water depth, with generally cooler temperatures below the surface."
+      'Warmer temperatures can impact the levels of dissolved oxygen, rates of photosynthesis (the process used by plants and algae to "make food") and can generally make an aquatic habitat uninhabitable if temperatures are high enough. Temperature can vary with water depth, with generally cooler temperatures below the surface.'
   },
   [Parameter.pH]: {
     name: "pH",
