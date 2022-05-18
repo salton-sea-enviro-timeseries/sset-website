@@ -103,8 +103,8 @@ const ContactUsPage = () => {
             <CardContent>
               <Typography align="center" variant="h6" component="p">
                 We are always looking for volunteers to help us with our
-                research and outreach. If you are interested in volunteering for
-                our research, please apply
+                research and outreach. We provide a modest stipend to compensate for the labor. If you are interested in volunteering for
+                our research, please apply.
               </Typography>
               <Box pt={3} display="flex" justifyContent="center">
                 <Button size="large" variant="contained" color="primary">

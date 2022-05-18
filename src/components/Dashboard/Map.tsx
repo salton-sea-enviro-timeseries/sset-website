@@ -135,18 +135,19 @@ export default function Map({ pins }: MapProps) {
             >
               This map shows how water quality parameters vary spatially in the
               north of the Salton Sea. The location of each of the sites is
-              indicated by the position of the colored dots while the color of
-              each dot indicates the concentration of each parameter in the
+              indicated by the position of the colored dots, while the color of
+              each dot indicates the average concentration over all sampling times 
+	      of each parameter in the
               surface water. Salton Sea 1 (SS1) is the deepest site we measure
-              at 6 meters depth and can be generally used as an indicator for
+              (6 meters deep) and can be generally used as an indicator for
               what&apos;s happening in the interior of the Salton Sea. SS8 and
               SS9 show the variability of each parameter as we approach the
-              shore of the Salton Sea. While SS2 through SS7 shows how the
+              shore of the Salton Sea, while SS2 through SS7 shows how the
               parameters change as we approach the Whitewater River, a major
               source of agricultural runoff into the Salton Sea. Inflow 1 (IN1)
-              and IN2 are two freshwater small agricultural runoff canals that
+              and IN2 are two small freshwater agricultural runoff canals that
               run into the Salton Sea. Hundreds of small agricultural canals
-              like IN1 and IN2 runoff into the Salton Sea.
+              like IN1 and IN2 empty into the Salton Sea.
             </Typography>
             <Box display="flex" justifyContent="center">
               <Link
