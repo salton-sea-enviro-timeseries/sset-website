@@ -1,15 +1,20 @@
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
-import Section from "components/Section";
-import SectionHeader from "components/SectionHeader";
 import { makeStyles } from "@material-ui/core/styles";
 import { colors } from "@material-ui/core";
+
+import Section from "components/Section";
+import SectionHeader from "components/SectionHeader";
+import { getContent } from "util/getContent";
+import { useAppContext } from "components/AppContext";
 
 // TODO: add links to definitions
 // or add a glossary section ???
 
 const AboutUsSection = () => {
   const classes = useStyles();
+  // @ts-ignore
+  const { language } = useAppContext();
   return (
     <Section
       style={{
@@ -19,7 +24,7 @@ const AboutUsSection = () => {
       <Container>
         <Box>
           <SectionHeader
-            title="About Us"
+            title={getContent(language, "home.about_us_section.title")}
             titleProps={{
               align: "center",
               className: classes.header,
@@ -29,18 +34,11 @@ const AboutUsSection = () => {
             justifyContent="center"
             size={4}
           />
-          <p>
-            We are a team of non-local scientists and community members (with
-            scientific and non- scientific careers) developing a water
-            monitoring program to collect information on the Salton Sea that can
-            be used for further advocacy efforts. We are also dedicated to
-            having an easily understood data dashboard (here) to better
-            communicate with the community our observations and any existing
-            publicly available data. We currently measure temperature, salinity,
-            turbidity (water murkiness), oxygen, bacteria, nutrient
-            concentrations, and air particles at various points along the
-            northern region of the Sea (see map).
-          </p>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: getContent(language, "home.about_us_section.content")
+            }}
+          />
         </Box>
       </Container>
     </Section>

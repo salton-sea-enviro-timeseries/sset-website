@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles, Divider } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import { orange } from "@material-ui/core/colors";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
@@ -16,10 +16,6 @@ const Layout: React.FC = ({ children }) => {
 };
 
 const useStyles = makeStyles((theme) => ({
-  divider: {
-    // backgroundColor: theme.palette.secondary.main,
-    height: "2px"
-  },
   header: {
     fontWeight: theme.typography.fontWeightBold
   },

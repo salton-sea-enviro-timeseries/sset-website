@@ -162,3 +162,5 @@ export interface RawNutrientsData {
   sulphide: NumericDataPoint;
   turbidity: NumericDataPoint;
 }
+
+export type Language = "en" | "es";
