@@ -38,7 +38,7 @@ function Footer() {
               </Box>
             )} */}
           </Grid>
-          <Grid item={true} xs={12} md={6}>
+          {/* <Grid item={true} xs={12} md={6}>
             <Grid container={true} spacing={4} justifyContent="flex-end">
               <Grid item={true} xs={12} md={4}>
                 <List disablePadding={true} component="div">
@@ -91,7 +91,7 @@ function Footer() {
                 </List>
               </Grid>
             </Grid>
-          </Grid>
+          </Grid> */}
         </Grid>
         <Box pt={10}>
           <Typography align="center" variant="caption" component="p">

@@ -18,6 +18,7 @@ import ReactMapGL, {
 } from "react-map-gl";
 
 import "mapbox-gl/dist/mapbox-gl.css";
+import Translation from "components/Translation";
 
 const LATITUDE = 33.47634;
 const LONGITUDE = -116.03884;
@@ -119,6 +120,7 @@ export default function Map({ pins }: MapProps) {
         />
       </ReactMapGL>
 
+      {/* TODO: Move this separate component */}
       <Box pb={3}>
         <Collapse
           in={showMoreInfo}
@@ -127,29 +129,16 @@ export default function Map({ pins }: MapProps) {
           onEnter={() => setTransitionExited(true)}
         >
           <Box display="flex" flexDirection="column">
-            <Typography
+            <Translation
               gutterBottom
-              component="p"
+              component="div"
               variant="caption"
               noWrap={transitionExited || showMoreInfo ? false : true}
-            >
-              This map shows how water quality parameters vary spatially in the
-              north of the Salton Sea. The location of each of the sites is
-              indicated by the position of the colored dots, while the color of
-              each dot indicates the average concentration over all sampling times 
-	      of each parameter in the
-              surface water. Salton Sea 1 (SS1) is the deepest site we measure
-              (6 meters deep) and can be generally used as an indicator for
-              what&apos;s happening in the interior of the Salton Sea. SS8 and
-              SS9 show the variability of each parameter as we approach the
-              shore of the Salton Sea, while SS2 through SS7 shows how the
-              parameters change as we approach the Whitewater River, a major
-              source of agricultural runoff into the Salton Sea. Inflow 1 (IN1)
-              and IN2 are two small freshwater agricultural runoff canals that
-              run into the Salton Sea. Hundreds of small agricultural canals
-              like IN1 and IN2 empty into the Salton Sea.
-            </Typography>
+              path="dashboard.map_caption_main"
+            />
+
             <Box display="flex" justifyContent="center">
+              {/* <Translation path="dashboard.download_nutrients_data_button"> */}
               <Link
                 component="button"
                 variant="caption"
@@ -157,6 +146,8 @@ export default function Map({ pins }: MapProps) {
               >
                 {showMoreInfo ? "Show Less" : "See More"}
               </Link>
+
+              {/* </Translation> */}
             </Box>
           </Box>
         </Collapse>

@@ -40,8 +40,6 @@ function Navbar() {
   // @ts-ignore
   const { language, setLanguage } = useAppContext();
 
-  console.log("LANGUAGE", language);
-
   const isActiveLink = (href: string) => router.asPath === href;
 
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);

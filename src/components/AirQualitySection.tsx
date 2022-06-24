@@ -30,7 +30,7 @@ const AirQualitySection = () => {
   );
 
   console.log(data);
-  console.log(error);
+  if (error) console.error(error);
 
   const isLoading = !data.length && !error;
 

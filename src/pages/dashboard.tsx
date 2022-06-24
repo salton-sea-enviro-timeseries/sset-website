@@ -2,18 +2,13 @@ import { useEffect, useState } from "react";
 // import Head from "next/head";
 import {
   Box,
-  Button,
   Container,
   Grid,
-  Grow,
-  IconButton,
   makeStyles,
   MenuItem,
   TextField,
   Typography
 } from "@material-ui/core";
-import { Skeleton } from "@material-ui/lab";
-import DownloadIcon from "@material-ui/icons/CloudDownload";
 import { ContinuousColorLegend } from "react-vis";
 import { groupBy } from "lodash";
 
@@ -23,6 +18,9 @@ import Layout from "components/Layout";
 import Map from "components/Dashboard/Map";
 import Table from "components/Dashboard/Table";
 import AirQualitySection from "components/AirQualitySection";
+import DownloadDataButtonsSection from "components/DownloadDataButtonsSection";
+import WithLoading from "components/WithLoading";
+import Translation from "components/Translation";
 
 const getMapData = (data: SiteData[]) => {
   const dataBySite = groupBy(data, "site");
@@ -105,7 +103,11 @@ const Dashboard = () => {
               <Grid container item xs={12} md={6} alignItems="center">
                 <Grid item xs md={6}>
                   <Box pr={0.5}>
-                    {!isDataLoading ? (
+                    <WithLoading
+                      variant="rect"
+                      height={40}
+                      isLoading={isDataLoading}
+                    >
                       <TextField
                         fullWidth
                         label="Parameter"
@@ -124,13 +126,15 @@ const Dashboard = () => {
                           </MenuItem>
                         ))}
                       </TextField>
-                    ) : (
-                      <Skeleton variant="rect" height={40} />
-                    )}
+                    </WithLoading>
                   </Box>
                 </Grid>
                 <Grid item xs md={6}>
-                  {!isDataLoading ? (
+                  <WithLoading
+                    variant="rect"
+                    height={40}
+                    isLoading={isDataLoading}
+                  >
                     <Box pl={0.5} className={classes.legend}>
                       <Typography variant="caption">
                         {ParameterMapping[parameter].unit}
@@ -150,9 +154,7 @@ const Dashboard = () => {
                           />
                         )}
                     </Box>
-                  ) : (
-                    <Skeleton variant="rect" height={40} />
-                  )}
+                  </WithLoading>
                 </Grid>
               </Grid>
               <Grid container item xs={12} md={6} alignItems="center">
@@ -165,77 +167,47 @@ const Dashboard = () => {
                     }}
                     alignItems="center"
                   >
-                    <Box pr={0.5}>
-                      {!isDataLoading ? (
-                        <Button
-                          startIcon={<DownloadIcon />}
-                          size="small"
-                          variant="contained"
-                          href="/api/download?range=nutrients&filename=nutrients-data.csv"
-                          download
-                        >
-                          Nutrients Data
-                        </Button>
-                      ) : (
-                        <Skeleton variant="rect" height={30} width="130px" />
-                      )}
-                    </Box>
-                    <Box pl={0.5}>
-                      {!isDataLoading ? (
-                        <Button
-                          startIcon={<DownloadIcon />}
-                          size="small"
-                          variant="contained"
-                          href="/api/download?range=probe_surface&filename=probe-data.csv"
-                          download
-                        >
-                          Sensor Data
-                        </Button>
-                      ) : (
-                        <Skeleton variant="rect" height={30} width="130px" />
-                      )}
-                    </Box>
+                    <DownloadDataButtonsSection isLoading={isDataLoading} />
                   </Box>
                 </Grid>
               </Grid>
               <Grid item xs={12}>
-                <Typography
-                  variant="caption"
-                  component="div"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    paddingBottom: "10px"
-                  }}
-                >
-                  {!isDataLoading ? (
-                    ParameterMapping[parameter].description
-                  ) : (
-                    <Skeleton width="100%" />
-                  )}
-                </Typography>
+                <WithLoading isLoading={isDataLoading} width="100%">
+                  <Typography
+                    variant="caption"
+                    component="div"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      paddingBottom: "10px"
+                    }}
+                  >
+                    {ParameterMapping[parameter].description}
+                  </Typography>
+                </WithLoading>
               </Grid>
               <Grid item xs={12}>
-                <Typography
-                  variant="caption"
-                  component="p"
-                  style={{
-                    fontWeight: "bold"
-                  }}
-                >
-                  {!isDataLoading ? (
-                    "The values displayed on the map are averages."
-                  ) : (
-                    <Skeleton width="100%" />
-                  )}
-                </Typography>
+                <WithLoading isLoading={isDataLoading} width="100%">
+                  <Translation
+                    variant="caption"
+                    component="p"
+                    path="dashboard.map_caption_secondary"
+                    style={{
+                      fontWeight: "bold"
+                    }}
+                  />
+                </WithLoading>
               </Grid>
             </Grid>
           </Box>
           <Grid container spacing={1}>
             <Grid item xs={12}>
-              {!isDataLoading ? (
-                mapData && (
+              <WithLoading
+                isLoading={isDataLoading}
+                variant="rect"
+                height="500px"
+              >
+                {mapData && (
                   <Map
                     pins={Object.values(mapData)
                       .filter((value) => value[parameter] > 0)
@@ -253,17 +225,17 @@ const Dashboard = () => {
                         };
                       })}
                   />
-                )
-              ) : (
-                <Skeleton variant="rect" height="500px" />
-              )}
+                )}
+              </WithLoading>
             </Grid>
             <Grid item xs={12}>
-              {!isDataLoading ? (
+              <WithLoading
+                isLoading={isDataLoading}
+                variant="rect"
+                height="500px"
+              >
                 <Table data={tableData} />
-              ) : (
-                <Skeleton variant="rect" height="500px" />
-              )}
+              </WithLoading>
             </Grid>
           </Grid>
         </Container>

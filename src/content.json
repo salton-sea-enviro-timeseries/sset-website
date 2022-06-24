@@ -14,6 +14,18 @@
       "in_the_news_section": {
         "title": "In the News"
       }
+    },
+    "dashboard": {
+      "map_caption_main": "This map shows how water quality parameters vary spatially in the north of the Salton Sea. The location of each of the sites is indicated by the position of the colored dots, while the color of each dot indicates the average concentration over all sampling times of each parameter at the surface. Salton Sea 1 (SS1) is the deepest site we measure (6 meters deep) and can be generally used as an indicator for what's happening in the interior of the Salton Sea. SS8 and SS9 show the variability of each parameter as we approach the shore of the Salton Sea, while SS2 through SS7 show how the parameters change as we approach the Whitewater River, a major source of agricultural runoff into the Salton Sea. Inflow 1 (IN1) and IN2 are two small freshwater agricultural runoff canals that run into the Salton Sea. Hundreds of small agricultural canals, like IN1 and IN2, empty into the Salton Sea.",
+      "map_caption_secondary": "The values displayed on the map are averages.",
+      "download_nutrients_data_button": "Nutrients Data",
+      "download_sensor_data_button": "Sensor Data"
+    },
+    "contact": {
+      "title": "Contact Us",
+      "content": "We are always looking for volunteers to help us with our research and outreach. We provide a modest stipend to compensate for the labor. If you are interested in volunteering for our research, please apply.",
+      "apply_button_text": "Apply Now",
+      "apply_button_link": "https://docs.google.com/forms/d/e/1FAIpQLSc0cpEzdLRGpdYY4vv6lO4QaNsavNWzgga2KNPCpL44fMaiqA/viewform?usp=sf_link"
     }
   },
   "es": {
@@ -35,6 +47,18 @@
       "in_the_news_section": {
         "title": "Noticias"
       }
+    },
+    "dashboard": {
+      "map_caption_main": "Este mapa muestra cómo los parámetros de la calidad del agua varían en el norte del Salton Sea. La ubicación de cada uno de las estaciones de muestreo está indicada por la posición de los puntos de colores, mientras que el color de cada punto indica el promedio temporal de cada parámetro en la superficie del agua. Salton Sea 1 (SS1) es la estación de muestreo más profunda (6 metros de profundidad) y, generalmente, se puede usar como un indicador de la calidad del agua en el interior del Salton Sea. SS8 y SS9 muestran la variabilidad de cada parámetro a medida que nos acercamos a la orilla del Salton Sea, mientras que las estaciones SS2 a la SS7 muestran cómo cambian los parámetros a medida que nos acercamos al río Whitewater, una fuente de escorrentía agrícola importante para el Salton Sea. IN1 e IN2 son dos canales de escorrentía agrícola pequeños (de cientos que existen) que desembocan en el Salton Sea.",
+      "map_caption_secondary": "Los datos mostrados en el mapa son promedios.",
+      "download_nutrients_data_button": "Datos de Nutrientes",
+      "download_sensor_data_button": "Datos de Sensores"
+    },
+    "contact": {
+      "title": "Contáctenos",
+      "content": "Siempre estamos buscando voluntarios para que nos ayuden con nuestra investigación y divulgación de datos. Proveemos un salario modesto para recompensar la labor. Si está interesado en ayudarnos, por favor aplique aquí.",
+      "apply_button_text": "Aplica Hoy",
+      "apply_button_link": "https://docs.google.com/forms/d/e/1FAIpQLSeei4yD1pbwhvuLK_bFFSJhnbWRiMMGWfi6PMkP1fiXJU2Z9w/viewform?usp=sf_link"
     }
   }
 }

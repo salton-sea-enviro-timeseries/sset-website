@@ -5,16 +5,14 @@ import Typography from "@material-ui/core/Typography";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
-import { Box, Card, colors, Grid } from "@material-ui/core";
+import { Box, Card } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Hero from "components/Hero";
 import Section from "components/Section";
-import SectionHeader from "components/SectionHeader";
 import Layout from "components/Layout";
+import Translation from "components/Translation";
 
 const ContactUsPage = () => {
   const classes = useStyles();
@@ -101,15 +99,27 @@ const ContactUsPage = () => {
           </Card>
           <Card>
             <CardContent>
-              <Typography align="center" variant="h6" component="p">
-                We are always looking for volunteers to help us with our
-                research and outreach. We provide a modest stipend to compensate for the labor. If you are interested in volunteering for
-                our research, please apply.
-              </Typography>
+              <Translation
+                align="center"
+                variant="h6"
+                component="p"
+                path="contact.content"
+              />
               <Box pt={3} display="flex" justifyContent="center">
-                <Button size="large" variant="contained" color="primary">
-                  Coming Soon
-                </Button>
+                <Translation
+                  path="contact.apply_button_text"
+                  propsToTranslate={{
+                    href: "contact.apply_button_link"
+                  }}
+                >
+                  <Button
+                    href=""
+                    target="_blank"
+                    size="large"
+                    variant="contained"
+                    color="primary"
+                  />
+                </Translation>
               </Box>
             </CardContent>
           </Card>
