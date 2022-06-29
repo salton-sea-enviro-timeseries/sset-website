@@ -1,0 +1,16 @@
+{
+  "en": {
+    "navLinks": {
+      "home": "Home",
+      "dashboard": "Dashboard",
+      "contact": "Contact Us"
+    }
+  },
+  "es": {
+    "navLinks": {
+      "home": "",
+      "dashboard": "",
+      "contact": ""
+    }
+  }
+}

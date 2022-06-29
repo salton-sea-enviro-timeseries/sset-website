@@ -1,0 +1,66 @@
+backend:
+  name: test-repo
+  branch: NetlifyCMS # Branch to update (optional; defaults to master)
+media_folder: public/img
+public_folder: img
+collections:
+  - name: "pages"
+    label: "Pages"
+    files:
+      - label: "Home"
+        name: "home"
+        file: "content/home.md"
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Publish Date", name: "date", widget: "datetime" }
+          - { label: "Body", name: "body", widget: "markdown" }
+          - label: "Cats"
+            name: "cats"
+            widget: list
+            fields:
+              - { label: "Name", name: "name", widget: "string" }
+              - { label: "Description", name: "description", widget: "text" }
+# backend:
+#   name: test-repo
+#   # git-gateway swapped with `test-repo` for local tests
+#   branch: NetlifyCMS # Branch to update (optional; defaults to master)
+#   # !!!!! need to change back to main when done
+# media_folder: public/img
+# public_folder: img
+# collections:
+#   - name: "posts"
+#     label: "Post"
+#     folder: "_posts"
+#     filter:
+#       field: language
+#       value: en
+#     fields:
+#       - {label: "Language", name: "language"}
+# - name: "pages"
+#   label: "Pages"
+#   extension: json
+#    files:
+#         - file: _store_/_pages/_home.json
+#           label: Home
+#           name: home
+#           # editor:
+#           #     preview: false
+#           fields:
+#               - label: Page Hero
+#                 name: hero
+#                 widget: string
+#               - label: Hero Button
+#                 name: call_to_action
+#                 widget: text
+#                 # required: false
+#                 # default: ""
+#                 # hint: Used for SEO
+#               # - label: Greeting
+#               #   name: greeting
+#               #   widget: markdown
+#               # - label: Tagline
+#               #   name: tagline
+#               #   widget: markdown
+#               # - label: Picture
+#               #   name: profile_image
+#               #   widget: image
