@@ -1,5 +1,5 @@
 backend:
-  name: test-repo
+  name: git-gateway
   # git-gateway
   # use test-repo to view ui changes locally
   branch: main
@@ -322,6 +322,27 @@ collections:
                       name: "description",
                       widget: "string"
                     }
+      - file: "__store__/site"
+        label: "NavLinks"
+        name: "navLinks"
+        fields:
+          - label: "NavLinks English"
+            name: "en"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Home", name: "home", widget: "string" }
+              - { label: "Dashboard", name: "dashboard", widget: "string" }
+              - { label: "Contact Us", name: "contact", widget: "string" }
+          - label: "NavLinks Spanish"
+            name: "es"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Home", name: "home", widget: "string" }
+              - { label: "Dashboard", name: "dashboard", widget: "string" }
+              - { label: "Contact Us", name: "contact", widget: "string" }
+
   - name: "pages"
     label: "Pages"
     delete: false
