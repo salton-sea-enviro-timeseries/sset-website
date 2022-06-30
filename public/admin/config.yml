@@ -1,66 +1,173 @@
 backend:
-  name: test-repo
-  branch: NetlifyCMS # Branch to update (optional; defaults to master)
-media_folder: public/img
-public_folder: img
+  name: git-gateway
+  # use test-repo to view ui changes locally
+  branch: main
+#publish mode allows control over content publishing enabling review
+publish_mode: editorial_workflow
+media_folder: static/uploads
+public_folder: static/uploads
+site_url: https://saltonseascience.org/
+logo_url: https://saltonseascience.org/logo-red.png
 collections:
+  - name: "global"
+    label: "Site Settings"
+    delete: false
+    description: "Settings that are used throughout the entire site"
+    extension: "json"
+    files:
+      - file: "__store__/metadata"
+        label: "Metadata"
+        name: "site"
+        fields:
+          - {
+              label: "Site Title",
+              name: "site_title",
+              widget: "string",
+              hint: "Used for SEO"
+            }
+          - {
+              label: "Default Site Description",
+              name: "default_site_description",
+              widget: "text",
+              required: false,
+              hint: "Used for SEO"
+            }
+          - { label: "Email", name: "email", widget: "string" }
+          - { label: Twitter Url, name: twitter_url, widget: string }
+          - { label: Facebook Url, name: facebook_url, widget: string }
+          - {
+              label: Open Graph Image,
+              name: open_graph_image,
+              widget: image,
+              required: false,
+              default: /logo-red.jpg,
+              hint: This is the thumbnail that shows up when you share your site on Facebook or via an iMessage
+            }
+
   - name: "pages"
     label: "Pages"
+    delete: false
+    create: false
+    extension: "json"
     files:
       - label: "Home"
+        file: "__store__/pages/home"
+        extension: "json"
         name: "home"
-        file: "content/home.md"
         fields:
-          - { label: "Title", name: "title", widget: "string" }
-          - { label: "Publish Date", name: "date", widget: "datetime" }
-          - { label: "Body", name: "body", widget: "markdown" }
-          - label: "Cats"
-            name: "cats"
-            widget: list
+          - label: "Content in English"
+            name: "en"
+            widget: "object"
+            collapsed: true
             fields:
-              - { label: "Name", name: "name", widget: "string" }
-              - { label: "Description", name: "description", widget: "text" }
-# backend:
-#   name: test-repo
-#   # git-gateway swapped with `test-repo` for local tests
-#   branch: NetlifyCMS # Branch to update (optional; defaults to master)
-#   # !!!!! need to change back to main when done
-# media_folder: public/img
-# public_folder: img
-# collections:
-#   - name: "posts"
-#     label: "Post"
-#     folder: "_posts"
-#     filter:
-#       field: language
-#       value: en
-#     fields:
-#       - {label: "Language", name: "language"}
-# - name: "pages"
-#   label: "Pages"
-#   extension: json
-#    files:
-#         - file: _store_/_pages/_home.json
-#           label: Home
-#           name: home
-#           # editor:
-#           #     preview: false
-#           fields:
-#               - label: Page Hero
-#                 name: hero
-#                 widget: string
-#               - label: Hero Button
-#                 name: call_to_action
-#                 widget: text
-#                 # required: false
-#                 # default: ""
-#                 # hint: Used for SEO
-#               # - label: Greeting
-#               #   name: greeting
-#               #   widget: markdown
-#               # - label: Tagline
-#               #   name: tagline
-#               #   widget: markdown
-#               # - label: Picture
-#               #   name: profile_image
-#               #   widget: image
+              - {
+                  label: "Hero",
+                  name: "hero",
+                  widget: "string",
+                  hint: "Main Home Page Title"
+                }
+              - {
+                  label: "Call to Action",
+                  name: "call_to_action",
+                  widget: "string",
+                  hint: "View Data Button Text"
+                }
+              - label: "Salton Sea Section"
+                name: "salton_sea_section"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Content", name: "content", widget: "text" }
+              - label: "Metadata"
+                name: "metadata"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - {
+                      label: "Site Title",
+                      name: "site_title",
+                      widget: "string",
+                      hint: "Used for SEO"
+                    }
+                  - {
+                      label: "Default Site Description",
+                      name: "site_description",
+                      widget: "text",
+                      required: false,
+                      hint: "Used for SEO"
+                    }
+                  - {
+                      label: "Open Graph Image",
+                      name: "open_graph_image",
+                      widget: "image",
+                      default: "/logo-red.jpg",
+                      required: false,
+                      hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
+                    }
+                  - {
+                      label: "Open Graph Site URL",
+                      name: "open_graph_site_url",
+                      widget: "string",
+                      default: "/logo-red.jpg",
+                      required: false,
+                      hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
+                    }
+          - label: "Content in Spanish"
+            name: "es"
+            widget: "object"
+            collapsed: true
+            fields:
+              - {
+                  label: "Hero",
+                  name: "hero",
+                  widget: "string",
+                  hint: "Main Home Page Title"
+                }
+              - {
+                  label: "Call to Action",
+                  name: "call_to_action",
+                  widget: "string",
+                  hint: "View Data Button Text"
+                }
+              - label: "Salton Sea Section"
+                name: "salton_sea_section"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Content", name: "content", widget: "text" }
+              - label: "Metadata"
+                name: "metadata"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - {
+                      label: "Site Title",
+                      name: "site_title",
+                      widget: "string",
+                      hint: "Used for SEO"
+                    }
+                  - {
+                      label: "Default Site Description",
+                      name: "site_description",
+                      widget: "text",
+                      required: false,
+                      hint: "Used for SEO"
+                    }
+                  - {
+                      label: "Open Graph Image",
+                      name: "open_graph_image",
+                      widget: "image",
+                      default: "/logo-red.jpg",
+                      required: false,
+                      hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
+                    }
+                  - {
+                      label: "Open Graph Site URL",
+                      name: "open_graph_site_url",
+                      widget: "string",
+                      default: "/logo-red.jpg",
+                      required: false,
+                      hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
+                    }
