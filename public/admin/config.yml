@@ -1,5 +1,5 @@
 backend:
-  name: git-gateway
+  name: test-repo
   # git-gateway
   # use test-repo to view ui changes locally
   branch: main
@@ -44,7 +44,284 @@ collections:
               default: /logo-red.jpg,
               hint: This is the thumbnail that shows up when you share your site on Facebook or via an iMessage
             }
-
+      - file: "__store__/parameters"
+        label: "Parameters"
+        name: "parameters"
+        fields:
+          - label: "Parameters in English"
+            name: "en"
+            widget: "object"
+            collapsed: true
+            fields:
+              - label: "Salinity"
+                name: "salinity"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Unit", name: "unit", widget: "string" }
+                  - {
+                      label: "Description",
+                      name: "description",
+                      widget: "string"
+                    }
+              - label: "Water Temperature"
+                name: "water_temperature"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Unit", name: "unit", widget: "string" }
+                  - {
+                      label: "Description",
+                      name: "description",
+                      widget: "string"
+                    }
+              - label: "pH"
+                name: "ph"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Unit", name: "unit", widget: "string" }
+                  - {
+                      label: "Description",
+                      name: "description",
+                      widget: "string"
+                    }
+              - label: "Turbidity"
+                name: "turbidity"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Unit", name: "unit", widget: "string" }
+                  - {
+                      label: "Description",
+                      name: "description",
+                      widget: "string"
+                    }
+              - label: "Dissolved Oxygen"
+                name: "dissolved_oxygen"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Unit", name: "unit", widget: "string" }
+                  - {
+                      label: "Description",
+                      name: "description",
+                      widget: "string"
+                    }
+              - label: "Chlorophyll"
+                name: "chlorophyll"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Unit", name: "unit", widget: "string" }
+                  - {
+                      label: "Description",
+                      name: "description",
+                      widget: "string"
+                    }
+              - label: "Phycoerythrin"
+                name: "phycoerythrin"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Unit", name: "unit", widget: "string" }
+                  - {
+                      label: "Description",
+                      name: "description",
+                      widget: "string"
+                    }
+              - label: "Nitrate"
+                name: "nitrate"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Unit", name: "unit", widget: "string" }
+                  - {
+                      label: "Description",
+                      name: "description",
+                      widget: "string"
+                    }
+              - label: "Ammonia"
+                name: "ammonia"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Unit", name: "unit", widget: "string" }
+                  - {
+                      label: "Description",
+                      name: "description",
+                      widget: "string"
+                    }
+              - label: "Phosphate"
+                name: "phosphate"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Unit", name: "unit", widget: "string" }
+                  - {
+                      label: "Description",
+                      name: "description",
+                      widget: "string"
+                    }
+              - label: "Sulphate"
+                name: "sulphate"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Unit", name: "unit", widget: "string" }
+                  - {
+                      label: "Description",
+                      name: "description",
+                      widget: "string"
+                    }
+              - label: "Sulphide"
+                name: "sulphide"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Unit", name: "unit", widget: "string" }
+                  - {
+                      label: "Description",
+                      name: "description",
+                      widget: "string"
+                    }
+          - label: "Parameters in Spanish"
+            name: "es"
+            widget: "object"
+            collapsed: true
+            fields:
+              - label: "Salinity"
+                name: "salinity"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Unit", name: "unit", widget: "string" }
+                  - {
+                      label: "Description",
+                      name: "description",
+                      widget: "string"
+                    }
+              - label: "Water Temperature"
+                name: "water_temperature"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Unit", name: "unit", widget: "string" }
+                  - {
+                      label: "Description",
+                      name: "description",
+                      widget: "string"
+                    }
+              - label: "pH"
+                name: "ph"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Unit", name: "unit", widget: "string" }
+                  - {
+                      label: "Description",
+                      name: "description",
+                      widget: "string"
+                    }
+              - label: "Turbidity"
+                name: "turbidity"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Unit", name: "unit", widget: "string" }
+                  - {
+                      label: "Description",
+                      name: "description",
+                      widget: "string"
+                    }
+              - label: "Dissolved Oxygen"
+                name: "dissolved_oxygen"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Unit", name: "unit", widget: "string" }
+                  - {
+                      label: "Description",
+                      name: "description",
+                      widget: "string"
+                    }
+              - label: "Chlorophyll"
+                name: "chlorophyll"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Unit", name: "unit", widget: "string" }
+                  - {
+                      label: "Description",
+                      name: "description",
+                      widget: "string"
+                    }
+              - label: "Phycoerythrin"
+                name: "phycoerythrin"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Unit", name: "unit", widget: "string" }
+                  - {
+                      label: "Description",
+                      name: "description",
+                      widget: "string"
+                    }
+              - label: "Nitrate"
+                name: "nitrate"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Unit", name: "unit", widget: "string" }
+                  - {
+                      label: "Description",
+                      name: "description",
+                      widget: "string"
+                    }
+              - label: "Ammonia"
+                name: "ammonia"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Unit", name: "unit", widget: "string" }
+                  - {
+                      label: "Description",
+                      name: "description",
+                      widget: "string"
+                    }
+              - label: "Phosphate"
+                name: "phosphate"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Unit", name: "unit", widget: "string" }
+                  - {
+                      label: "Description",
+                      name: "description",
+                      widget: "string"
+                    }
+              - label: "Sulphate"
+                name: "sulphate"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Unit", name: "unit", widget: "string" }
+                  - {
+                      label: "Description",
+                      name: "description",
+                      widget: "string"
+                    }
+              - label: "Sulphide"
+                name: "sulphide"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Unit", name: "unit", widget: "string" }
+                  - {
+                      label: "Description",
+                      name: "description",
+                      widget: "string"
+                    }
   - name: "pages"
     label: "Pages"
     delete: false
@@ -259,6 +536,113 @@ collections:
               - {
                   label: "Download Sensor Data Button",
                   name: "download_sensor_data_button",
+                  widget: "string"
+                }
+              - label: "Metadata"
+                name: "metadata"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - {
+                      label: "Site Title",
+                      name: "site_title",
+                      widget: "string",
+                      hint: "Used for SEO"
+                    }
+                  - {
+                      label: "Default Site Description",
+                      name: "site_description",
+                      widget: "text",
+                      required: false,
+                      hint: "Used for SEO"
+                    }
+                  - {
+                      label: "Open Graph Image",
+                      name: "open_graph_image",
+                      widget: "image",
+                      default: "/logo-red.jpg",
+                      required: false,
+                      hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
+                    }
+                  - {
+                      label: "Open Graph Site URL",
+                      name: "open_graph_site_url",
+                      widget: "string",
+                      default: "/logo-red.jpg",
+                      required: false,
+                      hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
+                    }
+      - label: "Contact"
+        file: "__store__/pages/contact"
+        extension: "json"
+        name: "contact"
+        fields:
+          - label: "Contact Content in English"
+            name: "en"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Content", name: "content", widget: "string" }
+              - {
+                  label: "Apply Button Text",
+                  name: "apply_button_text",
+                  widget: "string"
+                }
+              - {
+                  label: "Apply Button Link",
+                  name: "apply_button_link",
+                  widget: "string"
+                }
+              - label: "Metadata"
+                name: "metadata"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - {
+                      label: "Site Title",
+                      name: "site_title",
+                      widget: "string",
+                      hint: "Used for SEO"
+                    }
+                  - {
+                      label: "Default Site Description",
+                      name: "site_description",
+                      widget: "text",
+                      required: false,
+                      hint: "Used for SEO"
+                    }
+                  - {
+                      label: "Open Graph Image",
+                      name: "open_graph_image",
+                      widget: "image",
+                      default: "/logo-red.jpg",
+                      required: false,
+                      hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
+                    }
+                  - {
+                      label: "Open Graph Site URL",
+                      name: "open_graph_site_url",
+                      widget: "string",
+                      default: "/logo-red.jpg",
+                      required: false,
+                      hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
+                    }
+          - label: "Contact Content in Spanish"
+            name: "es"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Content", name: "content", widget: "string" }
+              - {
+                  label: "Apply Button Text",
+                  name: "apply_button_text",
+                  widget: "string"
+                }
+              - {
+                  label: "Apply Button Link",
+                  name: "apply_button_link",
                   widget: "string"
                 }
               - label: "Metadata"
