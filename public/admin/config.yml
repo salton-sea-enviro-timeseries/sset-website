@@ -1,5 +1,6 @@
 backend:
   name: git-gateway
+  # git-gateway
   # use test-repo to view ui changes locally
   branch: main
 #publish mode allows control over content publishing enabling review
@@ -55,7 +56,7 @@ collections:
         extension: "json"
         name: "home"
         fields:
-          - label: "Content in English"
+          - label: "Home Content in English"
             name: "en"
             widget: "object"
             collapsed: true
@@ -113,7 +114,7 @@ collections:
                       required: false,
                       hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
                     }
-          - label: "Content in Spanish"
+          - label: "Home Content in Spanish"
             name: "es"
             widget: "object"
             collapsed: true
@@ -137,6 +138,129 @@ collections:
                 fields:
                   - { label: "Title", name: "title", widget: "string" }
                   - { label: "Content", name: "content", widget: "text" }
+              - label: "Metadata"
+                name: "metadata"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - {
+                      label: "Site Title",
+                      name: "site_title",
+                      widget: "string",
+                      hint: "Used for SEO"
+                    }
+                  - {
+                      label: "Default Site Description",
+                      name: "site_description",
+                      widget: "text",
+                      required: false,
+                      hint: "Used for SEO"
+                    }
+                  - {
+                      label: "Open Graph Image",
+                      name: "open_graph_image",
+                      widget: "image",
+                      default: "/logo-red.jpg",
+                      required: false,
+                      hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
+                    }
+                  - {
+                      label: "Open Graph Site URL",
+                      name: "open_graph_site_url",
+                      widget: "string",
+                      default: "/logo-red.jpg",
+                      required: false,
+                      hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
+                    }
+      - label: "Dashboard"
+        file: "__store__/pages/dashboard"
+        extension: "json"
+        name: "dashboard"
+        fields:
+          - label: "Dashboard Content in English"
+            name: "en"
+            widget: "object"
+            collapsed: true
+            fields:
+              - {
+                  label: "Map Caption Main",
+                  name: "map_caption_main",
+                  widget: "string"
+                }
+              - {
+                  label: "Map Caption Secondary",
+                  name: "map_caption_secondary",
+                  widget: "string"
+                }
+              - {
+                  label: "Download Nutrients Data Button",
+                  name: "download_nutrients_data_button",
+                  widget: "string"
+                }
+              - {
+                  label: "Download Sensor Data Button",
+                  name: "download_sensor_data_button",
+                  widget: "string"
+                }
+              - label: "Metadata"
+                name: "metadata"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - {
+                      label: "Site Title",
+                      name: "site_title",
+                      widget: "string",
+                      hint: "Used for SEO"
+                    }
+                  - {
+                      label: "Default Site Description",
+                      name: "site_description",
+                      widget: "text",
+                      required: false,
+                      hint: "Used for SEO"
+                    }
+                  - {
+                      label: "Open Graph Image",
+                      name: "open_graph_image",
+                      widget: "image",
+                      default: "/logo-red.jpg",
+                      required: false,
+                      hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
+                    }
+                  - {
+                      label: "Open Graph Site URL",
+                      name: "open_graph_site_url",
+                      widget: "string",
+                      default: "/logo-red.jpg",
+                      required: false,
+                      hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
+                    }
+          - label: "Dashboard Content in Spanish"
+            name: "es"
+            widget: "object"
+            collapsed: true
+            fields:
+              - {
+                  label: "Map Caption Main",
+                  name: "map_caption_main",
+                  widget: "string"
+                }
+              - {
+                  label: "Map Caption Secondary",
+                  name: "map_caption_secondary",
+                  widget: "string"
+                }
+              - {
+                  label: "Download Nutrients Data Button",
+                  name: "download_nutrients_data_button",
+                  widget: "string"
+                }
+              - {
+                  label: "Download Sensor Data Button",
+                  name: "download_sensor_data_button",
+                  widget: "string"
+                }
               - label: "Metadata"
                 name: "metadata"
                 widget: "object"
