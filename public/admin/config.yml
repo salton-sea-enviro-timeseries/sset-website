@@ -45,7 +45,7 @@ collections:
         label: "Parameters"
         name: "parameters"
         fields:
-          - label: "Parameters in English"
+          - label: "Parameters (English)"
             name: "en"
             widget: "object"
             collapsed: true
@@ -59,7 +59,9 @@ collections:
                   - {
                       label: "Description",
                       name: "description",
-                      widget: "string"
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
                     }
               - label: "Water Temperature"
                 name: "water_temperature"
@@ -70,7 +72,9 @@ collections:
                   - {
                       label: "Description",
                       name: "description",
-                      widget: "string"
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
                     }
               - label: "pH"
                 name: "ph"
@@ -81,7 +85,9 @@ collections:
                   - {
                       label: "Description",
                       name: "description",
-                      widget: "string"
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
                     }
               - label: "Turbidity"
                 name: "turbidity"
@@ -92,7 +98,9 @@ collections:
                   - {
                       label: "Description",
                       name: "description",
-                      widget: "string"
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
                     }
               - label: "Dissolved Oxygen"
                 name: "dissolved_oxygen"
@@ -103,7 +111,9 @@ collections:
                   - {
                       label: "Description",
                       name: "description",
-                      widget: "string"
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
                     }
               - label: "Chlorophyll"
                 name: "chlorophyll"
@@ -114,7 +124,9 @@ collections:
                   - {
                       label: "Description",
                       name: "description",
-                      widget: "string"
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
                     }
               - label: "Phycoerythrin"
                 name: "phycoerythrin"
@@ -125,7 +137,9 @@ collections:
                   - {
                       label: "Description",
                       name: "description",
-                      widget: "string"
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
                     }
               - label: "Nitrate"
                 name: "nitrate"
@@ -136,7 +150,9 @@ collections:
                   - {
                       label: "Description",
                       name: "description",
-                      widget: "string"
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
                     }
               - label: "Ammonia"
                 name: "ammonia"
@@ -147,7 +163,9 @@ collections:
                   - {
                       label: "Description",
                       name: "description",
-                      widget: "string"
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
                     }
               - label: "Phosphate"
                 name: "phosphate"
@@ -158,7 +176,9 @@ collections:
                   - {
                       label: "Description",
                       name: "description",
-                      widget: "string"
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
                     }
               - label: "Sulphate"
                 name: "sulphate"
@@ -169,7 +189,9 @@ collections:
                   - {
                       label: "Description",
                       name: "description",
-                      widget: "string"
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
                     }
               - label: "Sulphide"
                 name: "sulphide"
@@ -180,9 +202,11 @@ collections:
                   - {
                       label: "Description",
                       name: "description",
-                      widget: "string"
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
                     }
-          - label: "Parameters in Spanish"
+          - label: "Parameters (Spanish)"
             name: "es"
             widget: "object"
             collapsed: true
@@ -196,7 +220,9 @@ collections:
                   - {
                       label: "Description",
                       name: "description",
-                      widget: "string"
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
                     }
               - label: "Water Temperature"
                 name: "water_temperature"
@@ -207,7 +233,9 @@ collections:
                   - {
                       label: "Description",
                       name: "description",
-                      widget: "string"
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
                     }
               - label: "pH"
                 name: "ph"
@@ -218,7 +246,9 @@ collections:
                   - {
                       label: "Description",
                       name: "description",
-                      widget: "string"
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
                     }
               - label: "Turbidity"
                 name: "turbidity"
@@ -229,7 +259,9 @@ collections:
                   - {
                       label: "Description",
                       name: "description",
-                      widget: "string"
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
                     }
               - label: "Dissolved Oxygen"
                 name: "dissolved_oxygen"
@@ -240,7 +272,9 @@ collections:
                   - {
                       label: "Description",
                       name: "description",
-                      widget: "string"
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
                     }
               - label: "Chlorophyll"
                 name: "chlorophyll"
@@ -251,7 +285,9 @@ collections:
                   - {
                       label: "Description",
                       name: "description",
-                      widget: "string"
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
                     }
               - label: "Phycoerythrin"
                 name: "phycoerythrin"
@@ -262,7 +298,9 @@ collections:
                   - {
                       label: "Description",
                       name: "description",
-                      widget: "string"
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
                     }
               - label: "Nitrate"
                 name: "nitrate"
@@ -273,7 +311,9 @@ collections:
                   - {
                       label: "Description",
                       name: "description",
-                      widget: "string"
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
                     }
               - label: "Ammonia"
                 name: "ammonia"
@@ -284,7 +324,9 @@ collections:
                   - {
                       label: "Description",
                       name: "description",
-                      widget: "string"
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
                     }
               - label: "Phosphate"
                 name: "phosphate"
@@ -295,7 +337,9 @@ collections:
                   - {
                       label: "Description",
                       name: "description",
-                      widget: "string"
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
                     }
               - label: "Sulphate"
                 name: "sulphate"
@@ -306,7 +350,9 @@ collections:
                   - {
                       label: "Description",
                       name: "description",
-                      widget: "string"
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
                     }
               - label: "Sulphide"
                 name: "sulphide"
@@ -317,7 +363,9 @@ collections:
                   - {
                       label: "Description",
                       name: "description",
-                      widget: "string"
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
                     }
       - file: "__store__/site"
         label: "NavLinks"
@@ -394,7 +442,8 @@ collections:
                       label: "Site Title",
                       name: "site_title",
                       widget: "string",
-                      hint: "Used for SEO"
+                      hint: "Used for SEO",
+                      required: false
                     }
                   - {
                       label: "Default Site Description",
@@ -462,7 +511,8 @@ collections:
                       label: "Site Title",
                       name: "site_title",
                       widget: "string",
-                      hint: "Used for SEO"
+                      hint: "Used for SEO",
+                      required: false
                     }
                   - {
                       label: "Default Site Description",
@@ -489,35 +539,43 @@ collections:
                     }
 
       - label: "Dashboard"
-        file: "__store__/pages/dashboard"
+        file: "__store__/pages/dashboard.json"
         extension: "json"
         name: "dashboard"
         fields:
-          - label: "Dashboard Content in English"
+          - label: "Dashboard Page (English)"
             name: "en"
             widget: "object"
             collapsed: true
             fields:
-              - {
-                  label: "Map Caption Main",
-                  name: "map_caption_main",
-                  widget: "string"
-                }
-              - {
-                  label: "Map Caption Secondary",
-                  name: "map_caption_secondary",
-                  widget: "string"
-                }
-              - {
-                  label: "Download Nutrients Data Button",
-                  name: "download_nutrients_data_button",
-                  widget: "string"
-                }
-              - {
-                  label: "Download Sensor Data Button",
-                  name: "download_sensor_data_button",
-                  widget: "string"
-                }
+              - label: "Content"
+                name: content
+                widget: object
+                fields:
+                  - {
+                      label: "Map Caption Main",
+                      name: "map_caption_main",
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
+                    }
+                  - {
+                      label: "Map Caption Secondary",
+                      name: "map_caption_secondary",
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
+                    }
+                  - {
+                      label: "Download Nutrients Data Button",
+                      name: "download_nutrients_data_button",
+                      widget: "string"
+                    }
+                  - {
+                      label: "Download Sensor Data Button",
+                      name: "download_sensor_data_button",
+                      widget: "string"
+                    }
               - label: "Metadata"
                 name: "metadata"
                 widget: "object"
@@ -527,7 +585,8 @@ collections:
                       label: "Site Title",
                       name: "site_title",
                       widget: "string",
-                      hint: "Used for SEO"
+                      hint: "Used for SEO",
+                      required: false
                     }
                   - {
                       label: "Default Site Description",
@@ -552,31 +611,39 @@ collections:
                       required: false,
                       hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
                     }
-          - label: "Dashboard Content in Spanish"
+          - label: "Dashboard Page (Spanish)"
             name: "es"
             widget: "object"
             collapsed: true
             fields:
-              - {
-                  label: "Map Caption Main",
-                  name: "map_caption_main",
-                  widget: "string"
-                }
-              - {
-                  label: "Map Caption Secondary",
-                  name: "map_caption_secondary",
-                  widget: "string"
-                }
-              - {
-                  label: "Download Nutrients Data Button",
-                  name: "download_nutrients_data_button",
-                  widget: "string"
-                }
-              - {
-                  label: "Download Sensor Data Button",
-                  name: "download_sensor_data_button",
-                  widget: "string"
-                }
+              - label: "Content"
+                name: content
+                widget: object
+                fields:
+                  - {
+                      label: "Map Caption Main",
+                      name: "map_caption_main",
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
+                    }
+                  - {
+                      label: "Map Caption Secondary",
+                      name: "map_caption_secondary",
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
+                    }
+                  - {
+                      label: "Download Nutrients Data Button",
+                      name: "download_nutrients_data_button",
+                      widget: "string"
+                    }
+                  - {
+                      label: "Download Sensor Data Button",
+                      name: "download_sensor_data_button",
+                      widget: "string"
+                    }
               - label: "Metadata"
                 name: "metadata"
                 widget: "object"
@@ -586,7 +653,8 @@ collections:
                       label: "Site Title",
                       name: "site_title",
                       widget: "string",
-                      hint: "Used for SEO"
+                      hint: "Used for SEO",
+                      required: false
                     }
                   - {
                       label: "Default Site Description",
@@ -612,27 +680,37 @@ collections:
                       hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
                     }
       - label: "Contact"
-        file: "__store__/pages/contact"
+        file: "__store__/pages/contact.json"
         extension: "json"
         name: "contact"
         fields:
-          - label: "Contact Content in English"
+          - label: "Contact Page (English)"
             name: "en"
             widget: "object"
             collapsed: true
             fields:
-              - { label: "Title", name: "title", widget: "string" }
-              - { label: "Content", name: "content", widget: "string" }
-              - {
-                  label: "Apply Button Text",
-                  name: "apply_button_text",
-                  widget: "string"
-                }
-              - {
-                  label: "Apply Button Link",
-                  name: "apply_button_link",
-                  widget: "string"
-                }
+              - label: "Content"
+                name: content
+                widget: object
+                fields:
+                  - { label: "Title", name: "title", widget: "string" }
+                  - {
+                      label: "Content",
+                      name: "content",
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
+                    }
+                  - {
+                      label: "Apply Button Text",
+                      name: "apply_button_text",
+                      widget: "string"
+                    }
+                  - {
+                      label: "Apply Button Link",
+                      name: "apply_button_link",
+                      widget: "string"
+                    }
               - label: "Metadata"
                 name: "metadata"
                 widget: "object"
@@ -642,7 +720,8 @@ collections:
                       label: "Site Title",
                       name: "site_title",
                       widget: "string",
-                      hint: "Used for SEO"
+                      hint: "Used for SEO",
+                      required: false
                     }
                   - {
                       label: "Default Site Description",
@@ -667,23 +746,33 @@ collections:
                       required: false,
                       hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
                     }
-          - label: "Contact Content in Spanish"
+          - label: "Contact Page (Spanish)"
             name: "es"
             widget: "object"
             collapsed: true
             fields:
-              - { label: "Title", name: "title", widget: "string" }
-              - { label: "Content", name: "content", widget: "string" }
-              - {
-                  label: "Apply Button Text",
-                  name: "apply_button_text",
-                  widget: "string"
-                }
-              - {
-                  label: "Apply Button Link",
-                  name: "apply_button_link",
-                  widget: "string"
-                }
+              - label: "Content"
+                name: content
+                widget: object
+                fields:
+                  - { label: "Title", name: "title", widget: "string" }
+                  - {
+                      label: "Content",
+                      name: "content",
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
+                    }
+                  - {
+                      label: "Apply Button Text",
+                      name: "apply_button_text",
+                      widget: "string"
+                    }
+                  - {
+                      label: "Apply Button Link",
+                      name: "apply_button_link",
+                      widget: "string"
+                    }
               - label: "Metadata"
                 name: "metadata"
                 widget: "object"
@@ -693,7 +782,8 @@ collections:
                       label: "Site Title",
                       name: "site_title",
                       widget: "string",
-                      hint: "Used for SEO"
+                      hint: "Used for SEO",
+                      required: false
                     }
                   - {
                       label: "Default Site Description",
