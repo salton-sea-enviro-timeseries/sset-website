@@ -1,13 +1,13 @@
 {
   "en": {
     "content": {
-      "title": "Contact Us",
+      "title": "Contact Us (Test)",
       "content": "We are always looking for volunteers to help us with our research and outreach. We provide a modest stipend to compensate for the labor. If you are interested in volunteering for our research, please apply.",
       "apply_button_text": "Apply Now",
       "apply_button_link": "https://docs.google.com/forms/d/e/1FAIpQLSc0cpEzdLRGpdYY4vv6lO4QaNsavNWzgga2KNPCpL44fMaiqA/viewform?usp=sf_link"
     },
     "metadata": {
-      "site_title": "",
+      "site_title": "(Test)",
       "site_description": "",
       "open_graph_image": "",
       "open_graph_site_url": ""
@@ -21,7 +21,7 @@
       "apply_button_link": "https://docs.google.com/forms/d/e/1FAIpQLSeei4yD1pbwhvuLK_bFFSJhnbWRiMMGWfi6PMkP1fiXJU2Z9w/viewform?usp=sf_link"
     },
     "metadata": {
-      "site_title": "",
+      "site_title": "(Test)",
       "site_description": "",
       "open_graph_image": "",
       "open_graph_site_url": ""
