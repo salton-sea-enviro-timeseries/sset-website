@@ -13,7 +13,7 @@ collections:
     description: "Settings that are used throughout the entire site"
     extension: "json"
     files:
-      - file: "__store__/metadata"
+      - file: "__store__/metadata.json"
         label: "Metadata"
         name: "site"
         fields:
@@ -41,7 +41,7 @@ collections:
               default: /logo-red.jpg,
               hint: This is the thumbnail that shows up when you share your site on Facebook or via an iMessage
             }
-      - file: "__store__/parameters"
+      - file: "__store__/parameters.json"
         label: "Parameters"
         name: "parameters"
         fields:
@@ -50,295 +50,311 @@ collections:
             widget: "object"
             collapsed: true
             fields:
-              - label: "Salinity"
-                name: "salinity"
-                widget: "object"
-                collapsed: true
+              - label: "Parameters"
+                name: "parameters"
+                widget: object
                 fields:
-                  - { label: "Unit", name: "unit", widget: "string" }
-                  - {
-                      label: "Description",
-                      name: "description",
-                      widget: "string"
-                    }
-              - label: "Water Temperature"
-                name: "water_temperature"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { label: "Unit", name: "unit", widget: "string" }
-                  - {
-                      label: "Description",
-                      name: "description",
-                      widget: "string"
-                    }
-              - label: "pH"
-                name: "ph"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { label: "Unit", name: "unit", widget: "string" }
-                  - {
-                      label: "Description",
-                      name: "description",
-                      widget: "string"
-                    }
-              - label: "Turbidity"
-                name: "turbidity"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { label: "Unit", name: "unit", widget: "string" }
-                  - {
-                      label: "Description",
-                      name: "description",
-                      widget: "string"
-                    }
-              - label: "Dissolved Oxygen"
-                name: "dissolved_oxygen"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { label: "Unit", name: "unit", widget: "string" }
-                  - {
-                      label: "Description",
-                      name: "description",
-                      widget: "string"
-                    }
-              - label: "Chlorophyll"
-                name: "chlorophyll"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { label: "Unit", name: "unit", widget: "string" }
-                  - {
-                      label: "Description",
-                      name: "description",
-                      widget: "string"
-                    }
-              - label: "Phycoerythrin"
-                name: "phycoerythrin"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { label: "Unit", name: "unit", widget: "string" }
-                  - {
-                      label: "Description",
-                      name: "description",
-                      widget: "string"
-                    }
-              - label: "Nitrate"
-                name: "nitrate"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { label: "Unit", name: "unit", widget: "string" }
-                  - {
-                      label: "Description",
-                      name: "description",
-                      widget: "string"
-                    }
-              - label: "Ammonia"
-                name: "ammonia"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { label: "Unit", name: "unit", widget: "string" }
-                  - {
-                      label: "Description",
-                      name: "description",
-                      widget: "string"
-                    }
-              - label: "Phosphate"
-                name: "phosphate"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { label: "Unit", name: "unit", widget: "string" }
-                  - {
-                      label: "Description",
-                      name: "description",
-                      widget: "string"
-                    }
-              - label: "Sulphate"
-                name: "sulphate"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { label: "Unit", name: "unit", widget: "string" }
-                  - {
-                      label: "Description",
-                      name: "description",
-                      widget: "string"
-                    }
-              - label: "Sulphide"
-                name: "sulphide"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { label: "Unit", name: "unit", widget: "string" }
-                  - {
-                      label: "Description",
-                      name: "description",
-                      widget: "string"
-                    }
+                  - label: "Salinity"
+                    name: "salinity"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "string"
+                        }
+                  - label: "Water Temperature"
+                    name: "water_temperature"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "string"
+                        }
+                  - label: "pH"
+                    name: "ph"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "string"
+                        }
+                  - label: "Turbidity"
+                    name: "turbidity"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "string"
+                        }
+                  - label: "Dissolved Oxygen"
+                    name: "dissolved_oxygen"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "string"
+                        }
+                  - label: "Chlorophyll"
+                    name: "chlorophyll"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "string"
+                        }
+                  - label: "Phycoerythrin"
+                    name: "phycoerythrin"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "string"
+                        }
+                  - label: "Nitrate"
+                    name: "nitrate"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "string"
+                        }
+                  - label: "Ammonia"
+                    name: "ammonia"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "string"
+                        }
+                  - label: "Phosphate"
+                    name: "phosphate"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "string"
+                        }
+                  - label: "Sulphate"
+                    name: "sulphate"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "string"
+                        }
+                  - label: "Sulphide"
+                    name: "sulphide"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "string"
+                        }
           - label: "Parameters in Spanish"
             name: "es"
             widget: "object"
             collapsed: true
             fields:
-              - label: "Salinity"
-                name: "salinity"
-                widget: "object"
-                collapsed: true
+              - label: "Parameters"
+                name: "parameters"
+                widget: object
                 fields:
-                  - { label: "Unit", name: "unit", widget: "string" }
-                  - {
-                      label: "Description",
-                      name: "description",
-                      widget: "string"
-                    }
-              - label: "Water Temperature"
-                name: "water_temperature"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { label: "Unit", name: "unit", widget: "string" }
-                  - {
-                      label: "Description",
-                      name: "description",
-                      widget: "string"
-                    }
-              - label: "pH"
-                name: "ph"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { label: "Unit", name: "unit", widget: "string" }
-                  - {
-                      label: "Description",
-                      name: "description",
-                      widget: "string"
-                    }
-              - label: "Turbidity"
-                name: "turbidity"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { label: "Unit", name: "unit", widget: "string" }
-                  - {
-                      label: "Description",
-                      name: "description",
-                      widget: "string"
-                    }
-              - label: "Dissolved Oxygen"
-                name: "dissolved_oxygen"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { label: "Unit", name: "unit", widget: "string" }
-                  - {
-                      label: "Description",
-                      name: "description",
-                      widget: "string"
-                    }
-              - label: "Chlorophyll"
-                name: "chlorophyll"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { label: "Unit", name: "unit", widget: "string" }
-                  - {
-                      label: "Description",
-                      name: "description",
-                      widget: "string"
-                    }
-              - label: "Phycoerythrin"
-                name: "phycoerythrin"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { label: "Unit", name: "unit", widget: "string" }
-                  - {
-                      label: "Description",
-                      name: "description",
-                      widget: "string"
-                    }
-              - label: "Nitrate"
-                name: "nitrate"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { label: "Unit", name: "unit", widget: "string" }
-                  - {
-                      label: "Description",
-                      name: "description",
-                      widget: "string"
-                    }
-              - label: "Ammonia"
-                name: "ammonia"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { label: "Unit", name: "unit", widget: "string" }
-                  - {
-                      label: "Description",
-                      name: "description",
-                      widget: "string"
-                    }
-              - label: "Phosphate"
-                name: "phosphate"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { label: "Unit", name: "unit", widget: "string" }
-                  - {
-                      label: "Description",
-                      name: "description",
-                      widget: "string"
-                    }
-              - label: "Sulphate"
-                name: "sulphate"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { label: "Unit", name: "unit", widget: "string" }
-                  - {
-                      label: "Description",
-                      name: "description",
-                      widget: "string"
-                    }
-              - label: "Sulphide"
-                name: "sulphide"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { label: "Unit", name: "unit", widget: "string" }
-                  - {
-                      label: "Description",
-                      name: "description",
-                      widget: "string"
-                    }
-      - file: "__store__/site"
+                  - label: "Salinity"
+                    name: "salinity"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "string"
+                        }
+                  - label: "Water Temperature"
+                    name: "water_temperature"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "string"
+                        }
+                  - label: "pH"
+                    name: "ph"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "string"
+                        }
+                  - label: "Turbidity"
+                    name: "turbidity"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "string"
+                        }
+                  - label: "Dissolved Oxygen"
+                    name: "dissolved_oxygen"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "string"
+                        }
+                  - label: "Chlorophyll"
+                    name: "chlorophyll"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "string"
+                        }
+                  - label: "Phycoerythrin"
+                    name: "phycoerythrin"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "string"
+                        }
+                  - label: "Nitrate"
+                    name: "nitrate"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "string"
+                        }
+                  - label: "Ammonia"
+                    name: "ammonia"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "string"
+                        }
+                  - label: "Phosphate"
+                    name: "phosphate"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "string"
+                        }
+                  - label: "Sulphate"
+                    name: "sulphate"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "string"
+                        }
+                  - label: "Sulphide"
+                    name: "sulphide"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "string"
+                        }
+      - file: "__store__/site.json"
         label: "NavLinks"
         name: "navLinks"
         fields:
-          - label: "NavLinks English"
+          - label: "NavLinks (English)"
             name: "en"
             widget: "object"
             collapsed: true
             fields:
-              - { label: "Home", name: "home", widget: "string" }
-              - { label: "Dashboard", name: "dashboard", widget: "string" }
-              - { label: "Contact Us", name: "contact", widget: "string" }
-          - label: "NavLinks Spanish"
+              - label: "NavLinks"
+                name: "navLinks"
+                widget: object
+                fields:
+                  - { label: "Home", name: "home", widget: "string" }
+                  - { label: "Dashboard", name: "dashboard", widget: "string" }
+                  - { label: "Contact Us", name: "contact", widget: "string" }
+          - label: "NavLinks (Spanish)"
             name: "es"
             widget: "object"
             collapsed: true
             fields:
-              - { label: "Home", name: "home", widget: "string" }
-              - { label: "Dashboard", name: "dashboard", widget: "string" }
-              - { label: "Contact Us", name: "contact", widget: "string" }
+              - label: "NavLinks"
+                name: "navLinks"
+                widget: object
+                fields:
+                  - { label: "Home", name: "home", widget: "string" }
+                  - { label: "Dashboard", name: "dashboard", widget: "string" }
+                  - { label: "Contact Us", name: "contact", widget: "string" }
 
   - name: "pages"
     label: "Pages"
