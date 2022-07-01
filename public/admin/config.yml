@@ -1,14 +1,11 @@
 backend:
   name: git-gateway
-  # git-gateway
-  # use test-repo to view ui changes locally
   branch: main
-#publish mode allows control over content publishing enabling review
-publish_mode: editorial_workflow
-media_folder: static/uploads
-public_folder: static/uploads
+media_folder: public/uploads
+public_folder: public/uploads
 site_url: https://saltonseascience.org/
 logo_url: https://saltonseascience.org/logo-red.png
+search: false
 collections:
   - name: "global"
     label: "Site Settings"
@@ -350,34 +347,44 @@ collections:
     extension: "json"
     files:
       - label: "Home"
-        file: "__store__/pages/home"
+        file: "__store__/pages/home.json"
         extension: "json"
         name: "home"
         fields:
-          - label: "Home Content in English"
+          - label: "Home Page (English)"
             name: "en"
             widget: "object"
             collapsed: true
             fields:
-              - {
-                  label: "Hero",
-                  name: "hero",
-                  widget: "string",
-                  hint: "Main Home Page Title"
-                }
-              - {
-                  label: "Call to Action",
-                  name: "call_to_action",
-                  widget: "string",
-                  hint: "View Data Button Text"
-                }
-              - label: "Salton Sea Section"
-                name: "salton_sea_section"
-                widget: "object"
-                collapsed: true
+              - label: "Content"
+                name: content
+                widget: object
                 fields:
-                  - { label: "Title", name: "title", widget: "string" }
-                  - { label: "Content", name: "content", widget: "text" }
+                  - {
+                      label: "Hero",
+                      name: "hero",
+                      widget: "string",
+                      hint: "Main Home Page Title"
+                    }
+                  - {
+                      label: "Call to Action",
+                      name: "call_to_action",
+                      widget: "string",
+                      hint: "View Data Button Text"
+                    }
+                  - label: "Salton Sea Section"
+                    name: "salton_sea_section"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Title", name: "title", widget: "string" }
+                      - {
+                          label: "Content",
+                          name: "content",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
               - label: "Metadata"
                 name: "metadata"
                 widget: "object"
@@ -412,34 +419,44 @@ collections:
                       required: false,
                       hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
                     }
-          - label: "Home Content in Spanish"
+          - label: "Home Page (Spanish)"
             name: "es"
             widget: "object"
             collapsed: true
             fields:
-              - {
-                  label: "Hero",
-                  name: "hero",
-                  widget: "string",
-                  hint: "Main Home Page Title"
-                }
-              - {
-                  label: "Call to Action",
-                  name: "call_to_action",
-                  widget: "string",
-                  hint: "View Data Button Text"
-                }
-              - label: "Salton Sea Section"
-                name: "salton_sea_section"
-                widget: "object"
-                collapsed: true
+              - label: "Content"
+                name: content
+                widget: object
                 fields:
-                  - { label: "Title", name: "title", widget: "string" }
-                  - { label: "Content", name: "content", widget: "text" }
+                  - {
+                      label: "Hero",
+                      name: "hero",
+                      widget: "string",
+                      hint: "Main Home Page Title"
+                    }
+                  - {
+                      label: "Call to Action",
+                      name: "call_to_action",
+                      widget: "string",
+                      hint: "View Data Button Text"
+                    }
+                  - label: "Salton Sea Section"
+                    name: "salton_sea_section"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Title", name: "title", widget: "string" }
+                      - {
+                          label: "Content",
+                          name: "content",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
               - label: "Metadata"
                 name: "metadata"
                 widget: "object"
-                collapsed: true
+                collapsed: false
                 fields:
                   - {
                       label: "Site Title",
@@ -470,6 +487,7 @@ collections:
                       required: false,
                       hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
                     }
+
       - label: "Dashboard"
         file: "__store__/pages/dashboard"
         extension: "json"
