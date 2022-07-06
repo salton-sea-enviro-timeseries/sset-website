@@ -8,9 +8,9 @@
   },
   "es": {
     "navLinks": {
-      "home": "",
-      "dashboard": "",
-      "contact": ""
+      "home": "Página de Inicio",
+      "dashboard": "Tablero de Datos",
+      "contact": "Contáctenos"
     }
   }
 }
