@@ -1,82 +1,130 @@
 {
   "en": {
     "parameters": {
-      "salinity": {
-        "name": "Salinity",
-        "unit": "PSU",
-        "description": "Salinity is the concentration of salt in the water. High salinity levels make the Salton Sea uninhabitable to many fish and as their food source dwindles, an unreliable water source for many fish-eating birds. As a comparison, the average salinity of the ocean is 35 PSU. Currently, the Salton Sea's salinity has been increasing as the water evaporates and not enough water exists to replenish the Salton Sea."
-      },
-      "water_temperature": {
-        "name": "Water Temperature",
-        "unit": "°F",
-        "description": "Warmer temperatures can impact the levels of dissolved oxygen, rates of photosynthesis (the process used by plants and algae to \"make food\") and can generally make an aquatic habitat uninhabitable if temperatures are high enough. Temperature can vary with water depth, with generally cooler temperatures below the surface."
-      },
-      "ph": {
-        "name": "pH",
-        "unit": "ph",
-        "description": "pH indicates how acidic or basic a body of water is with 0 being extremely acidic, 7 being neutral and 14 being extremely basic. If pH levels are too high or too low, organisms living within the body of water may likely die if it is not within their tolerable threshold. Additionally, pH levels can affect the solubility of toxic chemicals, and even metals, within a body of water."
-      },
       "turbidity": {
         "name": "Turbidity",
         "unit": "FNU",
         "description": "Turbidity is a measure of the relative clarity of water. Higher turbidity indicates less scattered sunlight and is often caused by suspended sediment in the water, which can have negative impacts on aquatic life."
-      },
-      "dissolved_oxygen": {
-        "name": "Dissolved Oxygen",
-        "unit": "mg/L",
-        "description": "Optical dissolved oxygen concentrations indicate the amount of oxygen in the water. Oxygen levels will typically be higher closer to the surface and often at the lowest as water depth increases. There are also other factors that can impact oxygen levels, such as decomposition of dead phytoplankton."
-      },
-      "chlorophyll": {
-        "name": "Chlorophyll",
-        "unit": "μg/L",
-        "description": "Chlorophyll concentration is an indicator for the presence of photosynthetic phytoplankton (or algae) in the Salton Sea. High concentrations of chlorophyll in the water can indicate algal blooms."
       },
       "phycoerythrin": {
         "name": "Phycoerythrin",
         "unit": "μg/L",
         "description": "Phycoerythrin is an accessory pigment to the primary photosynthetic pigment, chlorophyll. Phycoerythrin is commonly found in harmful algal bloom forming cyanobacteria (blue-green algae) and is useful for monitoring algal blooms in the Salton Sea."
       },
-      "nitrate": {
-        "name": "Nitrate",
-        "unit": "mg/L N",
-        "description": "Nitrate is the main nitrogenous compound (ie: ammonia, nitrate, nitrite) utilized by algae and is often the limiting nutrient for algal growth in the ocean. Nitrate run off into the Salton Sea can lead to eutrophication, overstimulate algal growth, create harmful algal blooms, and deoxygenation at depth."
-      },
-      "ammonia": {
-        "name": "Ammonia",
-        "unit": "mg/L N",
-        "description": "Ammonia is an important nitrogenous compound (ie: ammonia, nitrate, nitrite) utilized by algae. Similar to nitrate, high levels of runoff can lead to harmful algal blooms and deoxygenation at depth."
-      },
-      "phosphate": {
-        "name": "Phosphate",
+      "sulphide": {
+        "name": "Sulphide",
         "unit": "mg/L",
-        "description": "Phosphate is an important nutrient for algal growth in inland lakes and can often be the limiting nutrient for algal growth. Phosphate runoff from fertilizers are often the primary cause of algae blooms in lakes."
+        "description": "Sulfide is the product of anaerobic (without oxygen) microbial reaction that occurs in the Salton Sea water column when there is no dissolved oxygen available due to eutrophication in the summer. When sulfide is accumulated in the water column, daily and seasonal water mixing induces sulfidic gas emission. This sulfidic gas emission is what creates the rotten egg yolk smell on the Salton Sea shoreline, specifically prolific in the summer months. The South Coast Air Quality Monitoring District is actively monitoring the release of this odor (more information on forecast can be found on saltonseaodor.org). Sulfide is unstable in environments with oxygen, so we measure very low values of sulfide in the surface of the Sea."
+      },
+      "salinity": {
+        "name": "Salinity",
+        "unit": "PSU",
+        "description": "Salinity is the concentration of salt in the water. High salinity levels make the Salton Sea uninhabitable to many fish and as their food source dwindles, an unreliable water source for many fish-eating birds. As a comparison, the average salinity of the ocean is 35 PSU. Currently, the Salton Sea's salinity has been increasing as the water evaporates and not enough water exists to replenish the Salton Sea."
+      },
+      "dissolved_oxygen": {
+        "name": "Dissolved Oxygen",
+        "unit": "mg/L",
+        "description": "Optical dissolved oxygen concentrations indicate the amount of oxygen in the water. Oxygen levels will typically be higher closer to the surface and often at the lowest as water depth increases. There are also other factors that can impact oxygen levels, such as decomposition of dead phytoplankton."
+      },
+      "water_temperature": {
+        "name": "Water Temperature",
+        "unit": "°F",
+        "description": "Warmer temperatures can impact the levels of dissolved oxygen, rates of photosynthesis (the process used by plants and algae to \"make food\") and can generally make an aquatic habitat uninhabitable if temperatures are high enough. Temperature can vary with water depth, with generally cooler temperatures below the surface."
       },
       "sulphate": {
         "name": "Sulphate",
         "unit": "mg/L",
         "description": "The sulfate concentration in the Salton Sea is about 10 times that of the modern ocean and has continued to increase annually as a result of agricultural runoff and interventions to curb algae blooms. Such high levels of sulfate in the lake make the water chemistry imbalanced. As a result, there is spontaneous gypsum crystal precipitation in the surface waters and rapid crust formation on the lakeshore. Most importantly, microbes use sulfate and produce sulfide, which leads to a rotten egg smell, mostly during the summer."
       },
-      "sulphide": {
-        "name": "Sulphide",
+      "ammonia": {
+        "name": "Ammonia",
+        "unit": "mg/L N",
+        "description": "Ammonia is an important nitrogenous compound (ie: ammonia, nitrate, nitrite) utilized by algae. Similar to nitrate, high levels of runoff can lead to harmful algal blooms and deoxygenation at depth."
+      },
+      "ph": {
+        "name": "pH",
+        "unit": "ph",
+        "description": "pH indicates how acidic or basic a body of water is with 0 being extremely acidic, 7 being neutral and 14 being extremely basic. If pH levels are too high or too low, organisms living within the body of water may likely die if it is not within their tolerable threshold. Additionally, pH levels can affect the solubility of toxic chemicals, and even metals, within a body of water."
+      },
+      "nitrate": {
+        "name": "Nitrate",
+        "unit": "mg/L N",
+        "description": "Nitrate is the main nitrogenous compound (ie: ammonia, nitrate, nitrite) utilized by algae and is often the limiting nutrient for algal growth in the ocean. Nitrate run off into the Salton Sea can lead to eutrophication, overstimulate algal growth, create harmful algal blooms, and deoxygenation at depth."
+      },
+      "chlorophyll": {
+        "name": "Chlorophyll",
+        "unit": "μg/L",
+        "description": "Chlorophyll concentration is an indicator for the presence of photosynthetic phytoplankton (or algae) in the Salton Sea. High concentrations of chlorophyll in the water can indicate algal blooms."
+      },
+      "phosphate": {
+        "name": "Phosphate",
         "unit": "mg/L",
-        "description": "Sulfide is the product of anaerobic (without oxygen) microbial reaction that occurs in the Salton Sea water column when there is no dissolved oxygen available due to eutrophication in the summer. When sulfide is accumulated in the water column, daily and seasonal water mixing induces sulfidic gas emission. This sulfidic gas emission is what creates the rotten egg yolk smell on the Salton Sea shoreline, specifically prolific in the summer months. The South Coast Air Quality Monitoring District is actively monitoring the release of this odor (more information on forecast can be found on saltonseaodor.org). Sulfide is unstable in environments with oxygen, so we measure very low values of sulfide in the surface of the Sea."
+        "description": "Phosphate is an important nutrient for algal growth in inland lakes and can often be the limiting nutrient for algal growth. Phosphate runoff from fertilizers are often the primary cause of algae blooms in lakes."
       }
     }
   },
   "es": {
     "parameters": {
-      "salinity": { "name": "", "unit": "", "description": "" },
-      "water_temperature": { "name": "", "unit": "", "description": "" },
-      "ph": { "name": "", "unit": "", "description": "" },
-      "turbidity": { "name": "", "unit": "", "description": "" },
-      "dissolved_oxygen": { "name": "", "unit": "", "description": "" },
-      "chlorophyll": { "name": "", "unit": "", "description": "" },
-      "phycoerythrin": { "name": "", "unit": "", "description": "" },
-      "nitrate": { "name": "", "unit": "", "description": "" },
-      "ammonia": { "name": "", "unit": "", "description": "" },
-      "phosphate": { "name": "", "unit": "", "description": "" },
-      "sulphate": { "name": "", "unit": "", "description": "" },
-      "sulphide": { "name": "", "unit": "", "description": "" }
+      "turbidity": {
+        "name": "",
+        "unit": "FNU",
+        "description": "La turbidez es una medida del nivel de claridad del agua. Turbidez alta indica que hay una menor cantidad de luz dispersada a través de la columna de agua. Niveles de turbidez altos usualmente son causados por sedimentos suspendidos en la columna de agua, los cuales.disminuyen la cantidad de luz que puede llegar a lo profundo. Niveles de turbidez altos pueden impactar la vida acuática negativamente."
+      },
+      "phycoerythrin": {
+        "name": "",
+        "unit": "μg/L",
+        "description": "La ficoeritrina es un pigmento que complementa la clorofila. La ficoeritrina se encuentra comúnmente en los grupos de algas dañinas que forman cianobacterias (algas verdeazuladas) y es útil para monitorear la proliferación de algas en el Salton Sea."
+      },
+      "sulphide": {
+        "name": "",
+        "unit": "mg/L",
+        "description": "El sulfuro es el producto de una reacción microbiana anaeróbica (sin oxígeno) que ocurre en la columna de agua del Salton Sea cuando no hay oxígeno en el agua debido a la descomposición de algas excesivas. El sulfuro se acumula en la columna de agua, así que, cuando sopla el viento, se emiten gases sulfurosos.  Esta emisión de gas sulfuroso es lo que crea el olor a yema de huevo podrido en la costa del Salton Sea, especialmente durante el verano. El Distrito de Monitoreo de la Calidad del Aire de la Costa Sur está monitoreando activamente la emisión de este olor (se puede encontrar más información sobre el pronóstico en saltonseaodor.org). El sulfuro es inestable en ambientes con oxígeno así que medimos cantidades muy bajas en la superficie del lago."
+      },
+      "salinity": {
+        "name": "",
+        "unit": "PSU",
+        "description": "La salinidad es la concentración de sal en el agua. Los niveles altos de salinidad en el Salton Sea (como comparación, el océano tiene una salinidad promedio de 35 psu) hacen que éste sea inhabitable para muchos peces y, por ende, es una fuente de agua poco confiable para muchas aves que se alimentan de esos peces. La salinidad del Salton Sea ha aumentado porque más agua se evapora de la que entra en el Salton Sea."
+      },
+      "dissolved_oxygen": {
+        "name": "",
+        "unit": "mg/L",
+        "description": "Las concentraciones de oxígeno disuelto indican la cantidad de oxígeno en el agua. Los niveles de oxígeno típicamente son más altos cerca de la superficie (el agua que está expuesta al aire) y, a menudo, disminuyen a medida que aumenta la profundidad del agua. También hay otros factores que pueden afectar los niveles de oxígeno, como la descomposición de las algas muertas."
+      },
+      "water_temperature": {
+        "name": "",
+        "unit": "°F",
+        "description": "Las temperaturas altas pueden afectar los niveles de oxígeno disuelto y el proceso de fotosíntesis (el modo en que las plantas y algas “producen su comida”). En general, las temperaturas altas pueden hacer que el Salton Sea sea inhabitable. La temperatura puede variar con la profundidad del agua; el agua lejos de la superficie es, generalmente, más fría."
+      },
+      "sulphate": {
+        "name": "",
+        "unit": "mg/L",
+        "description": "La concentración de sulfato en el Salton Sea es aproximadamente 10 veces mayor que la del océano y ha seguido aumentando anualmente como resultado de las escorrentías agrícolas y programas para controlar la proliferación de algas. Estos niveles elevados de sulfato (a causa de los humanos) implican que hay un desequilibrio en la química del agua. Este desequilibrio lleva a la saturación y precipitación del sulfato y a la formación rápida de costras en la orilla del lago. Además, las cantidades excesivas de sulfato conduce a la acumulación del sulfuro y a la peste en los veranos."
+      },
+      "ammonia": {
+        "name": "",
+        "unit": "mg/L N",
+        "description": "El amoníaco es uno de los compuestos de los nitrógenos (los compuestos incluyen el amoníaco, nitrato, nitrito, etc.).  Al igual que con el nitrato, los altos niveles de amoníaco en las  escorrentías agrícolas pueden provocar la proliferación de algas y resultar en niveles de oxígeno muy bajos."
+      },
+      "ph": {
+        "name": "",
+        "unit": "ph",
+        "description": "El pH indica qué tan ácido o básico es un cuerpo de agua. Un pH de 0 indica que el agua es extremadamente ácida, un pH de 7 indica que el agua es neutral y un pH de 14 indica que el agua es extremadamente básica. Si los niveles de pH son demasiado altos o demasiado bajos, es probable que los organismos acuáticos mueran. Además, los niveles de pH pueden afectar la solubilidad de los productos químicos tóxicos, e incluso los metales, dentro de una masa de agua."
+      },
+      "nitrate": {
+        "name": "",
+        "unit": "mg/L N",
+        "description": "El nitrato es el compuesto principal de los nitrógenos (los compuestos incluyen el amoníaco, nitrato, nitrito, etc.). Las algas utilizan el nitrato; de hecho la escasez de nitrógeno es lo que, a menudo, limita el crecimiento de las algas en el océano. Al contrario, la cantidad alta de nitrógeno que llega al Salton Sea, a través de las escorrentías agrícolas, puede estimular el crecimiento de algas en exceso y crear un ambiente con niveles de oxígeno muy bajos."
+      },
+      "chlorophyll": {
+        "name": "",
+        "unit": "μg/L",
+        "description": "La concentración de clorofila es un indicador de la presencia de fitoplancton fotosintético (algas) en el Mar de Salton. Las altas concentraciones de clorofila en el agua pueden indicar que hay una proliferación de algas"
+      },
+      "phosphate": {
+        "name": "",
+        "unit": "mg/L",
+        "description": "El fosfato es un nutriente importante para el crecimiento de algas en los lagos y, a menudo, puede ser el nutriente que limita el crecimiento de las algas. El fosfato en las escorrentías agrícolas proviene de los fertilizantes y suele ser la causa principal de la proliferación de algas en los lagos."
+      }
     }
   }
 }
