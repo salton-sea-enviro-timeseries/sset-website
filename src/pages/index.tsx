@@ -23,12 +23,12 @@ const Home = ({
         size="large"
         bgImage="/hero.jpg"
         bgImageOpacity={0.75}
-        title={getContent(language, "home.hero")}
+        title={getContent(`pages.home.${language}.content.hero`)}
         subtitle=""
         cta={
           <Link href="/dashboard" passHref>
             <Button variant="contained" color="primary">
-              {getContent(language, "home.call_to_action")}
+              {getContent(`pages.home.${language}.content.call_to_action`)}
             </Button>
           </Link>
         }

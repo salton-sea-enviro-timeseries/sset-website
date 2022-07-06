@@ -122,7 +122,12 @@ const Dashboard = () => {
                             key={Parameter[key as keyof typeof Parameter]}
                             value={Parameter[key as keyof typeof Parameter]}
                           >
-                            {key}
+                            <Translation
+                              component="span"
+                              path={`parameters.language.parameters.${
+                                Parameter[key as keyof typeof Parameter]
+                              }.name`}
+                            />
                           </MenuItem>
                         ))}
                       </TextField>
@@ -136,9 +141,10 @@ const Dashboard = () => {
                     isLoading={isDataLoading}
                   >
                     <Box pl={0.5} className={classes.legend}>
-                      <Typography variant="caption">
-                        {ParameterMapping[parameter].unit}
-                      </Typography>
+                      <Translation
+                        variant="caption"
+                        path={`parameters.language.parameters.${parameter}.unit`}
+                      />
                       {activeRange.min !== undefined &&
                         activeRange.mid !== undefined &&
                         activeRange.max !== undefined && (
@@ -173,7 +179,7 @@ const Dashboard = () => {
               </Grid>
               <Grid item xs={12}>
                 <WithLoading isLoading={isDataLoading} width="100%">
-                  <Typography
+                  <Translation
                     variant="caption"
                     component="div"
                     style={{
@@ -181,9 +187,8 @@ const Dashboard = () => {
                       alignItems: "center",
                       paddingBottom: "10px"
                     }}
-                  >
-                    {ParameterMapping[parameter].description}
-                  </Typography>
+                    path={`parameters.language.parameters.${parameter}.description`}
+                  />
                 </WithLoading>
               </Grid>
               <Grid item xs={12}>
@@ -191,7 +196,7 @@ const Dashboard = () => {
                   <Translation
                     variant="caption"
                     component="p"
-                    path="dashboard.map_caption_secondary"
+                    path="pages.dashboard.language.content.map_caption_secondary"
                     style={{
                       fontWeight: "bold"
                     }}

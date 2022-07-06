@@ -18,24 +18,28 @@ const ContactUsPage = () => {
   const classes = useStyles();
   return (
     <Layout>
-      <Hero
-        bgColor="secondary"
-        size="medium"
-        bgImage="/topography.svg"
-        // bgImageOpacity={0.9}
-        title="Contact Us"
-        // subtitle="Some nice words here."
-        sectionHeaderProps={{
-          titleProps: {
-            align: "center",
-            className: classes.header,
-            display: "inline"
-          },
-          display: "flex",
-          justifyContent: "center",
-          size: 4
+      <Translation
+        path="pages.contact.language.content.title"
+        propsToTranslate={{
+          title: "pages.contact.language.content.title"
         }}
-      />
+      >
+        <Hero
+          bgColor="secondary"
+          size="medium"
+          bgImage="/topography.svg"
+          sectionHeaderProps={{
+            titleProps: {
+              align: "center",
+              className: classes.header,
+              display: "inline"
+            },
+            display: "flex",
+            justifyContent: "center",
+            size: 4
+          }}
+        />
+      </Translation>
       <Section>
         <Container maxWidth="sm" className={classes.container}>
           <Card className={classes.card}>
@@ -103,13 +107,13 @@ const ContactUsPage = () => {
                 align="center"
                 variant="h6"
                 component="p"
-                path="contact.content"
+                path="pages.contact.language.content.content"
               />
               <Box pt={3} display="flex" justifyContent="center">
                 <Translation
-                  path="contact.apply_button_text"
+                  path="pages.contact.language.content.apply_button_text"
                   propsToTranslate={{
-                    href: "contact.apply_button_link"
+                    href: "pages.contact.language.content.apply_button_link"
                   }}
                 >
                   <Button

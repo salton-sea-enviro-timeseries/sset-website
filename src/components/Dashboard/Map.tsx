@@ -134,7 +134,7 @@ export default function Map({ pins }: MapProps) {
               component="div"
               variant="caption"
               noWrap={transitionExited || showMoreInfo ? false : true}
-              path="dashboard.map_caption_main"
+              path="pages.dashboard.language.content.map_caption_main"
             />
 
             <Box display="flex" justifyContent="center">

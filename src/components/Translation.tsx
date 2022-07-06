@@ -22,7 +22,7 @@ export default function Translation({
   // @ts-ignore
   const { language } = useAppContext();
   const content = React.useMemo(
-    () => getContent(language, path),
+    () => getContent(path.replace("language", language)),
     [language, path]
   );
 
@@ -36,7 +36,9 @@ export default function Translation({
     const translatedProps: { [prop: string]: string } = {};
     if (propsToTranslate) {
       Object.keys(propsToTranslate).forEach((key) => {
-        translatedProps[key] = getContent(language, propsToTranslate[key]);
+        translatedProps[key] = getContent(
+          propsToTranslate[key].replace("language", language)
+        );
       });
     }
 
@@ -51,7 +53,7 @@ export default function Translation({
     <Typography
       {...props}
       dangerouslySetInnerHTML={{
-        __html: getContent(language, path)
+        __html: getContent(path.replace("language", language))
       }}
     />
   );

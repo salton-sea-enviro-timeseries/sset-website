@@ -17,21 +17,7 @@ import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import { useAppContext } from "./AppContext";
 import { Language } from "types";
-
-const Links = [
-  {
-    href: "/",
-    label: "Home"
-  },
-  {
-    href: "/dashboard",
-    label: "Dashboard"
-  },
-  {
-    href: "/contact-us",
-    label: "Contact Us"
-  }
-];
+import { getContent } from "util/getContent";
 
 function Navbar() {
   const classes = useStyles();
@@ -39,6 +25,23 @@ function Navbar() {
 
   // @ts-ignore
   const { language, setLanguage } = useAppContext();
+
+  const Links = React.useMemo(() => {
+    return [
+      {
+        href: "/",
+        label: getContent(`site.${language}.navLinks.home`)
+      },
+      {
+        href: "/dashboard",
+        label: getContent(`site.${language}.navLinks.dashboard`)
+      },
+      {
+        href: "/contact-us",
+        label: getContent(`site.${language}.navLinks.contact`)
+      }
+    ];
+  }, [language]);
 
   const isActiveLink = (href: string) => router.asPath === href;
 

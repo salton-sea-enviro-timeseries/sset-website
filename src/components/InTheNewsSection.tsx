@@ -21,7 +21,9 @@ const InTheNewsSection = ({ mediaObjects }: FeaturedNewsFeedProps) => {
       <Container>
         <Box>
           <SectionHeader
-            title={getContent(language, "home.in_the_news_section.title")}
+            title={getContent(
+              `pages.home.${language}.content.in_the_news_section.title`
+            )}
             titleProps={{
               align: "center",
               className: classes.header,

@@ -24,7 +24,9 @@ const AboutUsSection = () => {
       <Container>
         <Box>
           <SectionHeader
-            title={getContent(language, "home.about_us_section.title")}
+            title={getContent(
+              `pages.home.${language}.content.about_us_section.title`
+            )}
             titleProps={{
               align: "center",
               className: classes.header,
@@ -36,7 +38,9 @@ const AboutUsSection = () => {
           />
           <div
             dangerouslySetInnerHTML={{
-              __html: getContent(language, "home.about_us_section.content")
+              __html: getContent(
+                `pages.home.${language}.content.about_us_section.content`
+              )
             }}
           />
         </Box>

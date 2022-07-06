@@ -31,7 +31,9 @@ const DownloadDataButtonsSection = ({
             href="/api/download?range=nutrients&filename=nutrients-data.csv"
             download
           >
-            {getContent(language, "dashboard.download_nutrients_data_button")}
+            {getContent(
+              `pages.dashboard.${language}.content.download_nutrients_data_button`
+            )}
           </Button>
         </WithLoading>
       </Box>
@@ -49,7 +51,9 @@ const DownloadDataButtonsSection = ({
             href="/api/download?range=probe_surface&filename=probe-data.csv"
             download
           >
-            {getContent(language, "dashboard.download_sensor_data_button")}
+            {getContent(
+              `pages.dashboard.${language}.content.download_sensor_data_button`
+            )}
           </Button>
         </WithLoading>
       </Box>
