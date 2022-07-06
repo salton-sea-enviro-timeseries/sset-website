@@ -14,7 +14,7 @@
       "sulphide": {
         "name": "Sulphide",
         "unit": "mg/L",
-        "description": "Sulfide is the product of anaerobic (without oxygen) microbial reaction that occurs in the Salton Sea water column when there is no dissolved oxygen available due to eutrophication in the summer. When sulfide is accumulated in the water column, daily and seasonal water mixing induces sulfidic gas emission. This sulfidic gas emission is what creates the rotten egg yolk smell on the Salton Sea shoreline, specifically prolific in the summer months. The South Coast Air Quality Monitoring District is actively monitoring the release of this odor (more information on forecast can be found on saltonseaodor.org). Sulfide is unstable in environments with oxygen, so we measure very low values of sulfide in the surface of the Sea."
+        "description": "Sulfide is the product of anaerobic (without oxygen) microbial reaction that occurs in the Salton Sea water column when there is no dissolved oxygen available due to eutrophication in the summer. When sulfide is accumulated in the water column, daily and seasonal water mixing induces sulfidic gas emission. This sulfidic gas emission is what creates the rotten egg yolk smell on the Salton Sea shoreline, specifically prolific in the summer months. The South Coast Air Quality Monitoring District is actively monitoring the release of this odor (more information on forecast can be found on [saltonseaodor.org](saltonseaodor.org)). Sulfide is unstable in environments with oxygen, so we measure very low values of sulfide in the surface of the Sea."
       },
       "salinity": {
         "name": "Salinity",
