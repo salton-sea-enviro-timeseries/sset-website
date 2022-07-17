@@ -3,11 +3,13 @@ import { makeStyles } from "@material-ui/core";
 import { orange } from "@material-ui/core/colors";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
+import Meta from "./Meta";
 
 const Layout: React.FC = ({ children }) => {
   const classes = useStyles();
   return (
     <>
+      <Meta />
       <Navbar />
       <main className={classes.main}>{children}</main>
       <Footer />

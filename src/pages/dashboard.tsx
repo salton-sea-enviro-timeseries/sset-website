@@ -21,6 +21,7 @@ import AirQualitySection from "components/AirQualitySection";
 import DownloadDataButtonsSection from "components/DownloadDataButtonsSection";
 import WithLoading from "components/WithLoading";
 import Translation from "components/Translation";
+import Meta from "components/Meta";
 
 const getMapData = (data: SiteData[]) => {
   const dataBySite = groupBy(data, "site");
@@ -94,6 +95,7 @@ const Dashboard = () => {
 
   return (
     <Layout>
+      <Meta title="Dashboard | Salton Sea Environmental Timeseries" />
       <Box px={1} py={5}>
         <Container maxWidth="md">
           <AirQualitySection />

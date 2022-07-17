@@ -13,11 +13,13 @@ import Hero from "components/Hero";
 import Section from "components/Section";
 import Layout from "components/Layout";
 import Translation from "components/Translation";
+import Meta from "components/Meta";
 
 const ContactUsPage = () => {
   const classes = useStyles();
   return (
     <Layout>
+      <Meta title="Contact Us | Salton Sea Environmental Timeseries" />
       <Translation
         path="pages.contact.language.content.title"
         propsToTranslate={{
