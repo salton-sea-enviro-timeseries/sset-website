@@ -90,7 +90,9 @@ const AirQualitySection = () => {
                   </svg>
                   <Typography component="span">{d.AQI}</Typography>
                   <span className={classes.bullet}>&bull;</span>
-                  <Typography component="span">{d.Category.Name}</Typography>
+                  <Typography component="span" noWrap>
+                    {d.Category.Name}
+                  </Typography>
                 </Box>
               </Box>
             );

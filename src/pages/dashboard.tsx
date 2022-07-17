@@ -1,15 +1,5 @@
 import { useEffect, useState } from "react";
-// import Head from "next/head";
-import {
-  Box,
-  Container,
-  Grid,
-  makeStyles,
-  MenuItem,
-  TextField,
-  Typography
-} from "@material-ui/core";
-import { ContinuousColorLegend } from "react-vis";
+import { Box, Container, Grid, MenuItem, TextField } from "@material-ui/core";
 import { groupBy } from "lodash";
 
 import { Parameter, ParameterMapping, Data, SiteData } from "types";
@@ -22,6 +12,7 @@ import DownloadDataButtonsSection from "components/DownloadDataButtonsSection";
 import WithLoading from "components/WithLoading";
 import Translation from "components/Translation";
 import Meta from "components/Meta";
+import ContinuousColorLegend from "components/ContinuousColorLegend";
 
 const getMapData = (data: SiteData[]) => {
   const dataBySite = groupBy(data, "site");
@@ -56,7 +47,6 @@ const getMapData = (data: SiteData[]) => {
 };
 
 const Dashboard = () => {
-  const classes = useStyles();
   const [parameter, setParameter] = useState<Parameter>(Parameter.Chlorophyll);
   const [activeRange, setActiveRange] = useState<ReturnType<typeof getRange>>({
     min: 0,
@@ -142,7 +132,7 @@ const Dashboard = () => {
                     height={40}
                     isLoading={isDataLoading}
                   >
-                    <Box pl={0.5} className={classes.legend}>
+                    <Box pl={0.5}>
                       <Translation
                         variant="caption"
                         path={`parameters.language.parameters.${parameter}.unit`}
@@ -151,6 +141,7 @@ const Dashboard = () => {
                         activeRange.mid !== undefined &&
                         activeRange.max !== undefined && (
                           <ContinuousColorLegend
+                            height={15}
                             startColor={colorScale[0]}
                             startTitle={activeRange.min}
                             midColor={
@@ -250,14 +241,5 @@ const Dashboard = () => {
     </Layout>
   );
 };
-
-const useStyles = makeStyles(() => ({
-  legend: {
-    "& .rv-gradient": {
-      height: 15,
-      width: "100%"
-    }
-  }
-}));
 
 export default Dashboard;
