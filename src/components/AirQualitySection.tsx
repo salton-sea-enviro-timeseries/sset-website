@@ -8,6 +8,7 @@ import { format } from "date-fns";
 import { AirQualityMapping, ForecastResponse } from "lib/airnow";
 import { fetcher } from "utils";
 import AQLegend from "./AQLegend";
+import WithLoading from "./WithLoading";
 
 const SALTON_SEA_ZIPCODE = "92254";
 
@@ -42,15 +43,16 @@ const AirQualitySection = () => {
 
   return (
     <Box pb={5}>
-      <Typography>
-        {isLoading ? (
-          <Skeleton />
-        ) : (
-          `Air Quality Forecast for ${
+      <WithLoading isLoading={isLoading}>
+        <Typography>
+          {`Air Quality Forecast for ${
             forecastDate ? format(forecastDate, "EEE, MMM dd, yyyy") : ""
-          }`
-        )}
-      </Typography>
+          }`}
+        </Typography>
+      </WithLoading>
+      <WithLoading isLoading={isLoading}>
+        <Typography variant="caption">{`Zip Code ${SALTON_SEA_ZIPCODE}`}</Typography>
+      </WithLoading>
 
       <Box display="flex" flexWrap="wrap">
         {isLoading ? (

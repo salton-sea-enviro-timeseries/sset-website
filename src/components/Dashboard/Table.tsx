@@ -5,6 +5,7 @@ import { DataGrid } from "@material-ui/data-grid";
 import Paper from "@material-ui/core/Paper";
 import { Units } from "types";
 import { isArray } from "lodash";
+import { format } from "date-fns";
 
 const useStyles = makeStyles({
   table: {
@@ -23,7 +24,9 @@ const columns = [
     headerName: "Date",
     width: 110,
     editable: false,
-    type: "date"
+    type: "date",
+    // @ts-ignore
+    valueFormatter: ({ value }) => format(value, "MM/dd/yyyy")
   },
   {
     field: "site",
@@ -166,6 +169,7 @@ export default function Table(props: TableProps) {
         columns={columns}
         disableSelectionOnClick
         pageSize={rows.length}
+        sortModel={[{ field: "date", sort: "desc" }]}
       />
     </Paper>
   );

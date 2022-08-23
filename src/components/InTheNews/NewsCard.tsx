@@ -20,7 +20,7 @@ export default function NewsCard({ media }: NewsCardProps) {
       >
         <CardMedia
           component={"img"}
-          height="140"
+          height="225"
           image={media.imageUrl}
           alt={media.title}
         />
