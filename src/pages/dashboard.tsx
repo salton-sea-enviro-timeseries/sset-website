@@ -88,7 +88,7 @@ const Dashboard = () => {
       <Meta title="Dashboard | Salton Sea Environmental Timeseries" />
       <Box px={1} py={5}>
         <Container maxWidth="md">
-          <AirQualitySection />
+          {/* <AirQualitySection /> */}
           {/* TODO: Refactor: Move to separate component */}
           <Box pb={1}>
             <Grid container spacing={1}>

@@ -59,22 +59,4 @@ export async function downloadFile(range: "probe_surface" | "nutrients") {
   });
   // @ts-ignore
   return stringify(response.data.values);
-
-  // return drive.files.export(
-  //   {
-  //     fileId,
-  //     mimeType: "text/csv"
-  //   },
-  //   {
-  //     // responseType: "stream",
-  //     // params: {
-  //     //   gid,
-  //     //   format: "csv",
-  //     //   id: fileId,
-  //     //   dat: "AFCstmp4ptZLwPLrzJSO95CblB3IYMisQ7I-39xSNtBti6tSaFAj-IaPSSsPFkhLlW-gCZgzDJbNJg-HkXd4NQufMDJEuiLMWmYYGqBP7DlFydHUMYOMEGzPeJgMacmdOZHkmkmEUTo2YvnN1gsAzEwV6CkKi_eJT605zfEcjrhCWV8PQjnxvI2Cu7VAREkiWXqqXLd0Mk-BwomMkj2lFEJw48YaPDGemk0QH3kTKmABV1DCUxgVdKlheMOK__ELHknO5Qd21WT4JZwH5TeYd25a5VT_X6q1EPvJrbvX3UDtVyTqpLE1nv20iW7tvjfhKMN9DghBHwjPIYZnliDajcTmYz85kctZuR2p8mkj0Vp6A9S4o-88kLF_Rmx-CRIKhnqxVDHLLAcU7PELAh8qTA3aIIvD7pxMAX189l4vduNng52poptq8buAmMkODa-ENtoZWwPvoeNQ-U7OyJzY3IU9NLxg8RM9vvycKJkAHD9lG7eRjaMeXbhLynur3Xyr-85SS7R75MOsOkJCig8K_tu0z9_COHQxoY8i-wwUhbj8CSkewiBn7l1HCswNeHxnxoK9TczjS8sHHWaX9OngCoM6s0Juyq7a4sgyasNhy4byT3nv27BQ0sEgt9pAl17HkhcaCtjx6kao2ycv_dE-Nh0_vMYV35MnUehRUehPvkI_277-tKXhVPOrGxReQyG6rzX0zX0ljY2hnyMBlcUvRhQeng"
-  //     // }
-  //   }
-  // );
-  // // .then((response) => response)
-  // // .then((data) => Buffer.from(data));
 }
