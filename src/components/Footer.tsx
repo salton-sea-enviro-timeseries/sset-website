@@ -4,18 +4,24 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
+// import List from "@material-ui/core/List";
+// import ListItem from "@material-ui/core/ListItem";
+// import ListItemText from "@material-ui/core/ListItemText";
+// import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { makeStyles } from "@material-ui/core/styles";
-import Image from "next/image";
+// import Image from "next/image";
 
 function Footer() {
   const classes = useStyles();
 
   return (
-    <Box component="footer" bgcolor="grey.900" color="white" py={2}>
+    <Box
+      component="footer"
+      bgcolor="grey.900"
+      color="white"
+      py={2}
+      className={classes.root}
+    >
       <Container>
         <Grid container={true} justifyContent="space-between" spacing={4}>
           <Grid item={true} xs={12} md={4}>
@@ -103,22 +109,25 @@ function Footer() {
   );
 }
 
-const useStyles = makeStyles(() => ({
-  sticky: {
-    marginTop: "auto"
-  },
-  listItem: {
-    paddingTop: 2,
-    paddingBottom: 2,
-    paddingLeft: 12,
-    paddingRight: 12
-  },
-  listItemTextHeader: {
-    fontWeight: "bold"
-  },
-  socialIcon: {
-    minWidth: 30
+const useStyles = makeStyles((theme) => ({
+  root: {
+    zIndex: theme.zIndex.drawer + 1
   }
+  // sticky: {
+  //   marginTop: "auto"
+  // },
+  // listItem: {
+  //   paddingTop: 2,
+  //   paddingBottom: 2,
+  //   paddingLeft: 12,
+  //   paddingRight: 12
+  // },
+  // listItemTextHeader: {
+  //   fontWeight: "bold"
+  // },
+  // socialIcon: {
+  //   minWidth: 30
+  // }
 }));
 
 export default Footer;

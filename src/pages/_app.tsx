@@ -1,14 +1,24 @@
 import React from "react";
+import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 // import "util/analytics.js";
 import { ThemeProvider } from "util/theme.js";
 import AppContextProvider from "components/AppContext";
 
-function MyApp({ Component, pageProps }: AppProps) {
+export type NextPageWithLayout = NextPage & {
+  getLayout?: (page: React.ReactElement) => React.ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+  const getLayout = Component.getLayout ?? ((page) => page);
   return (
     <ThemeProvider>
       <AppContextProvider>
-        <Component {...pageProps} />
+        {getLayout(<Component {...pageProps} />)}
       </AppContextProvider>
     </ThemeProvider>
   );
