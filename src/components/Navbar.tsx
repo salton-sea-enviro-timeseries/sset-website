@@ -39,6 +39,10 @@ function Navbar() {
       {
         href: "/contact-us",
         label: getContent(`site.${language}.navLinks.contact`)
+      },
+      {
+        href: "/team",
+        label: getContent(`site.${language}.navLinks.team`)
       }
     ];
   }, [language]);

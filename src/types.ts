@@ -164,3 +164,14 @@ export interface RawNutrientsData {
 }
 
 export type Language = "en" | "es";
+
+export type TeamMember = {
+  name: string;
+  title?: string;
+  image?: string;
+  bio?: string;
+  email?: string;
+  linkedin?: string;
+  twitter?: string;
+  website?: string;
+};

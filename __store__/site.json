@@ -3,14 +3,16 @@
     "navLinks": {
       "home": "Home",
       "dashboard": "Dashboard",
-      "contact": "Contact Us"
+      "contact": "Contact Us",
+      "team": "Team"
     }
   },
   "es": {
     "navLinks": {
       "home": "Página de Inicio",
       "dashboard": "Tablero de Datos",
-      "contact": "Contáctenos"
+      "contact": "Contáctenos",
+      "team": "Team"
     }
   }
 }

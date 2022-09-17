@@ -16,14 +16,11 @@ const Layout: React.FC = ({ children }) => {
   );
 };
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   main: {
-    flex: 1
-    // display: "flex",
-    // flexDirection: "column",
-    // justifyContent: "center",
-    // alignItems: "center",
-    // padding: theme.spacing(5, 0)
+    flex: 1,
+    display: "flex",
+    flexDirection: "column"
   }
 }));
 
