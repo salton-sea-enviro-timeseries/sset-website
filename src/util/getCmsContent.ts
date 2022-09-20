@@ -8,6 +8,7 @@ const client = createClient({
 export const getCmsContent = async (contentID: string) => {
   const cmsRes = await client.getEntries({
     content_type: contentID,
+    select: "fields",
     locale: "*"
   });
 
