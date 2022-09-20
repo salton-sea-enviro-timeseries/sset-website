@@ -1,4 +1,6 @@
 // import Head from "next/head";
+import { getCmsContent } from "util/getCmsContent";
+import type { InferGetServerSidePropsType } from "next";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
@@ -15,8 +17,11 @@ import Layout from "components/Layout";
 import Translation from "components/Translation";
 import Meta from "components/Meta";
 
-const ContactUsPage = () => {
+const ContactUsPage = ({
+  cmsData
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const classes = useStyles();
+  // console.log("cms contact data: ", cmsData);
   return (
     <Layout>
       <Meta title="Contact Us | Salton Sea Environmental Timeseries" />
@@ -167,3 +172,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default ContactUsPage;
+
+export const getServerSideProps = async () => {
+  const contactPage = await getCmsContent("contactPage");
+  return {
+    props: {
+      cmsData: contactPage.items[0]
+    }
+  };
+};

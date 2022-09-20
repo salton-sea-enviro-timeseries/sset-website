@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+import type { InferGetServerSidePropsType } from "next";
 import { Box, Container, Grid, MenuItem, TextField } from "@material-ui/core";
 import { groupBy } from "lodash";
-
+import { getCmsContent } from "util/getCmsContent";
 import { Parameter, ParameterMapping, Data, SiteData } from "types";
 import { colorScale, getAverage, getColorFromScale, getRange } from "utils";
 import Layout from "components/Layout";
@@ -46,7 +47,10 @@ const getMapData = (data: SiteData[]) => {
   return mapData;
 };
 
-const Dashboard = () => {
+const Dashboard = ({
+  cmsData
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  // console.log("cms dashboard data: ", cmsData);
   const [parameter, setParameter] = useState<Parameter>(Parameter.Chlorophyll);
   const [activeRange, setActiveRange] = useState<ReturnType<typeof getRange>>({
     min: 0,
@@ -243,3 +247,11 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+export const getServerSideProps = async () => {
+  const dashboardContent = await getCmsContent("dashboard");
+  return {
+    props: {
+      cmsData: dashboardContent.items[0]
+    }
+  };
+};
