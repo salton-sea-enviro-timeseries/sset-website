@@ -1,5 +1,11 @@
 import type { InferGetStaticPropsType } from "next";
-import { Button, Container, makeStyles, Typography } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  Container,
+  makeStyles,
+  Typography
+} from "@material-ui/core";
 import Link from "next/link";
 
 import Layout from "components/Layout";
@@ -12,8 +18,12 @@ import { getContent } from "util/getContent";
 import { useAppContext } from "components/AppContext";
 import TeamSection from "components/TeamSection";
 import { TeamMember } from "types";
+import GallerySection from "components/GallerySection";
 
-const TeamPage = ({ team }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const TeamPage = ({
+  team,
+  gallery
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
   // @ts-ignore
   // const { language } = useAppContext();
   const classes = useStyles();
@@ -24,7 +34,12 @@ const TeamPage = ({ team }: InferGetStaticPropsType<typeof getStaticProps>) => {
         <Typography gutterBottom variant="h3" component="h1">
           Meet the Team
         </Typography>
-        <TeamSection team={team} />
+        <Box py={7}>
+          <GallerySection gallery={gallery} />
+        </Box>
+        <Box py={7}>
+          <TeamSection team={team} />
+        </Box>
       </Container>
     </Layout>
   );
@@ -57,9 +72,14 @@ export const getStaticProps = async () => {
     });
   });
 
+  const gallery = Array.from({ length: 12 }).map(
+    () => faker.image.abstract(640, 480, true) as string
+  );
+
   return {
     props: {
-      team
+      team,
+      gallery
     }
   };
 };

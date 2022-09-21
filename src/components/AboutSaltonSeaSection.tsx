@@ -12,7 +12,7 @@ const AboutSaltonSeaSection = () => {
   const { language } = useAppContext();
   return (
     <Section bgImage="/curves.png">
-      <Container>
+      <Container maxWidth="md">
         <Box>
           <SectionHeader
             title={getContent(

@@ -18,7 +18,7 @@ const InTheNewsSection = ({ mediaObjects }: FeaturedNewsFeedProps) => {
   const { language } = useAppContext();
   return (
     <Section bgImage="/curves.png">
-      <Container>
+      <Container maxWidth="md">
         <Box>
           <SectionHeader
             title={getContent(

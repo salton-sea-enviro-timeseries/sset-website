@@ -7,11 +7,12 @@ import Section from "components/Section";
 import SectionHeader from "components/SectionHeader";
 import { getContent } from "util/getContent";
 import { useAppContext } from "components/AppContext";
+import GallerySection from "./GallerySection";
 
 // TODO: add links to definitions
 // or add a glossary section ???
 
-const AboutUsSection = () => {
+const AboutUsSection = ({ gallery }: { gallery: string[] }) => {
   const classes = useStyles();
   // @ts-ignore
   const { language } = useAppContext();
@@ -21,7 +22,7 @@ const AboutUsSection = () => {
         backgroundColor: colors.teal[50]
       }}
     >
-      <Container>
+      <Container maxWidth="md">
         <Box>
           <SectionHeader
             title={getContent(
@@ -43,6 +44,7 @@ const AboutUsSection = () => {
               )
             }}
           />
+          <GallerySection gallery={gallery} />
         </Box>
       </Container>
     </Section>

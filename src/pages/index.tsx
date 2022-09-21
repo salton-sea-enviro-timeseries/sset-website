@@ -12,7 +12,8 @@ import { getContent } from "util/getContent";
 import { useAppContext } from "components/AppContext";
 
 const Home = ({
-  mediaData
+  mediaData,
+  gallery
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   // @ts-ignore
   const { language } = useAppContext();
@@ -34,7 +35,7 @@ const Home = ({
         }
       />
       <AboutSaltonSeaSection />
-      <AboutUsSection />
+      <AboutUsSection gallery={gallery} />
       <InTheNewsSection mediaObjects={mediaData} />
     </Layout>
   );
@@ -43,6 +44,8 @@ const Home = ({
 export default Home;
 
 export const getStaticProps = async () => {
+  const faker = require("@faker-js/faker").faker;
+
   const urls = [
     // "https://kesq.com/news/2021/07/07/changes-happening-at-the-salton-sea-on-a-state-federal-level/",
     "https://www.cnbc.com/2021/11/06/californias-salton-sea-spewing-toxic-fumes-creating-ghost-towns-.html"
@@ -50,9 +53,14 @@ export const getStaticProps = async () => {
 
   const mediaData = await scrape(urls);
 
+  const gallery = Array.from({ length: 12 }).map(
+    () => faker.image.abstract(640, 480, true) as string
+  );
+
   return {
     props: {
-      mediaData
+      mediaData,
+      gallery
     }
   };
 };
