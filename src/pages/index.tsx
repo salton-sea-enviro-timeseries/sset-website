@@ -24,7 +24,7 @@ const Home = ({
         bgImage="/hero.jpg"
         bgImageOpacity={0.75}
         title={getContent(`pages.home.${language}.content.hero`)}
-        subtitle=""
+        subtitle="Community Science"
         cta={
           <Link href="/dashboard" passHref>
             <Button variant="contained" color="primary">
