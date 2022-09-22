@@ -10,6 +10,7 @@ import InTheNewsSection from "components/InTheNewsSection";
 import scrape from "../lib/scrape";
 import { getContent } from "util/getContent";
 import { useAppContext } from "components/AppContext";
+import React from "react";
 
 const Home = ({
   mediaData,
@@ -27,6 +28,19 @@ const Home = ({
       .url;
   const buttonText = cmsData.fields.hero["en-US"].fields.buttonText;
 
+  type Field = {
+    content?: { data: {}; content: []; nodeType: string };
+    title: { "en-US": string; es: string };
+  };
+
+  type FieldObj = { fields: Field };
+  const sectionContent = cmsData.fields.content["en-US"].map(
+    ({ fields }: FieldObj) => {
+      return fields;
+    }
+  );
+  // console.log("about salton sea", cmsData.fields.content["en-US"]);
+  console.log("section Obj", sectionContent);
   return (
     <Layout>
       <Hero
@@ -44,9 +58,21 @@ const Home = ({
           </Link>
         }
       />
-      <AboutSaltonSeaSection />
+
+      <AboutSaltonSeaSection content={sectionContent[0]} />
+      <AboutUsSection content={sectionContent[1]} />
+      <InTheNewsSection mediaObjects={mediaData} content={sectionContent[2]} />
+
+      {/* {sectionContent.map(({ content, title }: Field) => (
+        <>
+          <AboutSaltonSeaSection key={title["en-US"]} />
+          <AboutUsSection key={title["en-US"]} />
+          <InTheNewsSection mediaObjects={mediaData} key={title["en-US"]} />
+        </>
+      ))} */}
+      {/* <AboutSaltonSeaSection />
       <AboutUsSection />
-      <InTheNewsSection mediaObjects={mediaData} />
+      <InTheNewsSection mediaObjects={mediaData} /> */}
     </Layout>
   );
 };

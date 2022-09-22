@@ -1,7 +1,6 @@
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
-
 import Section from "components/Section";
 import SectionHeader from "components/SectionHeader";
 import FeaturedNewsFeed from "components/InTheNews/FeaturedNewsFeed";
@@ -11,8 +10,13 @@ import { useAppContext } from "components/AppContext";
 interface FeaturedNewsFeedProps {
   mediaObjects: MediaObject[];
 }
-
-const InTheNewsSection = ({ mediaObjects }: FeaturedNewsFeedProps) => {
+type Title = {
+  "en-US": string;
+  es: string;
+};
+type Content = { content: { title: Title } };
+type Props = FeaturedNewsFeedProps & Content;
+const InTheNewsSection = ({ mediaObjects, content: { title } }: Props) => {
   const classes = useStyles();
   // @ts-ignore
   const { language } = useAppContext();
@@ -21,9 +25,7 @@ const InTheNewsSection = ({ mediaObjects }: FeaturedNewsFeedProps) => {
       <Container>
         <Box>
           <SectionHeader
-            title={getContent(
-              `pages.home.${language}.content.in_the_news_section.title`
-            )}
+            title={language === "en" ? title["en-US"] : title["es"]}
             titleProps={{
               align: "center",
               className: classes.header,
