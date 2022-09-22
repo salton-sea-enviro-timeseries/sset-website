@@ -49,7 +49,7 @@ const Home = ({
         bgImage={heroImage}
         bgImageOpacity={0.75}
         title={language === "en" ? heroTitle["en-US"] : heroTitle["es"]}
-        subtitle=""
+        subtitle="Community Science"
         cta={
           <Link href="/dashboard" passHref>
             <Button variant="contained" color="primary">
@@ -62,17 +62,6 @@ const Home = ({
       <AboutSaltonSeaSection content={sectionContent[0]} />
       <AboutUsSection content={sectionContent[1]} />
       <InTheNewsSection mediaObjects={mediaData} content={sectionContent[2]} />
-
-      {/* {sectionContent.map(({ content, title }: Field) => (
-        <>
-          <AboutSaltonSeaSection key={title["en-US"]} />
-          <AboutUsSection key={title["en-US"]} />
-          <InTheNewsSection mediaObjects={mediaData} key={title["en-US"]} />
-        </>
-      ))} */}
-      {/* <AboutSaltonSeaSection />
-      <AboutUsSection />
-      <InTheNewsSection mediaObjects={mediaData} /> */}
     </Layout>
   );
 };
