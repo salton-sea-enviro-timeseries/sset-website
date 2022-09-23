@@ -8,7 +8,6 @@ import AboutSaltonSeaSection from "components/AboutSaltonSeaSection";
 import AboutUsSection from "components/AboutUsSection";
 import InTheNewsSection from "components/InTheNewsSection";
 import scrape from "../lib/scrape";
-import { getContent } from "util/getContent";
 import { useAppContext } from "components/AppContext";
 import React from "react";
 
@@ -18,29 +17,18 @@ const Home = ({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   // @ts-ignore
   const { language } = useAppContext();
-  // TODO: Find way to destructure types
-  // const {
-  //   fields: { content, hero, metadata }
-  // } = cmsData;
+  // TODO: Find way to refactor
   const heroTitle = cmsData.fields.hero["en-US"].fields.title;
   const heroImage =
     cmsData.fields.hero["en-US"].fields.heroImage["en-US"].fields.file["en-US"]
       .url;
   const buttonText = cmsData.fields.hero["en-US"].fields.buttonText;
+  const heroSubTitle = cmsData.fields.hero["en-US"].fields.subTitle;
 
-  type Field = {
-    content?: { data: {}; content: []; nodeType: string };
-    title: { "en-US": string; es: string };
-  };
+  const sectionContent = cmsData.fields.content["en-US"].map(({ fields }) => {
+    return fields;
+  });
 
-  type FieldObj = { fields: Field };
-  const sectionContent = cmsData.fields.content["en-US"].map(
-    ({ fields }: FieldObj) => {
-      return fields;
-    }
-  );
-  // console.log("about salton sea", cmsData.fields.content["en-US"]);
-  console.log("section Obj", sectionContent);
   return (
     <Layout>
       <Hero
@@ -49,7 +37,9 @@ const Home = ({
         bgImage={heroImage}
         bgImageOpacity={0.75}
         title={language === "en" ? heroTitle["en-US"] : heroTitle["es"]}
-        subtitle="Community Science"
+        subtitle={
+          language === "en" ? heroSubTitle["en-US"] : heroSubTitle["es"]
+        }
         cta={
           <Link href="/dashboard" passHref>
             <Button variant="contained" color="primary">

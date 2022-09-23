@@ -5,16 +5,17 @@ import Section from "components/Section";
 import SectionHeader from "components/SectionHeader";
 import FeaturedNewsFeed from "components/InTheNews/FeaturedNewsFeed";
 import { MediaObject } from "types";
-import { getContent } from "util/getContent";
 import { useAppContext } from "components/AppContext";
+
 interface FeaturedNewsFeedProps {
   mediaObjects: MediaObject[];
 }
-type Title = {
-  "en-US": string;
-  es: string;
+
+type LocaleOption<T> = {
+  "en-US": T;
+  es: T;
 };
-type Content = { content: { title: Title } };
+type Content = { content: { title: LocaleOption<string> } };
 type Props = FeaturedNewsFeedProps & Content;
 const InTheNewsSection = ({ mediaObjects, content: { title } }: Props) => {
   const classes = useStyles();

@@ -3,7 +3,7 @@ import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
 import { makeStyles, Typography } from "@material-ui/core";
 
-function Hero(props) {
+function Hero({ bgImage, title, subtitle, cta, ...props }) {
   const classes = useStyles();
 
   const isMobileDevice =
@@ -23,10 +23,10 @@ function Hero(props) {
         controls={isMobileDevice ? true : false}
         preload="auto"
       >
-        <source src="/hero.mp4" type="video/mp4" />
+        <source src={bgImage} type="video/mp4" />
       </video>
       <div className={classes.overlay}>
-        {(props.title || props.subtitle) && (
+        {(title || subtitle) && (
           <Container>
             <Box textAlign="center">
               <Typography
@@ -34,26 +34,26 @@ function Hero(props) {
                 variant="h4"
                 className={classes.subtitle}
               >
-                {props.subtitle}
+                {subtitle}
               </Typography>
               <Typography
                 component="h2"
                 variant="h3"
                 className={classes.header}
               >
-                {props.title}
+                {title}
               </Typography>
             </Box>
           </Container>
         )}
-        {props.cta && (
+        {cta && (
           <Box
             py={5}
             display="flex"
             justifyContent="center"
             alignItems="center"
           >
-            {props.cta}
+            {cta}
           </Box>
         )}
       </div>

@@ -11,10 +11,25 @@ import { useAppContext } from "components/AppContext";
 // TODO: add links to definitions
 // or add a glossary section ???
 
-const AboutUsSection = () => {
+type BodyValues = { content: [{ value: string }] };
+type NestedObjBodyText = { content: [BodyValues] };
+type LocaleOption<T> = {
+  "en-US": T;
+  es: T;
+};
+type Props = {
+  content: {
+    body: LocaleOption<NestedObjBodyText>;
+    title: LocaleOption<string>;
+  };
+};
+
+const AboutUsSection = ({ content: { body, title } }: Props) => {
   const classes = useStyles();
   // @ts-ignore
   const { language } = useAppContext();
+  const bodyText =
+    body[language === "en" ? "en-US" : "es"].content[0].content[0].value;
   return (
     <Section
       style={{
@@ -24,9 +39,7 @@ const AboutUsSection = () => {
       <Container>
         <Box>
           <SectionHeader
-            title={getContent(
-              `pages.home.${language}.content.about_us_section.title`
-            )}
+            title={language === "en" ? title["en-US"] : title["es"]}
             titleProps={{
               align: "center",
               className: classes.header,
@@ -38,9 +51,7 @@ const AboutUsSection = () => {
           />
           <div
             dangerouslySetInnerHTML={{
-              __html: getContent(
-                `pages.home.${language}.content.about_us_section.content`
-              )
+              __html: bodyText
             }}
           />
         </Box>

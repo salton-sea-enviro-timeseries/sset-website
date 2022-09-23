@@ -3,21 +3,34 @@ import Box from "@material-ui/core/Box";
 import Section from "components/Section";
 import SectionHeader from "components/SectionHeader";
 import { makeStyles } from "@material-ui/core/styles";
-import { getContent } from "util/getContent";
 import { useAppContext } from "components/AppContext";
 
-const AboutSaltonSeaSection = () => {
+type BodyValues = { content: [{ value: string }] };
+type NestedObjBodyText = { content: [BodyValues] };
+type LocaleOption<T> = {
+  "en-US": T;
+  es: T;
+};
+type Props = {
+  content: {
+    body: LocaleOption<NestedObjBodyText>;
+    title: LocaleOption<string>;
+  };
+};
+
+const AboutSaltonSeaSection = ({ content: { body, title } }: Props) => {
   const classes = useStyles();
   // @ts-ignore
   const { language } = useAppContext();
+  const bodyText =
+    body[language === "en" ? "en-US" : "es"].content[0].content[0].value;
+
   return (
     <Section bgImage="/curves.png">
       <Container>
         <Box>
           <SectionHeader
-            title={getContent(
-              `pages.home.${language}.content.salton_sea_section.title`
-            )}
+            title={language === "en" ? title["en-US"] : title["es"]}
             titleProps={{
               align: "center",
               className: classes.header,
@@ -29,9 +42,7 @@ const AboutSaltonSeaSection = () => {
           />
           <div
             dangerouslySetInnerHTML={{
-              __html: getContent(
-                `pages.home.${language}.content.salton_sea_section.content`
-              )
+              __html: bodyText
             }}
           />
         </Box>
