@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import type { InferGetServerSidePropsType } from "next";
-import { Box, Container, Grid, MenuItem, TextField } from "@material-ui/core";
+import {
+  Box,
+  Container,
+  Grid,
+  MenuItem,
+  TextField,
+  Typography
+} from "@material-ui/core";
 import { groupBy } from "lodash";
 import { getCmsContent } from "util/getCmsContent";
 import { Parameter, ParameterMapping, Data, SiteData } from "types";
@@ -14,6 +21,7 @@ import WithLoading from "components/WithLoading";
 import Translation from "components/Translation";
 import Meta from "components/Meta";
 import ContinuousColorLegend from "components/ContinuousColorLegend";
+import { useAppContext } from "components/AppContext";
 
 const getMapData = (data: SiteData[]) => {
   const dataBySite = groupBy(data, "site");
@@ -50,7 +58,8 @@ const getMapData = (data: SiteData[]) => {
 const Dashboard = ({
   cmsData
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  // console.log("cms dashboard data: ", cmsData);
+  // @ts-ignore
+  const { language } = useAppContext();
   const [parameter, setParameter] = useState<Parameter>(Parameter.Chlorophyll);
   const [activeRange, setActiveRange] = useState<ReturnType<typeof getRange>>({
     min: 0,
@@ -61,7 +70,22 @@ const Dashboard = ({
   const [isDataLoading, setIsDataLoading] = useState(false);
   const [tableData, setTableData] = useState<SiteData[]>([]);
   const [mapData, setMapData] = useState<Data | undefined>();
+  // CMS consts
+  const locale = language === "en" ? "en-US" : "es";
+  const cmsField = cmsData.fields;
+  const mapSecondaryCaption = cmsField.map_caption_secondary[locale];
+  const parameterList = cmsField.menuList["en-US"].map(({ fields }) => {
+    return fields;
+  });
+  // console.log("parameter unit", parameterList);
 
+  const parameterFilter = parameterList.filter(({ name, unit }) => {
+    if (name["en-US"].toLowerCase() === parameter) {
+      return unit["en-US"];
+    }
+  });
+
+  console.log("parameter unit", parameterFilter);
   useEffect(() => {
     if (mapData) {
       setActiveRange(getRange(parameter as keyof SiteData, mapData));
@@ -71,7 +95,7 @@ const Dashboard = ({
   const handleChangeParameter = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setParameter(event.target.value as Parameter);
+    setParameter(event.target.value.toLowerCase() as Parameter);
   };
 
   // TODO: Refactor: use useSWR
@@ -86,7 +110,7 @@ const Dashboard = ({
       })
       .finally(() => setIsDataLoading(false));
   }, []);
-
+  console.log("parameterUnit res", parameterFilter);
   return (
     <Layout>
       <Meta title="Dashboard | Salton Sea Environmental Timeseries" />
@@ -113,17 +137,12 @@ const Dashboard = ({
                         value={parameter}
                         onChange={handleChangeParameter}
                       >
-                        {Object.keys(Parameter).map((key) => (
+                        {parameterList.map(({ name }) => (
                           <MenuItem
-                            key={Parameter[key as keyof typeof Parameter]}
-                            value={Parameter[key as keyof typeof Parameter]}
+                            key={name["en-US"].toLowerCase()}
+                            value={name["en-US"].toLowerCase()}
                           >
-                            <Translation
-                              component="span"
-                              path={`parameters.language.parameters.${
-                                Parameter[key as keyof typeof Parameter]
-                              }.name`}
-                            />
+                            {name[locale]}
                           </MenuItem>
                         ))}
                       </TextField>
@@ -137,10 +156,13 @@ const Dashboard = ({
                     isLoading={isDataLoading}
                   >
                     <Box pl={0.5}>
-                      <Translation
+                      <Typography variant="caption">
+                        {parameterFilter[0].unit["en-US"]}
+                      </Typography>
+                      {/* <Translation
                         variant="caption"
                         path={`parameters.language.parameters.${parameter}.unit`}
-                      />
+                      /> */}
                       {activeRange.min !== undefined &&
                         activeRange.mid !== undefined &&
                         activeRange.max !== undefined && (
@@ -190,14 +212,15 @@ const Dashboard = ({
               </Grid>
               <Grid item xs={12}>
                 <WithLoading isLoading={isDataLoading} width="100%">
-                  <Translation
+                  <Typography
                     variant="caption"
                     component="p"
-                    path="pages.dashboard.language.content.map_caption_secondary"
                     style={{
                       fontWeight: "bold"
                     }}
-                  />
+                  >
+                    {mapSecondaryCaption}
+                  </Typography>
                 </WithLoading>
               </Grid>
             </Grid>
