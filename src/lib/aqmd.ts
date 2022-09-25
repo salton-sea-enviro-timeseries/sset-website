@@ -55,44 +55,28 @@ export type Device = Pick<
   | "Longitude"
   | "DeviceStatus"
   | "WorkingStatus"
->;
+> & {
+  Provider: string;
+  DeviceGroup: string;
+  Program: string;
+  Community: string;
+  DataLastRecorded: string;
+};
 
 export async function getDevices({ groupId }: DevicesRequestParams) {
-  try {
-    const options = {
-      method: "GET",
-      headers: {
-        username: USERNAME,
-        token: PASSWORD
-      }
-    };
+  const options = {
+    method: "GET",
+    headers: {
+      username: USERNAME,
+      token: PASSWORD
+    }
+  };
 
-    const url = new URL(`${ENDPOINT_BASE_URL}/devicedata`);
-    url.searchParams.append("group", groupId.toString());
+  const url = new URL(`${ENDPOINT_BASE_URL}/devicedata`);
+  url.searchParams.append("Group", groupId.toString());
 
-    const requestUrl = decodeURIComponent(url.toString()).replace(/\+/g, "%20");
-    console.log(requestUrl);
-
-    const data = await (await fetch(requestUrl, options)).json();
-    // console.log(data.data.length);
-    return data;
-    // const groupedData = groupBy(data.data, "DeviceTitle");
-    // const devices = Object.keys(groupedData).reduce((acc, key) => {
-    //   const device = groupedData[key][0];
-    //   acc[key] = {
-    //     DeviceID: device.DeviceID,
-    //     DeviceTitle: device.DeviceTitle,
-    //     Latitude: device.Latitude,
-    //     Longitude: device.Longitude,
-    //     DeviceStatus: device.DeviceStatus,
-    //     WorkingStatus: device.WorkingStatus
-    //   };
-    //   return acc;
-    // }, {} as { [key: string]: Device });
-    // return devices;
-  } catch (err) {
-    console.log(err);
-  }
+  const data = await (await fetch(url, options)).json();
+  return data.data as Device[];
 }
 
 // export async function getDevices({ communityId }: DevicesRequestParams) {

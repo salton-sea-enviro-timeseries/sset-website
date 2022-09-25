@@ -19,10 +19,7 @@ import { COMMUNITY_ID } from "../../constants";
 import { Device } from "lib/aqmd";
 
 const AirQuality = () => {
-  const { data = {}, error } = useSWR<Record<string, Device>>(
-    `../api/aq/devices?communityId=${COMMUNITY_ID}`,
-    fetcher
-  );
+  const { data = [], error } = useSWR<Device[]>(`../api/aq/devices`, fetcher);
 
   return (
     <>
