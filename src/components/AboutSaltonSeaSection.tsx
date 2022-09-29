@@ -1,23 +1,32 @@
 import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Section from "components/Section";
 import SectionHeader from "components/SectionHeader";
 import { makeStyles } from "@material-ui/core/styles";
-import { getContent } from "util/getContent";
-import { useAppContext } from "components/AppContext";
+import { NestedObjBodyText, LocaleOption } from "util/getCmsContent";
 
-const AboutSaltonSeaSection = () => {
+type Props = {
+  content: {
+    body: LocaleOption<NestedObjBodyText>;
+    title: LocaleOption<string>;
+  };
+  locale: string;
+};
+
+const AboutSaltonSeaSection = ({ content: { body, title }, locale }: Props) => {
   const classes = useStyles();
-  // @ts-ignore
-  const { language } = useAppContext();
+
+  const bodyText =
+    body[locale as keyof LocaleOption<NestedObjBodyText>].content[0].content[0]
+      .value;
+
   return (
     <Section bgImage="/curves.png">
       <Container>
         <Box>
           <SectionHeader
-            title={getContent(
-              `pages.home.${language}.content.salton_sea_section.title`
-            )}
+            title={title[locale as keyof LocaleOption<NestedObjBodyText>]}
             titleProps={{
               align: "center",
               className: classes.header,
@@ -27,13 +36,7 @@ const AboutSaltonSeaSection = () => {
             justifyContent="center"
             size={4}
           />
-          <div
-            dangerouslySetInnerHTML={{
-              __html: getContent(
-                `pages.home.${language}.content.salton_sea_section.content`
-              )
-            }}
-          />
+          <Typography>{bodyText}</Typography>
         </Box>
       </Container>
     </Section>

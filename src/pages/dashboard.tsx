@@ -1,8 +1,16 @@
-import { useEffect, useState } from "react";
-import { Box, Container, Grid, MenuItem, TextField } from "@material-ui/core";
+import { useEffect, useMemo, useState } from "react";
+import type { InferGetServerSidePropsType } from "next";
+import {
+  Box,
+  Container,
+  Grid,
+  MenuItem,
+  TextField,
+  Typography
+} from "@material-ui/core";
 import { groupBy } from "lodash";
-
-import { Parameter, ParameterMapping, Data, SiteData } from "types";
+import { getCmsContent } from "util/getCmsContent";
+import { Parameter, Data, SiteData } from "types";
 import { colorScale, getAverage, getColorFromScale, getRange } from "utils";
 import Layout from "components/Layout";
 import Map from "components/Dashboard/Map";
@@ -10,9 +18,10 @@ import Table from "components/Dashboard/Table";
 import AirQualitySection from "components/AirQualitySection";
 import DownloadDataButtonsSection from "components/DownloadDataButtonsSection";
 import WithLoading from "components/WithLoading";
-import Translation from "components/Translation";
 import Meta from "components/Meta";
 import ContinuousColorLegend from "components/ContinuousColorLegend";
+import { useAppContext } from "components/AppContext";
+import { DashboardPage } from "util/getCmsContent";
 
 const getMapData = (data: SiteData[]) => {
   const dataBySite = groupBy(data, "site");
@@ -46,18 +55,42 @@ const getMapData = (data: SiteData[]) => {
   return mapData;
 };
 
-const Dashboard = () => {
+const Dashboard = ({
+  cmsData
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  // @ts-ignore
+  const { language } = useAppContext();
   const [parameter, setParameter] = useState<Parameter>(Parameter.Chlorophyll);
   const [activeRange, setActiveRange] = useState<ReturnType<typeof getRange>>({
     min: 0,
     max: 0,
     mid: 0
   });
-
   const [isDataLoading, setIsDataLoading] = useState(false);
   const [tableData, setTableData] = useState<SiteData[]>([]);
   const [mapData, setMapData] = useState<Data | undefined>();
-
+  // CMS const start ================================================
+  const locale = language === "en" ? "en-US" : "es";
+  const cmsField = cmsData.fields;
+  const mapSecondaryCaption = cmsField.map_caption_secondary[locale];
+  const parameterList = cmsField.menuList["en-US"].map(({ fields }) => {
+    return fields;
+  });
+  const downloadNutrientsButtonTxt =
+    cmsField.download_nutrients_data_button[locale];
+  const downloadSenorButtonTxt = cmsField.download_sensor_data_button[locale];
+  const parameterFilter = useMemo(
+    () =>
+      parameterList.filter(({ paramKey, unit }) => {
+        if (paramKey["en-US"] === parameter) {
+          return unit["en-US"];
+        }
+      }),
+    [parameterList, parameter]
+  );
+  const mapCaptionMain =
+    parameterFilter[0].description[locale].content[0].content[0].value;
+  // CMS consts end =====================================================
   useEffect(() => {
     if (mapData) {
       setActiveRange(getRange(parameter as keyof SiteData, mapData));
@@ -109,17 +142,12 @@ const Dashboard = () => {
                         value={parameter}
                         onChange={handleChangeParameter}
                       >
-                        {Object.keys(Parameter).map((key) => (
+                        {parameterList.map(({ name, paramKey }) => (
                           <MenuItem
-                            key={Parameter[key as keyof typeof Parameter]}
-                            value={Parameter[key as keyof typeof Parameter]}
+                            key={paramKey["en-US"]}
+                            value={paramKey["en-US"]}
                           >
-                            <Translation
-                              component="span"
-                              path={`parameters.language.parameters.${
-                                Parameter[key as keyof typeof Parameter]
-                              }.name`}
-                            />
+                            {name[locale]}
                           </MenuItem>
                         ))}
                       </TextField>
@@ -133,10 +161,9 @@ const Dashboard = () => {
                     isLoading={isDataLoading}
                   >
                     <Box pl={0.5}>
-                      <Translation
-                        variant="caption"
-                        path={`parameters.language.parameters.${parameter}.unit`}
-                      />
+                      <Typography variant="caption">
+                        {parameterFilter[0].unit["en-US"]}
+                      </Typography>
                       {activeRange.min !== undefined &&
                         activeRange.mid !== undefined &&
                         activeRange.max !== undefined && (
@@ -166,13 +193,17 @@ const Dashboard = () => {
                     }}
                     alignItems="center"
                   >
-                    <DownloadDataButtonsSection isLoading={isDataLoading} />
+                    <DownloadDataButtonsSection
+                      isLoading={isDataLoading}
+                      nutrientButtonText={downloadNutrientsButtonTxt}
+                      sensorButtonText={downloadSenorButtonTxt}
+                    />
                   </Box>
                 </Grid>
               </Grid>
               <Grid item xs={12}>
                 <WithLoading isLoading={isDataLoading} width="100%">
-                  <Translation
+                  <Typography
                     variant="caption"
                     component="div"
                     style={{
@@ -180,20 +211,22 @@ const Dashboard = () => {
                       alignItems: "center",
                       paddingBottom: "10px"
                     }}
-                    path={`parameters.language.parameters.${parameter}.description`}
-                  />
+                  >
+                    {mapCaptionMain}
+                  </Typography>
                 </WithLoading>
               </Grid>
               <Grid item xs={12}>
                 <WithLoading isLoading={isDataLoading} width="100%">
-                  <Translation
+                  <Typography
                     variant="caption"
                     component="p"
-                    path="pages.dashboard.language.content.map_caption_secondary"
                     style={{
                       fontWeight: "bold"
                     }}
-                  />
+                  >
+                    {mapSecondaryCaption}
+                  </Typography>
                 </WithLoading>
               </Grid>
             </Grid>
@@ -243,3 +276,11 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+export const getServerSideProps = async () => {
+  const dashboardContent = await getCmsContent<DashboardPage>("dashboard");
+  return {
+    props: {
+      cmsData: dashboardContent
+    }
+  };
+};
