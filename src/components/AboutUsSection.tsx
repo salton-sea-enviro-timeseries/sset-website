@@ -1,5 +1,6 @@
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
+import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import { colors } from "@material-ui/core";
 import Section from "components/Section";
@@ -40,11 +41,8 @@ const AboutUsSection = ({ content: { body, title }, locale }: Props) => {
             justifyContent="center"
             size={4}
           />
-          <div
-            dangerouslySetInnerHTML={{
-              __html: bodyText
-            }}
-          />
+
+          <Typography>{bodyText}</Typography>
         </Box>
       </Container>
     </Section>
