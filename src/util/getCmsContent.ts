@@ -57,7 +57,12 @@ type MenuItem = Fields<{
   unit: LocaleDefault<string>;
   paramKey: LocaleDefault<string>;
 }>;
-type memberInfo = Fields<{ name: ""; email: ""; website: ""; affiliation: "" }>;
+type memberInfo = Fields<{
+  name: LocaleDefault<string>;
+  email: LocaleDefault<string>;
+  website: LocaleDefault<string>;
+  affiliation: HeroImage;
+}>;
 type MenuList = LocaleDefault<[MenuItem]>;
 // ========= Page types ==========================
 export type HomePage = {
@@ -77,12 +82,13 @@ export type DashboardPage = {
 };
 
 export type ContactPage = {
-  members: LocaleDefault<[memberInfo]>;
+  members: LocaleDefault<memberInfo[]>;
   applyLink: LocaleDefault<string>;
-  body: LocaleDefault<string>;
+  body: LocaleOption<string>;
   callToAction: LocaleOption<string>;
   metadata: Metadata;
   title: LocaleOption<string>;
+  heroImage: HeroImage;
 };
 // ==============================================
 
