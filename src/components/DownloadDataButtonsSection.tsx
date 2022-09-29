@@ -1,20 +1,18 @@
 import { Box, Button } from "@material-ui/core";
 import DownloadIcon from "@material-ui/icons/CloudDownload";
-
-import { useAppContext } from "components/AppContext";
-import { getContent } from "util/getContent";
 import WithLoading from "./WithLoading";
 
 interface DownloadDataButtonsSectionProps {
   isLoading: boolean;
+  nutrientButtonText: string;
+  sensorButtonText: string;
 }
 
 const DownloadDataButtonsSection = ({
-  isLoading
+  isLoading,
+  nutrientButtonText,
+  sensorButtonText
 }: DownloadDataButtonsSectionProps) => {
-  // @ts-ignore
-  const { language } = useAppContext();
-
   return (
     <>
       <Box pr={0.5}>
@@ -31,9 +29,7 @@ const DownloadDataButtonsSection = ({
             href="/api/download?range=nutrients&filename=nutrients-data.csv"
             download
           >
-            {getContent(
-              `pages.dashboard.${language}.content.download_nutrients_data_button`
-            )}
+            {nutrientButtonText}
           </Button>
         </WithLoading>
       </Box>
@@ -51,9 +47,7 @@ const DownloadDataButtonsSection = ({
             href="/api/download?range=probe_surface&filename=probe-data.csv"
             download
           >
-            {getContent(
-              `pages.dashboard.${language}.content.download_sensor_data_button`
-            )}
+            {sensorButtonText}
           </Button>
         </WithLoading>
       </Box>
