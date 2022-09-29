@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { InferGetServerSidePropsType } from "next";
 import {
   Box,
@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import { groupBy } from "lodash";
 import { getCmsContent } from "util/getCmsContent";
-import { Parameter, ParameterMapping, Data, SiteData } from "types";
+import { Parameter, Data, SiteData } from "types";
 import { colorScale, getAverage, getColorFromScale, getRange } from "utils";
 import Layout from "components/Layout";
 import Map from "components/Dashboard/Map";
@@ -18,10 +18,10 @@ import Table from "components/Dashboard/Table";
 import AirQualitySection from "components/AirQualitySection";
 import DownloadDataButtonsSection from "components/DownloadDataButtonsSection";
 import WithLoading from "components/WithLoading";
-import Translation from "components/Translation";
 import Meta from "components/Meta";
 import ContinuousColorLegend from "components/ContinuousColorLegend";
 import { useAppContext } from "components/AppContext";
+import { DashboardPage } from "util/getCmsContent";
 
 const getMapData = (data: SiteData[]) => {
   const dataBySite = groupBy(data, "site");
@@ -66,26 +66,31 @@ const Dashboard = ({
     max: 0,
     mid: 0
   });
-
   const [isDataLoading, setIsDataLoading] = useState(false);
   const [tableData, setTableData] = useState<SiteData[]>([]);
   const [mapData, setMapData] = useState<Data | undefined>();
-  // CMS consts
+  // CMS const start ================================================
   const locale = language === "en" ? "en-US" : "es";
   const cmsField = cmsData.fields;
   const mapSecondaryCaption = cmsField.map_caption_secondary[locale];
   const parameterList = cmsField.menuList["en-US"].map(({ fields }) => {
     return fields;
   });
-  // console.log("parameter unit", parameterList);
-
-  const parameterFilter = parameterList.filter(({ name, unit }) => {
-    if (name["en-US"].toLowerCase() === parameter) {
-      return unit["en-US"];
-    }
-  });
-
-  console.log("parameter unit", parameterFilter);
+  const downloadNutrientsButtonTxt =
+    cmsField.download_nutrients_data_button[locale];
+  const downloadSenorButtonTxt = cmsField.download_sensor_data_button[locale];
+  const parameterFilter = useMemo(
+    () =>
+      parameterList.filter(({ paramKey, unit }) => {
+        if (paramKey["en-US"] === parameter) {
+          return unit["en-US"];
+        }
+      }),
+    [parameterList, parameter]
+  );
+  const mapCaptionMain =
+    parameterFilter[0].description[locale].content[0].content[0].value;
+  // CMS consts end =====================================================
   useEffect(() => {
     if (mapData) {
       setActiveRange(getRange(parameter as keyof SiteData, mapData));
@@ -95,7 +100,7 @@ const Dashboard = ({
   const handleChangeParameter = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setParameter(event.target.value.toLowerCase() as Parameter);
+    setParameter(event.target.value as Parameter);
   };
 
   // TODO: Refactor: use useSWR
@@ -110,7 +115,7 @@ const Dashboard = ({
       })
       .finally(() => setIsDataLoading(false));
   }, []);
-  console.log("parameterUnit res", parameterFilter);
+
   return (
     <Layout>
       <Meta title="Dashboard | Salton Sea Environmental Timeseries" />
@@ -137,10 +142,10 @@ const Dashboard = ({
                         value={parameter}
                         onChange={handleChangeParameter}
                       >
-                        {parameterList.map(({ name }) => (
+                        {parameterList.map(({ name, paramKey }) => (
                           <MenuItem
-                            key={name["en-US"].toLowerCase()}
-                            value={name["en-US"].toLowerCase()}
+                            key={paramKey["en-US"]}
+                            value={paramKey["en-US"]}
                           >
                             {name[locale]}
                           </MenuItem>
@@ -159,10 +164,6 @@ const Dashboard = ({
                       <Typography variant="caption">
                         {parameterFilter[0].unit["en-US"]}
                       </Typography>
-                      {/* <Translation
-                        variant="caption"
-                        path={`parameters.language.parameters.${parameter}.unit`}
-                      /> */}
                       {activeRange.min !== undefined &&
                         activeRange.mid !== undefined &&
                         activeRange.max !== undefined && (
@@ -192,13 +193,17 @@ const Dashboard = ({
                     }}
                     alignItems="center"
                   >
-                    <DownloadDataButtonsSection isLoading={isDataLoading} />
+                    <DownloadDataButtonsSection
+                      isLoading={isDataLoading}
+                      nutrientButtonText={downloadNutrientsButtonTxt}
+                      sensorButtonText={downloadSenorButtonTxt}
+                    />
                   </Box>
                 </Grid>
               </Grid>
               <Grid item xs={12}>
                 <WithLoading isLoading={isDataLoading} width="100%">
-                  <Translation
+                  <Typography
                     variant="caption"
                     component="div"
                     style={{
@@ -206,8 +211,9 @@ const Dashboard = ({
                       alignItems: "center",
                       paddingBottom: "10px"
                     }}
-                    path={`parameters.language.parameters.${parameter}.description`}
-                  />
+                  >
+                    {mapCaptionMain}
+                  </Typography>
                 </WithLoading>
               </Grid>
               <Grid item xs={12}>
@@ -271,10 +277,10 @@ const Dashboard = ({
 
 export default Dashboard;
 export const getServerSideProps = async () => {
-  const dashboardContent = await getCmsContent("dashboard");
+  const dashboardContent = await getCmsContent<DashboardPage>("dashboard");
   return {
     props: {
-      cmsData: dashboardContent.items[0]
+      cmsData: dashboardContent
     }
   };
 };

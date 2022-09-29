@@ -5,28 +5,27 @@ import Section from "components/Section";
 import SectionHeader from "components/SectionHeader";
 import FeaturedNewsFeed from "components/InTheNews/FeaturedNewsFeed";
 import { MediaObject } from "types";
-import { useAppContext } from "components/AppContext";
+import { LocaleOption } from "util/getCmsContent";
 
 interface FeaturedNewsFeedProps {
   mediaObjects: MediaObject[];
 }
-
-type LocaleOption<T> = {
-  "en-US": T;
-  es: T;
-};
-type Content = { content: { title: LocaleOption<string> } };
+type Content = { content: { title: LocaleOption<string> }; locale: string };
 type Props = FeaturedNewsFeedProps & Content;
-const InTheNewsSection = ({ mediaObjects, content: { title } }: Props) => {
+
+const InTheNewsSection = ({
+  mediaObjects,
+  content: { title },
+  locale
+}: Props) => {
   const classes = useStyles();
-  // @ts-ignore
-  const { language } = useAppContext();
+
   return (
     <Section bgImage="/curves.png">
       <Container>
         <Box>
           <SectionHeader
-            title={language === "en" ? title["en-US"] : title["es"]}
+            title={title[locale as keyof LocaleOption<string>]}
             titleProps={{
               align: "center",
               className: classes.header,

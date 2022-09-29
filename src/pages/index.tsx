@@ -10,14 +10,15 @@ import InTheNewsSection from "components/InTheNewsSection";
 import scrape from "../lib/scrape";
 import { useAppContext } from "components/AppContext";
 import React from "react";
-
+import { HomePage } from "util/getCmsContent";
 const Home = ({
   mediaData,
   cmsData
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   // @ts-ignore
   const { language } = useAppContext();
-  // TODO: Find way to refactor
+  const locale = language === "en" ? "en-US" : "es";
+  // TODO: Find way to refactor cms start ===================================
   const heroTitle = cmsData.fields.hero["en-US"].fields.title;
   const heroImage =
     cmsData.fields.hero["en-US"].fields.heroImage["en-US"].fields.file["en-US"]
@@ -28,7 +29,7 @@ const Home = ({
   const sectionContent = cmsData.fields.content["en-US"].map(({ fields }) => {
     return fields;
   });
-
+  //  cms end =================================================================
   return (
     <Layout>
       <Hero
@@ -36,22 +37,24 @@ const Home = ({
         size="large"
         bgImage={heroImage}
         bgImageOpacity={0.75}
-        title={language === "en" ? heroTitle["en-US"] : heroTitle["es"]}
-        subtitle={
-          language === "en" ? heroSubTitle["en-US"] : heroSubTitle["es"]
-        }
+        title={heroTitle[locale]}
+        subtitle={heroSubTitle[locale]}
         cta={
           <Link href="/dashboard" passHref>
             <Button variant="contained" color="primary">
-              {language === "en" ? buttonText["en-US"] : buttonText["es"]}
+              {buttonText[locale]}
             </Button>
           </Link>
         }
       />
 
-      <AboutSaltonSeaSection content={sectionContent[0]} />
-      <AboutUsSection content={sectionContent[1]} />
-      <InTheNewsSection mediaObjects={mediaData} content={sectionContent[2]} />
+      <AboutSaltonSeaSection content={sectionContent[0]} locale={locale} />
+      <AboutUsSection content={sectionContent[1]} locale={locale} />
+      <InTheNewsSection
+        mediaObjects={mediaData}
+        content={sectionContent[2]}
+        locale={locale}
+      />
     </Layout>
   );
 };
@@ -65,11 +68,11 @@ export const getServerSideProps = async () => {
   ];
   const mediaData = await scrape(urls);
 
-  const homepageContent = await getCmsContent("homePage");
+  const homepageContent = await getCmsContent<HomePage>("homePage");
   return {
     props: {
       mediaData,
-      cmsData: homepageContent.items[0]
+      cmsData: homepageContent
     }
   };
 };
