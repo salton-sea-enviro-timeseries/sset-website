@@ -218,6 +218,11 @@ const WaterQuality = () => {
                       )
                     };
                   })}
+                caption
+                LATITUDE={33.47634}
+                LONGITUDE={-116.03884}
+                SIZE={20}
+                ZOOM={12}
               />
             )}
           </WithLoading>
