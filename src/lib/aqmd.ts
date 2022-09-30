@@ -1,5 +1,5 @@
 import { subHours } from "date-fns";
-import { utcToZonedTime, formatInTimeZone } from "date-fns-tz";
+// import { utcToZonedTime, formatInTimeZone } from "date-fns-tz";
 import { groupBy } from "lodash";
 
 const USERNAME = process.env.AQMD_USERNAME as string;
@@ -23,7 +23,7 @@ interface RawDeviceAvergeDataResponse {
   WorkingStatus: string;
   ProgramId: number;
   CommunityId: number;
-  DeviceID: string;
+  DeviceId: string;
   Longitude: number;
   Latitude: number;
   Averagingperiod: string;
@@ -49,7 +49,7 @@ export type DevicesRequestParams = {
 
 export type Device = Pick<
   RawDeviceAvergeDataResponse,
-  | "DeviceID"
+  | "DeviceId"
   | "DeviceTitle"
   | "Latitude"
   | "Longitude"
