@@ -17,9 +17,34 @@ import DashboardLayout from "components/DashboardLayout";
 import { fetcher } from "utils";
 import { COMMUNITY_ID } from "../../constants";
 import { Device } from "lib/aqmd";
+import Map from "components/Dashboard/Map";
 
 const AirQuality = () => {
   const { data = [], error } = useSWR<Device[]>(`../api/aq/devices`, fetcher);
+  const isLoading = !data.length && !error;
+  if (error) return <Typography>Error Loading data</Typography>;
+
+  const airQualityDevices = data.map((device) => {
+    let status: string = "";
+    switch (device.WorkingStatus) {
+      case "Not Working":
+        status = "red";
+        break;
+      case "Offline":
+        status = "yellow";
+        break;
+      case "Working":
+        status = "blue";
+        break;
+    }
+    return {
+      site: device.DeviceId,
+      value: device.WorkingStatus,
+      latitude: device.Latitude,
+      longitude: device.Longitude,
+      color: status
+    };
+  });
 
   return (
     <>
@@ -28,7 +53,18 @@ const AirQuality = () => {
         Air Quality
       </Typography>
       <AirQualitySection />
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <WithLoading isLoading={isLoading} variant="rect" height="500px">
+        {data && (
+          <Map
+            pins={airQualityDevices}
+            caption={false}
+            LATITUDE={33.638421}
+            LONGITUDE={-116.075339}
+            SIZE={20}
+            ZOOM={10}
+          />
+        )}
+      </WithLoading>
     </>
   );
 };
