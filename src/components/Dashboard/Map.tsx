@@ -1,14 +1,4 @@
-import {
-  Tooltip,
-  makeStyles,
-  Box,
-  Grow,
-  IconButton,
-  Typography,
-  Slide,
-  Collapse,
-  Link
-} from "@material-ui/core";
+import { Tooltip, makeStyles, Box, Collapse, Link } from "@material-ui/core";
 import React from "react";
 import ReactMapGL, {
   Marker,
@@ -20,23 +10,31 @@ import ReactMapGL, {
 import "mapbox-gl/dist/mapbox-gl.css";
 import Translation from "components/Translation";
 
-const LATITUDE = 33.47634;
-const LONGITUDE = -116.03884;
-const SIZE = 20;
-const ZOOM = 12;
-
 type Pin = {
   latitude: number;
   longitude: number;
   color: string;
   site: string;
-  value: number;
+  value: number | string;
 };
+
 interface MapProps {
   pins: Pin[];
+  caption: Boolean;
+  LATITUDE: number;
+  LONGITUDE: number;
+  SIZE: number;
+  ZOOM: number;
 }
 
-export default function Map({ pins }: MapProps) {
+export default function Map({
+  pins,
+  caption,
+  LATITUDE,
+  LONGITUDE,
+  SIZE,
+  ZOOM
+}: MapProps) {
   const classes = useStyles();
   const [viewport, setViewport] = React.useState<Partial<ViewportProps>>({
     zoom: ZOOM,
@@ -45,12 +43,41 @@ export default function Map({ pins }: MapProps) {
   });
   const [showMoreInfo, setShowMoreInfo] = React.useState(false);
   const [transitionExited, setTransitionExited] = React.useState(false);
-  // const [selectedPin, setSelectedPin] = React.useState<Pin | null>(null);
 
   function onViewportChange(viewport: ViewportProps) {
     const { height, width, ...rest } = viewport;
     setViewport({ ...rest });
   }
+  const mapCaption = (
+    <Box pb={3}>
+      <Collapse
+        in={showMoreInfo}
+        collapsedSize={40}
+        onExited={() => setTransitionExited(false)}
+        onEnter={() => setTransitionExited(true)}
+      >
+        <Box display="flex" flexDirection="column">
+          <Translation
+            gutterBottom
+            component="div"
+            variant="caption"
+            noWrap={transitionExited || showMoreInfo ? false : true}
+            path="pages.dashboard.language.content.map_caption_main"
+          />
+
+          <Box display="flex" justifyContent="center">
+            <Link
+              component="button"
+              variant="caption"
+              onClick={() => setShowMoreInfo(!showMoreInfo)}
+            >
+              {showMoreInfo ? "Show Less" : "See More"}
+            </Link>
+          </Box>
+        </Box>
+      </Collapse>
+    </Box>
+  );
 
   return (
     <>
@@ -78,7 +105,7 @@ export default function Map({ pins }: MapProps) {
                 <>
                   <b>{site}</b>
                   &nbsp;
-                  {value.toPrecision(3)}
+                  {typeof value === "string" ? value : value.toPrecision(3)}
                 </>
               }
               open={true}
@@ -121,37 +148,7 @@ export default function Map({ pins }: MapProps) {
       </ReactMapGL>
 
       {/* TODO: Move this separate component */}
-      <Box pb={3}>
-        <Collapse
-          in={showMoreInfo}
-          collapsedSize={40}
-          onExited={() => setTransitionExited(false)}
-          onEnter={() => setTransitionExited(true)}
-        >
-          <Box display="flex" flexDirection="column">
-            <Translation
-              gutterBottom
-              component="div"
-              variant="caption"
-              noWrap={transitionExited || showMoreInfo ? false : true}
-              path="pages.dashboard.language.content.map_caption_main"
-            />
-
-            <Box display="flex" justifyContent="center">
-              {/* <Translation path="dashboard.download_nutrients_data_button"> */}
-              <Link
-                component="button"
-                variant="caption"
-                onClick={() => setShowMoreInfo(!showMoreInfo)}
-              >
-                {showMoreInfo ? "Show Less" : "See More"}
-              </Link>
-
-              {/* </Translation> */}
-            </Box>
-          </Box>
-        </Collapse>
-      </Box>
+      {caption && mapCaption}
     </>
   );
 }
