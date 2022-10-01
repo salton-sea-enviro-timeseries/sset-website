@@ -74,7 +74,7 @@ export async function getDevices({ groupId }: DevicesRequestParams) {
 
   const url = new URL(`${ENDPOINT_BASE_URL}/devicedata`);
   url.searchParams.append("Group", groupId.toString());
-
+  // @ts-ignore
   const data = await (await fetch(url, options)).json();
   return data.data as Device[];
 }
