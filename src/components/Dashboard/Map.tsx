@@ -9,7 +9,8 @@ import ReactMapGL, {
 
 import "mapbox-gl/dist/mapbox-gl.css";
 import Translation from "components/Translation";
-
+import WaterQuality from "pages/dashboard/water-quality";
+import { Theme } from "@material-ui/core";
 type Pin = {
   latitude: number;
   longitude: number;
@@ -25,17 +26,24 @@ interface MapProps {
   LONGITUDE: number;
   SIZE: number;
   ZOOM: number;
+  airQualityTooltip?: Boolean;
 }
-
+interface ToolTipStyleProps {
+  width: number;
+}
 export default function Map({
   pins,
   caption,
   LATITUDE,
   LONGITUDE,
   SIZE,
-  ZOOM
+  ZOOM,
+  airQualityTooltip
 }: MapProps) {
-  const classes = useStyles();
+  const toolTipWidth = {
+    width: airQualityTooltip ? 140 : 70
+  };
+  const classes = useStyles(toolTipWidth);
   const [viewport, setViewport] = React.useState<Partial<ViewportProps>>({
     zoom: ZOOM,
     latitude: LATITUDE,
@@ -105,7 +113,9 @@ export default function Map({
                 <>
                   <b>{site}</b>
                   &nbsp;
-                  {typeof value === "string" ? value : value.toPrecision(3)}
+                  {typeof value === "string"
+                    ? `: ${value}`
+                    : value.toPrecision(3)}
                 </>
               }
               open={true}
@@ -153,16 +163,17 @@ export default function Map({
   );
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles<Theme, ToolTipStyleProps>(() => ({
   popper: {
     top: "10px !important",
     cursor: "pointer",
     pointerEvents: "unset"
   },
   tooltip: {
-    fontSize: 10,
-    maxWidth: "none",
-    width: 70
+    fontSize: 11,
+    minWidth: 70,
+    maxWidth: 150,
+    width: ({ width }) => width
   }
 }));
 
