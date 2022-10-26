@@ -1,13 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Box,
   Container,
   Grid,
   MenuItem,
   TextField,
-  Typography
+  Typography,
+  makeStyles,
+  Tooltip
 } from "@material-ui/core";
 import { groupBy } from "lodash";
+import { Marker } from "react-map-gl";
 
 import { Parameter, ParameterMapping, Data, SiteData } from "types";
 import { colorScale, getAverage, getColorFromScale, getRange } from "utils";
@@ -19,6 +22,9 @@ import WithLoading from "components/WithLoading";
 import Translation from "components/Translation";
 import Meta from "components/Meta";
 import ContinuousColorLegend from "components/ContinuousColorLegend";
+import { MapPinIcon } from "../../constants";
+
+const PIN_SIZE = 20;
 
 const getMapData = (data: SiteData[]) => {
   const dataBySite = groupBy(data, "site");
@@ -53,6 +59,8 @@ const getMapData = (data: SiteData[]) => {
 };
 
 const WaterQuality = () => {
+  const classes = useStyles();
+
   const [parameter, setParameter] = useState<Parameter>(Parameter.Chlorophyll);
   const [activeRange, setActiveRange] = useState<ReturnType<typeof getRange>>({
     min: 0,
@@ -88,6 +96,25 @@ const WaterQuality = () => {
       })
       .finally(() => setIsDataLoading(false));
   }, []);
+
+  const sites = useMemo(() => {
+    if (!mapData) return [];
+    return Object.values(mapData)
+      .filter((value) => value[parameter] > 0)
+      .map((value) => {
+        return {
+          site: value.site.toUpperCase(),
+          value: value[parameter] as number,
+          latitude: value.latitude as number,
+          longitude: value.longitude as number,
+          color: getColorFromScale(
+            value[parameter],
+            activeRange.min as number,
+            activeRange.max as number
+          )
+        };
+      });
+  }, [mapData, parameter, activeRange]);
 
   return (
     <>
@@ -202,28 +229,57 @@ const WaterQuality = () => {
         <Grid item xs={12}>
           <WithLoading isLoading={isDataLoading} variant="rect" height="500px">
             {mapData && (
-              <Map
-                pins={Object.values(mapData)
-                  .filter((value) => value[parameter] > 0)
-                  .map((value) => {
-                    return {
-                      site: value.site.toUpperCase(),
-                      value: value[parameter] as number,
-                      latitude: value.latitude as number,
-                      longitude: value.longitude as number,
-                      color: getColorFromScale(
-                        value[parameter],
-                        activeRange.min as number,
-                        activeRange.max as number
-                      )
-                    };
-                  })}
-                caption
-                LATITUDE={33.47634}
-                LONGITUDE={-116.03884}
-                SIZE={20}
-                ZOOM={12}
-              />
+              <Map caption LATITUDE={33.47634} LONGITUDE={-116.03884} ZOOM={12}>
+                {sites.map(({ latitude, longitude, color, site, value }, i) => {
+                  return (
+                    <Marker
+                      key={`${i}-${latitude}-${longitude}`}
+                      latitude={latitude}
+                      longitude={longitude}
+                    >
+                      <Tooltip
+                        title={
+                          <>
+                            <b>{site}</b>
+                            &nbsp;
+                            {typeof value === "string"
+                              ? `: ${value}`
+                              : value.toPrecision(3)}
+                          </>
+                        }
+                        open={true}
+                        arrow
+                        placement="top-end"
+                        PopperProps={{
+                          disablePortal: true
+                        }}
+                        classes={{
+                          popper: classes.popper,
+                          tooltip: classes.tooltip
+                        }}
+                      >
+                        <svg
+                          height={PIN_SIZE}
+                          viewBox="0 0 24 24"
+                          style={{
+                            cursor: "pointer",
+                            fill: color,
+                            stroke: "none",
+                            transform: `translate(${
+                              -PIN_SIZE / 2
+                            }px,${-PIN_SIZE}px)`
+                          }}
+                          // onClick={() => {
+                          //   setSelectedPin(pins[i]);
+                          // }}
+                        >
+                          <path d={MapPinIcon} />
+                        </svg>
+                      </Tooltip>
+                    </Marker>
+                  );
+                })}
+              </Map>
             )}
           </WithLoading>
         </Grid>
@@ -236,6 +292,20 @@ const WaterQuality = () => {
     </>
   );
 };
+
+const useStyles = makeStyles(() => ({
+  popper: {
+    top: "10px !important",
+    cursor: "pointer",
+    pointerEvents: "unset"
+  },
+  tooltip: {
+    fontSize: 11,
+    width: 70,
+    display: "flex",
+    justifyContent: "center"
+  }
+}));
 
 WaterQuality.getLayout = function getLayout(page: React.ReactElement) {
   return <DashboardLayout>{page}</DashboardLayout>;
