@@ -1,3 +1,5 @@
+import { BLOCKS, NodeData, TopLevelBlock } from "@contentful/rich-text-types";
+
 export interface SiteData {
   date: string;
   site: string;
@@ -192,7 +194,11 @@ type Fields<T> = {
 type BodyValues = {
   content: [{ value: string }];
 };
-export type NestedObjBodyText = { content: [BodyValues] };
+export type NestedObjBodyText = {
+  content: TopLevelBlock[];
+  nodeType: BLOCKS.DOCUMENT;
+  data: NodeData;
+};
 
 type PageContent = [
   Fields<{
