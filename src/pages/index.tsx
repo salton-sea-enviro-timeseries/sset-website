@@ -5,12 +5,28 @@ import { getCmsContent } from "util/getCmsContent";
 import { HomePage } from "types";
 import Layout from "components/Layout";
 import Hero from "components/Hero";
-import AboutSaltonSeaSection from "components/AboutSaltonSeaSection";
-import AboutUsSection from "components/AboutUsSection";
-import InTheNewsSection from "components/InTheNewsSection";
+import PageSection from "components/PageSection";
 import scrape from "../lib/scrape";
-import { getContent } from "util/getContent";
 import { useAppContext } from "components/AppContext";
+import { LocaleOption, NestedObjBodyText } from "types";
+import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import { Document } from "@contentful/rich-text-types";
+import { Key } from "react";
+
+// Contentful rich text helper
+const renderDocument = (document: Document) => {
+  const options = {
+    renderText: (text: string) => {
+      return text
+        .split("\n")
+        .reduce((children: any, textSegment: any, index: Key) => {
+          return [...children, index > 0 && <br key={index} />, textSegment];
+        }, []);
+    }
+  };
+
+  return documentToReactComponents(document, options);
+};
 
 const Home = ({
   mediaData,
@@ -26,8 +42,23 @@ const Home = ({
   const buttonText = heroContentBase.buttonText;
   const heroSubTitle = heroContentBase.subTitle;
   const sectionContent = homepageContent.fields.content["en-US"].map(
-    ({ fields }) => {
-      return fields;
+    ({ fields }, index) => {
+      const { body, title } = fields;
+      return (
+        <PageSection
+          key={`section-${index}`}
+          bodyText={
+            body
+              ? renderDocument(
+                  body[locale as keyof LocaleOption<NestedObjBodyText>]
+                )
+              : null
+          }
+          section={index}
+          title={title[locale as keyof LocaleOption<NestedObjBodyText>]}
+          mediaObjects={body ? undefined : mediaData}
+        />
+      );
     }
   );
   //================== cms end ============================
@@ -48,9 +79,7 @@ const Home = ({
           </Link>
         }
       />
-      <AboutSaltonSeaSection />
-      <AboutUsSection />
-      <InTheNewsSection mediaObjects={mediaData} />
+      {sectionContent}
     </Layout>
   );
 };
@@ -65,7 +94,6 @@ export const getServerSideProps = async () => {
 
   const mediaData = await scrape(urls);
   const homepageContent = await getCmsContent<HomePage>("homePage");
-  console.log("cms result: ", homepageContent);
   return {
     props: {
       mediaData,
