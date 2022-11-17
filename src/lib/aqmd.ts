@@ -1,6 +1,5 @@
-import { subHours } from "date-fns";
-// import { utcToZonedTime, formatInTimeZone } from "date-fns-tz";
-import { groupBy } from "lodash";
+import { addHours, startOfHour, subHours } from "date-fns";
+import { utcToZonedTime, formatInTimeZone } from "date-fns-tz";
 
 const USERNAME = process.env.AQMD_USERNAME as string;
 const PASSWORD = process.env.AQMD_PASSWORD as string;
@@ -79,50 +78,52 @@ export async function getDevices({ groupId }: DevicesRequestParams) {
   return data.data as Device[];
 }
 
-// export async function getDevices({ communityId }: DevicesRequestParams) {
-//   try {
-//     const options = {
-//       method: "GET",
-//       headers: {
-//         username: USERNAME,
-//         token: PASSWORD
-//       }
-//     };
+export async function getDeviceData({ sensorId }: { sensorId: string }) {
+  try {
+    const options = {
+      method: "GET",
+      headers: {
+        username: USERNAME,
+        token: PASSWORD
+      }
+    };
 
-//     const timeZone = "America/Los_Angeles";
-//     const today = utcToZonedTime(new Date(), timeZone);
+    /**
+     * TODO: Get most recent data for now. Will want to allow
+     * start and end date params in the future.
+     */
+    const timeZone = "America/Los_Angeles";
+    const today = utcToZonedTime(new Date(), timeZone);
 
-//     const endDate = formatInTimeZone(today, "UTC", "yyyy-MM-dd HH:mm:ss");
-//     const startDate = formatInTimeZone(
-//       subHours(today, 3),
-//       "UTC",
-//       "yyyy-MM-dd HH:mm:ss"
-//     );
+    /**
+     * Start date is 24 hours ago because I wasn't getting any data
+     * for some reason even though it device "DataLastRecoded" is
+     * within now - 1 hour and now. Need to check with AQMD.
+     */
+    const startDate = formatInTimeZone(
+      startOfHour(subHours(today, 24)),
+      "UTC",
+      "yyyy-MM-dd HH:mm:ss"
+    );
+    const endDate = formatInTimeZone(
+      startOfHour(addHours(today, 1)),
+      "UTC",
+      "yyyy-MM-dd HH:mm:ss"
+    );
 
-//     const url = new URL(ENDPOINT_BASE_URL);
-//     url.searchParams.append("community", communityId.toString());
-//     url.searchParams.append("StartDateTime", startDate);
-//     url.searchParams.append("EndDateTime", endDate);
+    const url = new URL(`${ENDPOINT_BASE_URL}/deviceaveragedata`);
+    url.searchParams.append("sensorId", sensorId);
+    url.searchParams.append("StartDateTime", startDate);
+    url.searchParams.append("EndDateTime", endDate);
 
-//     const requestUrl = decodeURIComponent(url.toString()).replace(/\+/g, "%20");
+    const requestUrl = decodeURIComponent(url.toString()).replace(/\+/g, "%20");
 
-//     const data = await (await fetch(requestUrl, options)).json();
-//     console.log(data.data.length);
-//     const groupedData = groupBy(data.data, "DeviceTitle");
-//     const devices = Object.keys(groupedData).reduce((acc, key) => {
-//       const device = groupedData[key][0];
-//       acc[key] = {
-//         DeviceID: device.DeviceID,
-//         DeviceTitle: device.DeviceTitle,
-//         Latitude: device.Latitude,
-//         Longitude: device.Longitude,
-//         DeviceStatus: device.DeviceStatus,
-//         WorkingStatus: device.WorkingStatus
-//       };
-//       return acc;
-//     }, {} as { [key: string]: Device });
-//     return devices;
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }
+    const data = await (await fetch(requestUrl, options)).json();
+    console.log("data", data.data);
+
+    // The last item in the array is the most recent data
+    return data.data;
+  } catch (err) {
+    console.log(err);
+  }
+}
