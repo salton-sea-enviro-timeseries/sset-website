@@ -2,24 +2,28 @@ import { useMemo } from "react";
 import { Typography, Tooltip, makeStyles } from "@material-ui/core";
 import useSWR from "swr";
 import { Marker } from "react-map-gl";
-
 import AirQualitySection from "components/AirQualitySection";
 import WithLoading from "components/WithLoading";
-import Translation from "components/Translation";
 import Meta from "components/Meta";
 import DashboardLayout from "components/DashboardLayout";
 import { fetcher } from "utils";
 import { MapPinIcon } from "../../constants";
-import { Device } from "lib/aqmd";
 import Map from "components/Dashboard/Map";
 
 const PIN_SIZE = 20;
-
+async function multiFetcher(...urls: string[]) {
+  const promises: string | any[] = [];
+  const deviceArrays = await Promise.all(urls.map((url) => fetcher(url)));
+  return promises.concat(...deviceArrays);
+}
 const AirQuality = () => {
   const classes = useStyles();
+  const { data = [], error } = useSWR(
+    [`../api/aq/devices/aqmd`, `../api/aq/devices/quant`],
+    multiFetcher
+  );
 
-  const { data = [], error } = useSWR<Device[]>(`../api/aq/devices`, fetcher);
-
+  console.log("array list: ", data);
   const airQualityDevices = useMemo(() => {
     return data.map((device) => {
       let status: string = "";
@@ -32,7 +36,8 @@ const AirQuality = () => {
         "AQY BD-1074": null,
         "AQY BD-1094": null,
         "AQY BD-1063": null,
-        "AQY BD-1152": null
+        "AQY BD-1152": null,
+        "MOD-PM-00404": "Palm Desert"
       };
       const name = DeviceNames[device.DeviceId] ?? device.DeviceTitle;
       switch (device.WorkingStatus) {
@@ -45,13 +50,18 @@ const AirQuality = () => {
         case "Working":
           status = "🟢";
           break;
+        case "Working-Quant":
+          status = "🟩";
+          break;
+        case "Not Working-Quant":
+          status = "🟥";
       }
       return {
         site: `${status} ${name}`,
         value: device.WorkingStatus,
         latitude: device.Latitude,
         longitude: device.Longitude,
-        color: "yellow"
+        color: "#040273"
       };
     });
   }, [data]);
