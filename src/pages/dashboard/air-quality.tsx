@@ -23,7 +23,6 @@ const AirQuality = () => {
     multiFetcher
   );
 
-  console.log("array list: ", data);
   const airQualityDevices = useMemo(() => {
     return data.map((device) => {
       let status: string = "";

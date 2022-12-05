@@ -1,7 +1,5 @@
 const MODEL_NUM = "MOD-PM-00404";
-const url = new URL(
-  `https://app.quant-aq.com/ui-device-data/${MODEL_NUM}?table=clean`
-);
+const url = `https://app.quant-aq.com/ui-device-data/${MODEL_NUM}?table=clean`;
 
 export interface MODRawDeviceDataResponse {
   "geo.lat": number;
