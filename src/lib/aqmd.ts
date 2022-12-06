@@ -101,7 +101,7 @@ export async function getDeviceData({ sensorId }: { sensorId: string }) {
      * within now - 1 hour and now. Need to check with AQMD.
      */
     const startDate = formatInTimeZone(
-      startOfHour(subHours(today, 24)),
+      startOfHour(subHours(today, 48)),
       "UTC",
       "yyyy-MM-dd HH:mm:ss"
     );
