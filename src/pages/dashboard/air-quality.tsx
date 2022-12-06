@@ -9,10 +9,11 @@ import DashboardLayout from "components/DashboardLayout";
 import { fetcher } from "utils";
 import { MapPinIcon } from "../../constants";
 import Map from "components/Dashboard/Map";
+import { Device } from "lib/aqmd";
 
 const PIN_SIZE = 20;
 async function multiFetcher(...urls: string[]) {
-  const promises: string | any[] = [];
+  const promises: string | Device[] = [];
   const deviceArrays = await Promise.all(urls.map((url) => fetcher(url)));
   return promises.concat(...deviceArrays);
 }
@@ -60,6 +61,8 @@ const AirQuality = () => {
         value: device.WorkingStatus,
         latitude: device.Latitude,
         longitude: device.Longitude,
+        sensorId: `${device.DeviceId}: ${name}`,
+        location: name,
         color: "#040273"
       };
     });
@@ -74,7 +77,9 @@ const AirQuality = () => {
       <Typography gutterBottom component="h1" variant="h4">
         Air Quality
       </Typography>
-      <AirQualitySection />
+      <AirQualitySection
+        sensorId={airQualityDevices.map(({ sensorId }) => sensorId)}
+      />
       <WithLoading isLoading={isLoading} variant="rect" height="500px">
         {data && (
           <Map

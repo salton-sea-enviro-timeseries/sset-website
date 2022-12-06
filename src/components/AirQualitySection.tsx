@@ -4,11 +4,14 @@ import { colors, Typography } from "@material-ui/core";
 import useSWR from "swr";
 import { Skeleton } from "@material-ui/lab";
 import { format } from "date-fns";
-
+import Translation from "./Translation";
+import { MenuItem, TextField } from "@material-ui/core";
 import { AirQualityMapping, ForecastResponse } from "lib/airnow";
 import { fetcher } from "utils";
 import AQLegend from "./AQLegend";
 import WithLoading from "./WithLoading";
+import { Device } from "lib/aqmd";
+import { useState } from "react";
 
 const SALTON_SEA_ZIPCODE = "92254";
 
@@ -23,26 +26,70 @@ const filterData = (
   return true;
 };
 
-const AirQualitySection = () => {
+function determineSourceOfData(sensor: string) {
+  const regex = /^M/g;
+  return sensor.match(regex)
+    ? `../api/aq/devices/quant/${sensor}`
+    : `../api/aq/devices/aqmd/${sensor}`;
+}
+
+const AirQualitySection = ({ sensorId }: { sensorId: string[] }) => {
+  console.log("sensors", sensorId);
   const classes = useStyles();
-  const { data = [], error } = useSWR<ForecastResponse[]>(
-    `/api/aq/forecast?zipCode=${SALTON_SEA_ZIPCODE}`,
+  const [sensor, setSensor] = useState("AQY BD-1071");
+
+  const { data: forecastData = [], error: forecastError } = useSWR<
+    ForecastResponse[]
+  >(`/api/aq/forecast?zipCode=${SALTON_SEA_ZIPCODE}`, fetcher);
+  const { data: deviceData, error: aqmdError } = useSWR(
+    determineSourceOfData(sensor),
     fetcher
   );
 
-  console.log(data);
-  if (error) console.error(error);
+  console.log("device Data", deviceData);
+  if (forecastError) console.error(forecastError);
 
-  const isLoading = !data.length && !error;
+  const isLoading = !forecastData.length && !forecastError;
 
-  if (error) return <Typography>Error loading data</Typography>;
+  console.log("sensor select value", sensor);
+  const handleChangeSensor = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSensor(event.target.value);
+  };
 
-  const forecastDate = data[0]?.DateForecast
-    ? new Date(data[0]?.DateForecast.trim() + "T00:00:00")
+  if (forecastError) return <Typography>Error loading data</Typography>;
+
+  const forecastDate = forecastData[0]?.DateForecast
+    ? new Date(forecastData[0]?.DateForecast.trim() + "T00:00:00")
     : undefined;
 
   return (
     <Box pb={5}>
+      {/* selector start */}
+      <Box pr={0.5} pb={1}>
+        <WithLoading variant="rect" height={40} isLoading={isLoading}>
+          {sensorId.length > 0 && (
+            <TextField
+              fullWidth
+              label="Sensor"
+              select
+              size="small"
+              variant="outlined"
+              value={sensor}
+              onChange={handleChangeSensor}
+            >
+              {sensorId.map((option) => {
+                const sensorInfoArray = option.split(":");
+                return (
+                  <MenuItem key={option} value={sensorInfoArray[0]}>
+                    {option}
+                  </MenuItem>
+                );
+              })}
+            </TextField>
+          )}
+        </WithLoading>
+      </Box>
+      {/* selector end */}
       <WithLoading isLoading={isLoading}>
         <Typography>
           {`Air Quality Forecast for ${
@@ -74,7 +121,7 @@ const AirQualitySection = () => {
             </Box>
           </>
         ) : (
-          data.filter(filterData).map((d) => {
+          forecastData.filter(filterData).map((d) => {
             return (
               <Box
                 key={d.ParameterName}
