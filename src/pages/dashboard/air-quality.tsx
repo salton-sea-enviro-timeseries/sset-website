@@ -70,16 +70,13 @@ const AirQuality = () => {
 
   const isLoading = !data.length && !error;
   if (error) return <Typography>Error Loading data</Typography>;
-
   return (
     <>
       <Meta title="Dashboard | Salton Sea Environmental Timeseries" />
       <Typography gutterBottom component="h1" variant="h4">
         Air Quality
       </Typography>
-      <AirQualitySection
-        sensorId={airQualityDevices.map(({ sensorId }) => sensorId)}
-      />
+      <AirQualitySection devices={airQualityDevices} />
       <WithLoading isLoading={isLoading} variant="rect" height="500px">
         {data && (
           <Map
