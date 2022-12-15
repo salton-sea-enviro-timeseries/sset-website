@@ -12,7 +12,7 @@ export type DeviceAvergeDataRequestParams = {
   communityId: number;
 };
 
-interface RawDeviceAvergeDataResponse {
+export interface RawDeviceAverageDataResponse {
   TimeStamp: number;
   DateTime: string;
   StartDate: string;
@@ -47,7 +47,7 @@ export type DevicesRequestParams = {
 };
 
 export type Device = Pick<
-  RawDeviceAvergeDataResponse,
+  RawDeviceAverageDataResponse,
   | "DeviceId"
   | "DeviceTitle"
   | "Latitude"
@@ -119,7 +119,6 @@ export async function getDeviceData({ sensorId }: { sensorId: string }) {
     const requestUrl = decodeURIComponent(url.toString()).replace(/\+/g, "%20");
 
     const data = await (await fetch(requestUrl, options)).json();
-    console.log("data", data.data);
 
     // The last item in the array is the most recent data
     return data.data;
