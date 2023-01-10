@@ -94,14 +94,13 @@ export async function getDeviceData({ sensorId }: { sensorId: string }) {
      */
     const timeZone = "America/Los_Angeles";
     const today = utcToZonedTime(new Date(), timeZone);
-
     /**
      * Start date is 24 hours ago because I wasn't getting any data
      * for some reason even though it device "DataLastRecoded" is
      * within now - 1 hour and now. Need to check with AQMD.
      */
     const startDate = formatInTimeZone(
-      startOfHour(subHours(today, 48)),
+      startOfHour(subHours(today, 168)),
       "UTC",
       "yyyy-MM-dd HH:mm:ss"
     );
@@ -119,9 +118,8 @@ export async function getDeviceData({ sensorId }: { sensorId: string }) {
     const requestUrl = decodeURIComponent(url.toString()).replace(/\+/g, "%20");
 
     const data = await (await fetch(requestUrl, options)).json();
-
     // The last item in the array is the most recent data
-    return data.data;
+    return data.data.length === 0 ? ["No data available"] : data.data;
   } catch (err) {
     console.log(err);
   }
