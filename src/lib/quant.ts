@@ -12,6 +12,9 @@ export interface MODRawDeviceDataResponse {
   pm1: number;
   pm10: number;
   pm25: number;
+  PM1: number;
+  PM10: number;
+  "PM2.5": number;
   sn: string;
   timestamp: string;
   timestamp_local: string;
