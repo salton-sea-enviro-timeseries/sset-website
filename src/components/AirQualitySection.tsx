@@ -7,20 +7,19 @@ import { fetcher } from "utils";
 import AQLegend from "./AQLegend";
 import WithLoading from "./WithLoading";
 import { RawDeviceAverageDataResponse } from "lib/aqmd";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AirQualityParamBox from "./AirQualityParamBox";
-import { timeStamp } from "console";
 import { MODRawDeviceDataResponse } from "lib/quant";
+import determineSourceOfData from "lib/determineSourceOfData";
+import { format, parse } from "date-fns";
 
 type ParamAQIStandardMap = {
   O3: number;
-  PM2_5: number;
   "PM2.5": number;
   PM10: number;
   NO2: number;
   PM1: null;
 };
-
 type airQualityDevices = {
   site: string;
   value: string;
@@ -30,44 +29,50 @@ type airQualityDevices = {
   location: string;
   color: string;
 };
-
-function determineSourceOfData(sensor: string) {
-  const regex = /^M/g;
-  return sensor.match(regex)
-    ? `../api/aq/devices/quant/${sensor}`
-    : `../api/aq/devices/aqmd/${sensor}`;
-}
-
+type DataType =
+  | RawDeviceAverageDataResponse[]
+  | MODRawDeviceDataResponse
+  | [string];
+type CommonDeviceType = RawDeviceAverageDataResponse & MODRawDeviceDataResponse;
 const paramAQIStandardMap: ParamAQIStandardMap = {
   O3: 70,
-  PM2_5: 35,
-  //TODO find way to edit key for PM2.5
   "PM2.5": 35,
   PM10: 150,
   NO2: 100,
-  PM1: null // set to null since there is no standard
+  PM1: null // set to null since there is no standard,
 };
 
+function isDataTypeQuant(data: DataType): data is MODRawDeviceDataResponse {
+  return "Model_PM_PM1" in data;
+}
 const AirQualitySection = ({ devices }: { devices: airQualityDevices[] }) => {
-  const [sensor, setSensor] = useState("MOD-PM-00404");
-  //TODO correct typing for useSWR < RawDeviceAverageDataResponse[] | MODRawDeviceDataResponse[]>
-  const { data: deviceData = [], error: deviceDataError } = useSWR(
-    determineSourceOfData(sensor),
+  const [selectedSensor, setSelectedSensor] = useState("MOD-PM-00404");
+  const sanitizedValue = devices.length > 0 ? selectedSensor : "";
+  const { data: deviceData = [], error: deviceDataError } = useSWR<DataType>(
+    determineSourceOfData(selectedSensor),
     fetcher
   );
-
   if (deviceDataError) console.error(deviceDataError);
+
   const isLoading = !Object.keys(deviceData).length && !deviceDataError;
   const handleChangeSensor = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSensor(event.target.value);
+    setSelectedSensor(event.target.value);
   };
   if (deviceDataError) return <Typography>Error loading data</Typography>;
-  const recentDeviceData = deviceData.length
-    ? deviceData[deviceData?.length - 1]
-    : deviceData;
-  const dateTime = deviceData.length
-    ? recentDeviceData?.DateTime
-    : deviceData.timestamp;
+
+  //  Device values for aqmd array
+  const recentDeviceData = isDataTypeQuant(deviceData)
+    ? (deviceData as CommonDeviceType)
+    : (deviceData[deviceData?.length - 1] as CommonDeviceType);
+
+  const dateTime = isDataTypeQuant(deviceData)
+    ? format(new Date(deviceData.timestamp_local), "MMM d yyyy hh:mm a zz")
+    : recentDeviceData !== undefined && recentDeviceData.TimeStamp !== undefined
+    ? format(
+        new Date(recentDeviceData.TimeStamp * 1000),
+        "MMM d yyyy hh:mm a zz"
+      )
+    : null;
 
   const workingDeviceList = devices.map(({ sensorId, value }) => {
     const sensorInfoArray = sensorId.split(":");
@@ -77,8 +82,35 @@ const AirQualitySection = ({ devices }: { devices: airQualityDevices[] }) => {
       </MenuItem>
     ) : null;
   });
+
+  const parameterValues = Object.keys(paramAQIStandardMap).map(
+    (parameter, index) => {
+      return isLoading ? (
+        <Box flex={1} p={1} key={index} m={0.5}>
+          <Skeleton variant="rect" height={85} width="100%" />
+        </Box>
+      ) : (
+        <AirQualityParamBox
+          key={parameter}
+          parameter={parameter}
+          parameterValue={
+            recentDeviceData[parameter as keyof ParamAQIStandardMap]
+          }
+          unitOfMeasure={
+            recentDeviceData[
+              `${parameter}UOM` as keyof RawDeviceAverageDataResponse
+            ]
+          }
+          aqiStandard={
+            paramAQIStandardMap[parameter as keyof ParamAQIStandardMap]
+          }
+        />
+      );
+    }
+  );
   return (
     <Box pb={5}>
+      {}
       {/* selector start */}
       <Box pr={0.5} pb={1}>
         <WithLoading variant="rect" height={40} isLoading={isLoading}>
@@ -88,7 +120,7 @@ const AirQualitySection = ({ devices }: { devices: airQualityDevices[] }) => {
             select
             size="small"
             variant="outlined"
-            value={sensor}
+            value={sanitizedValue}
             onChange={handleChangeSensor}
           >
             {workingDeviceList}
@@ -96,34 +128,15 @@ const AirQualitySection = ({ devices }: { devices: airQualityDevices[] }) => {
         </WithLoading>
       </Box>
       {/* selector end */}
+      {deviceData[0 as keyof DataType] === "No data available" && (
+        <Typography>No data available</Typography>
+      )}
       <WithLoading isLoading={isLoading}>
-        <Typography>{dateTime}</Typography>
+        {dateTime && <Typography>AQI Values From {dateTime}</Typography>}
       </WithLoading>
       {/* Parameter and AQI data */}
       <Box display="flex" flexWrap="wrap">
-        {Object.keys(paramAQIStandardMap).map((parameter, index) => {
-          return isLoading ? (
-            <Box flex={1} p={1} key={index} m={0.5}>
-              <Skeleton variant="rect" height={85} width="100%" />
-            </Box>
-          ) : (
-            <AirQualityParamBox
-              key={parameter}
-              parameter={parameter}
-              parameterValue={
-                recentDeviceData[parameter as keyof ParamAQIStandardMap]
-              }
-              unitOfMeasure={
-                recentDeviceData[
-                  `${parameter}UOM` as keyof RawDeviceAverageDataResponse
-                ]
-              }
-              aqiStandard={
-                paramAQIStandardMap[parameter as keyof ParamAQIStandardMap]
-              }
-            />
-          );
-        })}
+        {parameterValues}
       </Box>
       {isLoading ? <Skeleton height={50} width="100%" /> : <AQLegend />}
     </Box>
