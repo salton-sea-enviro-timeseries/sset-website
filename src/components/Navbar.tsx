@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import clsx from "clsx";
 import AppBar from "@material-ui/core/AppBar";
-import Container from "@material-ui/core/Container";
 import Toolbar from "@material-ui/core/Toolbar";
 import Link from "next/link";
 import Hidden from "@material-ui/core/Hidden";
@@ -33,7 +31,7 @@ function Navbar() {
         label: getContent(`site.${language}.navLinks.home`)
       },
       {
-        href: "/dashboard",
+        href: "/dashboard/water-quality",
         label: getContent(`site.${language}.navLinks.dashboard`)
       },
       {
@@ -68,7 +66,7 @@ function Navbar() {
     <AppBar
       className={classes.navbar}
       color="transparent"
-      position="sticky"
+      position="fixed"
       elevation={1}
     >
       {/* <Container disableGutters={true}> */}
@@ -183,7 +181,8 @@ const useStyles = makeStyles((theme) => ({
   },
   navbar: {
     // backgroundColor: "#181818"
-    backgroundColor: theme.palette.background.default
+    backgroundColor: theme.palette.background.default,
+    zIndex: theme.zIndex.drawer + 1
   },
   navlink: {
     margin: theme.spacing(0, 0.25)

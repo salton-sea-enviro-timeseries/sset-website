@@ -26,7 +26,7 @@ const Home = ({
         title={getContent(`pages.home.${language}.content.hero`)}
         subtitle="Community Science"
         cta={
-          <Link href="/dashboard" passHref>
+          <Link href="/dashboard/water-quality" passHref>
             <Button variant="contained" color="primary">
               {getContent(`pages.home.${language}.content.call_to_action`)}
             </Button>
