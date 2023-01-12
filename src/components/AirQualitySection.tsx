@@ -1,135 +1,146 @@
 import Box from "@material-ui/core/Box";
-import { makeStyles } from "@material-ui/core/styles";
-import { colors, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import useSWR from "swr";
 import { Skeleton } from "@material-ui/lab";
-import { format } from "date-fns";
-
-import { AirQualityMapping, ForecastResponse } from "lib/airnow";
+import { MenuItem, TextField } from "@material-ui/core";
 import { fetcher } from "utils";
 import AQLegend from "./AQLegend";
 import WithLoading from "./WithLoading";
+import { RawDeviceAverageDataResponse } from "lib/aqmd";
+import { useState } from "react";
+import AirQualityParamBox from "./AirQualityParamBox";
+import { MODRawDeviceDataResponse } from "lib/quant";
+import determineSourceOfData from "lib/determineSourceOfData";
+import { format, parse } from "date-fns";
 
-const SALTON_SEA_ZIPCODE = "92254";
-
-const filterData = (
-  item: ForecastResponse,
-  index: number,
-  array: ForecastResponse[]
-) => {
-  if (array.length > 5) {
-    return index < 5;
-  }
-  return true;
+type ParamAQIStandardMap = {
+  O3: number;
+  "PM2.5": number;
+  PM10: number;
+  NO2: number;
+  PM1: null;
+};
+type airQualityDevices = {
+  site: string;
+  value: string;
+  latitude: number;
+  longitude: number;
+  sensorId: string;
+  location: string;
+  color: string;
+};
+type DataType =
+  | RawDeviceAverageDataResponse[]
+  | MODRawDeviceDataResponse
+  | [string];
+type CommonDeviceType = RawDeviceAverageDataResponse & MODRawDeviceDataResponse;
+const paramAQIStandardMap: ParamAQIStandardMap = {
+  O3: 70,
+  "PM2.5": 35,
+  PM10: 150,
+  NO2: 100,
+  PM1: null // set to null since there is no standard,
 };
 
-const AirQualitySection = () => {
-  const classes = useStyles();
-  const { data = [], error } = useSWR<ForecastResponse[]>(
-    `/api/aq/forecast?zipCode=${SALTON_SEA_ZIPCODE}`,
+function isDataTypeQuant(data: DataType): data is MODRawDeviceDataResponse {
+  return "Model_PM_PM1" in data;
+}
+const AirQualitySection = ({ devices }: { devices: airQualityDevices[] }) => {
+  const [selectedSensor, setSelectedSensor] = useState("MOD-PM-00404");
+  const sanitizedValue = devices.length > 0 ? selectedSensor : "";
+  const { data: deviceData = [], error: deviceDataError } = useSWR<DataType>(
+    determineSourceOfData(selectedSensor),
     fetcher
   );
+  if (deviceDataError) console.error(deviceDataError);
 
-  console.log(data);
-  if (error) console.error(error);
+  const isLoading = !Object.keys(deviceData).length && !deviceDataError;
+  const handleChangeSensor = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedSensor(event.target.value);
+  };
+  if (deviceDataError) return <Typography>Error loading data</Typography>;
 
-  const isLoading = !data.length && !error;
+  //  Device values for aqmd array
+  const recentDeviceData = isDataTypeQuant(deviceData)
+    ? (deviceData as CommonDeviceType)
+    : (deviceData[deviceData?.length - 1] as CommonDeviceType);
 
-  if (error) return <Typography>Error loading data</Typography>;
+  const dateTime = isDataTypeQuant(deviceData)
+    ? format(new Date(deviceData.timestamp_local), "MMM d yyyy hh:mm a zz")
+    : recentDeviceData !== undefined && recentDeviceData.TimeStamp !== undefined
+    ? format(
+        new Date(recentDeviceData.TimeStamp * 1000),
+        "MMM d yyyy hh:mm a zz"
+      )
+    : null;
 
-  const forecastDate = data[0]?.DateForecast
-    ? new Date(data[0]?.DateForecast.trim() + "T00:00:00")
-    : undefined;
+  const workingDeviceList = devices.map(({ sensorId, value }) => {
+    const sensorInfoArray = sensorId.split(":");
+    return value[0] === "W" ? (
+      <MenuItem key={sensorId} value={sensorInfoArray[0]}>
+        {sensorId}
+      </MenuItem>
+    ) : null;
+  });
 
+  const parameterValues = Object.keys(paramAQIStandardMap).map(
+    (parameter, index) => {
+      return isLoading ? (
+        <Box flex={1} p={1} key={index} m={0.5}>
+          <Skeleton variant="rect" height={85} width="100%" />
+        </Box>
+      ) : (
+        <AirQualityParamBox
+          key={parameter}
+          parameter={parameter}
+          parameterValue={
+            recentDeviceData[parameter as keyof ParamAQIStandardMap]
+          }
+          unitOfMeasure={
+            recentDeviceData[
+              `${parameter}UOM` as keyof RawDeviceAverageDataResponse
+            ]
+          }
+          aqiStandard={
+            paramAQIStandardMap[parameter as keyof ParamAQIStandardMap]
+          }
+        />
+      );
+    }
+  );
   return (
     <Box pb={5}>
-      <WithLoading isLoading={isLoading}>
-        <Typography>
-          {`Air Quality Forecast for ${
-            forecastDate ? format(forecastDate, "EEE, MMM dd, yyyy") : ""
-          }`}
-        </Typography>
-      </WithLoading>
-      <WithLoading isLoading={isLoading}>
-        <Typography variant="caption">{`Zip Code ${SALTON_SEA_ZIPCODE}`}</Typography>
-      </WithLoading>
-
-      <Box display="flex" flexWrap="wrap">
-        {isLoading ? (
-          <>
-            <Box flex={1} p={1} m={0.5}>
-              <Skeleton variant="rect" height={85} width="100%" />
-            </Box>
-            <Box flex={1} p={1} m={0.5}>
-              <Skeleton variant="rect" height={85} width="100%" />
-            </Box>
-            <Box flex={1} p={1} m={0.5}>
-              <Skeleton variant="rect" height={85} width="100%" />
-            </Box>
-            <Box flex={1} p={1} m={0.5}>
-              <Skeleton variant="rect" height={85} width="100%" />
-            </Box>
-            <Box flex={1} p={1} m={0.5}>
-              <Skeleton variant="rect" height={85} width="100%" />
-            </Box>
-          </>
-        ) : (
-          data.filter(filterData).map((d) => {
-            return (
-              <Box
-                key={d.ParameterName}
-                flex={1}
-                border={`1px solid ${colors.grey[300]}`}
-                p={1}
-                m={0.5}
-              >
-                <Typography variant="h6" component="p">
-                  {d.ParameterName}
-                </Typography>
-                <Box display="flex" alignItems="center">
-                  <svg className={classes.aqIndicator}>
-                    <circle fill={AirQualityMapping[d.Category.Number].color} />
-                  </svg>
-                  <Typography component="span">{d.AQI}</Typography>
-                  <span className={classes.bullet}>&bull;</span>
-                  <Typography component="span" noWrap>
-                    {d.Category.Name}
-                  </Typography>
-                </Box>
-              </Box>
-            );
-          })
-        )}
+      {}
+      {/* selector start */}
+      <Box pr={0.5} pb={1}>
+        <WithLoading variant="rect" height={40} isLoading={isLoading}>
+          <TextField
+            fullWidth
+            label="Sensor"
+            select
+            size="small"
+            variant="outlined"
+            value={sanitizedValue}
+            onChange={handleChangeSensor}
+          >
+            {workingDeviceList}
+          </TextField>
+        </WithLoading>
       </Box>
-
+      {/* selector end */}
+      {deviceData[0 as keyof DataType] === "No data available" && (
+        <Typography>No data available</Typography>
+      )}
+      <WithLoading isLoading={isLoading}>
+        {dateTime && <Typography>AQI Values From {dateTime}</Typography>}
+      </WithLoading>
+      {/* Parameter and AQI data */}
+      <Box display="flex" flexWrap="wrap">
+        {parameterValues}
+      </Box>
       {isLoading ? <Skeleton height={50} width="100%" /> : <AQLegend />}
     </Box>
   );
 };
-
-const useStyles = makeStyles((theme) => ({
-  header: {
-    boxShadow: `inset 0 -5px 0 ${theme.palette.secondary.light}`
-  },
-  bullet: {
-    fontSize: "1.5rem",
-    padding: theme.spacing(0, 0.5)
-  },
-  aqIndicator: {
-    height: 12,
-    width: 12,
-    fontSize: 14,
-    lineHeight: 20,
-    marginRight: theme.spacing(0.5),
-    display: "inline-block",
-    "& circle": {
-      cx: "5px",
-      cy: "6px",
-      r: "5px",
-      fontSize: 14,
-      lineHeight: 20
-    }
-  }
-}));
 
 export default AirQualitySection;

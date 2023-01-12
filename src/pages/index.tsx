@@ -72,7 +72,7 @@ const Home = ({
         title={heroTitle[locale]}
         subtitle={heroSubTitle[locale]}
         cta={
-          <Link href="/dashboard" passHref>
+          <Link href="/dashboard/water-quality" passHref>
             <Button variant="contained" color="primary">
               {buttonText[locale]}
             </Button>

@@ -33,7 +33,7 @@ async function getSheetData(range: "probe_surface" | "nutrients") {
      * if date field is empty, all other fields are empty
      * so we can skip this row
      */
-    if (row[0] === "") return acc;
+    if (!row[0]?.trim()) return acc;
     acc.push(
       row.reduce((acc1, value, index) => {
         acc1[keys[index]] = sanitizeValue(value);

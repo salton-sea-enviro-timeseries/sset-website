@@ -1,17 +1,6 @@
-import {
-  Tooltip,
-  makeStyles,
-  Box,
-  Grow,
-  IconButton,
-  Typography,
-  Slide,
-  Collapse,
-  Link
-} from "@material-ui/core";
-import React from "react";
+import { Box, Collapse, Link } from "@material-ui/core";
+import React, { FC } from "react";
 import ReactMapGL, {
-  Marker,
   NavigationControl,
   ViewportProps,
   Popup
@@ -20,24 +9,22 @@ import ReactMapGL, {
 import "mapbox-gl/dist/mapbox-gl.css";
 import Translation from "components/Translation";
 
-const LATITUDE = 33.47634;
-const LONGITUDE = -116.03884;
-const SIZE = 20;
-const ZOOM = 12;
-
-type Pin = {
-  latitude: number;
-  longitude: number;
-  color: string;
-  site: string;
-  value: number;
-};
 interface MapProps {
-  pins: Pin[];
+  caption: Boolean;
+  LATITUDE: number;
+  LONGITUDE: number;
+  ZOOM: number;
 }
-
-export default function Map({ pins }: MapProps) {
-  const classes = useStyles();
+interface ToolTipStyleProps {
+  width: number;
+}
+const Map: FC<MapProps> = ({
+  caption,
+  children,
+  LATITUDE,
+  LONGITUDE,
+  ZOOM
+}) => {
   const [viewport, setViewport] = React.useState<Partial<ViewportProps>>({
     zoom: ZOOM,
     latitude: LATITUDE,
@@ -45,12 +32,41 @@ export default function Map({ pins }: MapProps) {
   });
   const [showMoreInfo, setShowMoreInfo] = React.useState(false);
   const [transitionExited, setTransitionExited] = React.useState(false);
-  // const [selectedPin, setSelectedPin] = React.useState<Pin | null>(null);
 
   function onViewportChange(viewport: ViewportProps) {
     const { height, width, ...rest } = viewport;
     setViewport({ ...rest });
   }
+  const mapCaption = (
+    <Box pb={3}>
+      <Collapse
+        in={showMoreInfo}
+        collapsedSize={40}
+        onExited={() => setTransitionExited(false)}
+        onEnter={() => setTransitionExited(true)}
+      >
+        <Box display="flex" flexDirection="column">
+          <Translation
+            gutterBottom
+            component="div"
+            variant="caption"
+            noWrap={transitionExited || showMoreInfo ? false : true}
+            path="pages.dashboard.language.content.map_caption_main"
+          />
+
+          <Box display="flex" justifyContent="center">
+            <Link
+              component="button"
+              variant="caption"
+              onClick={() => setShowMoreInfo(!showMoreInfo)}
+            >
+              {showMoreInfo ? "Show Less" : "See More"}
+            </Link>
+          </Box>
+        </Box>
+      </Collapse>
+    </Box>
+  );
 
   return (
     <>
@@ -67,49 +83,7 @@ export default function Map({ pins }: MapProps) {
         scrollZoom={false}
         reuseMaps
       >
-        {pins.map(({ latitude, longitude, color, site, value }, i) => (
-          <Marker
-            key={`${i}-${latitude}-${longitude}`}
-            latitude={latitude}
-            longitude={longitude}
-          >
-            <Tooltip
-              title={
-                <>
-                  <b>{site}</b>
-                  &nbsp;
-                  {value.toPrecision(3)}
-                </>
-              }
-              open={true}
-              arrow
-              placement="top-end"
-              PopperProps={{
-                disablePortal: true
-              }}
-              classes={{
-                popper: classes.popper,
-                tooltip: classes.tooltip
-              }}
-            >
-              <svg
-                height={SIZE}
-                viewBox="0 0 24 24"
-                style={{
-                  cursor: "pointer",
-                  fill: color,
-                  stroke: "none",
-                  transform: `translate(${-SIZE / 2}px,${-SIZE}px)`
-                }}
-                // onClick={() => {
-                //   setSelectedPin(pins[i]);
-                // }}
-              >
-                <path d={ICON} />
-              </svg>
-            </Tooltip>
-          </Marker>
-        ))}
+        {children}
 
         <NavigationControl
           showCompass={false}
@@ -121,54 +95,9 @@ export default function Map({ pins }: MapProps) {
       </ReactMapGL>
 
       {/* TODO: Move this separate component */}
-      <Box pb={3}>
-        <Collapse
-          in={showMoreInfo}
-          collapsedSize={40}
-          onExited={() => setTransitionExited(false)}
-          onEnter={() => setTransitionExited(true)}
-        >
-          <Box display="flex" flexDirection="column">
-            <Translation
-              gutterBottom
-              component="div"
-              variant="caption"
-              noWrap={transitionExited || showMoreInfo ? false : true}
-              path="pages.dashboard.language.content.map_caption_main"
-            />
-
-            <Box display="flex" justifyContent="center">
-              {/* <Translation path="dashboard.download_nutrients_data_button"> */}
-              <Link
-                component="button"
-                variant="caption"
-                onClick={() => setShowMoreInfo(!showMoreInfo)}
-              >
-                {showMoreInfo ? "Show Less" : "See More"}
-              </Link>
-
-              {/* </Translation> */}
-            </Box>
-          </Box>
-        </Collapse>
-      </Box>
+      {caption && mapCaption}
     </>
   );
-}
+};
 
-const useStyles = makeStyles(() => ({
-  popper: {
-    top: "10px !important",
-    cursor: "pointer",
-    pointerEvents: "unset"
-  },
-  tooltip: {
-    fontSize: 10,
-    maxWidth: "none",
-    width: 70
-  }
-}));
-
-const ICON = `M20.2,15.7L20.2,15.7c1.1-1.6,1.8-3.6,1.8-5.7c0-5.6-4.5-10-10-10S2,4.5,2,10c0,2,0.6,3.9,1.6,5.4c0,0.1,0.1,0.2,0.2,0.3
-  c0,0,0.1,0.1,0.1,0.2c0.2,0.3,0.4,0.6,0.7,0.9c2.6,3.1,7.4,7.6,7.4,7.6s4.8-4.5,7.4-7.5c0.2-0.3,0.5-0.6,0.7-0.9
-  C20.1,15.8,20.2,15.8,20.2,15.7z`;
+export default Map;

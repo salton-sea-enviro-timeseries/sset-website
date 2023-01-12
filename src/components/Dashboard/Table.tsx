@@ -168,7 +168,7 @@ export default function Table(props: TableProps) {
         rows={rows}
         columns={columns}
         disableSelectionOnClick
-        pageSize={rows.length}
+        pageSize={100}
         sortModel={[{ field: "date", sort: "desc" }]}
       />
     </Paper>
