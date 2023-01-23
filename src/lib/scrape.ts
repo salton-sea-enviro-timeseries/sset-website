@@ -11,13 +11,12 @@ async function scrape(urls: string[]) {
   if (urls) {
     try {
       const data = await Promise.all(promises);
-
       const mediaData: MediaObject[] = data.map((article: any) => {
         const { title, description, image, url, provider } = article;
         return {
           title,
           provider,
-          description,
+          description: description ?? null,
           imageUrl: image,
           link: url
         };

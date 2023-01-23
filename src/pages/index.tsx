@@ -88,8 +88,13 @@ export default Home;
 
 export const getServerSideProps = async () => {
   const urls = [
-    // "https://kesq.com/news/2021/07/07/changes-happening-at-the-salton-sea-on-a-state-federal-level/",
-    "https://www.cnbc.com/2021/11/06/californias-salton-sea-spewing-toxic-fumes-creating-ghost-towns-.html"
+    "https://www.cnbc.com/2021/11/06/californias-salton-sea-spewing-toxic-fumes-creating-ghost-towns-.html",
+    "https://atmos.earth/salton-sea-california-drought-pollution/",
+    "https://thehill.com/policy/equilibrium-sustainability/3633056-dried-up-in-utah-drying-great-salt-lake-leads-to-air-pollution/",
+    "https://grist.org/health/how-californias-salton-sea-went-from-vacation-destination-to-toxic-nightmare/",
+    "https://www.theguardian.com/us-news/2021/jul/23/salton-sea-california-lake-dust-drought-climate",
+    "https://ca.audubon.org/news/it-takes-village-dr-ryan-sinclair-and-community-science-salton-sea",
+    "https://ca.audubon.org/news/valley-voice-salton-sea-communities-needed-relief-long-coronavirus"
   ];
 
   const mediaData = await scrape(urls);
