@@ -47,9 +47,9 @@ const Resources = () => {
     <Layout>
       <Meta title="Resources | Salton Sea Environmental Timeseries" />
       <Translation
-        path="pages.contact.language.content.title"
+        path="site.language.navLinks.resources"
         propsToTranslate={{
-          title: "pages.contact.language.content.title"
+          title: "site.language.navLinks.resources"
         }}
       >
         <Hero
