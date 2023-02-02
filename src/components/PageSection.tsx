@@ -38,7 +38,21 @@ const PageSection = ({ bodyText, title, mediaObjects, section }: Props) => {
             size={4}
           />
           {mediaObjects ? (
-            <FeaturedNewsFeed mediaObjects={mediaObjects} />
+            <>
+              <FeaturedNewsFeed mediaObjects={mediaObjects} />
+              <Box mt="1em">
+                <Typography component="p" align="center">
+                  *Many of these articles use highly negative language such as
+                  “toxic” and “death pit” in referring to the Salton Sea,
+                  portraying a hopeless situation. While we are very aware of
+                  the environmental state of the Salton Sea, we believe such
+                  language is damaging to the surrounding community and
+                  discourages remediation efforts. We encourage the use of
+                  positive language that centers not just biodiversity but the
+                  community and their stories who deserve a restored sea.
+                </Typography>
+              </Box>
+            </>
           ) : (
             <Typography component="div">{bodyText}</Typography>
           )}
