@@ -16,6 +16,7 @@
     "@material-ui/lab": "^4.0.0-alpha.60",
     "@types/chart.js": "^2.9.37",
     "chart.js": "^4.2.0",
+    "chartjs-adapter-date-fns": "^3.0.0",
     "chroma-js": "^2.1.2",
     "contentful": "^9.2.9",
     "csv-stringify": "^6.0.5",
