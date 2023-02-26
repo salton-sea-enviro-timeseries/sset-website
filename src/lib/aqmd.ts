@@ -122,7 +122,7 @@ export async function getDeviceData({ sensorId }: { sensorId: string }) {
     const data = await (await fetch(requestUrl, options)).json();
     // The last item in the array is the most recent data
     return data.data.length === 0
-      ? { DeviceID: sensorId, data: ["Data not available"] }
+      ? { DeviceId: sensorId, data: ["Data not available"] }
       : data.data;
   } catch (err) {
     console.log(err);
