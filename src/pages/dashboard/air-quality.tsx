@@ -81,7 +81,7 @@ const AirQuality = () => {
       </Typography>
       <AirQualitySection devices={airQualityDevices} />
       <AirQualityPlots devices={airQualityDevices} />
-      {/* <WithLoading isLoading={isLoading} variant="rect" height="500px">
+      <WithLoading isLoading={isLoading} variant="rect" height="500px">
         {data && (
           <Map
             caption={false}
@@ -133,7 +133,7 @@ const AirQuality = () => {
             )}
           </Map>
         )}
-      </WithLoading> */}
+      </WithLoading>
     </>
   );
 };
