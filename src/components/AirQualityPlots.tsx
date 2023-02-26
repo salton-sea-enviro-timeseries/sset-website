@@ -24,6 +24,8 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core";
+import { RawDeviceAverageDataResponse } from "lib/aqmd";
+import { MODRawDeviceDataResponse } from "lib/quant";
 
 ChartJS.register(
   CategoryScale,
@@ -40,6 +42,16 @@ ChartJS.register(
 );
 
 // TODO export common types
+export interface DeviceDataResponse extends RawDeviceAverageDataResponse {
+  DeviceID: string;
+}
+type CombinedDeviceData = DeviceDataResponse & MODRawDeviceDataResponse;
+type DeviceRawData = {
+  id: string;
+  name: string;
+  data: CombinedDeviceData[];
+};
+type DataType = CombinedDeviceData[];
 type airQualityDevices = {
   site: string;
   value: string;
@@ -208,14 +220,13 @@ export const options = (selectedParam: string) => {
 };
 
 // TODO move functions to utils
-async function multiFetcher(...urls: string[]) {
-  const promises: string | Device[] = [];
+async function multiFetcher(...urls: string[]): Promise<DataType> {
   const deviceArrays = await Promise.all(urls.map((url) => fetcher(url)));
-  return promises.concat(...deviceArrays);
+  return deviceArrays.flat();
 }
 // @ts-ignore
 function mapNames(id) {
-  const DeviceNames: { [key: string]: string | null | undefined } = {
+  const DeviceNames: { [key: string]: string } = {
     "AQY BD-1071": "AQY1 Indio",
     "AQY BD-1080": "Mecca",
     "AQY BD-1072": "AQY2 Indio",
@@ -230,6 +241,7 @@ function mapNames(id) {
   return DeviceNames[id];
 }
 const AirQualityPlots = ({ devices }: { devices: airQualityDevices[] }) => {
+  console.log("devices", devices);
   const classes = useStyles();
   const [selectedParam, setSelectedParam] = useState("O3");
   const sensorUrls = devices.map(({ sensorId }) => {
@@ -238,26 +250,28 @@ const AirQualityPlots = ({ devices }: { devices: airQualityDevices[] }) => {
     return sensorIdList;
   });
   // TODO fix quant device data, its only returning 1 entry.
-  const { data: sensorData = [], error } = useSWR(sensorUrls, multiFetcher);
-  // console.log("data for all sensors", sensorData);
-  // @ts-ignore
+  const { data: sensorData = [], error } = useSWR<DataType>(
+    sensorUrls,
+    multiFetcher
+  );
+
   const groupedData = useMemo(() => {
-    return sensorData.reduce((sensors, curr) => {
-      // @ts-ignore
-      const id = curr.DeviceID || curr.sn;
-      if (!sensors[id]) {
-        // @ts-ignore
-        sensors[id] = {
-          id,
-          name: mapNames(id),
-          data: [{ ...curr }]
-        };
-      } else {
-        // @ts-ignore
-        sensors[id].data.push({ ...curr });
-      }
-      return sensors;
-    }, []);
+    return sensorData.reduce(
+      (sensors: Record<string, DeviceRawData>, curr: CombinedDeviceData) => {
+        const id = curr.DeviceID || curr.sn;
+        if (!sensors[id]) {
+          sensors[id] = {
+            id,
+            name: mapNames(id),
+            data: [{ ...curr }]
+          };
+        } else {
+          sensors[id].data.push({ ...curr });
+        }
+        return sensors;
+      },
+      {}
+    );
   }, [sensorData]);
 
   const handleTitleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
