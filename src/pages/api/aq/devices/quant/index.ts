@@ -10,12 +10,14 @@ export default async function handler(
     return res.status(405).end(`Method ${method} Not Allowed`);
 
   try {
-    const {
-      "geo.lat": Latitude,
-      "geo.lon": Longitude,
-      sn,
-      timestamp_local: WorkingStatus
-    } = await getQuantDevice();
+    const [
+      {
+        "geo.lat": Latitude,
+        "geo.lon": Longitude,
+        sn,
+        timestamp_local: WorkingStatus
+      }
+    ] = await getQuantDevice();
 
     return res.status(200).json({
       Latitude,
