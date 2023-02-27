@@ -10,20 +10,20 @@ import {
   Legend,
   SubTitle,
   TimeScale,
-  TimeSeriesScale,
-  LineController
+  LineController,
+  ChartOptions,
+  LegendItem,
+  ChartData
 } from "chart.js";
 import "chartjs-adapter-date-fns";
 import { Line } from "react-chartjs-2";
-import { Device } from "lib/aqmd";
 import { fetcher } from "utils";
 import determineSourceOfData from "lib/determineSourceOfData";
 import useSWR from "swr";
-import { format } from "date-fns";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import { makeStyles } from "@material-ui/core";
+import { Box, FormHelperText, makeStyles } from "@material-ui/core";
 import { RawDeviceAverageDataResponse } from "lib/aqmd";
 import { MODRawDeviceDataResponse } from "lib/quant";
 
@@ -33,7 +33,6 @@ ChartJS.register(
   PointElement,
   LineElement,
   TimeScale,
-  TimeSeriesScale,
   LineController,
   Title,
   Tooltip,
@@ -73,7 +72,15 @@ const paramAQIStandardMap: ParamAQIStandardMap = {
   PM10: 150,
   NO2: 100
 };
+type DataItem = {
+  x: number;
+  PM2_5?: number;
+  PM10?: number;
+  NO2?: number;
+  O3?: number;
+};
 
+// ==============================================================
 const colors = [
   "#2d647d",
   "#000000",
@@ -88,7 +95,6 @@ const colors = [
 ];
 const canvasBackgroundColor = {
   id: "canvasBackgroundColor",
-
   beforeDraw(
     chart: {
       ctx: any;
@@ -128,10 +134,9 @@ const canvasBackgroundColor = {
     bgColors(0, 300);
   }
 };
-// TODO fix typing issues
+
 export const plugins: any = [canvasBackgroundColor];
-function paramAQICalc(data: any) {
-  // @ts-ignore
+function paramAQICalc(data: CombinedDeviceData[]) {
   return data.map(({ EndDate, timestamp, O3, NO2, PM10, "PM2.5": PM2_5 }) => {
     return {
       O3: Math.round((O3 / 70) * 100),
@@ -143,14 +148,18 @@ function paramAQICalc(data: any) {
     };
   });
 }
-export const options = (selectedParam: string) => {
+export const options = (selectedParam: string): ChartOptions<"line"> => {
   return {
     responsive: true,
     interaction: {
       mode: "index" as const,
       intersect: false
     },
-    stacked: false,
+    layout: {
+      padding: {
+        bottom: 10
+      }
+    },
     plugins: {
       title: {
         display: true,
@@ -160,7 +169,22 @@ export const options = (selectedParam: string) => {
         }
       },
       legend: {
-        position: "bottom" as const
+        position: "bottom" as const,
+        labels: {
+          filter: (legendItem: LegendItem, chartData: ChartData<"line">) => {
+            const datasetIndex = legendItem.datasetIndex;
+            const datasetData =
+              typeof datasetIndex !== "undefined"
+                ? chartData.datasets[datasetIndex].data
+                : [];
+            const isDefined = datasetData.some((data) => {
+              const item = data as DataItem;
+              return item[selectedParam as keyof DataItem] !== undefined;
+            });
+
+            return isDefined;
+          }
+        }
       },
       subtitle: {
         display: true,
@@ -170,7 +194,6 @@ export const options = (selectedParam: string) => {
         }
       }
     },
-    // TODO: this will be dynamic based on selector
     parsing: {
       xAxisKey: "x",
       yAxisKey: selectedParam
@@ -179,7 +202,6 @@ export const options = (selectedParam: string) => {
       y: {
         title: {
           display: true,
-          // TODO change to e-2 based on selection
           text: "AQI Value",
           font: {
             size: 16
@@ -196,19 +218,13 @@ export const options = (selectedParam: string) => {
         suggestedMax: 300
       },
       x: {
-        parsing: false,
-        type: "time",
+        type: "time" as any,
         time: {
           unit: "day"
         },
         ticks: {
           minRotation: 0,
-          maxRotation: 0,
-          // @ts-ignore
-          callback: function (val, index) {
-            // @ts-ignore
-            return index % 24 === 0 ? this.getLabelForValue(val) : "";
-          }
+          maxRotation: 0
         },
         beginAtZero: false,
         grid: {
@@ -224,8 +240,8 @@ async function multiFetcher(...urls: string[]): Promise<DataType> {
   const deviceArrays = await Promise.all(urls.map((url) => fetcher(url)));
   return deviceArrays.flat();
 }
-// @ts-ignore
-function mapNames(id) {
+
+function mapNames(id: string) {
   const DeviceNames: { [key: string]: string } = {
     "AQY BD-1071": "AQY1 Indio",
     "AQY BD-1080": "Mecca",
@@ -241,7 +257,6 @@ function mapNames(id) {
   return DeviceNames[id];
 }
 const AirQualityPlots = ({ devices }: { devices: airQualityDevices[] }) => {
-  console.log("devices", devices);
   const classes = useStyles();
   const [selectedParam, setSelectedParam] = useState("O3");
   const sensorUrls = devices.map(({ sensorId }) => {
@@ -249,7 +264,6 @@ const AirQualityPlots = ({ devices }: { devices: airQualityDevices[] }) => {
     const sensorIdList = determineSourceOfData(sensorInfoArray[0]);
     return sensorIdList;
   });
-  // TODO fix quant device data, its only returning 1 entry.
   const { data: sensorData = [], error } = useSWR<DataType>(
     sensorUrls,
     multiFetcher
@@ -258,7 +272,7 @@ const AirQualityPlots = ({ devices }: { devices: airQualityDevices[] }) => {
   const groupedData = useMemo(() => {
     return sensorData.reduce(
       (sensors: Record<string, DeviceRawData>, curr: CombinedDeviceData) => {
-        const id = curr.DeviceID || curr.sn;
+        const id = curr.DeviceID || curr.sn || curr.DeviceId;
         if (!sensors[id]) {
           sensors[id] = {
             id,
@@ -277,18 +291,15 @@ const AirQualityPlots = ({ devices }: { devices: airQualityDevices[] }) => {
   const handleTitleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setSelectedParam(event.target.value as string);
   };
-  console.log("grouped data: ", groupedData);
   const datasets = useMemo(() => {
-    //@ts-ignore
     return Object.values(groupedData).map(({ data, name }, index) => ({
       label: name,
-      // Todo parameter will change here depending on selection
       data: paramAQICalc(data),
       borderColor: colors[index],
       fill: false,
       lineTension: 0.1,
       backgroundColor: `${colors[index]}3F`,
-      borderCapStyle: "butt",
+      borderCapStyle: "butt" as const,
       borderDash: [],
       borderDashOffset: 0.0,
       borderJoinStyle: "miter" as const,
@@ -296,7 +307,7 @@ const AirQualityPlots = ({ devices }: { devices: airQualityDevices[] }) => {
       pointBackgroundColor: "#fff" as const,
       pointBorderWidth: 1,
       pointHoverRadius: 5,
-      pointHoverBackgroundColor: "blue",
+      pointHoverBackgroundColor: "blue" as const,
       pointHoverBorderColor: "#fff" as const,
       pointHoverBorderWidth: 2,
       pointRadius: 1,
@@ -305,11 +316,9 @@ const AirQualityPlots = ({ devices }: { devices: airQualityDevices[] }) => {
     }));
   }, [groupedData]);
 
-  // console.log("datasets", datasets);
   const chartData = {
     datasets
   };
-  console.count("renders: ");
   return (
     <>
       <FormControl className={classes.formControl}>
@@ -318,7 +327,7 @@ const AirQualityPlots = ({ devices }: { devices: airQualityDevices[] }) => {
           onChange={handleTitleChange}
           displayEmpty
           className={classes.selectEmpty}
-          inputProps={{ "aria-label": "Without label" }}
+          // inputProps={{ "aria-label": "Without label" }}
         >
           {Object.keys(paramAQIStandardMap).map((param, index) => (
             <MenuItem key={`${index}${param}`} value={param}>
@@ -326,13 +335,12 @@ const AirQualityPlots = ({ devices }: { devices: airQualityDevices[] }) => {
             </MenuItem>
           ))}
         </Select>
+        <FormHelperText>Select Param to Chart</FormHelperText>
       </FormControl>
       <Line
         redraw={true}
         plugins={plugins}
-        // @ts-ignore
         options={options(selectedParam)}
-        // @ts-ignore
         data={chartData}
       />
     </>
@@ -341,7 +349,7 @@ const AirQualityPlots = ({ devices }: { devices: airQualityDevices[] }) => {
 
 export default AirQualityPlots;
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   formControl: {
     minWidth: 120
   },
