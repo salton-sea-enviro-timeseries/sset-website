@@ -70,8 +70,6 @@ const AirQuality = () => {
   }, [data]);
 
   const isLoading = !data.length && !error;
-  // console.log("airQualityDevices", airQualityDevices);
-  // console.log("data", data);
   if (error) return <Typography>Error Loading data</Typography>;
   return (
     <>

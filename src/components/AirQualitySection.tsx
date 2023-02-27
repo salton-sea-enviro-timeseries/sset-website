@@ -31,7 +31,7 @@ type airQualityDevices = {
 };
 type DataType =
   | RawDeviceAverageDataResponse[]
-  | MODRawDeviceDataResponse
+  | MODRawDeviceDataResponse[]
   | [string];
 type CommonDeviceType = RawDeviceAverageDataResponse & MODRawDeviceDataResponse;
 const paramAQIStandardMap: ParamAQIStandardMap = {
@@ -42,7 +42,7 @@ const paramAQIStandardMap: ParamAQIStandardMap = {
   PM1: null // set to null since there is no standard,
 };
 
-function isDataTypeQuant(data: DataType): data is MODRawDeviceDataResponse {
+function isDataTypeQuant(data: DataType): data is MODRawDeviceDataResponse[] {
   return "Model_PM_PM1" in data;
 }
 const AirQualitySection = ({ devices }: { devices: airQualityDevices[] }) => {
@@ -53,7 +53,6 @@ const AirQualitySection = ({ devices }: { devices: airQualityDevices[] }) => {
     fetcher
   );
   if (deviceDataError) console.error(deviceDataError);
-
   const isLoading = !Object.keys(deviceData).length && !deviceDataError;
   const handleChangeSensor = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedSensor(event.target.value);
@@ -62,11 +61,11 @@ const AirQualitySection = ({ devices }: { devices: airQualityDevices[] }) => {
 
   //  Device values for aqmd array
   const recentDeviceData = isDataTypeQuant(deviceData)
-    ? (deviceData as CommonDeviceType)
+    ? (deviceData[0] as CommonDeviceType)
     : (deviceData[deviceData?.length - 1] as CommonDeviceType);
 
   const dateTime = isDataTypeQuant(deviceData)
-    ? format(new Date(deviceData.timestamp_local), "MMM d yyyy hh:mm a zz")
+    ? format(new Date(deviceData[0].timestamp_local), "MMM d yyyy hh:mm a zz")
     : recentDeviceData !== undefined && recentDeviceData.TimeStamp !== undefined
     ? format(
         new Date(recentDeviceData.TimeStamp * 1000),
