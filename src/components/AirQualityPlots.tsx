@@ -25,8 +25,6 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import { Box, FormHelperText, makeStyles } from "@material-ui/core";
-import { RawDeviceAverageDataResponse } from "lib/aqmd";
-import { MODRawDeviceDataResponse } from "lib/quant";
 
 ChartJS.register(
   CategoryScale,
