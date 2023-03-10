@@ -15,6 +15,7 @@ import {
   LegendItem,
   ChartData
 } from "chart.js";
+import { AirQualityDevices, CommonDeviceType } from "types";
 import "chartjs-adapter-date-fns";
 import { Line } from "react-chartjs-2";
 import { fetcher } from "utils";
@@ -41,36 +42,25 @@ ChartJS.register(
 );
 
 // TODO export common types
-export interface DeviceDataResponse extends RawDeviceAverageDataResponse {
-  DeviceID: string;
-}
-type CombinedDeviceData = DeviceDataResponse & MODRawDeviceDataResponse;
 type DeviceRawData = {
   id: string;
   name: string;
-  data: CombinedDeviceData[];
+  data: CommonDeviceType[];
 };
-type DataType = CombinedDeviceData[];
-type airQualityDevices = {
-  site: string;
-  value: string;
-  latitude: number;
-  longitude: number;
-  sensorId: string;
-  location: string;
-  color: string;
-};
+type DataType = CommonDeviceType[];
 type ParamAQIStandardMap = {
   O3: number;
   PM2_5: number;
   PM10: number;
   NO2: number;
+  PM1: null;
 };
 const paramAQIStandardMap: ParamAQIStandardMap = {
   O3: 70,
   PM2_5: 35,
   PM10: 150,
-  NO2: 100
+  NO2: 100,
+  PM1: null
 };
 type DataItem = {
   x: number;
@@ -136,17 +126,20 @@ const canvasBackgroundColor = {
 };
 
 export const plugins: any = [canvasBackgroundColor];
-function paramAQICalc(data: CombinedDeviceData[]) {
-  return data.map(({ EndDate, timestamp, O3, NO2, PM10, "PM2.5": PM2_5 }) => {
-    return {
-      O3: Math.round((O3 / 70) * 100),
-      // leaving NO2 as is
-      NO2: Math.round(NO2),
-      PM10: Math.round((PM10 / 150) * 100),
-      PM2_5: Math.round((PM2_5 / 35) * 100),
-      x: timestamp ? timestamp : EndDate
-    };
-  });
+function paramAQICalc(data: CommonDeviceType[]) {
+  return data.map(
+    ({ EndDate, timestamp, O3, NO2, PM10, "PM2.5": PM2_5, PM1 }) => {
+      return {
+        O3: Math.round((O3 / 70) * 100),
+        // leaving NO2 as is
+        NO2: Math.round(NO2),
+        PM10: Math.round((PM10 / 150) * 100),
+        PM2_5: Math.round((PM2_5 / 35) * 100),
+        PM1,
+        x: timestamp ? timestamp : EndDate
+      };
+    }
+  );
 }
 export const options = (selectedParam: string): ChartOptions<"line"> => {
   return {
@@ -256,7 +249,7 @@ function mapNames(id: string) {
   };
   return DeviceNames[id];
 }
-const AirQualityPlots = ({ devices }: { devices: airQualityDevices[] }) => {
+const AirQualityPlots = ({ devices }: { devices: AirQualityDevices[] }) => {
   const classes = useStyles();
   const [selectedParam, setSelectedParam] = useState("O3");
   const sensorUrls = devices.map(({ sensorId }) => {
@@ -271,7 +264,7 @@ const AirQualityPlots = ({ devices }: { devices: airQualityDevices[] }) => {
 
   const groupedData = useMemo(() => {
     return sensorData.reduce(
-      (sensors: Record<string, DeviceRawData>, curr: CombinedDeviceData) => {
+      (sensors: Record<string, DeviceRawData>, curr: CommonDeviceType) => {
         const id = curr.DeviceID || curr.sn || curr.DeviceId;
         if (!sensors[id]) {
           sensors[id] = {
@@ -287,7 +280,7 @@ const AirQualityPlots = ({ devices }: { devices: airQualityDevices[] }) => {
       {}
     );
   }, [sensorData]);
-
+  console.log("data", groupedData);
   const handleTitleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setSelectedParam(event.target.value as string);
   };
