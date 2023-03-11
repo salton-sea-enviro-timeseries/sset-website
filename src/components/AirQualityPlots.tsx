@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -13,18 +13,25 @@ import {
   LineController,
   ChartOptions,
   LegendItem,
-  ChartData
+  ChartData,
+  Filler
 } from "chart.js";
 import { AirQualityDevices, CommonDeviceType } from "types";
 import "chartjs-adapter-date-fns";
 import { Line } from "react-chartjs-2";
-import { fetcher } from "utils";
 import determineSourceOfData from "lib/determineSourceOfData";
 import useSWR from "swr";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import { Box, FormHelperText, makeStyles } from "@material-ui/core";
+import {
+  FormControl,
+  Select,
+  MenuItem,
+  makeStyles,
+  FormHelperText
+} from "@material-ui/core";
+import LoadingChart from "./LoadingChart";
+import { calcParamAQI } from "util/calcParamAQI";
+import { fetchMultipleDeviceDetails } from "util/fetchMultipleDeviceDetails";
+import { mapDeviceNames } from "util/mapDeviceNames";
 
 ChartJS.register(
   CategoryScale,
@@ -33,13 +40,13 @@ ChartJS.register(
   LineElement,
   TimeScale,
   LineController,
+  Filler,
   Title,
   Tooltip,
   Legend,
   SubTitle
 );
 
-// TODO export common types
 type DeviceRawData = {
   id: string;
   name: string;
@@ -81,6 +88,7 @@ const colors = [
   "#99225f",
   "#800080"
 ];
+// gradient background color for chart
 const canvasBackgroundColor = {
   id: "canvasBackgroundColor",
   beforeDraw(
@@ -122,23 +130,8 @@ const canvasBackgroundColor = {
     bgColors(0, 300);
   }
 };
-
 export const plugins: any = [canvasBackgroundColor];
-function paramAQICalc(data: CommonDeviceType[]) {
-  return data.map(
-    ({ EndDate, timestamp, O3, NO2, PM10, "PM2.5": PM2_5, PM1 }) => {
-      return {
-        O3: Math.round((O3 / 70) * 100),
-        // leaving NO2 as is
-        NO2: Math.round(NO2),
-        PM10: Math.round((PM10 / 150) * 100),
-        PM2_5: Math.round((PM2_5 / 35) * 100),
-        PM1,
-        x: timestamp ? timestamp : EndDate
-      };
-    }
-  );
-}
+// all chart options and selected param as y axis
 export const options = (selectedParam: string): ChartOptions<"line"> => {
   return {
     responsive: true,
@@ -172,7 +165,6 @@ export const options = (selectedParam: string): ChartOptions<"line"> => {
               const item = data as DataItem;
               return item[selectedParam as keyof DataItem] !== undefined;
             });
-
             return isDefined;
           }
         }
@@ -225,28 +217,6 @@ export const options = (selectedParam: string): ChartOptions<"line"> => {
     }
   };
 };
-
-// TODO move functions to utils
-async function multiFetcher(...urls: string[]): Promise<DataType> {
-  const deviceArrays = await Promise.all(urls.map((url) => fetcher(url)));
-  return deviceArrays.flat();
-}
-
-function mapNames(id: string) {
-  const DeviceNames: { [key: string]: string } = {
-    "AQY BD-1071": "AQY1 Indio",
-    "AQY BD-1080": "Mecca",
-    "AQY BD-1072": "AQY2 Indio",
-    "AQY BD-1065": "Fillmore St. and 52nd Ave",
-    "AQY BD-1092": "Mission San Jose",
-    "AQY BD-1074": "Salton Sea State Park",
-    "AQY BD-1094": "Thermal Airport",
-    "AQY BD-1063": "Torres Martinez - Headquarters",
-    "AQY BD-1152": "Torres Martinez - Near Shore",
-    "MOD-PM-00404": "Palm Desert"
-  };
-  return DeviceNames[id];
-}
 const AirQualityPlots = ({ devices }: { devices: AirQualityDevices[] }) => {
   const classes = useStyles();
   const [selectedParam, setSelectedParam] = useState("O3");
@@ -257,9 +227,12 @@ const AirQualityPlots = ({ devices }: { devices: AirQualityDevices[] }) => {
   });
   const { data: sensorData = [], error } = useSWR<DataType>(
     sensorUrls,
-    multiFetcher
+    fetchMultipleDeviceDetails
   );
-
+  const handleTitleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setSelectedParam(event.target.value as string);
+  };
+  // group all data based on sensor ID
   const groupedData = useMemo(() => {
     return sensorData.reduce(
       (sensors: Record<string, DeviceRawData>, curr: CommonDeviceType) => {
@@ -267,7 +240,7 @@ const AirQualityPlots = ({ devices }: { devices: AirQualityDevices[] }) => {
         if (!sensors[id]) {
           sensors[id] = {
             id,
-            name: mapNames(id),
+            name: mapDeviceNames(id),
             data: [{ ...curr }]
           };
         } else {
@@ -278,14 +251,11 @@ const AirQualityPlots = ({ devices }: { devices: AirQualityDevices[] }) => {
       {}
     );
   }, [sensorData]);
-  console.log("data", groupedData);
-  const handleTitleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setSelectedParam(event.target.value as string);
-  };
+  // dataset used for line chart
   const datasets = useMemo(() => {
     return Object.values(groupedData).map(({ data, name }, index) => ({
       label: name,
-      data: paramAQICalc(data),
+      data: calcParamAQI(data),
       borderColor: colors[index],
       fill: false,
       lineTension: 0.1,
@@ -306,7 +276,8 @@ const AirQualityPlots = ({ devices }: { devices: AirQualityDevices[] }) => {
       yAxisID: "y" as const
     }));
   }, [groupedData]);
-
+  const isLoading = !Object.keys(sensorData).length && !error;
+  // dataset as an object for chart prop
   const chartData = {
     datasets
   };
@@ -318,7 +289,6 @@ const AirQualityPlots = ({ devices }: { devices: AirQualityDevices[] }) => {
           onChange={handleTitleChange}
           displayEmpty
           className={classes.selectEmpty}
-          // inputProps={{ "aria-label": "Without label" }}
         >
           {Object.keys(paramAQIStandardMap).map((param, index) => (
             <MenuItem key={`${index}${param}`} value={param}>
@@ -328,12 +298,16 @@ const AirQualityPlots = ({ devices }: { devices: AirQualityDevices[] }) => {
         </Select>
         <FormHelperText>Select Param to Chart</FormHelperText>
       </FormControl>
-      <Line
-        redraw={true}
-        plugins={plugins}
-        options={options(selectedParam)}
-        data={chartData}
-      />
+      {isLoading ? (
+        <LoadingChart />
+      ) : (
+        <Line
+          key={selectedParam}
+          plugins={plugins}
+          options={options(selectedParam)}
+          data={chartData}
+        />
+      )}
     </>
   );
 };
