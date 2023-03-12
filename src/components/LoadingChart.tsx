@@ -42,6 +42,7 @@ const LoadingChart = () => {
       }
     },
     responsive: true,
+    maintainAspectRatio: false,
     interaction: {
       mode: "index" as const,
       intersect: false
@@ -132,7 +133,7 @@ const LoadingChart = () => {
     ]
   };
   return (
-    <Box p={1} m={0.5}>
+    <Box minHeight={350} m={2}>
       <Line
         options={loadingOption}
         data={loadingData}

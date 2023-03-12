@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -26,7 +26,8 @@ import {
   Select,
   MenuItem,
   makeStyles,
-  FormHelperText
+  FormHelperText,
+  Box
 } from "@material-ui/core";
 import LoadingChart from "./LoadingChart";
 import { calcParamAQI } from "util/calcParamAQI";
@@ -76,6 +77,7 @@ type DataItem = {
 };
 
 // ==============================================================
+//Todo refactor to export?
 const colors = [
   "#2d647d",
   "#000000",
@@ -114,10 +116,16 @@ const canvasBackgroundColor = {
     function bgColors(bracketLow: number, bracketHigh: number) {
       let gradient = ctx.createLinearGradient(0, top, 0, bottom);
       // Percentage of color from ending point (bottom)
-      // TODO : will need to adjust range based on AQI standard;
-      gradient.addColorStop(0, "rgba(203,70,18,100)"); // red
-      gradient.addColorStop(0.5, "rgba(233,228,22,.5)"); // yellow
-      gradient.addColorStop(1, "rgba(38,195,11,.3)"); //green
+      if (bracketHigh > 300) {
+        gradient.addColorStop(0.25, "rgba(136,14,79,.95)"); // Hazard
+        gradient.addColorStop(0.5, "rgba(203,70,18,.75)"); // red
+        gradient.addColorStop(0.9, "rgba(233,228,22,.5)"); // yellow
+        gradient.addColorStop(0.95, "rgba(38,195,11,.3)"); //green
+      } else {
+        gradient.addColorStop(0, "rgba(203,70,18,100)"); // red
+        gradient.addColorStop(0.5, "rgba(233,228,22,.5)"); // yellow
+        gradient.addColorStop(1, "rgba(38,195,11,.3)"); //green
+      }
       ctx.fillStyle = gradient;
       ctx.fillRect(
         left,
@@ -127,7 +135,7 @@ const canvasBackgroundColor = {
       );
       ctx.restore();
     }
-    bgColors(0, 300);
+    bgColors(0, y.max);
   }
 };
 export const plugins: any = [canvasBackgroundColor];
@@ -135,14 +143,10 @@ export const plugins: any = [canvasBackgroundColor];
 export const options = (selectedParam: string): ChartOptions<"line"> => {
   return {
     responsive: true,
+    maintainAspectRatio: false,
     interaction: {
       mode: "index" as const,
       intersect: false
-    },
-    layout: {
-      padding: {
-        bottom: 10
-      }
     },
     plugins: {
       title: {
@@ -301,12 +305,15 @@ const AirQualityPlots = ({ devices }: { devices: AirQualityDevices[] }) => {
       {isLoading ? (
         <LoadingChart />
       ) : (
-        <Line
-          key={selectedParam}
-          plugins={plugins}
-          options={options(selectedParam)}
-          data={chartData}
-        />
+        // Todo change min height depending on y-max
+        <Box minHeight={350} m={2}>
+          <Line
+            key={selectedParam}
+            plugins={plugins}
+            options={options(selectedParam)}
+            data={chartData}
+          />
+        </Box>
       )}
     </>
   );
