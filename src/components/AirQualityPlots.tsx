@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -14,7 +14,8 @@ import {
   ChartOptions,
   LegendItem,
   ChartData,
-  Filler
+  Filler,
+  Scale
 } from "chart.js";
 import { AirQualityDevices, CommonDeviceType } from "types";
 import "chartjs-adapter-date-fns";
@@ -135,12 +136,16 @@ const canvasBackgroundColor = {
       );
       ctx.restore();
     }
-    bgColors(0, y.max);
+    if (y.max < 3) {
+      bgColors(0, y.max + 0.1);
+    } else {
+      bgColors(0, y.max + 1);
+    }
   }
 };
-export const plugins: any = [canvasBackgroundColor];
+const plugins: any = [canvasBackgroundColor];
 // all chart options and selected param as y axis
-export const options = (selectedParam: string): ChartOptions<"line"> => {
+const options = (selectedParam: string): ChartOptions<"line"> => {
   return {
     responsive: true,
     maintainAspectRatio: false,
@@ -200,9 +205,7 @@ export const options = (selectedParam: string): ChartOptions<"line"> => {
         beginAtZero: true,
         grid: {
           drawOnChartArea: false
-        },
-        suggestedMin: 0,
-        suggestedMax: 300
+        }
       },
       x: {
         type: "time" as any,
