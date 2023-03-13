@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -14,8 +14,7 @@ import {
   ChartOptions,
   LegendItem,
   ChartData,
-  Filler,
-  Scale
+  Filler
 } from "chart.js";
 import { AirQualityDevices, CommonDeviceType } from "types";
 import "chartjs-adapter-date-fns";
@@ -117,15 +116,28 @@ const canvasBackgroundColor = {
     function bgColors(bracketLow: number, bracketHigh: number) {
       let gradient = ctx.createLinearGradient(0, top, 0, bottom);
       // Percentage of color from ending point (bottom)
-      if (bracketHigh > 300) {
-        gradient.addColorStop(0.25, "rgba(136,14,79,.95)"); // Hazard
-        gradient.addColorStop(0.5, "rgba(203,70,18,.75)"); // red
-        gradient.addColorStop(0.9, "rgba(233,228,22,.5)"); // yellow
-        gradient.addColorStop(0.95, "rgba(38,195,11,.3)"); //green
-      } else {
-        gradient.addColorStop(0, "rgba(203,70,18,100)"); // red
-        gradient.addColorStop(0.5, "rgba(233,228,22,.5)"); // yellow
+      if (bracketHigh < 50) {
         gradient.addColorStop(1, "rgba(38,195,11,.3)"); //green
+      } else if (bracketHigh < 105) {
+        gradient.addColorStop(0.5, "rgba(233,228,22,0.5)"); // yellow
+        gradient.addColorStop(1, "rgba(38,195,11,0.3)"); //green
+      } else if (bracketHigh > 105 && bracketHigh < 155) {
+        gradient.addColorStop(0, "rgba(245,	124,	0)"); // orange
+        gradient.addColorStop(0.5, "rgba(233,228,22,0.5)"); // yellow
+        gradient.addColorStop(1, "rgba(38,195,11,0.3)"); //green
+      } else if (bracketHigh > 155 && bracketHigh < 255) {
+        gradient.addColorStop(0, "rgba(136,14,79,.95)"); // Hazard
+        gradient.addColorStop(0.25, "rgba(197,57,41,0.7)"); // red
+        gradient.addColorStop(0.5, "rgba(245,	124,	0.3)"); // orange
+        gradient.addColorStop(0.75, "rgba(233,228,22,0.3)"); // yellow
+        gradient.addColorStop(1, "rgba(38,195,11,0.3)"); //green
+      } else {
+        gradient.addColorStop(0, "rgba(136,	14,	79, 0.95)"); //Hazard
+        gradient.addColorStop(0.25, "rgba(136,14,79,0.7)"); // Very unhealthy
+        gradient.addColorStop(0.5, "rgba(197,57,41,0.3)"); // red
+        gradient.addColorStop(0.7, "rgba(245,	124,0.3)"); // orange
+        gradient.addColorStop(0.8, "rgba(233,228,22,0.3)"); // yellow
+        gradient.addColorStop(1, "rgba(38,195,11,0.3)"); //green
       }
       ctx.fillStyle = gradient;
       ctx.fillRect(
