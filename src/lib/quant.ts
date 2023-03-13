@@ -27,8 +27,9 @@ export async function getQuantDevice() {
   };
 
   const {
-    data: { data },
-    meta
-  } = await (await fetch(url, options)).json();
-  return data[0] as MODRawDeviceDataResponse;
+    data: { data }
+  }: { data: { data: MODRawDeviceDataResponse[] } } = await (
+    await fetch(url, options)
+  ).json();
+  return data;
 }

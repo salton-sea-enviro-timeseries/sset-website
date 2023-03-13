@@ -22,6 +22,7 @@ export interface RawDeviceAverageDataResponse {
   WorkingStatus: string;
   ProgramId: number;
   CommunityId: number;
+  // TODO look into DeviceID for all o
   DeviceId: string;
   Longitude: number;
   Latitude: number;
@@ -100,7 +101,8 @@ export async function getDeviceData({ sensorId }: { sensorId: string }) {
      * within now - 1 hour and now. Need to check with AQMD.
      */
     const startDate = formatInTimeZone(
-      startOfHour(subHours(today, 168)),
+      // set to past 10 days
+      startOfHour(subHours(today, 240)),
       "UTC",
       "yyyy-MM-dd HH:mm:ss"
     );
@@ -119,7 +121,9 @@ export async function getDeviceData({ sensorId }: { sensorId: string }) {
 
     const data = await (await fetch(requestUrl, options)).json();
     // The last item in the array is the most recent data
-    return data.data.length === 0 ? ["No data available"] : data.data;
+    return data.data.length === 0
+      ? { DeviceId: sensorId, data: ["Data not available"] }
+      : data.data;
   } catch (err) {
     console.log(err);
   }

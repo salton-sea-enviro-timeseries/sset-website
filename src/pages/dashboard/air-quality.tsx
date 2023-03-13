@@ -10,6 +10,7 @@ import { fetcher } from "utils";
 import { MapPinIcon } from "../../constants";
 import Map from "components/Dashboard/Map";
 import { Device } from "lib/aqmd";
+import AirQualityPlots from "components/AirQualityPlots";
 
 const PIN_SIZE = 20;
 async function multiFetcher(...urls: string[]) {
@@ -77,6 +78,7 @@ const AirQuality = () => {
         Air Quality
       </Typography>
       <AirQualitySection devices={airQualityDevices} />
+      <AirQualityPlots devices={airQualityDevices} />
       <WithLoading isLoading={isLoading} variant="rect" height="500px">
         {data && (
           <Map

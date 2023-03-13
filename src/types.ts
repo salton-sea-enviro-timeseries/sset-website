@@ -1,4 +1,6 @@
 import { BLOCKS, NodeData, TopLevelBlock } from "@contentful/rich-text-types";
+import { RawDeviceAverageDataResponse } from "lib/aqmd";
+import { MODRawDeviceDataResponse } from "lib/quant";
 
 export interface SiteData {
   date: string;
@@ -262,3 +264,17 @@ export type ContactPage = {
   heroImage: HeroImage;
 };
 // =================================================== CMS Contentful Types End======================================
+// =================================================== Air Quality Types Start ======================================
+export type AirQualityDevices = {
+  site: string;
+  value: string;
+  latitude: number;
+  longitude: number;
+  sensorId: string;
+  location: string;
+  color: string;
+};
+export interface DeviceDataResponse extends RawDeviceAverageDataResponse {
+  DeviceID: string;
+}
+export type CommonDeviceType = DeviceDataResponse & MODRawDeviceDataResponse;
