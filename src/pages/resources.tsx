@@ -138,11 +138,7 @@ const Resources = () => {
           </Box>
 
           <Box display="flex" justifyContent={"center"}>
-            <Button
-              color="primary"
-              href="/marquez-2022-infographic-salton-sea-environmental-timeseries.pdf"
-              download
-            >
+            <Button color="primary" href="/salton-sea-flyer.pdf" download>
               Download Our Flyer
             </Button>
           </Box>
