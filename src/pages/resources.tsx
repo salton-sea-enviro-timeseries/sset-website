@@ -43,6 +43,7 @@ const Resources = () => {
       </ListItemText>
     </ListItem>
   ));
+  // TODO Fix styling
   return (
     <Layout>
       <Meta title="Resources | Salton Sea Environmental Timeseries" />
@@ -69,45 +70,46 @@ const Resources = () => {
           }}
         />
       </Translation>
-      {/* TODO: Check design with group see if they want side by side or flyers placed vertically */}
-      {/* <Section>
-        <Container maxWidth="md" className={classes.container}>
-          <Card className={classes.card}>
-            <CardMedia
-              component={"img"}
-              className={classes.cover}
-              image="/salton-sea-flyer-front.jpg"
-              title="Alianza CV"
-            />
-          </Card>
-          <Card className={classes.card}>
-            <CardMedia
-              component={"img"}
-              className={classes.cover}
-              image="/salton-sea-flyer-back.jpg"
-              title="Alianza CV"
-            />
-          </Card>
-        </Container>
-      </Section> */}
 
       <Section>
-        <Container maxWidth="xl" className={classes.container}>
-          <Box display="flex" justifyContent={"center"}>
-            <Button
-              startIcon={<DownloadIcon />}
-              size="large"
-              variant="contained"
-              color="primary"
-              href="/salton-sea-flyer.pdf"
-              download
+        <Container
+          maxWidth="xl"
+          className={classes.container}
+          style={{
+            // backgroundColor: "blue",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center"
+          }}
+        >
+          {/* TODO change width using breakpoint for flyer */}
+          <Box
+            sx={{
+              // width: "50%",
+              maxHeight: 480
+              // display: "flex",
+              // justifyContent: "center",
+              // bgcolor: "red"
+            }}
+          >
+            <Box
+              // minWidth="375px"
+              // bgcolor={"green"}
+              sx={{
+                position: "relative",
+                display: "flex",
+                justifyContent: "center",
+                minWidth: "100px"
+              }}
             >
-              Download Our Flyer
-            </Button>
-          </Box>
-          <Grid container spacing={2}>
-            <Grid item sm={12} lg={6}>
-              <Card className={classes.card}>
+              <Card
+                className={classes.card}
+                style={{
+                  // position: "absolute",
+                  // left: "-25%",
+                  transform: "rotate(-8deg)"
+                }}
+              >
                 <CardMedia
                   component={"img"}
                   className={classes.cover}
@@ -115,9 +117,16 @@ const Resources = () => {
                   title="Alianza CV"
                 />
               </Card>
-            </Grid>
-            <Grid item sm={12} lg={6}>
-              <Card className={classes.card}>
+              <Card
+                className={classes.card}
+                style={{
+                  // position: "relative",
+                  // top: 2,
+                  // left: "25%",
+                  // zIndex: 1,
+                  transform: "rotate(8deg)"
+                }}
+              >
                 <CardMedia
                   component={"img"}
                   className={classes.cover}
@@ -125,8 +134,18 @@ const Resources = () => {
                   title="Alianza CV"
                 />
               </Card>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
+
+          <Box display="flex" justifyContent={"center"}>
+            <Button
+              color="primary"
+              href="/marquez-2022-infographic-salton-sea-environmental-timeseries.pdf"
+              download
+            >
+              Download Our Flyer
+            </Button>
+          </Box>
           <SectionHeader
             title={"Zotero Artilces"}
             titleProps={{
@@ -139,66 +158,72 @@ const Resources = () => {
             justifyContent="center"
             size={4}
           />
-          {/* TODO: Refactor and make own component */}
-          <Grid container item justifyContent="center">
-            <Grid item xs={12} lg={6}>
-              <Card className={classes.card}>
-                <CardContent>
-                  {isLoading ? (
-                    <List>{placeHolderList}</List>
-                  ) : (
-                    <List>
-                      {data.map(({ data: article, meta }: ArticleData) => (
-                        <ListItem
-                          key={article.key}
-                          button
-                          component="a"
-                          href={article.url}
-                          target="_blank"
-                        >
-                          <ListItemIcon>
-                            <AssignmentOutlinedIcon
-                              fontSize="large"
-                              color="secondary"
-                            />
-                          </ListItemIcon>
-                          <ListItemText
-                            primary={article.title}
-                            secondary={
-                              <>
-                                <Typography
-                                  component="span"
-                                  display="block"
-                                  variant="body1"
-                                >
-                                  {meta.creatorSummary} • {article.date}
-                                </Typography>
-                                {article.publicationTitle &&
-                                  article.publicationTitle}
-                              </>
-                            }
+
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center"
+              // bgcolor: "red"
+              // minWidth: "300px"
+              // width: "100%"
+            }}
+          >
+            <Card className={classes.zotero}>
+              <CardContent>
+                {isLoading ? (
+                  <List>{placeHolderList}</List>
+                ) : (
+                  <List>
+                    {data.map(({ data: article, meta }: ArticleData) => (
+                      <ListItem
+                        key={article.key}
+                        button
+                        component="a"
+                        href={article.url}
+                        target="_blank"
+                      >
+                        <ListItemIcon>
+                          <AssignmentOutlinedIcon
+                            fontSize="large"
+                            color="secondary"
                           />
-                        </ListItem>
-                      ))}
-                    </List>
-                  )}
-                </CardContent>
-                <CardActions disableSpacing className={classes.zoteroButton}>
-                  <Button
-                    endIcon={<LaunchOutlinedIcon />}
-                    target="_blank"
-                    size="small"
-                    variant="contained"
-                    color="primary"
-                    href={`https://www.zotero.org/groups/${groupID}/saltonseascience/`}
-                    download
-                  >
-                    Zotero
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          </Grid>
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={article.title}
+                          secondary={
+                            <>
+                              <Typography
+                                component="span"
+                                display="block"
+                                variant="body1"
+                              >
+                                {meta.creatorSummary} • {article.date}
+                              </Typography>
+                              {article.publicationTitle &&
+                                article.publicationTitle}
+                            </>
+                          }
+                        />
+                      </ListItem>
+                    ))}
+                  </List>
+                )}
+              </CardContent>
+              <CardActions disableSpacing className={classes.zoteroButton}>
+                <Button
+                  endIcon={<LaunchOutlinedIcon />}
+                  target="_blank"
+                  size="small"
+                  variant="contained"
+                  color="primary"
+                  href={`https://www.zotero.org/groups/${groupID}/saltonseascience/`}
+                  download
+                >
+                  Zotero
+                </Button>
+              </CardActions>
+            </Card>
+          </Box>
         </Container>
       </Section>
     </Layout>
@@ -212,16 +237,20 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: `inset 0 -5px 0 ${theme.palette.secondary.light}`
   },
   container: {
-    top: "-7rem"
+    // top: "-7rem"
   },
   card: {
-    display: "flex",
-    flexDirection: "column",
+    width: 300,
+    // display: "flex",
+    // flexDirection: "column",
     margin: "1rem 0"
   },
+  zotero: {
+    maxWidth: 800
+  },
   cover: {
-    width: "100%",
-    height: "100%",
+    // width: "100%",
+    // height: "100%",
     backgroundSize: "contain"
   },
   flyerTitle: {
