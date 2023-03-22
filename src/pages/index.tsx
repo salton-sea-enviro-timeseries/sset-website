@@ -1,4 +1,4 @@
-import type { InferGetServerSidePropsType } from "next";
+import type { InferGetStaticPropsType } from "next";
 import { Button } from "@material-ui/core";
 import Link from "next/link";
 import { getCmsContent } from "util/getCmsContent";
@@ -31,7 +31,7 @@ const renderDocument = (document: Document) => {
 const Home = ({
   mediaData,
   homepageContent
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
   // @ts-ignore
   const { language } = useAppContext();
   const locale = language === "en" ? "en-US" : "es";
@@ -86,7 +86,7 @@ const Home = ({
 
 export default Home;
 
-export const getServerSideProps = async () => {
+export const getStaticProps = async () => {
   const urls = [
     "https://www.cnbc.com/2021/11/06/californias-salton-sea-spewing-toxic-fumes-creating-ghost-towns-.html",
     "https://atmos.earth/salton-sea-california-drought-pollution/",
