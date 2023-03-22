@@ -43,7 +43,6 @@ const Resources = () => {
       </ListItemText>
     </ListItem>
   ));
-  // TODO Fix styling
   return (
     <Layout>
       <Meta title="Resources | Salton Sea Environmental Timeseries" />
@@ -74,63 +73,27 @@ const Resources = () => {
       <Section>
         <Container
           maxWidth="xl"
-          className={classes.container}
           style={{
-            // backgroundColor: "blue",
             display: "flex",
             flexDirection: "column",
             alignItems: "center"
           }}
         >
-          {/* TODO change width using breakpoint for flyer */}
-          <Box
-            sx={{
-              // width: "50%",
-              maxHeight: 480
-              // display: "flex",
-              // justifyContent: "center",
-              // bgcolor: "red"
-            }}
-          >
-            <Box
-              // minWidth="375px"
-              // bgcolor={"green"}
-              sx={{
-                position: "relative",
-                display: "flex",
-                justifyContent: "center",
-                minWidth: "100px"
-              }}
-            >
-              <Card
-                className={classes.card}
-                style={{
-                  // position: "absolute",
-                  // left: "-25%",
-                  transform: "rotate(-8deg)"
-                }}
-              >
-                <CardMedia
-                  component={"img"}
-                  className={classes.cover}
-                  image="/salton-sea-flyer-front.jpg"
-                  title="Alianza CV"
-                />
-              </Card>
-              <Card
-                className={classes.card}
-                style={{
-                  // position: "relative",
-                  // top: 2,
-                  // left: "25%",
-                  // zIndex: 1,
-                  transform: "rotate(8deg)"
-                }}
-              >
+          <Box className={classes.flyerContainerWrapper}>
+            <Box className={classes.flyerContainer}>
+              <Card className={classes.backCard}>
                 <CardMedia
                   component={"img"}
                   className={classes.cover}
                   image="/salton-sea-flyer-back.jpg"
+                  title="Alianza CV"
+                />
+              </Card>
+              <Card className={classes.frontCard} elevation={5}>
+                <CardMedia
+                  component={"img"}
+                  className={classes.cover}
+                  image="/salton-sea-flyer-front.jpg"
                   title="Alianza CV"
                 />
               </Card>
@@ -155,15 +118,7 @@ const Resources = () => {
             size={4}
           />
 
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center"
-              // bgcolor: "red"
-              // minWidth: "300px"
-              // width: "100%"
-            }}
-          >
+          <Box className={classes.zoteroContainer}>
             <Card className={classes.zotero}>
               <CardContent>
                 {isLoading ? (
@@ -232,28 +187,68 @@ const useStyles = makeStyles((theme) => ({
   section: {
     boxShadow: `inset 0 -5px 0 ${theme.palette.secondary.light}`
   },
-  container: {
-    // top: "-7rem"
-  },
   card: {
     width: 300,
-    // display: "flex",
-    // flexDirection: "column",
     margin: "1rem 0"
   },
   zotero: {
     maxWidth: 800
   },
   cover: {
-    // width: "100%",
-    // height: "100%",
     backgroundSize: "contain"
   },
   flyerTitle: {
     fontWeight: 400
   },
+  zoteroContainer: {
+    display: "flex",
+    justifyContent: "center"
+  },
   zoteroButton: {
     justifyContent: "flex-end"
+  },
+  flyerContainerWrapper: {
+    minWidth: "370px",
+    maxHeight: 480
+  },
+  flyerContainer: {
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column"
+    },
+    [theme.breakpoints.up("sm")]: {
+      flexDirection: "row"
+    }
+  },
+  frontCard: {
+    width: 300,
+    margin: "1rem 0",
+    transition: "transform 300ms",
+    [theme.breakpoints.up("sm")]: {
+      transform: "rotate(8deg)"
+    },
+    [theme.breakpoints.down("xs")]: {
+      position: "relative",
+      zIndex: 1,
+      left: "2.5em",
+      top: "1.5em"
+    }
+  },
+  backCard: {
+    width: 300,
+    margin: "1rem 0",
+    transition: "transform 300ms",
+    [theme.breakpoints.up("sm")]: {
+      transform: "rotate(-8deg)"
+    },
+    [theme.breakpoints.down("xs")]: {
+      position: "absolute",
+      zIndex: 0,
+      bottom: "2em",
+      left: "0"
+    }
   }
 }));
 
