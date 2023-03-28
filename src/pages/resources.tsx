@@ -1,11 +1,18 @@
-import { Typography, Container, Button, Box, Grid } from "@material-ui/core";
-import { List, ListItem, ListItemText, ListItemIcon } from "@material-ui/core";
+import {
+  Typography,
+  Container,
+  Button,
+  Box,
+  Divider,
+  Grid,
+  ButtonBase,
+  IconButton
+} from "@material-ui/core";
 import { Card, CardActions, CardContent, CardMedia } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import AssignmentOutlinedIcon from "@material-ui/icons/AssignmentOutlined";
 import LaunchOutlinedIcon from "@material-ui/icons/LaunchOutlined";
 import Skeleton from "@material-ui/lab/Skeleton";
-import DownloadIcon from "@material-ui/icons/CloudDownload";
 import Hero from "components/Hero";
 import Section from "components/Section";
 import Layout from "components/Layout";
@@ -22,27 +29,44 @@ type ArticleData = {
     publicationTitle?: string;
     date: string;
   };
+  links: {
+    alternate: {
+      href: string;
+    };
+  };
   meta: { creatorSummary: string };
 };
 const Resources = () => {
   const classes = useStyles();
   const groupID = 4854089;
   const zoteroUrl = `https://api.zotero.org/groups/${groupID}/items/top?limit=10&order=dateModified&v=3`;
-  const { data = [], error } = useSWR(zoteroUrl, fetcher);
-  const isLoading = !data.length && !error;
+
+  const { data = [], error, isValidating } = useSWR(zoteroUrl, fetcher);
   // TODO add Translations and import content from Contentful
   const placeHolderList = Array.from({ length: 3 }).map((_, index) => (
-    <ListItem key={index}>
-      <ListItemIcon style={{ marginRight: "1rem" }}>
-        <Skeleton height={50} width="100%" variant="rect" />
-      </ListItemIcon>
-      <ListItemText>
-        <Skeleton animation="wave" variant="text" height={25} width="100%" />
-        <Skeleton animation="wave" variant="text" height={20} width="100%" />
-        <Skeleton animation="wave" variant="text" height={10} width="100%" />
-      </ListItemText>
-    </ListItem>
+    <Grid container spacing={1} key={index} alignItems="center">
+      <Grid item>
+        <ButtonBase style={{ width: 80, height: 80 }}>
+          <Skeleton
+            animation="wave"
+            variant="text"
+            height="100%"
+            width="100%"
+          />
+        </ButtonBase>
+      </Grid>
+      <Grid item xs={12} sm container>
+        <Grid item xs container direction="column" spacing={2}>
+          <Grid item xs>
+            <Skeleton animation="wave" variant="text" height={25} />
+            <Skeleton animation="wave" variant="text" height={20} />
+            <Skeleton animation="wave" variant="text" height={10} />
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
   ));
+  //  TODO Refactor : Maybe add a card component...
   return (
     <Layout>
       <Meta title="Resources | Salton Sea Environmental Timeseries" />
@@ -69,7 +93,6 @@ const Resources = () => {
           }}
         />
       </Translation>
-
       <Section>
         <Container
           maxWidth="xl"
@@ -99,14 +122,13 @@ const Resources = () => {
               </Card>
             </Box>
           </Box>
-
           <Box display="flex" justifyContent={"center"}>
             <Button color="primary" href="/salton-sea-flyer.pdf" download>
               Download Our Flyer
             </Button>
           </Box>
           <SectionHeader
-            title={"Zotero Artilces"}
+            title={"Scientific Articles"}
             titleProps={{
               align: "center",
               className: classes.section,
@@ -117,48 +139,67 @@ const Resources = () => {
             justifyContent="center"
             size={4}
           />
-
           <Box className={classes.zoteroContainer}>
             <Card className={classes.zotero}>
               <CardContent>
-                {isLoading ? (
-                  <List>{placeHolderList}</List>
-                ) : (
-                  <List>
-                    {data.map(({ data: article, meta }: ArticleData) => (
-                      <ListItem
-                        key={article.key}
-                        button
-                        component="a"
-                        href={article.url}
-                        target="_blank"
-                      >
-                        <ListItemIcon>
-                          <AssignmentOutlinedIcon
-                            fontSize="large"
-                            color="secondary"
-                          />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={article.title}
-                          secondary={
-                            <>
-                              <Typography
-                                component="span"
-                                display="block"
-                                variant="body1"
+                {isValidating
+                  ? placeHolderList
+                  : data.map(
+                      ({
+                        data: article,
+                        meta,
+                        links: { alternate }
+                      }: ArticleData) => (
+                        <Box key={article.key} style={{ marginBottom: "1rem" }}>
+                          <Grid container spacing={1} alignItems="center">
+                            <Grid item>
+                              <IconButton href={alternate.href} target="_blank">
+                                <AssignmentOutlinedIcon
+                                  fontSize="large"
+                                  color="secondary"
+                                />
+                              </IconButton>
+                            </Grid>
+                            <Grid item xs={12} sm container>
+                              <Grid
+                                item
+                                xs
+                                container
+                                direction="column"
+                                spacing={2}
                               >
-                                {meta.creatorSummary} • {article.date}
-                              </Typography>
-                              {article.publicationTitle &&
-                                article.publicationTitle}
-                            </>
-                          }
-                        />
-                      </ListItem>
-                    ))}
-                  </List>
+                                <Grid item xs>
+                                  <Typography
+                                    variant="subtitle1"
+                                    component="div"
+                                  >
+                                    {article.title}
+                                  </Typography>
+                                  <Typography variant="body2" gutterBottom>
+                                    {meta.creatorSummary} • {article.date}
+                                  </Typography>
+                                  <Typography
+                                    variant="body2"
+                                    color="textSecondary"
+                                  >
+                                    {article.publicationTitle &&
+                                      article.publicationTitle}
+                                  </Typography>
+                                </Grid>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                        </Box>
+                      )
+                    )}
+                {error && (
+                  <Typography>Error retrieving Scientific Articles</Typography>
                 )}
+                <Divider />
+                <Typography variant="caption">
+                  *List of articles above were gathered from Zotero; a tool used
+                  to collect, organize, annotate, cite, and share research.
+                </Typography>
               </CardContent>
               <CardActions disableSpacing className={classes.zoteroButton}>
                 <Button
