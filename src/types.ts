@@ -209,6 +209,8 @@ type PageContent = [
   }>
 ];
 
+type NavLinkItems = { href: string; label: string };
+
 type HeroImage = LocaleDefault<
   Fields<{
     title: LocaleDefault<string>;
@@ -263,6 +265,10 @@ export type ContactPage = {
   title: LocaleOption<string>;
   heroImage: HeroImage;
 };
+// TODO: Add types to NavLinks for contentful if we decide to retrieve nav content
+// - Issue is we would call getCmsContent 3 times one for index and two for dashbaord
+// - Need to revisit
+export type NavLinks = { navItems: LocaleOption<NavLinkItems[]> };
 // =================================================== CMS Contentful Types End======================================
 // =================================================== Air Quality Types Start ======================================
 export type AirQualityDevices = {

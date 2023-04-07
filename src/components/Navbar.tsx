@@ -23,7 +23,6 @@ function Navbar() {
 
   // @ts-ignore
   const { language, setLanguage } = useAppContext();
-
   const Links = React.useMemo(() => {
     return [
       {
@@ -37,6 +36,10 @@ function Navbar() {
       {
         href: "/contact-us",
         label: getContent(`site.${language}.navLinks.contact`)
+      },
+      {
+        href: "/resources",
+        label: getContent(`site.${language}.navLinks.resources`)
       }
     ];
   }, [language]);
