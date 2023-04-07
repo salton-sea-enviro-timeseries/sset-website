@@ -57,6 +57,26 @@ const DownloadDataButtonsSection = ({
           </Button>
         </WithLoading>
       </Box>
+      <Box pl={1} pr={0.5}>
+        <WithLoading
+          isLoading={isLoading}
+          variant="rect"
+          height={30}
+          width="130px"
+        >
+          <Button
+            startIcon={<DownloadIcon />}
+            size="small"
+            variant="contained"
+            href="/SSET_readme.txt"
+            download
+          >
+            {getContent(
+              `pages.dashboard.${language}.content.download_readme_button`
+            )}
+          </Button>
+        </WithLoading>
+      </Box>
     </>
   );
 };

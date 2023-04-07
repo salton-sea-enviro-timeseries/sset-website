@@ -7,11 +7,12 @@ import {
   TextField,
   Typography,
   makeStyles,
-  Tooltip
+  Tooltip,
+  Link,
+  Button
 } from "@material-ui/core";
 import { groupBy } from "lodash";
 import { Marker } from "react-map-gl";
-
 import { Parameter, ParameterMapping, Data, SiteData } from "types";
 import { colorScale, getAverage, getColorFromScale, getRange } from "utils";
 import DashboardLayout from "components/DashboardLayout";
@@ -288,16 +289,51 @@ const WaterQuality = () => {
             <Table data={tableData} />
           </WithLoading>
         </Grid>
+        <Grid item xs={12}>
+          <Button
+            className={classes.downloadButton}
+            variant="text"
+            color="inherit"
+            href="/sset-protocols.pdf"
+            disableFocusRipple
+            disableRipple
+            download
+          >
+            <Typography
+              className={classes.downloadText}
+              variant="h5"
+              display="inline"
+            >
+              Protocol PDF
+            </Typography>
+          </Button>
+        </Grid>
       </Grid>
     </>
   );
 };
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   popper: {
     top: "10px !important",
     cursor: "pointer",
     pointerEvents: "unset"
+  },
+  downloadText: {
+    boxShadow: `inset 0 -4px 0 ${theme.palette.primary.light}`,
+    transition: "color 0.2s ease",
+    "&:hover": {
+      color: theme.palette.secondary.light
+    }
+  },
+  downloadButton: {
+    ...theme.typography.h5,
+    textTransform: "none",
+    justifyContent: "flex-start",
+    padding: 0,
+    "&:hover": {
+      backgroundColor: "transparent"
+    }
   },
   tooltip: {
     fontSize: 11,
