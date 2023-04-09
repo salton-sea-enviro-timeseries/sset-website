@@ -67,30 +67,22 @@ const Resources = () => {
           <Box className={classes.flyerContainerWrapper}>
             <Box className={classes.flyerContainer}>
               <Card className={classes.backCard}>
-                <CardMedia className={classes.imageContainer} component="div">
-                  <Image
-                    src="/salton-sea-flyer-back.jpg"
-                    alt="Alianza CV"
-                    layout="responsive"
-                    width={300}
-                    height={400}
-                    objectFit="cover"
-                    priority
-                  />
-                </CardMedia>
+                <Image
+                  src="/salton-sea-flyer-back.jpg"
+                  alt="Alianza CV"
+                  width={400}
+                  height={(400 * 3300) / 2550}
+                  priority
+                />
               </Card>
               <Card className={classes.frontCard} elevation={5}>
-                <CardMedia className={classes.imageContainer}>
-                  <Image
-                    src="/salton-sea-flyer-front.jpg"
-                    alt="Alianza CV"
-                    layout="responsive"
-                    width={300}
-                    height={400}
-                    objectFit="cover"
-                    priority
-                  />
-                </CardMedia>
+                <Image
+                  src="/salton-sea-flyer-front.jpg"
+                  alt="Alianza CV"
+                  width={400}
+                  height={(400 * 3300) / 2550}
+                  priority
+                />
               </Card>
             </Box>
           </Box>
@@ -132,15 +124,8 @@ const useStyles = makeStyles((theme) => ({
   section: {
     boxShadow: `inset 0 -5px 0 ${theme.palette.secondary.light}`
   },
-  card: {
-    width: 300,
-    margin: "1rem 0"
-  },
   zotero: {
     maxWidth: 800
-  },
-  cover: {
-    backgroundSize: "contain"
   },
   flyerTitle: {
     fontWeight: 400
@@ -153,8 +138,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "flex-end"
   },
   flyerContainerWrapper: {
-    minWidth: "370px",
-    maxHeight: 480
+    minWidth: "365px"
   },
   flyerContainer: {
     position: "relative",
@@ -167,15 +151,9 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: "row"
     }
   },
-  imageContainer: {
-    position: "relative",
-    width: "100%",
-    height: "100%"
-  },
   frontCard: {
     width: 300,
-    minHeight: 400,
-    maxHeight: 480,
+    height: 385,
     margin: "1rem 0",
     transition: "transform 300ms",
     [theme.breakpoints.up("sm")]: {
@@ -190,8 +168,7 @@ const useStyles = makeStyles((theme) => ({
   },
   backCard: {
     width: 300,
-    minHeight: 400,
-    maxHeight: 480,
+    height: 385,
     margin: "1rem 0",
     transition: "transform 300ms",
     [theme.breakpoints.up("sm")]: {
@@ -203,6 +180,11 @@ const useStyles = makeStyles((theme) => ({
       bottom: "2em",
       left: "0"
     }
+  },
+  imageWrapper: {
+    position: "relative",
+    width: "100%",
+    height: "100%"
   }
 }));
 
