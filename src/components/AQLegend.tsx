@@ -1,5 +1,6 @@
-import { Box, makeStyles, Typography } from "@material-ui/core";
+import { Box, Link, makeStyles, Tooltip, Typography } from "@material-ui/core";
 import { AirQualityIndex, AirQualityMapping } from "lib/airnow";
+import HoverTooltip from "./HoverToolTip";
 const AQLegend = () => {
   const classes = useStyles();
   return (
@@ -9,7 +10,32 @@ const AQLegend = () => {
         variant="caption"
         color="textSecondary"
       >
-        US Air Quality Index (AQI)
+        US Air Quality Index{" "}
+        <HoverTooltip
+          title={
+            <>
+              <Typography color="inherit">
+                <b>Air Quality Index:</b>
+              </Typography>
+              <Typography color="inherit" variant="body2" component="p">
+                The U.S. AQI is EPA’s index for reporting air quality. This link
+                will take you to{" "}
+                <em>
+                  <u>airnow.gov</u>
+                </em>{" "}
+                for more information.
+              </Typography>
+            </>
+          }
+        >
+          <Link
+            href="https://www.airnow.gov/aqi/aqi-basics/"
+            target="_blank"
+            rel="noopener"
+          >
+            (AQI)
+          </Link>
+        </HoverTooltip>
       </Typography>
       <Box display="flex" mb={1}>
         {Object.keys(AirQualityMapping).map((key, index) => {

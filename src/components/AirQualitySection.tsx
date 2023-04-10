@@ -103,6 +103,7 @@ const AirQualitySection = ({ devices }: { devices: AirQualityDevices[] }) => {
       {}
       {/* selector start */}
       <Box pr={0.5} pb={1}>
+        {isLoading ? <Skeleton height={50} width="100%" /> : <AQLegend />}
         <WithLoading variant="rect" height={40} isLoading={isLoading}>
           <TextField
             fullWidth
@@ -128,7 +129,6 @@ const AirQualitySection = ({ devices }: { devices: AirQualityDevices[] }) => {
       <Box display="flex" flexWrap="wrap">
         {parameterValues}
       </Box>
-      {isLoading ? <Skeleton height={50} width="100%" /> : <AQLegend />}
     </Box>
   );
 };
