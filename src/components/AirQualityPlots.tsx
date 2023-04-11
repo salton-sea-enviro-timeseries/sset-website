@@ -33,6 +33,7 @@ import LoadingChart from "./LoadingChart";
 import { calcParamAQI } from "util/calcParamAQI";
 import { fetchMultipleDeviceDetails } from "util/fetchMultipleDeviceDetails";
 import { mapDeviceNames } from "util/mapDeviceNames";
+import { filterHourlyData } from "../util/filterHourlyData";
 
 ChartJS.register(
   CategoryScale,
@@ -83,11 +84,11 @@ const colors = [
   "#000000",
   "#FF69B4",
   "#00FFFF",
-  "#FFFF00",
+  "#00d5ff",
   "#1a1245",
   "#9400D3",
-  "#FFD700",
-  "#99225f",
+  "#00ff48",
+  "#e62020",
   "#800080"
 ];
 // gradient background color for chart
@@ -224,6 +225,7 @@ const options = (selectedParam: string): ChartOptions<"line"> => {
         time: {
           unit: "day"
         },
+
         ticks: {
           minRotation: 0,
           maxRotation: 0
@@ -272,9 +274,12 @@ const AirQualityPlots = ({ devices }: { devices: AirQualityDevices[] }) => {
   }, [sensorData]);
   // dataset used for line chart
   const datasets = useMemo(() => {
-    return Object.values(groupedData).map(({ data, name }, index) => ({
+    return Object.values(groupedData).map(({ data, name, id }, index) => ({
       label: name,
-      data: calcParamAQI(data),
+      data:
+        id === "MOD-PM-00404"
+          ? calcParamAQI(filterHourlyData(data))
+          : calcParamAQI(data),
       borderColor: colors[index],
       fill: false,
       lineTension: 0.1,
@@ -295,11 +300,38 @@ const AirQualityPlots = ({ devices }: { devices: AirQualityDevices[] }) => {
       yAxisID: "y" as const
     }));
   }, [groupedData]);
+  // const datasets = useMemo(() => {
+  //   return Object.values(groupedData).map(({ data, name }, index) => ({
+  //     label: name,
+  //     data: calcParamAQI(data),
+  //     borderColor: colors[index],
+  //     fill: false,
+  //     lineTension: 0.1,
+  //     backgroundColor: `${colors[index]}3F`,
+  //     borderCapStyle: "butt" as const,
+  //     borderDash: [],
+  //     borderDashOffset: 0.0,
+  //     borderJoinStyle: "miter" as const,
+  //     pointBorderColor: colors[index],
+  //     pointBackgroundColor: "#fff" as const,
+  //     pointBorderWidth: 1,
+  //     pointHoverRadius: 5,
+  //     pointHoverBackgroundColor: "blue" as const,
+  //     pointHoverBorderColor: "#fff" as const,
+  //     pointHoverBorderWidth: 2,
+  //     pointRadius: 1,
+  //     pointHitRadius: 10,
+  //     yAxisID: "y" as const
+  //   }));
+  // }, [groupedData]);
   const isLoading = !Object.keys(sensorData).length && !error;
   // dataset as an object for chart prop
+  // console.log("dataset", datasets);
   const chartData = {
     datasets
   };
+
+  // console.log("data", groupedData);
   return (
     <>
       <FormControl className={classes.formControl}>
