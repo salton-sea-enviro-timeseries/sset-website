@@ -300,38 +300,12 @@ const AirQualityPlots = ({ devices }: { devices: AirQualityDevices[] }) => {
       yAxisID: "y" as const
     }));
   }, [groupedData]);
-  // const datasets = useMemo(() => {
-  //   return Object.values(groupedData).map(({ data, name }, index) => ({
-  //     label: name,
-  //     data: calcParamAQI(data),
-  //     borderColor: colors[index],
-  //     fill: false,
-  //     lineTension: 0.1,
-  //     backgroundColor: `${colors[index]}3F`,
-  //     borderCapStyle: "butt" as const,
-  //     borderDash: [],
-  //     borderDashOffset: 0.0,
-  //     borderJoinStyle: "miter" as const,
-  //     pointBorderColor: colors[index],
-  //     pointBackgroundColor: "#fff" as const,
-  //     pointBorderWidth: 1,
-  //     pointHoverRadius: 5,
-  //     pointHoverBackgroundColor: "blue" as const,
-  //     pointHoverBorderColor: "#fff" as const,
-  //     pointHoverBorderWidth: 2,
-  //     pointRadius: 1,
-  //     pointHitRadius: 10,
-  //     yAxisID: "y" as const
-  //   }));
-  // }, [groupedData]);
+
   const isLoading = !Object.keys(sensorData).length && !error;
   // dataset as an object for chart prop
-  // console.log("dataset", datasets);
   const chartData = {
     datasets
   };
-
-  // console.log("data", groupedData);
   return (
     <>
       <FormControl className={classes.formControl}>
@@ -365,9 +339,7 @@ const AirQualityPlots = ({ devices }: { devices: AirQualityDevices[] }) => {
     </>
   );
 };
-
 export default AirQualityPlots;
-
 const useStyles = makeStyles(() => ({
   formControl: {
     minWidth: 120
