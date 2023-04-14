@@ -53,7 +53,7 @@ const ContactUsPage = () => {
                       dense
                       button
                       component="a"
-                      href="aydee@alianzacv.org"
+                      href="mailto:aydee@alianzacv.org"
                     >
                       <ListItemText
                         primary="Aydee Palomino"
