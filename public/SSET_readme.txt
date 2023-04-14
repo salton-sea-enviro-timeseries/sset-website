@@ -18,19 +18,20 @@ rsinclair@llu.edu
 
 Nutrients data (YSI Photometer) is currently available for the period :
 
-September 2021 	        	to 		December 2022 
+September 2021 	        	to 		April 2023 
 
 Probe data (YSI Sonde) is currently available for the period :
 
-September 2021 	        	to 		December 2022 
+September 2021 	        	to 		February 2023 
 
 ************************************************************************
 
 Note : 
 *Phosphate samples removed prior to December 2023 
-*Chlorophyll and Phycoerythrin probe added to YSI Probe October 2021
-*Turbidity, Total Dissolved Solids, and Total Suspended Solids sensor removed from YSI Probe October 2021
-*Turbidity measured by TN400 turbidity meter added to Nutrients data October 2021 
+*Chlorophyll and Phycoerythrin probe added to YSI Probe - October 2021
+*Turbidity, Total Dissolved Solids, and Total Suspended Solids sensor removed from YSI Probe - October 2021
+*Turbidity measured by TN400 turbidity meter added to Nutrients data - October 2021
+*pH sensor was out of calibration during February 2023 sampling event 
 
 ************************************************************************
 
