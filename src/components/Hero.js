@@ -1,30 +1,38 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
 import { makeStyles, Typography } from "@material-ui/core";
 
 function Hero(props) {
   const classes = useStyles();
+  const [isMounted, setIsMounted] = useState(false);
+  const [isMobileDevice, setIsMobileDevice] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
 
-  const isMobileDevice =
-    process.browser &&
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    );
-
+    if (typeof navigator !== "undefined") {
+      setIsMobileDevice(
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      );
+    }
+  }, []);
   return (
     <Box position="relative" height="100vh">
-      <video
-        className={classes.video}
-        playsInline
-        autoPlay={!isMobileDevice ? true : false}
-        loop={!isMobileDevice ? true : false}
-        muted
-        controls={isMobileDevice ? true : false}
-        preload="auto"
-      >
-        <source src="/hero.mp4" type="video/mp4" />
-      </video>
+      {isMounted ? (
+        <video
+          className={classes.video}
+          playsInline
+          autoPlay={!isMobileDevice}
+          loop={!isMobileDevice}
+          muted
+          controls={isMobileDevice}
+          preload="auto"
+        >
+          <source src="/hero.mp4" type="video/mp4" />
+        </video>
+      ) : null}
       <div className={classes.overlay}>
         {(props.title || props.subtitle) && (
           <Container>
