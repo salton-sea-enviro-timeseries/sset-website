@@ -48,6 +48,27 @@ export enum Parameter {
   "Sulphate" = "sulphate",
   "Sulphide" = "sulphide"
 }
+// export enum AirQualityParameter {
+//   "O3" = "Ground-level ozone",
+//   "PM10" = "Particle pollution",
+//   "PM2_5" = "Fine particles",
+//   "NO2" = "Nitrogen Dioxide",
+//   "PM1" = "Ultra fine"
+// }
+// export enum AirQualityParameter {
+//   "Ground-level ozone" ="O3" ,
+//   "Particle pollution"="PM10" ,
+//  "Fine particles"=  "PM2_5" ,
+//   "Nitrogen Dioxide"="NO2" ,
+//   "Ultra fine"= "PM1"
+// }
+export enum AirQualityParameter {
+  O3 = "O3",
+  PM10 = "PM10",
+  PM2_5 = "PM2_5",
+  NO2 = "NO2",
+  PM1 = "PM1"
+}
 
 export enum Units {
   "salinity" = "PSU",
@@ -63,6 +84,38 @@ export enum Units {
   "sulphate" = "mg/L",
   "sulphide" = "mg/L"
 }
+export const AirQualityParameterMapping = {
+  [AirQualityParameter.O3]: {
+    name: "Ground-level ozone",
+    href: "https://www.epa.gov/ground-level-ozone-pollution/ground-level-ozone-basics",
+    description:
+      "Ozone at ground level is a harmful air pollutant, elevated exposures can affect sensitive vegetation and people with asthma."
+  },
+  [AirQualityParameter.PM10]: {
+    name: "Particle pollution",
+    href: "https://www.epa.gov/pmcourse/what-particle-pollution",
+    description:
+      "Particulate matter also known at particle pollution or PM, is a general term for a mixture of solid and liquid droplets suspended in the air. PM10 stands for inhalable particles, with a diameter that are fewer than 10 microns."
+  },
+  [AirQualityParameter.PM2_5]: {
+    name: "Particle pollution",
+    href: "https://www.epa.gov/pmcourse/what-particle-pollution",
+    description:
+      "Particulate matter also known at particle pollution or PM, is a general term for a mixture of solid and liquid droplets suspended in the air. PM2.5 stands for inhalable particles, with a diameter that are fewer than 2.5 microns."
+  },
+  [AirQualityParameter.NO2]: {
+    name: "Nitrogen Dioxide",
+    href: "https://www.epa.gov/no2-pollution/basic-information-about-no2",
+    description:
+      "NO2 is one of a group of highly reactive gases known as oxides of nitrogen. Nitrogen Dioxide primarily gets in the air from the burning of fuel such as emissions from cars, trucks, and power plants."
+  },
+  [AirQualityParameter.PM1]: {
+    name: "Ultra fine particulate matter",
+    href: "https://www.epa.gov/pm-pollution/particulate-matter-pm-basics",
+    description:
+      "Particulate matter also known at particle pollution or PM, is a general term for a mixture of solid and liquid droplets suspended in the air. PM1 stands for inhalable particles, with a diameter that are fewer than 1 microns."
+  }
+};
 
 export const ParameterMapping = {
   [Parameter.Salinity]: {

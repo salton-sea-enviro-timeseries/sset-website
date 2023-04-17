@@ -19,7 +19,7 @@ const renderDocument = (document: Document) => {
     renderText: (text: string) => {
       return text
         .split("\n")
-        .reduce((children: any, textSegment: any, index: Key) => {
+        .reduce((children: any, textSegment: any, index: number) => {
           return [...children, index > 0 && <br key={index} />, textSegment];
         }, []);
     }
@@ -41,6 +41,7 @@ const Home = ({
   const heroImage = heroContentBase.heroImage["en-US"].fields.file["en-US"].url;
   const buttonText = heroContentBase.buttonText;
   const heroSubTitle = heroContentBase.subTitle;
+  console.log("hero image: ", heroImage);
   const sectionContent = homepageContent.fields.content["en-US"].map(
     ({ fields }, index) => {
       const { body, title } = fields;
