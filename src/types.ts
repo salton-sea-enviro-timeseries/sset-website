@@ -87,31 +87,31 @@ export enum Units {
 export const AirQualityParameterMapping = {
   [AirQualityParameter.O3]: {
     name: "Ground-level ozone",
-    href: "",
+    href: "https://www.epa.gov/ground-level-ozone-pollution/ground-level-ozone-basics",
     description:
       "Ozone at ground level is a harmful air pollutant, elevated exposures can affect sensitive vegetation and people with asthma."
   },
   [AirQualityParameter.PM10]: {
     name: "Particle pollution",
-    href: "",
+    href: "https://www.epa.gov/pmcourse/what-particle-pollution",
     description:
       "Particulate matter also known at particle pollution or PM, is a general term for a mixture of solid and liquid droplets suspended in the air. PM10 stands for inhalable particles, with a diameter that are fewer than 10 microns."
   },
   [AirQualityParameter.PM2_5]: {
     name: "Particle pollution",
-    href: "",
+    href: "https://www.epa.gov/pmcourse/what-particle-pollution",
     description:
       "Particulate matter also known at particle pollution or PM, is a general term for a mixture of solid and liquid droplets suspended in the air. PM2.5 stands for inhalable particles, with a diameter that are fewer than 2.5 microns."
   },
   [AirQualityParameter.NO2]: {
     name: "Nitrogen Dioxide",
-    href: "",
+    href: "https://www.epa.gov/no2-pollution/basic-information-about-no2",
     description:
       "NO2 is one of a group of highly reactive gases known as oxides of nitrogen. Nitrogen Dioxide primarily gets in the air from the burning of fuel such as emissions from cars, trucks, and power plants."
   },
   [AirQualityParameter.PM1]: {
     name: "Ultra fine particulate matter",
-    href: "",
+    href: "https://www.epa.gov/pm-pollution/particulate-matter-pm-basics",
     description:
       "Particulate matter also known at particle pollution or PM, is a general term for a mixture of solid and liquid droplets suspended in the air. PM1 stands for inhalable particles, with a diameter that are fewer than 1 microns."
   }
