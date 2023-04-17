@@ -16,7 +16,11 @@ import {
   ChartData,
   Filler
 } from "chart.js";
-import { AirQualityDevices, CommonDeviceType } from "types";
+import {
+  AirQualityDevices,
+  AirQualityParameter,
+  CommonDeviceType
+} from "types";
 import "chartjs-adapter-date-fns";
 import { Line } from "react-chartjs-2";
 import determineSourceOfData from "lib/determineSourceOfData";
@@ -27,13 +31,16 @@ import {
   MenuItem,
   makeStyles,
   FormHelperText,
-  Box
+  Box,
+  Typography,
+  Link
 } from "@material-ui/core";
 import LoadingChart from "./LoadingChart";
 import { calcParamAQI } from "util/calcParamAQI";
 import { fetchMultipleDeviceDetails } from "util/fetchMultipleDeviceDetails";
 import { mapDeviceNames } from "util/mapDeviceNames";
 import { filterHourlyData } from "../util/filterHourlyData";
+import { AirQualityParameterMapping } from "types";
 
 ChartJS.register(
   CategoryScale,
@@ -306,6 +313,7 @@ const AirQualityPlots = ({ devices }: { devices: AirQualityDevices[] }) => {
   const chartData = {
     datasets
   };
+  console.log("groupedData", groupedData);
   return (
     <>
       <FormControl className={classes.formControl}>
@@ -327,7 +335,7 @@ const AirQualityPlots = ({ devices }: { devices: AirQualityDevices[] }) => {
         <LoadingChart />
       ) : (
         // Todo change min height depending on y-max
-        <Box minHeight={350} m={2}>
+        <Box minHeight={350} m="2 2 0 2">
           <Line
             key={selectedParam}
             plugins={plugins}
@@ -336,6 +344,36 @@ const AirQualityPlots = ({ devices }: { devices: AirQualityDevices[] }) => {
           />
         </Box>
       )}
+      <Box marginBottom={1}>
+        <Typography
+          variant="body2"
+          align="center"
+          style={{
+            fontSize: "14px",
+            marginTop: "-10px",
+            fontWeight: "lighter"
+          }}
+        >
+          EPA establishes an AQI for five major air pollutants regulated by the
+          Clean Air Act. Each of these pollutants has a national air quality
+          standard set by EPA to protect public health.{" "}
+          <Link
+            className={classes.airPollutant}
+            href={
+              AirQualityParameterMapping[selectedParam as AirQualityParameter]
+                .href
+            }
+            target="_blank"
+            rel="noopener"
+          >
+            <b>{selectedParam}:</b>
+          </Link>{" "}
+          {
+            AirQualityParameterMapping[selectedParam as AirQualityParameter]
+              .description
+          }
+        </Typography>
+      </Box>
     </>
   );
 };
@@ -344,5 +382,6 @@ const useStyles = makeStyles(() => ({
   formControl: {
     minWidth: 120
   },
+  airPollutant: { color: "#3a7ca5", cursor: "pointer" },
   selectEmpty: {}
 }));
