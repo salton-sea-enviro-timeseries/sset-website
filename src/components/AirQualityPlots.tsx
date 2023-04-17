@@ -313,7 +313,6 @@ const AirQualityPlots = ({ devices }: { devices: AirQualityDevices[] }) => {
   const chartData = {
     datasets
   };
-  console.log("groupedData", groupedData);
   return (
     <>
       <FormControl className={classes.formControl}>
