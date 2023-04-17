@@ -16,7 +16,11 @@ import {
   ChartData,
   Filler
 } from "chart.js";
-import { AirQualityDevices, CommonDeviceType } from "types";
+import {
+  AirQualityDevices,
+  AirQualityParameter,
+  CommonDeviceType
+} from "types";
 import "chartjs-adapter-date-fns";
 import { Line } from "react-chartjs-2";
 import determineSourceOfData from "lib/determineSourceOfData";
@@ -27,12 +31,16 @@ import {
   MenuItem,
   makeStyles,
   FormHelperText,
-  Box
+  Box,
+  Typography,
+  Link
 } from "@material-ui/core";
 import LoadingChart from "./LoadingChart";
 import { calcParamAQI } from "util/calcParamAQI";
 import { fetchMultipleDeviceDetails } from "util/fetchMultipleDeviceDetails";
 import { mapDeviceNames } from "util/mapDeviceNames";
+import { filterHourlyData } from "../util/filterHourlyData";
+import { AirQualityParameterMapping } from "types";
 
 ChartJS.register(
   CategoryScale,
@@ -83,11 +91,11 @@ const colors = [
   "#000000",
   "#FF69B4",
   "#00FFFF",
-  "#FFFF00",
+  "#00d5ff",
   "#1a1245",
   "#9400D3",
-  "#FFD700",
-  "#99225f",
+  "#00ff48",
+  "#e62020",
   "#800080"
 ];
 // gradient background color for chart
@@ -224,6 +232,7 @@ const options = (selectedParam: string): ChartOptions<"line"> => {
         time: {
           unit: "day"
         },
+
         ticks: {
           minRotation: 0,
           maxRotation: 0
@@ -272,9 +281,12 @@ const AirQualityPlots = ({ devices }: { devices: AirQualityDevices[] }) => {
   }, [sensorData]);
   // dataset used for line chart
   const datasets = useMemo(() => {
-    return Object.values(groupedData).map(({ data, name }, index) => ({
+    return Object.values(groupedData).map(({ data, name, id }, index) => ({
       label: name,
-      data: calcParamAQI(data),
+      data:
+        id === "MOD-PM-00404"
+          ? calcParamAQI(filterHourlyData(data))
+          : calcParamAQI(data),
       borderColor: colors[index],
       fill: false,
       lineTension: 0.1,
@@ -295,6 +307,7 @@ const AirQualityPlots = ({ devices }: { devices: AirQualityDevices[] }) => {
       yAxisID: "y" as const
     }));
   }, [groupedData]);
+
   const isLoading = !Object.keys(sensorData).length && !error;
   // dataset as an object for chart prop
   const chartData = {
@@ -321,7 +334,7 @@ const AirQualityPlots = ({ devices }: { devices: AirQualityDevices[] }) => {
         <LoadingChart />
       ) : (
         // Todo change min height depending on y-max
-        <Box minHeight={350} m={2}>
+        <Box minHeight={350} m="2 2 0 2">
           <Line
             key={selectedParam}
             plugins={plugins}
@@ -330,15 +343,44 @@ const AirQualityPlots = ({ devices }: { devices: AirQualityDevices[] }) => {
           />
         </Box>
       )}
+      <Box marginBottom={1}>
+        <Typography
+          variant="body2"
+          align="center"
+          style={{
+            fontSize: "14px",
+            marginTop: "-10px",
+            fontWeight: "lighter"
+          }}
+        >
+          EPA establishes an AQI for five major air pollutants regulated by the
+          Clean Air Act. Each of these pollutants has a national air quality
+          standard set by EPA to protect public health.{" "}
+          <Link
+            className={classes.airPollutant}
+            href={
+              AirQualityParameterMapping[selectedParam as AirQualityParameter]
+                .href
+            }
+            target="_blank"
+            rel="noopener"
+          >
+            <b>{selectedParam}:</b>
+          </Link>{" "}
+          {
+            AirQualityParameterMapping[selectedParam as AirQualityParameter]
+              .description
+          }
+        </Typography>
+      </Box>
     </>
   );
 };
-
 export default AirQualityPlots;
-
 const useStyles = makeStyles(() => ({
   formControl: {
     minWidth: 120
   },
+  airPollutant: { color: "#3a7ca5", cursor: "pointer" },
   selectEmpty: {}
 }));
