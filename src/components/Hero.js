@@ -29,6 +29,7 @@ function Hero(props) {
           muted
           controls={isMobileDevice}
           preload="auto"
+          poster="/hero-poster.jpg"
         >
           <source src="/hero.mp4" type="video/mp4" />
         </video>

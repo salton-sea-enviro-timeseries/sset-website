@@ -11,7 +11,6 @@ import { useAppContext } from "components/AppContext";
 import { LocaleOption, NestedObjBodyText } from "types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { Document } from "@contentful/rich-text-types";
-import { Key } from "react";
 
 // Contentful rich text helper
 const renderDocument = (document: Document) => {
@@ -41,7 +40,7 @@ const Home = ({
   const heroImage = heroContentBase.heroImage["en-US"].fields.file["en-US"].url;
   const buttonText = heroContentBase.buttonText;
   const heroSubTitle = heroContentBase.subTitle;
-  console.log("hero image: ", heroImage);
+
   const sectionContent = homepageContent.fields.content["en-US"].map(
     ({ fields }, index) => {
       const { body, title } = fields;
