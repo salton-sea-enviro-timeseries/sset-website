@@ -36,8 +36,8 @@ const TutorialModal: React.FC<TutorialModalProps> = ({
         <div className={classes.videoContainer}>
           <iframe
             className={classes.video}
-            width="560"
-            height="315"
+            width="100%"
+            height="100%"
             src={`https://www.youtube.com/embed/${
               locale === "en-US" ? "cpeo_u3RO3s" : "dTk0K0mipI4"
             }?showinfo=0`}
