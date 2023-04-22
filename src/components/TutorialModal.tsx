@@ -80,7 +80,8 @@ const useStyles = makeStyles((theme) => ({
   videoContainer: {
     width: "100%",
     paddingTop: "56.25%",
-    position: "relative"
+    position: "relative",
+    overflow: "hidden"
   },
   videoWrapper: {
     borderRadius: theme.shape.borderRadius,
