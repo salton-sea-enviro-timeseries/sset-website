@@ -1,5 +1,6 @@
+import { useState } from "react";
 import type { InferGetStaticPropsType } from "next";
-import { Button } from "@material-ui/core";
+import { Button, makeStyles } from "@material-ui/core";
 import Link from "next/link";
 import { getCmsContent } from "util/getCmsContent";
 import { HomePage } from "types";
@@ -7,6 +8,7 @@ import Layout from "components/Layout";
 import Hero from "components/Hero";
 import PageSection from "components/PageSection";
 import scrape from "../lib/scrape";
+import TutorialModal from "../components/TutorialModal";
 import { useAppContext } from "components/AppContext";
 import { LocaleOption, NestedObjBodyText } from "types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
@@ -26,14 +28,25 @@ const renderDocument = (document: Document) => {
 
   return documentToReactComponents(document, options);
 };
-
+// TODO: Retrieve content from contentful for tutorial video translations
 const Home = ({
   mediaData,
   homepageContent
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
+  const classes = useStyles();
   // @ts-ignore
   const { language } = useAppContext();
   const locale = language === "en" ? "en-US" : "es";
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   //================== cms start ==========================
   const heroContentBase = homepageContent.fields.hero["en-US"].fields;
   const heroTitle = heroContentBase.title;
@@ -72,13 +85,25 @@ const Home = ({
         title={heroTitle[locale]}
         subtitle={heroSubTitle[locale]}
         cta={
-          <Link href="/dashboard/water-quality" passHref>
-            <Button variant="contained" color="primary">
-              {buttonText[locale]}
+          <>
+            <Link href="/dashboard/water-quality" passHref>
+              <Button variant="contained" color="primary">
+                {buttonText[locale]}
+              </Button>
+            </Link>
+            <Button
+              className={classes.tutorialButton}
+              variant="text"
+              // size="small"
+              onClick={handleOpen}
+            >
+              {locale === "en-US" ? "Watch Tutorial" : "Ver El Tutorial"}
             </Button>
-          </Link>
+          </>
         }
       />
+
+      <TutorialModal open={open} onClose={handleClose} locale={locale} />
       {sectionContent}
     </Layout>
   );
@@ -106,3 +131,27 @@ export const getStaticProps = async () => {
     }
   };
 };
+const useStyles = makeStyles((theme) => ({
+  tutorialButton: {
+    marginTop: 4,
+    color: "white",
+    borderColor: "whitesmoke",
+    position: "absolute",
+    bottom: 15,
+    "&::after": {
+      content: `""`,
+      position: "absolute",
+      width: "100%",
+      height: 3,
+      backgroundColor: theme.palette.primary.light,
+      bottom: 0,
+      left: 0,
+      transformOrigin: "center",
+      transform: "scaleX(.10)",
+      transition: "transform .4s ease-in-out"
+    },
+    "&:hover::after": {
+      transform: "scaleX(1)"
+    }
+  }
+}));
