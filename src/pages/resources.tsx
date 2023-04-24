@@ -2,6 +2,7 @@ import { Container, Button, Box } from "@material-ui/core";
 import Image from "next/image";
 import { Card, CardMedia } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { useAppContext } from "components/AppContext";
 import Hero from "components/Hero";
 import Section from "components/Section";
 import Layout from "components/Layout";
@@ -27,6 +28,8 @@ const Resources = () => {
   const classes = useStyles();
   const groupID = 4854089;
   const zoteroUrl = `https://api.zotero.org/groups/${groupID}/items/top?limit=10&order=dateModified&v=3`;
+  // @ts-ignore
+  const { language } = useAppContext();
   // TODO add Translations and import content from Contentful
   //  TODO Refactor : Make dry...
   return (
@@ -87,8 +90,14 @@ const Resources = () => {
             </Box>
           </Box>
           <Box display="flex" justifyContent={"center"}>
-            <Button color="primary" href="/salton-sea-flyer.pdf" download>
-              Download Our Flyer
+            <Button
+              color="primary"
+              href={`/salton-sea-flyer-${language}.pdf`}
+              download
+            >
+              {language === "en"
+                ? "Download Our Flyer (EN)"
+                : "Descarga nuestro volante (ES)"}
             </Button>
           </Box>
           <ResourceSection
