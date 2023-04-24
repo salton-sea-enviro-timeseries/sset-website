@@ -4,7 +4,8 @@
       "home": "Home",
       "dashboard": "Dashboard",
       "contact": "Contact Us",
-      "resources": "Resources"
+      "resources": "Resources",
+      "about": "About US"
     }
   },
   "es": {
@@ -12,7 +13,8 @@
       "home": "Página de Inicio",
       "dashboard": "Tablero de Datos",
       "contact": "Contáctenos",
-      "resources": "Recursos"
+      "resources": "Recursos",
+      "about": "Sobre Nosotros"
     }
   }
 }

@@ -40,6 +40,10 @@ function Navbar() {
       {
         href: "/resources",
         label: getContent(`site.${language}.navLinks.resources`)
+      },
+      {
+        href: "/about-us",
+        label: getContent(`site.${language}.navLinks.about`)
       }
     ];
   }, [language]);
