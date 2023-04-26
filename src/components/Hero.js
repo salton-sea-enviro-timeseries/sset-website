@@ -59,6 +59,7 @@ function Hero(props) {
           <Box
             py={5}
             display="flex"
+            flexDirection="column"
             justifyContent="center"
             alignItems="center"
           >
