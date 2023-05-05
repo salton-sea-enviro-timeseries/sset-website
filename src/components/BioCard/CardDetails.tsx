@@ -34,7 +34,7 @@ const CardDetails = ({ image, name, bio, answer }: AboutUsProps) => {
           {name}
         </Typography>
         <Typography variant="body2">{bio}</Typography>
-        <Typography component="span">
+        <Typography component="span" display="block" style={{ marginTop: 5 }}>
           <b>Answer:</b> {answer}
         </Typography>
       </Grid>

@@ -1,16 +1,12 @@
+import { useState } from "react";
 import {
   Container,
-  Button,
-  Box,
   CardContent,
-  List,
-  ListItem,
-  ListItemText,
   Typography,
   CardActionArea
 } from "@material-ui/core";
 import Image from "next/image";
-import { Card, CardMedia } from "@material-ui/core";
+import { Card } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useAppContext } from "components/AppContext";
 import Hero from "components/Hero";
@@ -18,14 +14,27 @@ import Section from "components/Section";
 import Layout from "components/Layout";
 import Meta from "components/Meta";
 import Translation from "components/Translation";
-import ResourceSection from "components/ResourceSection";
+
 import CardDetails from "components/BioCard/CardDetails";
 
 const AboutUsPage = () => {
+  // TODO: refactor
+  // TODO: add survey api
   const classes = useStyles();
-
   // @ts-ignore
   const { language } = useAppContext();
+  const [activeCards, setActiveCards] = useState<{ [key: number]: boolean }>(
+    {}
+  );
+  const handleCardClick: React.MouseEventHandler<HTMLButtonElement> = (
+    event
+  ) => {
+    const cardId = parseInt(event.currentTarget.dataset.cardId || "");
+    setActiveCards((prev) => ({
+      ...prev,
+      [cardId]: !prev[cardId]
+    }));
+  };
 
   return (
     <Layout>
@@ -54,34 +63,101 @@ const AboutUsPage = () => {
         />
       </Translation>
       <Section>
-        <Container maxWidth="sm" className={classes.container}>
-          <Card className={classes.frontCard} elevation={4}>
-            <CardActionArea style={{ height: "100%" }}>
-              <CardContent className={classes.content}>
-                <Typography align="center" variant="h6">
-                  Question Goes Here: Lorem ipsum dolor sit amet.Lorem ipsum
-                  dolor sit amet Lorem ipsum dolor sit amet. Lorem ipsum dolor
-                  sit amet
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-          <Card className={classes.backCard} elevation={4}>
-            <CardActionArea style={{ height: "100%" }}>
-              <CardContent style={{ height: "100%", padding: 0 }}>
-                <CardDetails
-                  image="/logo-alt.png"
-                  name={"John Doe"}
-                  bio={
-                    "Nam ut enim nec metus aliquet imperdiet nec sit amet mi.  Nunc laoreet pulvinar lectus. In ac efficitur lectus. Aliquam vulputate, augue at rutrum placerat, dolor ante sodales velit, non posuere augue ipsum rutrum erat. Morbi vel blandit nunc. Sed rhoncus, diam in eleifend iaculis, tortor arcu sodales magna, id pretium leo eros eu lectus. Phasellus tempor bibendum enim, eu ornare ante sagittis non."
-                  }
-                  answer={
-                    "Phasellus tempor bibendum enim, eu ornare ante sagittis non."
-                  }
-                />
-              </CardContent>
-            </CardActionArea>
-          </Card>
+        <Container maxWidth="sm">
+          <div className={classes.flipCard} key={1}>
+            <div
+              className={`${classes.flipCardInner} ${
+                activeCards[1] ? classes.flipped : ""
+              }`}
+            >
+              <div className={classes.flipCardFront}>
+                <Card className={classes.frontCard} elevation={4}>
+                  <CardActionArea
+                    data-card-id={1}
+                    style={{ height: "100%" }}
+                    onClick={handleCardClick}
+                  >
+                    <CardContent className={classes.content}>
+                      <Typography align="center" variant="h6">
+                        Question Goes Here: Lorem ipsum dolor sit amet.Lorem
+                        ipsum dolor sit amet Lorem ipsum dolor sit amet. Lorem
+                        ipsum dolor sit amet
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </div>
+              <div className={classes.flipCardBack}>
+                <Card className={classes.backCard} elevation={4}>
+                  <CardActionArea
+                    data-card-id={1}
+                    style={{ height: "100%" }}
+                    onClick={handleCardClick}
+                  >
+                    <CardContent style={{ height: "100%", padding: 0 }}>
+                      <CardDetails
+                        image="/logo-alt.png"
+                        name={"John Doe"}
+                        bio={
+                          "Nam ut enim nec metus aliquet imperdiet nec sit amet mi.  Nunc laoreet pulvinar lectus. In ac efficitur lectus. Aliquam vulputate, augue at rutrum placerat, dolor ante sodales velit, non posuere augue ipsum rutrum erat. Morbi vel blandit nunc. Sed rhoncus, diam in eleifend iaculis, tortor arcu sodales magna, id pretium leo eros eu lectus. Phasellus tempor bibendum enim, eu ornare ante sagittis non."
+                        }
+                        answer={
+                          "Phasellus tempor bibendum enim, eu ornare ante sagittis non."
+                        }
+                      />
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </div>
+            </div>
+          </div>
+          <div className={classes.flipCard} key={2}>
+            <div
+              className={`${classes.flipCardInner} ${
+                activeCards[2] ? classes.flipped : ""
+              }`}
+            >
+              <div className={classes.flipCardFront}>
+                <Card className={classes.frontCard} elevation={4}>
+                  <CardActionArea
+                    data-card-id={2}
+                    style={{ height: "100%" }}
+                    onClick={handleCardClick}
+                  >
+                    <CardContent className={classes.content}>
+                      <Typography align="center" variant="h6">
+                        Question Goes Here: Lorem ipsum dolor sit amet.Lorem
+                        ipsum dolor sit amet Lorem ipsum dolor sit amet. Lorem
+                        ipsum dolor sit amet
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </div>
+              <div className={classes.flipCardBack}>
+                <Card className={classes.backCard} elevation={4}>
+                  <CardActionArea
+                    data-card-id={2}
+                    style={{ height: "100%" }}
+                    onClick={handleCardClick}
+                  >
+                    <CardContent style={{ height: "100%", padding: 0 }}>
+                      <CardDetails
+                        image="/logo-alt.png"
+                        name={"John Doe"}
+                        bio={
+                          "Nam ut enim nec metus aliquet imperdiet nec sit amet mi.  Nunc laoreet pulvinar lectus. In ac efficitur lectus. Aliquam vulputate, augue at rutrum placerat, dolor ante sodales velit, non posuere augue ipsum rutrum erat. Morbi vel blandit nunc. Sed rhoncus, diam in eleifend iaculis, tortor arcu sodales magna, id pretium leo eros eu lectus. Phasellus tempor bibendum enim, eu ornare ante sagittis non."
+                        }
+                        answer={
+                          "Phasellus tempor bibendum enim, eu ornare ante sagittis non."
+                        }
+                      />
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </div>
+            </div>
+          </div>
         </Container>
       </Section>
     </Layout>
@@ -95,16 +171,51 @@ const useStyles = makeStyles((theme) => ({
     height: 150,
     backgroundSize: "contain"
   },
-  container: {
-    // backgroundColor: "blue"
-    // top: "-6rem"
-  },
+
   frontCard: {
-    margin: "1rem 0",
-    height: "300px"
+    height: "100%"
   },
   backCard: {
-    margin: "1rem 0"
+    height: "100%"
+  },
+  flipCard: {
+    perspective: "1000px",
+    marginBottom: "2rem",
+    display: "grid",
+    [theme.breakpoints.down("md")]: {
+      minHeight: "500px"
+    },
+    [theme.breakpoints.up("md")]: {
+      minHeight: "310px"
+    }
+  },
+  flipCardInner: {
+    position: "relative",
+    backgroundColor: "blue",
+    width: "100%",
+    height: "100%",
+    transition: "transform 0.9s",
+    transformStyle: "preserve-3d"
+  },
+  flipCardFront: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    backfaceVisibility: "hidden"
+  },
+  flipCardBack: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    backfaceVisibility: "hidden",
+    transform: "rotateY(180deg)"
+  },
+  flipped: {
+    transform: "rotateY(180deg)"
   },
   details: {
     display: "flex",
