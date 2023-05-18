@@ -247,7 +247,7 @@ const options = (selectedParam: string): ChartOptions<"line"> => {
 };
 const AirQualityPlots = ({ devices }: { devices: AirQualityDevices[] }) => {
   const classes = useStyles();
-  const [selectedParam, setSelectedParam] = useState("O3");
+  const [selectedParam, setSelectedParam] = useState("PM10");
   const sensorUrls = devices.map(({ sensorId }) => {
     const sensorInfoArray = sensorId.split(":");
     const sensorIdList = determineSourceOfData(sensorInfoArray[0]);
@@ -349,7 +349,7 @@ const AirQualityPlots = ({ devices }: { devices: AirQualityDevices[] }) => {
           align="center"
           style={{
             fontSize: "14px",
-            marginTop: "-10px",
+            // marginTop: "-5px",
             fontWeight: "lighter"
           }}
         >
