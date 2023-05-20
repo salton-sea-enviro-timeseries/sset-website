@@ -6,7 +6,6 @@ import {
 } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton/IconButton";
 import DoubleArrow from "@material-ui/icons/DoubleArrowSharp";
-// import Image from "next/image";
 import { Card } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useAppContext } from "components/AppContext";
@@ -23,7 +22,6 @@ const AboutCard = ({
   handleCardClick,
   selectedQuestion
 }: Props) => {
-  // TODO: refactor
   // TODO: add survey api
   const classes = useStyles();
   // @ts-ignore
@@ -81,7 +79,6 @@ const AboutCard = ({
             <Box
               style={{
                 width: "100%",
-                // backgroundColor: "red",
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "space-between",
