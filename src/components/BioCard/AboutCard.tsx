@@ -2,124 +2,145 @@ import {
   CardContent,
   Typography,
   CardActionArea,
-  Box
+  Box,
+  Divider
 } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton/IconButton";
 import DoubleArrow from "@material-ui/icons/DoubleArrowSharp";
 import { Card } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useAppContext } from "components/AppContext";
-import Translation from "components/Translation";
 import CardDetails from "components/BioCard/CardDetails";
+import { useState } from "react";
 
 interface Props {
+  //TODO fix responses types
+  responses: any[];
   activeCard: boolean;
   handleCardClick: React.MouseEventHandler<HTMLButtonElement>;
   selectedQuestion: string;
 }
 const AboutCard = ({
+  responses,
   activeCard,
   handleCardClick,
   selectedQuestion
 }: Props) => {
-  // TODO: add survey api
-  const classes = useStyles();
+  // TODO: add contentful
   // @ts-ignore
   const { language } = useAppContext();
+
+  const [cardHeight, setCardHeight] = useState(340);
+  const [profileIndex, setProfileIndex] = useState(0);
+  const classes = useStyles({ cardHeight });
+
+  const handleHeightChange = (height: number) => {
+    activeCard
+      ? setCardHeight((prev) =>
+          prev >= 340 ? height + 70 : Math.max(height, prev)
+        )
+      : setCardHeight(340);
+  };
+  const handleBiosNav: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+    const id = event.currentTarget.id;
+    if (id === "prevQuest") {
+      profileIndex === 0
+        ? setProfileIndex(responses.length - 1)
+        : setProfileIndex((prev) => prev - 1);
+    }
+
+    if (id === "nextQuest") {
+      profileIndex === responses.length - 1
+        ? setProfileIndex(0)
+        : setProfileIndex((prev) => prev + 1);
+    }
+  };
+
   return (
-    <div className={classes.flipCard} key={1}>
+    <div className={classes.cardContainer}>
       <div
         className={`${classes.flipCardInner} ${
           activeCard ? classes.flipped : ""
         }`}
       >
-        <div className={classes.flipCardFront}>
-          <Card className={classes.frontCard} elevation={4}>
-            <CardActionArea
-              data-card-id={1}
-              style={{ height: "100%" }}
-              onClick={handleCardClick}
-            >
-              <CardContent className={classes.content}>
-                <Typography align="center" variant="h6">
-                  {selectedQuestion}
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </div>
-        <div className={classes.flipCardBack}>
-          <Card
-            className={classes.backCard}
-            elevation={4}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between"
-            }}
+        <Card className={classes.cardFront} elevation={4}>
+          <CardActionArea
+            data-card-id={1}
+            style={{ height: "100%" }}
+            onClick={handleCardClick}
           >
-            <CardActionArea data-card-id={1} onClick={handleCardClick}>
-              <CardContent
-                style={{
-                  padding: 8
-                }}
-              >
-                <CardDetails
-                  image="/logo-alt.png"
-                  name={"John Doe"}
-                  bio={
-                    "Nam ut enim nec metus aliquet imperdiet nec sit amet mi.  Nunc laoreet pulvinar lectus. In ac efficitur lectus. Aliquam vulputate, augue at rutrum placerat, dolor ante sodales velit, non posuere augue ipsum rutrum erat. Morbi vel blandit nunc. Sed rhoncus, diam in eleifend iaculis, tortor arcu sodales magna, id pretium leo eros eu lectus. Phasellus tempor bibendum enim, eu ornare ante sagittis non."
-                  }
-                  answer={
-                    "Phasellus tempor bibendum enim, eu ornare ante sagittis non."
-                  }
-                />
-              </CardContent>
-            </CardActionArea>
-            <Box
+            <CardContent>
+              <Typography align="center" variant="h6">
+                {selectedQuestion}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+        <Card
+          className={classes.cardBack}
+          elevation={4}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between"
+          }}
+        >
+          <CardActionArea data-card-id={1} onClick={handleCardClick}>
+            <CardContent
               style={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                padding: 4
+                padding: 8
               }}
             >
-              <IconButton aria-label="previous profile" color="primary">
-                <DoubleArrow style={{ transform: "rotate(180deg)" }} />
-              </IconButton>
-              <IconButton aria-label="next profile" color="primary">
-                <DoubleArrow />
-              </IconButton>
-            </Box>
-          </Card>
-        </div>
+              <CardDetails
+                image={responses[profileIndex].image}
+                name={responses[profileIndex].fullName}
+                activeCard={activeCard}
+                community={responses[profileIndex].community}
+                title={responses[profileIndex].title}
+                question={responses[profileIndex].question}
+                answer={responses[profileIndex].answer}
+                onHeightChange={handleHeightChange}
+              />
+            </CardContent>
+          </CardActionArea>
+          <Divider variant="middle" />
+          <Box
+            style={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              padding: 4
+            }}
+          >
+            <IconButton
+              aria-label="previous profile"
+              color="primary"
+              id="prevQuest"
+              onClick={handleBiosNav}
+            >
+              <DoubleArrow style={{ transform: "rotate(180deg)" }} />
+            </IconButton>
+
+            <IconButton
+              aria-label="next profile"
+              color="primary"
+              id="nextQuest"
+              onClick={handleBiosNav}
+            >
+              <DoubleArrow />
+            </IconButton>
+          </Box>
+        </Card>
       </div>
     </div>
   );
 };
 const useStyles = makeStyles((theme) => ({
-  frontCard: {
-    height: "100%"
-  },
-  backCard: {
-    height: "100%"
-  },
-  flipCard: {
+  cardContainer: (props: { cardHeight: number }) => ({
     perspective: "1000px",
-    [theme.breakpoints.between(300, 800)]: {
-      minHeight: "550px"
-    },
-    [theme.breakpoints.between(800, 890)]: {
-      minHeight: "500px"
-    },
-    [theme.breakpoints.between(890, "md")]: {
-      minHeight: "450px"
-    },
-    [theme.breakpoints.up("md")]: {
-      minHeight: "360px"
-    }
-  },
+    height: props.cardHeight
+  }),
   flipCardInner: {
     position: "relative",
     width: "100%",
@@ -127,17 +148,19 @@ const useStyles = makeStyles((theme) => ({
     transition: "transform 0.9s",
     transformStyle: "preserve-3d"
   },
-  flipCardFront: {
+  cardFront: {
     position: "absolute",
     top: 0,
+    bottom: 0,
     left: 0,
     width: "100%",
     height: "100%",
     backfaceVisibility: "hidden"
   },
-  flipCardBack: {
+  cardBack: {
     position: "absolute",
     top: 0,
+    bottom: 0,
     left: 0,
     width: "100%",
     height: "100%",
@@ -146,12 +169,6 @@ const useStyles = makeStyles((theme) => ({
   },
   flipped: {
     transform: "rotateY(180deg)"
-  },
-  content: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    height: "100%"
   }
 }));
 

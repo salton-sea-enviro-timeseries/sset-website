@@ -1,15 +1,47 @@
-import { Avatar, Typography, Grid, makeStyles } from "@material-ui/core";
+import { Avatar, Typography, Grid, makeStyles, Box } from "@material-ui/core";
+import { useEffect, useRef, useState } from "react";
 
 type AboutUsProps = {
   image: string;
   name: string;
-  bio: string;
   answer: string;
+  title: string;
+  community: string;
+  question: string;
+  activeCard: boolean;
+  onHeightChange: (height: number) => void;
 };
-const CardDetails = ({ image, name, bio, answer }: AboutUsProps) => {
+const CardDetails = ({
+  image,
+  name,
+  community,
+  title,
+  question,
+  answer,
+  activeCard,
+  onHeightChange
+}: AboutUsProps) => {
   const classes = useStyles();
+  const refHeight = useRef<HTMLDivElement>(null);
+  const [divHeight, setDivHeight] = useState(0);
+
+  useEffect(() => {
+    let height = 0;
+    if (refHeight.current) {
+      height = refHeight.current?.offsetHeight;
+    }
+    setDivHeight(height);
+    if (onHeightChange) {
+      onHeightChange(divHeight);
+    }
+  }, [activeCard, divHeight, onHeightChange]);
   return (
-    <Grid container spacing={0} className={classes.gridContainer}>
+    <Grid
+      container
+      spacing={0}
+      className={classes.gridContainer}
+      ref={refHeight}
+    >
       <Grid
         item
         sm={12}
@@ -20,14 +52,27 @@ const CardDetails = ({ image, name, bio, answer }: AboutUsProps) => {
       >
         <Avatar className={classes.avatarStyles} alt={"Avatar"} src={image} />
       </Grid>
-      <Grid item sm={12} md={9} lg={8} className={classes.bioWrapper}>
-        {/* Bio here  */}
-        <Typography style={{ fontSize: "large" }} variant="h6" gutterBottom>
-          {name}
+      <Grid item xs={12} sm={12} md={9} lg={8} className={classes.bioWrapper}>
+        <Box display="flex" flexWrap="wrap" alignItems="center">
+          <Typography
+            style={{ fontSize: "large", paddingRight: ".5rem" }}
+            variant="h6"
+          >
+            {name}:
+          </Typography>
+          <Typography style={{ fontSize: "medium" }}>{title}</Typography>
+        </Box>
+        <Typography>
+          <b> From:</b> {community}
         </Typography>
-        <Typography variant="body2" gutterBottom>
-          {bio}
-        </Typography>
+        <Box>
+          <Typography noWrap={true} gutterBottom={true}>
+            <Typography component="span" color="primary">
+              <b>Question:</b>
+            </Typography>
+            {question}
+          </Typography>
+        </Box>
         <Typography>
           <b>Answer:</b> {answer}
         </Typography>
