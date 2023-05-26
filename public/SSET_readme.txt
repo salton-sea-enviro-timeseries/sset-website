@@ -2,7 +2,7 @@
 Salton Sea Environmental Timeseries
 Nutrients and Probe data
 Readme file
-Last update: Feb 2023
+Last update: May 2023
 ************************************************************************
 
 
@@ -22,7 +22,7 @@ September 2021 	        	to 		April 2023
 
 Probe data (YSI Sonde) is currently available for the period :
 
-September 2021 	        	to 		February 2023 
+September 2021 	        	to 		April 2023 
 
 ************************************************************************
 
