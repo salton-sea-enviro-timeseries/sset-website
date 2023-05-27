@@ -37,9 +37,9 @@ const AboutCard = ({
   const handleHeightChange = (height: number) => {
     activeCard
       ? setCardHeight((prev) =>
-          prev >= 340 ? height + 70 : Math.max(height, prev)
+          prev >= 350 ? height + 70 : Math.max(height, prev)
         )
-      : setCardHeight(340);
+      : setCardHeight(350);
   };
   const handleBiosNav: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     const id = event.currentTarget.id;
