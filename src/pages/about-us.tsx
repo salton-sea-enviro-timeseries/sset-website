@@ -221,13 +221,13 @@ const AboutUsPage = () => {
         />
       </Translation>
       <Section>
-        <Container style={{ minWidth: "350px" }}>
+        <Container className={classes.gridWrapper}>
           <Grid container spacing={1} justifyContent="center">
             <Grid
               item
-              lg={12}
+              lg={6}
               md={6}
-              sm={4}
+              sm={12}
               xs={12}
               className={classes.questionWrapper}
             >
@@ -241,14 +241,10 @@ const AboutUsPage = () => {
                       onClick={handleQuestionClick(key)}
                     >
                       <Button
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          overflow: "hidden"
-                        }}
+                        className={classes.questionButtonStyles}
                         variant="text"
                       >
-                        <Typography style={{ fontSize: "small" }}>
+                        <Typography className={classes.questionTextStyles}>
                           {truncateQuestion(value, isMatch)}
                         </Typography>
                       </Button>
@@ -262,10 +258,7 @@ const AboutUsPage = () => {
               md={6}
               sm={8}
               xs={12}
-              style={{
-                display: "flex",
-                flexDirection: "column"
-              }}
+              className={classes.aboutCardsWrapper}
             >
               <AboutCard
                 responses={shuffledAnswers}
@@ -288,6 +281,13 @@ const useStyles = makeStyles((theme) => ({
     height: 150,
     backgroundSize: "contain"
   },
+  gridWrapper: {
+    minWidth: "350px"
+  },
+  aboutCardsWrapper: {
+    display: "flex",
+    flexDirection: "column"
+  },
   questionPaper: {
     width: 200,
     height: 100,
@@ -297,13 +297,16 @@ const useStyles = makeStyles((theme) => ({
     margin: 4
   },
   questionWrapper: {
-    [theme.breakpoints.down("md")]: {
-      maxHeight: "530px",
-      overflowY: "auto"
-    },
     display: "flex",
     flexWrap: "wrap",
     justifyContent: "center"
+  },
+  questionTextStyles: {
+    fontSize: "small"
+  },
+  questionButtonStyles: {
+    width: "100%",
+    height: "100%"
   }
 }));
 

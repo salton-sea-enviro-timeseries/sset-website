@@ -76,15 +76,7 @@ const AboutCard = ({
             </CardContent>
           </CardActionArea>
         </Card>
-        <Card
-          className={classes.cardBack}
-          elevation={4}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between"
-          }}
-        >
+        <Card className={classes.cardBack} elevation={4}>
           <CardActionArea data-card-id={1} onClick={handleCardClick}>
             <CardContent
               style={{
@@ -104,15 +96,7 @@ const AboutCard = ({
             </CardContent>
           </CardActionArea>
           <Divider variant="middle" />
-          <Box
-            style={{
-              width: "100%",
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              padding: 4
-            }}
-          >
+          <Box className={classes.iconButtonWrapper}>
             <IconButton
               aria-label="previous profile"
               color="primary"
@@ -158,6 +142,9 @@ const useStyles = makeStyles((theme) => ({
     backfaceVisibility: "hidden"
   },
   cardBack: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
     position: "absolute",
     top: 0,
     bottom: 0,
@@ -169,6 +156,13 @@ const useStyles = makeStyles((theme) => ({
   },
   flipped: {
     transform: "rotateY(180deg)"
+  },
+  iconButtonWrapper: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 4
   }
 }));
 

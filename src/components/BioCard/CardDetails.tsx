@@ -54,13 +54,10 @@ const CardDetails = ({
       </Grid>
       <Grid item xs={12} sm={12} md={9} lg={8} className={classes.bioWrapper}>
         <Box display="flex" flexWrap="wrap" alignItems="center">
-          <Typography
-            style={{ fontSize: "large", paddingRight: ".5rem" }}
-            variant="h6"
-          >
+          <Typography className={classes.nameTextStyles} variant="h6">
             {name}:
           </Typography>
-          <Typography style={{ fontSize: "medium" }}>{title}</Typography>
+          <Typography className={classes.titleTextStyles}>{title}</Typography>
         </Box>
         <Typography>
           <b> From:</b> {community}
@@ -100,5 +97,12 @@ const useStyles = makeStyles(() => ({
   },
   bioWrapper: {
     padding: 16
+  },
+  nameTextStyles: {
+    fontSize: "large",
+    paddingRight: ".5rem"
+  },
+  titleTextStyles: {
+    fontSize: "medium"
   }
 }));
