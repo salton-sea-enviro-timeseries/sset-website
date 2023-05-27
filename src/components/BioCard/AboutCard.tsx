@@ -37,7 +37,7 @@ const AboutCard = ({
   const handleHeightChange = (height: number) => {
     activeCard
       ? setCardHeight((prev) =>
-          prev >= 350 ? height + 70 : Math.max(height, prev)
+          prev >= 330 ? height + 70 : Math.max(height, 300)
         )
       : setCardHeight(350);
   };
