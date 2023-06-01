@@ -1,17 +1,16 @@
+import { useState } from "react";
 import {
   CardContent,
-  Typography,
   CardActionArea,
-  Box,
-  Divider
+  Divider,
+  useMediaQuery,
+  Card
 } from "@material-ui/core";
-import IconButton from "@material-ui/core/IconButton/IconButton";
-import DoubleArrow from "@material-ui/icons/DoubleArrowSharp";
-import { Card } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { useAppContext } from "components/AppContext";
 import CardDetails from "components/BioCard/CardDetails";
-import { useState } from "react";
+import CardFront from "./CardFront";
+import ProfileNav from "./ProfileNav";
 
 interface Props {
   //TODO fix responses types
@@ -29,17 +28,26 @@ const AboutCard = ({
   // TODO: add contentful
   // @ts-ignore
   const { language } = useAppContext();
-
-  const [cardHeight, setCardHeight] = useState(340);
+  const [cardHeight, setCardHeight] = useState(350);
   const [profileIndex, setProfileIndex] = useState(0);
   const classes = useStyles({ cardHeight });
+  const theme = useTheme();
+  const matchesBreakpointSmallScreen = useMediaQuery(
+    theme.breakpoints.down("xs")
+  );
 
   const handleHeightChange = (height: number) => {
-    activeCard
-      ? setCardHeight((prev) =>
-          prev >= 330 ? height + 70 : Math.max(height, 300)
-        )
-      : setCardHeight(350);
+    const totalCardHeightWithNav = height + 70;
+    if (activeCard) {
+      setCardHeight(() =>
+        height <= 330
+          ? Math.max(totalCardHeightWithNav, 370)
+          : totalCardHeightWithNav
+      );
+    }
+    if (!activeCard) {
+      matchesBreakpointSmallScreen ? setCardHeight(370) : setCardHeight(350);
+    }
   };
   const handleBiosNav: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     const id = event.currentTarget.id;
@@ -63,19 +71,10 @@ const AboutCard = ({
           activeCard ? classes.flipped : ""
         }`}
       >
-        <Card className={classes.cardFront} elevation={4}>
-          <CardActionArea
-            data-card-id={1}
-            style={{ height: "100%" }}
-            onClick={handleCardClick}
-          >
-            <CardContent>
-              <Typography align="center" variant="h6">
-                {selectedQuestion}
-              </Typography>
-            </CardContent>
-          </CardActionArea>
-        </Card>
+        <CardFront
+          handleCardClick={handleCardClick}
+          selectedQuestion={selectedQuestion}
+        />
         <Card className={classes.cardBack} elevation={4}>
           <CardActionArea data-card-id={1} onClick={handleCardClick}>
             <CardContent
@@ -96,34 +95,17 @@ const AboutCard = ({
             </CardContent>
           </CardActionArea>
           <Divider variant="middle" />
-          <Box className={classes.iconButtonWrapper}>
-            <IconButton
-              aria-label="previous profile"
-              color="primary"
-              id="prevQuest"
-              onClick={handleBiosNav}
-            >
-              <DoubleArrow style={{ transform: "rotate(180deg)" }} />
-            </IconButton>
-
-            <IconButton
-              aria-label="next profile"
-              color="primary"
-              id="nextQuest"
-              onClick={handleBiosNav}
-            >
-              <DoubleArrow />
-            </IconButton>
-          </Box>
+          <ProfileNav handleBiosNav={handleBiosNav} />
         </Card>
       </div>
     </div>
   );
 };
 const useStyles = makeStyles((theme) => ({
-  cardContainer: (props: { cardHeight: number }) => ({
+  cardContainer: ({ cardHeight }: { cardHeight: number }) => ({
     perspective: "1000px",
-    height: props.cardHeight
+    transition: "height 0.9s",
+    height: cardHeight
   }),
   flipCardInner: {
     position: "relative",
@@ -132,15 +114,7 @@ const useStyles = makeStyles((theme) => ({
     transition: "transform 0.9s",
     transformStyle: "preserve-3d"
   },
-  cardFront: {
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    backfaceVisibility: "hidden"
-  },
+
   cardBack: {
     display: "flex",
     flexDirection: "column",
@@ -156,13 +130,6 @@ const useStyles = makeStyles((theme) => ({
   },
   flipped: {
     transform: "rotateY(180deg)"
-  },
-  iconButtonWrapper: {
-    width: "100%",
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 4
   }
 }));
 
