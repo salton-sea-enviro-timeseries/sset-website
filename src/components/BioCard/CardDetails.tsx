@@ -23,18 +23,12 @@ const CardDetails = ({
 }: AboutUsProps) => {
   const classes = useStyles();
   const refHeight = useRef<HTMLDivElement>(null);
-  const [divHeight, setDivHeight] = useState(0);
 
   useEffect(() => {
-    let height = 0;
-    if (refHeight.current) {
-      height = refHeight.current?.offsetHeight;
-    }
-    setDivHeight(height);
-    if (onHeightChange) {
-      onHeightChange(divHeight);
-    }
-  }, [activeCard, divHeight, onHeightChange]);
+    let height = refHeight.current?.offsetHeight || 0;
+    onHeightChange(height);
+  }, [activeCard, onHeightChange]);
+
   return (
     <Grid
       container
@@ -42,17 +36,10 @@ const CardDetails = ({
       className={classes.gridContainer}
       ref={refHeight}
     >
-      <Grid
-        item
-        sm={12}
-        xs={12}
-        md={3}
-        lg={4}
-        className={classes.contentWrapper}
-      >
+      <Grid item xs={12} md={3} className={classes.contentWrapper}>
         <Avatar className={classes.avatarStyles} alt={"Avatar"} src={image} />
       </Grid>
-      <Grid item xs={12} sm={12} md={9} lg={8} className={classes.bioWrapper}>
+      <Grid item xs={12} md={9} className={classes.bioWrapper}>
         <Box display="flex" flexWrap="wrap" alignItems="center">
           <Typography className={classes.nameTextStyles} variant="h6">
             {name}:
@@ -65,13 +52,13 @@ const CardDetails = ({
         <Box>
           <Typography noWrap={true} gutterBottom={true}>
             <Typography component="span" color="primary">
-              <b>Question:</b>
+              <strong>Question:</strong>
             </Typography>
             {question}
           </Typography>
         </Box>
         <Typography>
-          <b>Answer:</b> {answer}
+          <strong>Answer:</strong> {answer}
         </Typography>
       </Grid>
     </Grid>
@@ -79,7 +66,7 @@ const CardDetails = ({
 };
 export default CardDetails;
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   gridContainer: {
     display: "flex",
     alignItems: "center"
@@ -99,10 +86,10 @@ const useStyles = makeStyles(() => ({
     padding: 16
   },
   nameTextStyles: {
-    fontSize: "large",
+    fontSize: theme.typography.h6.fontSize,
     paddingRight: ".5rem"
   },
   titleTextStyles: {
-    fontSize: "medium"
+    fontSize: theme.typography.subtitle1.fontSize
   }
 }));

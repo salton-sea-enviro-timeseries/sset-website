@@ -11,14 +11,27 @@ import { useAppContext } from "components/AppContext";
 import CardDetails from "components/BioCard/CardDetails";
 import CardFront from "./CardFront";
 import ProfileNav from "./ProfileNav";
-
+interface Response {
+  image: string;
+  fullName: string;
+  community: string;
+  title: string;
+  question: string;
+  answer: string;
+}
 interface Props {
   //TODO fix responses types
-  responses: any[];
+
+  responses: Response[];
   activeCard: boolean;
   handleCardClick: React.MouseEventHandler<HTMLButtonElement>;
   selectedQuestion: string;
 }
+const BACK_CARD_HEIGHT = 350;
+const FRONT_CARD_HEIGHT = 370;
+const NAV_HEIGHT = 70;
+const MIN_HEIGHT = 330;
+
 const AboutCard = ({
   responses,
   activeCard,
@@ -28,8 +41,11 @@ const AboutCard = ({
   // TODO: add contentful
   // @ts-ignore
   const { language } = useAppContext();
-  const [cardHeight, setCardHeight] = useState(350);
+  const [cardHeight, setCardHeight] = useState(BACK_CARD_HEIGHT);
   const [profileIndex, setProfileIndex] = useState(0);
+
+  const response = responses[profileIndex];
+
   const classes = useStyles({ cardHeight });
   const theme = useTheme();
   const matchesBreakpointSmallScreen = useMediaQuery(
@@ -37,39 +53,32 @@ const AboutCard = ({
   );
 
   const handleHeightChange = (height: number) => {
-    const totalCardHeightWithNav = height + 70;
+    const totalCardHeightWithNav = height + NAV_HEIGHT;
     if (activeCard) {
       setCardHeight(() =>
-        height <= 330
-          ? Math.max(totalCardHeightWithNav, 370)
+        height <= MIN_HEIGHT
+          ? Math.max(totalCardHeightWithNav, FRONT_CARD_HEIGHT)
           : totalCardHeightWithNav
       );
     }
     if (!activeCard) {
-      matchesBreakpointSmallScreen ? setCardHeight(370) : setCardHeight(350);
+      matchesBreakpointSmallScreen
+        ? setCardHeight(FRONT_CARD_HEIGHT)
+        : setCardHeight(BACK_CARD_HEIGHT);
     }
   };
   const handleBiosNav: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     const id = event.currentTarget.id;
-    if (id === "prevQuest") {
-      profileIndex === 0
-        ? setProfileIndex(responses.length - 1)
-        : setProfileIndex((prev) => prev - 1);
-    }
-
-    if (id === "nextQuest") {
-      profileIndex === responses.length - 1
-        ? setProfileIndex(0)
-        : setProfileIndex((prev) => prev + 1);
-    }
+    const offset = id === "prevQuest" ? -1 : 1;
+    const newProfileIndex =
+      (profileIndex + offset + responses.length) % responses.length;
+    setProfileIndex(newProfileIndex);
   };
 
   return (
     <div className={classes.cardContainer}>
       <div
-        className={`${classes.flipCardInner} ${
-          activeCard ? classes.flipped : ""
-        }`}
+        className={`${classes.flipCardInner} ${activeCard && classes.flipped}`}
       >
         <CardFront
           handleCardClick={handleCardClick}
@@ -77,19 +86,15 @@ const AboutCard = ({
         />
         <Card className={classes.cardBack} elevation={4}>
           <CardActionArea data-card-id={1} onClick={handleCardClick}>
-            <CardContent
-              style={{
-                padding: 8
-              }}
-            >
+            <CardContent className={classes.cardContent}>
               <CardDetails
-                image={responses[profileIndex].image}
-                name={responses[profileIndex].fullName}
+                image={response.image}
+                name={response.fullName}
                 activeCard={activeCard}
-                community={responses[profileIndex].community}
-                title={responses[profileIndex].title}
-                question={responses[profileIndex].question}
-                answer={responses[profileIndex].answer}
+                community={response.community}
+                title={response.title}
+                question={response.question}
+                answer={response.answer}
                 onHeightChange={handleHeightChange}
               />
             </CardContent>
@@ -107,6 +112,9 @@ const useStyles = makeStyles((theme) => ({
     transition: "height 0.9s",
     height: cardHeight
   }),
+  cardContent: {
+    padding: 8
+  },
   flipCardInner: {
     position: "relative",
     width: "100%",
