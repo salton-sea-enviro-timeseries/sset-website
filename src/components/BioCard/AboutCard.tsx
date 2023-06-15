@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CardContent,
   CardActionArea,
@@ -11,18 +11,18 @@ import { useAppContext } from "components/AppContext";
 import CardDetails from "components/BioCard/CardDetails";
 import CardFront from "./CardFront";
 import ProfileNav from "./ProfileNav";
-interface Response {
+import { debounce } from "lodash";
+
+interface ProfileResponse {
   image: string;
   fullName: string;
   community: string;
   title: string;
   question: string;
-  answer: string;
+  responses: string;
 }
 interface Props {
-  //TODO fix responses types
-
-  responses: Response[];
+  profiles: ProfileResponse[];
   activeCard: boolean;
   handleCardClick: React.MouseEventHandler<HTMLButtonElement>;
   selectedQuestion: string;
@@ -30,31 +30,40 @@ interface Props {
 const BACK_CARD_HEIGHT = 350;
 const FRONT_CARD_HEIGHT = 370;
 const NAV_HEIGHT = 70;
-const MIN_HEIGHT = 330;
+const MIN_HEIGHT = 350;
 
 const AboutCard = ({
-  responses,
+  profiles,
   activeCard,
   handleCardClick,
   selectedQuestion
 }: Props) => {
-  // TODO: add contentful
   // @ts-ignore
   const { language } = useAppContext();
   const [cardHeight, setCardHeight] = useState(BACK_CARD_HEIGHT);
+  const [isWindowResize, setIsWindowResize] = useState(false);
   const [profileIndex, setProfileIndex] = useState(0);
-
-  const response = responses[profileIndex];
-
+  const response = profiles[profileIndex];
   const classes = useStyles({ cardHeight });
   const theme = useTheme();
   const matchesBreakpointSmallScreen = useMediaQuery(
     theme.breakpoints.down("xs")
   );
+  useEffect(() => {
+    const toggleHeightOnWindowResize = debounce(() => {
+      setIsWindowResize((prev) => !prev);
+    }, 800);
 
+    window.addEventListener("resize", toggleHeightOnWindowResize);
+
+    return () => {
+      window.removeEventListener("resize", toggleHeightOnWindowResize);
+      toggleHeightOnWindowResize.cancel();
+    };
+  }, []);
   const handleHeightChange = (height: number) => {
     const totalCardHeightWithNav = height + NAV_HEIGHT;
-    if (activeCard) {
+    if (activeCard || isWindowResize) {
       setCardHeight(() =>
         height <= MIN_HEIGHT
           ? Math.max(totalCardHeightWithNav, FRONT_CARD_HEIGHT)
@@ -71,7 +80,7 @@ const AboutCard = ({
     const id = event.currentTarget.id;
     const offset = id === "prevQuest" ? -1 : 1;
     const newProfileIndex =
-      (profileIndex + offset + responses.length) % responses.length;
+      (profileIndex + offset + profiles.length) % profiles.length;
     setProfileIndex(newProfileIndex);
   };
 
@@ -94,7 +103,7 @@ const AboutCard = ({
                 community={response.community}
                 title={response.title}
                 question={response.question}
-                answer={response.answer}
+                answer={response.responses}
                 onHeightChange={handleHeightChange}
               />
             </CardContent>
