@@ -1,5 +1,6 @@
-import { Avatar, Typography, Grid, makeStyles, Box } from "@material-ui/core";
-import { useEffect, useRef, useState } from "react";
+import { Typography, Grid, makeStyles, Box } from "@material-ui/core";
+import { useEffect, useRef } from "react";
+import Image from "next/image";
 
 type AboutUsProps = {
   image: string;
@@ -25,7 +26,7 @@ const CardDetails = ({
   const refHeight = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    let height = refHeight.current?.offsetHeight || 0;
+    const height = refHeight.current?.offsetHeight || 0;
     onHeightChange(height);
   }, [activeCard, onHeightChange]);
 
@@ -36,10 +37,17 @@ const CardDetails = ({
       className={classes.gridContainer}
       ref={refHeight}
     >
-      <Grid item xs={12} md={3} className={classes.contentWrapper}>
-        <Avatar className={classes.avatarStyles} alt={"Avatar"} src={image} />
+      <Grid item xs={12} className={classes.contentWrapper}>
+        <div className={classes.avatar}>
+          <Image
+            layout="fill"
+            objectFit="cover"
+            src={image ? `https:${image}` : "/avatar-placeholder.png"}
+            alt={"Avatar"}
+          />
+        </div>
       </Grid>
-      <Grid item xs={12} md={9} className={classes.bioWrapper}>
+      <Grid item xs={12} className={classes.bioWrapper}>
         <Box display="flex" flexWrap="wrap" alignItems="center">
           <Typography className={classes.nameTextStyles} variant="h6">
             {name}:
@@ -77,10 +85,13 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     alignItems: "center"
   },
-  avatarStyles: {
-    width: 150,
-    height: 150,
-    marginRight: 2
+
+  avatar: {
+    borderRadius: "50%",
+    overflow: "hidden",
+    position: "relative",
+    width: 275,
+    height: 275
   },
   bioWrapper: {
     padding: 16
