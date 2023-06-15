@@ -16,14 +16,18 @@ import Meta from "components/Meta";
 import Translation from "components/Translation";
 import AboutCard from "components/BioCard/AboutCard";
 import { getCmsContent } from "util/getCmsContent";
-import { InferGetStaticPropsType } from "next";
 import SectionHeader from "components/SectionHeader";
 import { AboutPage, Profile, Question } from "types";
 import { shuffleArray, truncateQuestion } from "utils";
+import { Entry } from "contentful";
 
-const AboutUsPage = ({
-  listOfProfiles
-}: InferGetStaticPropsType<typeof getStaticProps>) => {
+interface AboutUsPageProps {
+  listOfProfiles: Entry<AboutPage> | null;
+}
+interface RawProfile {
+  fields: Profile;
+}
+const AboutUsPage = ({ listOfProfiles }: AboutUsPageProps) => {
   const classes = useStyles();
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down(960));
@@ -46,8 +50,8 @@ const AboutUsPage = ({
   useEffect(() => {
     // Normalize CMS profiles
     let questions: Question;
-    let profiles;
-    if (!Array.isArray(listOfProfiles)) {
+    let profiles: RawProfile[];
+    if (listOfProfiles && "fields" in listOfProfiles) {
       questions = listOfProfiles.fields.questions["en-US"];
       profiles = listOfProfiles.fields.profileList["en-US"]
         .map(
@@ -163,6 +167,28 @@ const AboutUsPage = ({
     </Layout>
   );
 };
+export default AboutUsPage;
+
+export const getStaticProps = async () => {
+  try {
+    const listOfProfiles = await getCmsContent<AboutPage>(
+      "communityScienceProfileList"
+    );
+
+    return {
+      props: {
+        listOfProfiles
+      }
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      props: {
+        listOfProfiles: null
+      }
+    };
+  }
+};
 const useStyles = makeStyles((theme) => ({
   header: {
     boxShadow: `inset 0 -5px 0 ${theme.palette.secondary.light}`
@@ -199,26 +225,3 @@ const useStyles = makeStyles((theme) => ({
     height: "100%"
   }
 }));
-
-export default AboutUsPage;
-
-export const getStaticProps = async () => {
-  try {
-    const listOfProfiles = await getCmsContent<AboutPage>(
-      "communityScienceProfileList"
-    );
-
-    return {
-      props: {
-        listOfProfiles
-      }
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      props: {
-        listOfProfiles: []
-      }
-    };
-  }
-};

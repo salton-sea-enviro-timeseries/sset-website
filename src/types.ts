@@ -298,7 +298,7 @@ export type Profile = {
   responses: string;
   timestamp: string;
   title: string;
-  image: string;
+  image?: string;
 };
 export type Question = {
   [key: string]: string;
