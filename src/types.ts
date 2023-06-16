@@ -292,6 +292,23 @@ type memberInfo = Fields<{
   affiliation: HeroImage;
 }>;
 type MenuList = LocaleDefault<[MenuItem]>;
+export type Profile = {
+  community: string;
+  fullName: string;
+  responses: string;
+  timestamp: string;
+  title: string;
+  image?: string;
+};
+export type Question = {
+  [key: string]: string;
+};
+
+export type AboutPage = {
+  Title: LocaleDefault<string>;
+  profileList: LocaleDefault<Profile[]>;
+  questions: LocaleOption<Question>;
+};
 // ========= Page types ==========================
 export type HomePage = {
   content: LocaleOption<PageContent>;
@@ -318,6 +335,7 @@ export type ContactPage = {
   title: LocaleOption<string>;
   heroImage: HeroImage;
 };
+
 // TODO: Add types to NavLinks for contentful if we decide to retrieve nav content
 // - Issue is we would call getCmsContent 3 times one for index and two for dashbaord
 // - Need to revisit
