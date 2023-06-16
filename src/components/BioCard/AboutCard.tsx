@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   CardContent,
   CardActionArea,
@@ -11,7 +10,9 @@ import { useAppContext } from "components/AppContext";
 import CardDetails from "components/BioCard/CardDetails";
 import CardFront from "./CardFront";
 import ProfileNav from "./ProfileNav";
-import { debounce } from "lodash";
+import useCardHeight from "hooks/useCardHeight";
+import useWindowResize from "hooks/useWindowResize";
+import useProfileNavigation from "hooks/useProfileNavigation";
 
 interface ProfileResponse {
   image: string;
@@ -19,7 +20,7 @@ interface ProfileResponse {
   community: string;
   title: string;
   question: string;
-  responses: string;
+  responses?: string;
 }
 interface Props {
   profiles: ProfileResponse[];
@@ -27,10 +28,6 @@ interface Props {
   handleCardClick: React.MouseEventHandler<HTMLButtonElement>;
   selectedQuestion: string;
 }
-const BACK_CARD_HEIGHT = 350;
-const FRONT_CARD_HEIGHT = 370;
-const NAV_HEIGHT = 70;
-const MIN_HEIGHT = 350;
 
 const AboutCard = ({
   profiles,
@@ -40,49 +37,19 @@ const AboutCard = ({
 }: Props) => {
   // @ts-ignore
   const { language } = useAppContext();
-  const [cardHeight, setCardHeight] = useState(BACK_CARD_HEIGHT);
-  const [isWindowResize, setIsWindowResize] = useState(false);
-  const [profileIndex, setProfileIndex] = useState(0);
-  const response = profiles[profileIndex];
-  const classes = useStyles({ cardHeight });
   const theme = useTheme();
   const matchesBreakpointSmallScreen = useMediaQuery(
     theme.breakpoints.down("xs")
   );
-  useEffect(() => {
-    const toggleHeightOnWindowResize = debounce(() => {
-      setIsWindowResize((prev) => !prev);
-    }, 800);
-
-    window.addEventListener("resize", toggleHeightOnWindowResize);
-
-    return () => {
-      window.removeEventListener("resize", toggleHeightOnWindowResize);
-      toggleHeightOnWindowResize.cancel();
-    };
-  }, []);
-  const handleHeightChange = (height: number) => {
-    const totalCardHeightWithNav = height + NAV_HEIGHT;
-    if (activeCard || isWindowResize) {
-      setCardHeight(() =>
-        height <= MIN_HEIGHT
-          ? Math.max(totalCardHeightWithNav, FRONT_CARD_HEIGHT)
-          : totalCardHeightWithNav
-      );
-    }
-    if (!activeCard) {
-      matchesBreakpointSmallScreen
-        ? setCardHeight(FRONT_CARD_HEIGHT)
-        : setCardHeight(BACK_CARD_HEIGHT);
-    }
-  };
-  const handleBiosNav: React.MouseEventHandler<HTMLButtonElement> = (event) => {
-    const id = event.currentTarget.id;
-    const offset = id === "prevQuest" ? -1 : 1;
-    const newProfileIndex =
-      (profileIndex + offset + profiles.length) % profiles.length;
-    setProfileIndex(newProfileIndex);
-  };
+  const { profileIndex, handleBiosNav } = useProfileNavigation(profiles.length);
+  const hasWindowResized = useWindowResize();
+  const [cardHeight, handleHeightChange] = useCardHeight(
+    activeCard,
+    hasWindowResized,
+    matchesBreakpointSmallScreen
+  );
+  const response = profiles[profileIndex];
+  const classes = useStyles({ cardHeight });
 
   return (
     <div className={classes.cardContainer}>

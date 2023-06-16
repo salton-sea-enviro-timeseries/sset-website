@@ -5,7 +5,7 @@ import Image from "next/image";
 type AboutUsProps = {
   image: string;
   name: string;
-  answer: string;
+  answer?: string;
   title: string;
   community: string;
   question: string;
