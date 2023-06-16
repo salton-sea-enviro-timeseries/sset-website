@@ -30,7 +30,7 @@ const renderDocument = (document: Document) => {
 };
 // TODO: Retrieve content from contentful for tutorial video translations
 const Home = ({
-  mediaData,
+  newsMediaData,
   homepageContent
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const classes = useStyles();
@@ -53,7 +53,7 @@ const Home = ({
   const heroImage = heroContentBase.heroImage["en-US"].fields.file["en-US"].url;
   const buttonText = heroContentBase.buttonText;
   const heroSubTitle = heroContentBase.subTitle;
-
+  console.log("homepage data", homepageContent);
   const sectionContent = homepageContent.fields.content["en-US"].map(
     ({ fields }, index) => {
       const { body, title } = fields;
@@ -69,7 +69,7 @@ const Home = ({
           }
           section={index}
           title={title[locale as keyof LocaleOption<NestedObjBodyText>]}
-          mediaObjects={body ? undefined : mediaData}
+          newsMediaData={body ? undefined : newsMediaData}
         />
       );
     }
@@ -122,11 +122,11 @@ export const getStaticProps = async () => {
     "https://ca.audubon.org/news/valley-voice-salton-sea-communities-needed-relief-long-coronavirus"
   ];
 
-  const mediaData = await scrape(urls);
+  const newsMediaData = await scrape(urls);
   const homepageContent = await getCmsContent<HomePage>("homePage");
   return {
     props: {
-      mediaData,
+      newsMediaData,
       homepageContent
     }
   };

@@ -11,12 +11,12 @@ import { MediaObject } from "types";
 // TODO: add links to definitions
 // or add a glossary section ???
 type Props = {
-  mediaObjects?: MediaObject[];
+  newsMediaData?: MediaObject[];
   bodyText: any;
   title: string;
   section: number;
 };
-const PageSection = ({ bodyText, title, mediaObjects, section }: Props) => {
+const PageSection = ({ bodyText, title, newsMediaData, section }: Props) => {
   const classes = useStyles();
 
   return (
@@ -37,9 +37,9 @@ const PageSection = ({ bodyText, title, mediaObjects, section }: Props) => {
             justifyContent="center"
             size={4}
           />
-          {mediaObjects ? (
+          {newsMediaData ? (
             <>
-              <FeaturedNewsFeed mediaObjects={mediaObjects} />
+              <FeaturedNewsFeed newsMediaData={newsMediaData} />
               <Box mt="1em">
                 <Typography component="p" align="center">
                   *Many of these articles use highly negative language such as
