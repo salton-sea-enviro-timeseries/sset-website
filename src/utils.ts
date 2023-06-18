@@ -81,3 +81,24 @@ export const fetcher = async (url: string) => {
 
   return res.json();
 };
+
+export const shuffleArray = (array: any[]) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const randomIndex = Math.floor(Math.random() * (i + 1));
+    [array[i], array[randomIndex]] = [array[randomIndex], array[i]];
+  }
+  return array;
+};
+
+export const truncateQuestion = (
+  question: string,
+  breakpointMatch: boolean
+) => {
+  if (breakpointMatch) {
+    return question.slice(0, 30) + "...";
+  }
+  if (question.length <= 80) {
+    return question;
+  }
+  return question.slice(0, 80) + "...";
+};

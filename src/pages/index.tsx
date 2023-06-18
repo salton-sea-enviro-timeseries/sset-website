@@ -94,7 +94,7 @@ const Home = ({
             <Button
               className={classes.tutorialButton}
               variant="text"
-              // size="small"
+              size="large"
               onClick={handleOpen}
             >
               {locale === "en-US" ? "Watch Tutorial" : "Ver El Tutorial"}
@@ -143,11 +143,11 @@ const useStyles = makeStyles((theme) => ({
       position: "absolute",
       width: "100%",
       height: 3,
-      backgroundColor: theme.palette.primary.light,
+      backgroundColor: "red",
       bottom: 0,
       left: 0,
       transformOrigin: "center",
-      transform: "scaleX(.10)",
+      transform: "scaleX(.15)",
       transition: "transform .4s ease-in-out"
     },
     "&:hover::after": {
