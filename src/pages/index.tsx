@@ -25,7 +25,6 @@ const renderDocument = (document: Document) => {
         }, []);
     }
   };
-
   return documentToReactComponents(document, options);
 };
 // TODO: Retrieve content from contentful for tutorial video translations
@@ -46,7 +45,6 @@ const Home = ({
   const handleClose = () => {
     setOpen(false);
   };
-
   //================== cms start ==========================
   const heroContentBase = homepageContent.fields.hero["en-US"].fields;
   const heroTitle = heroContentBase.title;
