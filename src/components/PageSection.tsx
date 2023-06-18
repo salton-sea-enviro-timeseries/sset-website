@@ -7,7 +7,7 @@ import Section from "components/Section";
 import SectionHeader from "components/SectionHeader";
 import { Typography } from "@material-ui/core";
 import { MediaObject } from "types";
-
+import Image from "next/image";
 // TODO: add links to definitions
 // or add a glossary section ???
 type Props = {
@@ -15,8 +15,15 @@ type Props = {
   bodyText: any;
   title: string;
   section: number;
+  images?: string[];
 };
-const PageSection = ({ bodyText, title, newsMediaData, section }: Props) => {
+const PageSection = ({
+  bodyText,
+  title,
+  newsMediaData,
+  section,
+  images
+}: Props) => {
   const classes = useStyles();
 
   return (
@@ -56,6 +63,20 @@ const PageSection = ({ bodyText, title, newsMediaData, section }: Props) => {
           ) : (
             <Typography component="div">{bodyText}</Typography>
           )}
+          {images && (
+            <Box className={classes.gradContainer}>
+              {images.map((item, index) => (
+                <div key={index} className={classes.imageWrapper}>
+                  <Image
+                    src={`https:${item}`}
+                    alt={"grad image"}
+                    layout="fill"
+                    objectFit="contain"
+                  />
+                </div>
+              ))}
+            </Box>
+          )}
         </Box>
       </Container>
     </Section>
@@ -67,6 +88,18 @@ const useStyles = makeStyles((theme) => ({
   },
   section: {
     "&:nth-child(odd)": { backgroundColor: colors.teal[50] }
+  },
+  gradContainer: {
+    display: "flex",
+    justifyContent: "space-evenly",
+
+    flexWrap: "wrap"
+  },
+  imageWrapper: {
+    height: 600,
+    width: 400,
+    position: "relative",
+    marginTop: "1em"
   }
 }));
 export default PageSection;

@@ -309,11 +309,16 @@ export type AboutPage = {
   profileList: LocaleDefault<Profile[]>;
   questions: LocaleOption<Question>;
 };
+type HomeGradImage = Fields<{
+  file: LocaleDefault<{ url: string }>;
+  title: LocaleDefault<string>;
+}>;
 // ========= Page types ==========================
 export type HomePage = {
   content: LocaleOption<PageContent>;
   hero: HeroContent;
   label: LocaleDefault<string>;
+  media: LocaleDefault<HomeGradImage[]>;
   metadata: Metadata;
 };
 

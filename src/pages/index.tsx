@@ -53,7 +53,11 @@ const Home = ({
   const heroImage = heroContentBase.heroImage["en-US"].fields.file["en-US"].url;
   const buttonText = heroContentBase.buttonText;
   const heroSubTitle = heroContentBase.subTitle;
-  console.log("homepage data", homepageContent);
+  const gradImages = homepageContent.fields.media["en-US"].map(
+    ({ fields: { file } }) => {
+      return file["en-US"].url;
+    }
+  );
   const sectionContent = homepageContent.fields.content["en-US"].map(
     ({ fields }, index) => {
       const { body, title } = fields;
@@ -102,9 +106,14 @@ const Home = ({
           </>
         }
       />
-
       <TutorialModal open={open} onClose={handleClose} locale={locale} />
       {sectionContent}
+      <PageSection
+        bodyText={null}
+        section={homepageContent.fields.content["en-US"].length}
+        title={"Congratulations Recent Grads"}
+        images={gradImages}
+      />
     </Layout>
   );
 };
