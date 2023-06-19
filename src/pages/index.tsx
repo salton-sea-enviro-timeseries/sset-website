@@ -25,12 +25,11 @@ const renderDocument = (document: Document) => {
         }, []);
     }
   };
-
   return documentToReactComponents(document, options);
 };
 // TODO: Retrieve content from contentful for tutorial video translations
 const Home = ({
-  mediaData,
+  newsMediaData,
   homepageContent
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const classes = useStyles();
@@ -46,14 +45,17 @@ const Home = ({
   const handleClose = () => {
     setOpen(false);
   };
-
   //================== cms start ==========================
   const heroContentBase = homepageContent.fields.hero["en-US"].fields;
   const heroTitle = heroContentBase.title;
   const heroImage = heroContentBase.heroImage["en-US"].fields.file["en-US"].url;
   const buttonText = heroContentBase.buttonText;
   const heroSubTitle = heroContentBase.subTitle;
-
+  const gradImages = homepageContent.fields.media["en-US"].map(
+    ({ fields: { file } }) => {
+      return file["en-US"].url;
+    }
+  );
   const sectionContent = homepageContent.fields.content["en-US"].map(
     ({ fields }, index) => {
       const { body, title } = fields;
@@ -69,7 +71,7 @@ const Home = ({
           }
           section={index}
           title={title[locale as keyof LocaleOption<NestedObjBodyText>]}
-          mediaObjects={body ? undefined : mediaData}
+          newsMediaData={body ? undefined : newsMediaData}
         />
       );
     }
@@ -102,9 +104,14 @@ const Home = ({
           </>
         }
       />
-
       <TutorialModal open={open} onClose={handleClose} locale={locale} />
       {sectionContent}
+      <PageSection
+        bodyText={null}
+        section={homepageContent.fields.content["en-US"].length}
+        title={"Congratulations Recent Grads"}
+        images={gradImages}
+      />
     </Layout>
   );
 };
@@ -122,11 +129,11 @@ export const getStaticProps = async () => {
     "https://ca.audubon.org/news/valley-voice-salton-sea-communities-needed-relief-long-coronavirus"
   ];
 
-  const mediaData = await scrape(urls);
+  const newsMediaData = await scrape(urls);
   const homepageContent = await getCmsContent<HomePage>("homePage");
   return {
     props: {
-      mediaData,
+      newsMediaData,
       homepageContent
     }
   };

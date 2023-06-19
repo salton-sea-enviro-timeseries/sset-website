@@ -4,13 +4,13 @@ import NewsCard from "./NewsCard";
 import VideoCard from "./VideoCard";
 
 interface FeaturedNewsFeedProps {
-  mediaObjects: MediaObject[];
+  newsMediaData: MediaObject[];
 }
 
-const FeaturedNewsFeed = ({ mediaObjects }: FeaturedNewsFeedProps) => {
+const FeaturedNewsFeed = ({ newsMediaData }: FeaturedNewsFeedProps) => {
   return (
     <Grid container spacing={2}>
-      {mediaObjects.map((media: MediaObject) => (
+      {newsMediaData.map((media: MediaObject) => (
         <Grid item xs={12} sm={6} md={4} key={media.link}>
           <NewsCard media={media} />
         </Grid>
