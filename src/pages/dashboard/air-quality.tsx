@@ -1,8 +1,7 @@
 import { useMemo } from "react";
-import { Typography, Tooltip, makeStyles } from "@material-ui/core";
 import useSWR from "swr";
+import { Typography, Tooltip, makeStyles } from "@material-ui/core";
 import { Marker } from "react-map-gl";
-import AirQualitySection from "components/AirQualitySection";
 import WithLoading from "components/WithLoading";
 import Meta from "components/Meta";
 import DashboardLayout from "components/DashboardLayout";
@@ -10,7 +9,7 @@ import { fetcher } from "utils";
 import { MapPinIcon } from "../../constants";
 import Map from "components/Dashboard/Map";
 import { Device } from "lib/aqmd";
-import AirQualityPlots from "components/AirQualityPlots";
+import AirQualityGroupDeviceDataLogic from "components/AirQualityGroupDeviceDataLogic";
 
 const PIN_SIZE = 20;
 async function multiFetcher(...urls: string[]) {
@@ -68,7 +67,6 @@ const AirQuality = () => {
       };
     });
   }, [data]);
-
   const isLoading = !data.length && !error;
   if (error) return <Typography>Error Loading data</Typography>;
   return (
@@ -77,8 +75,7 @@ const AirQuality = () => {
       <Typography gutterBottom component="h1" variant="h4">
         Air Quality
       </Typography>
-      <AirQualitySection devices={airQualityDevices} />
-      <AirQualityPlots devices={airQualityDevices} />
+      <AirQualityGroupDeviceDataLogic devices={airQualityDevices} />
       <WithLoading isLoading={isLoading} variant="rect" height="500px">
         {data && (
           <Map

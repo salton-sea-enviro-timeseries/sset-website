@@ -16,15 +16,9 @@ import {
   ChartData,
   Filler
 } from "chart.js";
-import {
-  AirQualityDevices,
-  AirQualityParameter,
-  CommonDeviceType
-} from "types";
+import { AirQualityParameter, CommonDeviceType } from "types";
 import "chartjs-adapter-date-fns";
 import { Line } from "react-chartjs-2";
-import determineSourceOfData from "lib/determineSourceOfData";
-import useSWR from "swr";
 import {
   FormControl,
   Select,
@@ -37,8 +31,6 @@ import {
 } from "@material-ui/core";
 import LoadingChart from "./LoadingChart";
 import { calcParamAQI } from "util/calcParamAQI";
-import { fetchMultipleDeviceDetails } from "util/fetchMultipleDeviceDetails";
-import { mapDeviceNames } from "util/mapDeviceNames";
 import { filterHourlyData } from "../util/filterHourlyData";
 import { AirQualityParameterMapping } from "types";
 
@@ -61,7 +53,6 @@ type DeviceRawData = {
   name: string;
   data: CommonDeviceType[];
 };
-type DataType = CommonDeviceType[];
 type ParamAQIStandardMap = {
   O3: number;
   PM2_5: number;
@@ -245,43 +236,21 @@ const options = (selectedParam: string): ChartOptions<"line"> => {
     }
   };
 };
-const AirQualityPlots = ({ devices }: { devices: AirQualityDevices[] }) => {
+const AirQualityPlots = ({
+  normalizedData,
+  isLoading
+}: {
+  normalizedData: Record<string, DeviceRawData>;
+  isLoading: boolean;
+}) => {
   const classes = useStyles();
   const [selectedParam, setSelectedParam] = useState("PM10");
-  const sensorUrls = devices.map(({ sensorId }) => {
-    const sensorInfoArray = sensorId.split(":");
-    const sensorIdList = determineSourceOfData(sensorInfoArray[0]);
-    return sensorIdList;
-  });
-  const { data: sensorData = [], error } = useSWR<DataType>(
-    sensorUrls,
-    fetchMultipleDeviceDetails
-  );
   const handleTitleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setSelectedParam(event.target.value as string);
   };
-  // group all data based on sensor ID
-  const groupedData = useMemo(() => {
-    return sensorData.reduce(
-      (sensors: Record<string, DeviceRawData>, curr: CommonDeviceType) => {
-        const id = curr.DeviceID || curr.sn || curr.DeviceId;
-        if (!sensors[id]) {
-          sensors[id] = {
-            id,
-            name: mapDeviceNames(id),
-            data: [{ ...curr }]
-          };
-        } else {
-          sensors[id].data.push({ ...curr });
-        }
-        return sensors;
-      },
-      {}
-    );
-  }, [sensorData]);
   // dataset used for line chart
   const datasets = useMemo(() => {
-    return Object.values(groupedData).map(({ data, name, id }, index) => ({
+    return Object.values(normalizedData).map(({ data, name, id }, index) => ({
       label: name,
       data:
         id === "MOD-PM-00404"
@@ -306,13 +275,13 @@ const AirQualityPlots = ({ devices }: { devices: AirQualityDevices[] }) => {
       pointHitRadius: 10,
       yAxisID: "y" as const
     }));
-  }, [groupedData]);
+  }, [normalizedData]);
 
-  const isLoading = !Object.keys(sensorData).length && !error;
   // dataset as an object for chart prop
   const chartData = {
     datasets
   };
+  //  TODO Update chart so that it doesnt show if param value is undefined
   return (
     <>
       <FormControl className={classes.formControl}>
