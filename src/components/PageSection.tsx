@@ -17,7 +17,7 @@ type Props = {
   section: number;
   images?: string[];
 };
-const PageSection = ({
+const PageSection: React.FC<Props> = ({
   bodyText,
   title,
   newsMediaData,

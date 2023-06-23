@@ -6,10 +6,25 @@ import VideoCard from "./VideoCard";
 interface FeaturedNewsFeedProps {
   newsMediaData: MediaObject[];
 }
-
+const SWBRCB_DESCRIPTION =
+  "The annual California State Waterboard Resources Control Board workshop was held on May 16th and May 17th of 2023 at the Imperial Valley College. Our very own community scientists (Cruz Marquez and Daniel Ramirez) and Dr. Ryan Sinclair were asked to be part of two panel discussions that talked about water quality and community voices and projects. These two topics were important to present to the public, the state waterboard, and the broader public as it leads to more visibility about the challenges the Salton Sea is facing and can lead to a common understanding about the possible solutions the state can act upon. We encourage you to watch both panels that were part of a larger range of topics.";
 const FeaturedNewsFeed = ({ newsMediaData }: FeaturedNewsFeedProps) => {
   return (
     <Grid container spacing={2}>
+      <Grid item xs={12} sm={6} md={4}>
+        <VideoCard
+          src="https://www.youtube.com/embed/t116cFHE1YE?start=6924&end=8940"
+          title="Ryan Sinclair- SWBRCB"
+          description={`${SWBRCB_DESCRIPTION} Dr. Ryan Sinclair’s portion is from about 1:55:45-2:29:00 `}
+        />
+      </Grid>
+      <Grid item xs={12} sm={6} md={4}>
+        <VideoCard
+          src="https://www.youtube.com/embed/t116cFHE1YE?start=8973&end=11505"
+          title="Community Voices- SWBRCB"
+          description={`${SWBRCB_DESCRIPTION} Community voices and projects panel is from about 2:29:30-3:11:45.`}
+        />
+      </Grid>
       {newsMediaData.map((media: MediaObject) => (
         <Grid item xs={12} sm={6} md={4} key={media.link}>
           <NewsCard media={media} />

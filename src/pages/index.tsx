@@ -35,7 +35,7 @@ const Home = ({
   const classes = useStyles();
   // @ts-ignore
   const { language } = useAppContext();
-  const locale = language === "en" ? "en-US" : "es";
+  const currentLocale = language === "en" ? "en-US" : "es";
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -46,17 +46,18 @@ const Home = ({
     setOpen(false);
   };
   //================== cms start ==========================
-  const heroContentBase = homepageContent.fields.hero["en-US"].fields;
-  const heroTitle = heroContentBase.title;
-  const heroImage = heroContentBase.heroImage["en-US"].fields.file["en-US"].url;
-  const buttonText = heroContentBase.buttonText;
-  const heroSubTitle = heroContentBase.subTitle;
-  const gradImages = homepageContent.fields.media["en-US"].map(
+  const heroContentBase = homepageContent?.fields.hero["en-US"].fields;
+  const heroTitle = heroContentBase?.title;
+  const heroImage =
+    heroContentBase?.heroImage["en-US"].fields.file["en-US"].url;
+  const buttonText = heroContentBase?.buttonText;
+  const heroSubTitle = heroContentBase?.subTitle;
+  const gradImages = homepageContent?.fields.media["en-US"].map(
     ({ fields: { file } }) => {
       return file["en-US"].url;
     }
   );
-  const sectionContent = homepageContent.fields.content["en-US"].map(
+  const sectionContent = homepageContent?.fields.content["en-US"].map(
     ({ fields }, index) => {
       const { body, title } = fields;
       return (
@@ -65,12 +66,12 @@ const Home = ({
           bodyText={
             body
               ? renderDocument(
-                  body[locale as keyof LocaleOption<NestedObjBodyText>]
+                  body[currentLocale as keyof LocaleOption<NestedObjBodyText>]
                 )
               : null
           }
           section={index}
-          title={title[locale as keyof LocaleOption<NestedObjBodyText>]}
+          title={title[currentLocale as keyof LocaleOption<NestedObjBodyText>]}
           newsMediaData={body ? undefined : newsMediaData}
         />
       );
@@ -84,13 +85,13 @@ const Home = ({
         size="large"
         bgImage={heroImage}
         bgImageOpacity={0.75}
-        title={heroTitle[locale]}
-        subtitle={heroSubTitle[locale]}
+        title={heroTitle && heroTitle[currentLocale]}
+        subtitle={heroSubTitle && heroSubTitle[currentLocale]}
         cta={
           <>
             <Link href="/dashboard/water-quality" passHref>
               <Button variant="contained" color="primary">
-                {buttonText[locale]}
+                {buttonText && buttonText[currentLocale]}
               </Button>
             </Link>
             <Button
@@ -99,16 +100,16 @@ const Home = ({
               size="large"
               onClick={handleOpen}
             >
-              {locale === "en-US" ? "Watch Tutorial" : "Ver El Tutorial"}
+              {currentLocale === "en-US" ? "Watch Tutorial" : "Ver El Tutorial"}
             </Button>
           </>
         }
       />
-      <TutorialModal open={open} onClose={handleClose} locale={locale} />
+      <TutorialModal open={open} onClose={handleClose} locale={currentLocale} />
       {sectionContent}
       <PageSection
         bodyText={null}
-        section={homepageContent.fields.content["en-US"].length}
+        section={homepageContent?.fields.content["en-US"].length ?? 0}
         title={"Congratulations Recent Grads"}
         images={gradImages}
       />
@@ -128,9 +129,20 @@ export const getStaticProps = async () => {
     "https://ca.audubon.org/news/it-takes-village-dr-ryan-sinclair-and-community-science-salton-sea",
     "https://ca.audubon.org/news/valley-voice-salton-sea-communities-needed-relief-long-coronavirus"
   ];
-
-  const newsMediaData = await scrape(urls);
-  const homepageContent = await getCmsContent<HomePage>("homePage");
+  let newsMediaData;
+  let homepageContent;
+  try {
+    newsMediaData = await scrape(urls);
+  } catch (error) {
+    console.error("Error while scraping URLs:", error);
+    throw new Error(`An unexpected error has ocurred Error:${error}`);
+  }
+  // const newsMediaData = await scrape(urls);
+  try {
+    homepageContent = await getCmsContent<HomePage>("homePage");
+  } catch (error) {
+    console.error("Error while fetching homepage content: ", error);
+  }
   return {
     props: {
       newsMediaData,
