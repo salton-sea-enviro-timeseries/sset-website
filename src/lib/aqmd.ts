@@ -120,9 +120,9 @@ export async function getDeviceData({ sensorId }: { sensorId: string }) {
     const requestUrl = decodeURIComponent(url.toString()).replace(/\+/g, "%20");
 
     const data = await (await fetch(requestUrl, options)).json();
-    // The last item in the array is the most recent data
+
     return data.data.length === 0
-      ? { DeviceId: sensorId, data: ["Data not available"] }
+      ? { DeviceId: sensorId, data: [] }
       : data.data;
   } catch (err) {
     console.log(err);

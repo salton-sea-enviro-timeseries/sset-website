@@ -10,13 +10,20 @@ const AirQualityParamBox = ({
   aqiStandard
 }: {
   parameter: string;
-  unitOfMeasure: RawDeviceAverageDataResponse[keyof RawDeviceAverageDataResponse];
-  parameterValue: number;
+  unitOfMeasure?: RawDeviceAverageDataResponse[keyof RawDeviceAverageDataResponse];
+  parameterValue?: number | string;
   aqiStandard: number | null;
 }) => {
   const classes = useStyles();
-  const calculateAQI = (parameterValue: number, aqiStandard: number) => {
-    return Math.round((parameterValue / aqiStandard) * 100);
+  const calculateAQI = (
+    parameterValue: number | string,
+    aqiStandard: number
+  ) => {
+    if (typeof parameterValue === "number") {
+      return Math.round((parameterValue / aqiStandard) * 100);
+    } else {
+      return null;
+    }
   };
   if (parameterValue === undefined) return null;
   if (!aqiStandard)
@@ -51,25 +58,25 @@ const AirQualityParamBox = ({
     }
     return aqiIndex;
   };
-
   const aqi = calculateAQI(parameterValue, aqiStandard);
-  const aqiIndex = findAqiIndex(aqi);
-
+  const aqiIndex = aqi && findAqiIndex(aqi);
   return (
     <Box flex={1} border={`1px solid ${colors.grey[300]}`} p={1} m={0.5}>
       <Typography variant="h6" component="p">
-        {parameter} &bull; {parameterValue} {unitOfMeasure}
+        {parameter} &bull; {parameterValue ?? "N/A"} {unitOfMeasure}
       </Typography>
-      <Box display="flex" alignItems="center">
-        <svg className={classes.aqIndicator}>
-          <circle fill={AirQualityMapping[findAqiIndex(aqi)].color} />
-        </svg>
-        <Typography component="span">{aqi} </Typography>
-        <span className={classes.bullet}>&bull;</span>
-        <Typography component="span" noWrap>
-          {AirQualityIndex[aqiIndex]}
-        </Typography>
-      </Box>
+      {aqiIndex && (
+        <Box display="flex" alignItems="center">
+          <svg className={classes.aqIndicator}>
+            <circle fill={AirQualityMapping[findAqiIndex(aqi)].color} />
+          </svg>
+          <Typography component="span">{aqi} </Typography>
+          <span className={classes.bullet}>&bull;</span>
+          <Typography component="span" noWrap>
+            {AirQualityIndex[aqiIndex]}
+          </Typography>
+        </Box>
+      )}
     </Box>
   );
 };
