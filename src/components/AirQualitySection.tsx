@@ -26,7 +26,6 @@ type DeviceRawData = {
   name: string;
   data: CommonDeviceType[];
 };
-
 const paramAQIStandardMap: ParamAQIStandardMap = {
   O3: 70,
   "PM2.5": 35,
@@ -64,7 +63,6 @@ const AirQualitySection = ({
   if (isLoading) {
     return (
       <Box pb={5}>
-        {}
         {/* selector start */}
         <Box pr={0.5} pb={1}>
           <Skeleton height={50} width="100%" />
@@ -84,7 +82,10 @@ const AirQualitySection = ({
   }
   const singleDeviceData =
     normalizedData && normalizedData[selectedSensor].data;
-  if (error) console.error(error);
+  if (error) {
+    console.error(error);
+    return <Typography>Error loading data</Typography>;
+  }
   const handleChangeSensor = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsLoadingSensor(true);
     setSelectedSensor(event.target.value);
@@ -92,7 +93,6 @@ const AirQualitySection = ({
       setIsLoadingSensor(false);
     }, 300);
   };
-  if (error) return <Typography>Error loading data</Typography>;
   const recentDeviceData = inspectData(singleDeviceData);
 
   let dateTime;
