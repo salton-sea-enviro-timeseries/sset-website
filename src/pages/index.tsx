@@ -127,7 +127,8 @@ export const getStaticProps = async () => {
     "https://grist.org/health/how-californias-salton-sea-went-from-vacation-destination-to-toxic-nightmare/",
     "https://www.theguardian.com/us-news/2021/jul/23/salton-sea-california-lake-dust-drought-climate",
     "https://ca.audubon.org/news/it-takes-village-dr-ryan-sinclair-and-community-science-salton-sea",
-    "https://ca.audubon.org/news/valley-voice-salton-sea-communities-needed-relief-long-coronavirus"
+    "https://ca.audubon.org/news/valley-voice-salton-sea-communities-needed-relief-long-coronavirus",
+    "https://www.hcn.org/issues/55.6/south-water-in-search-of-answers-at-the-salton-sea?utm_medium=email&utm_source=govdelivery"
   ];
   let newsMediaData;
   let homepageContent;
