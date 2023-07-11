@@ -300,6 +300,7 @@ export type Profile = {
   title: string;
   image?: string;
 };
+
 export type Question = {
   [key: string]: string;
 };
@@ -309,7 +310,7 @@ export type AboutPage = {
   profileList: LocaleDefault<Profile[]>;
   questions: LocaleOption<Question>;
 };
-type HomeGradImage = Fields<{
+type MediaFile = Fields<{
   file: LocaleDefault<{ url: string }>;
   title: LocaleDefault<string>;
 }>;
@@ -318,7 +319,7 @@ export type HomePage = {
   content: LocaleOption<PageContent>;
   hero: HeroContent;
   label: LocaleDefault<string>;
-  media: LocaleDefault<HomeGradImage[]>;
+  media: LocaleDefault<MediaFile[]>;
   metadata: Metadata;
 };
 
@@ -329,6 +330,7 @@ export type DashboardPage = {
   map_caption_main: LocaleOption<string>;
   map_caption_secondary: LocaleOption<string>;
   menuList: MenuList;
+  readMe: LocaleOption<MediaFile>;
 };
 
 export type ContactPage = {
