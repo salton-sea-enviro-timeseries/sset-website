@@ -1,29 +1,29 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   Box,
-  Container,
   Grid,
   MenuItem,
   TextField,
   Typography,
   makeStyles,
   Tooltip,
-  Link,
   Button
 } from "@material-ui/core";
 import { groupBy } from "lodash";
 import { Marker } from "react-map-gl";
-import { Parameter, ParameterMapping, Data, SiteData } from "types";
+import { Parameter, Data, SiteData, DashboardPage } from "types";
 import { colorScale, getAverage, getColorFromScale, getRange } from "utils";
 import DashboardLayout from "components/DashboardLayout";
 import Map from "components/Dashboard/Map";
 import Table from "components/Dashboard/Table";
 import DownloadDataButtonsSection from "components/DownloadDataButtonsSection";
 import WithLoading from "components/WithLoading";
-import Translation from "components/Translation";
 import Meta from "components/Meta";
 import ContinuousColorLegend from "components/ContinuousColorLegend";
 import { MapPinIcon } from "../../constants";
+import { getCmsContent } from "util/getCmsContent";
+import { InferGetStaticPropsType } from "next";
+import { useAppContext } from "components/AppContext";
 
 const PIN_SIZE = 20;
 
@@ -58,21 +58,46 @@ const getMapData = (data: SiteData[]) => {
   }, {} as Data);
   return mapData;
 };
-
-const WaterQuality = () => {
+const WaterQuality = ({
+  waterPageContent
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
   const classes = useStyles();
-
+  // @ts-ignore
+  const { language } = useAppContext();
   const [parameter, setParameter] = useState<Parameter>(Parameter.Chlorophyll);
   const [activeRange, setActiveRange] = useState<ReturnType<typeof getRange>>({
     min: 0,
     max: 0,
     mid: 0
   });
-
   const [isDataLoading, setIsDataLoading] = useState(false);
   const [tableData, setTableData] = useState<SiteData[]>([]);
   const [mapData, setMapData] = useState<Data | undefined>();
 
+  // ============================ CMS const start ==========================
+  const locale = language === "en" ? "en-US" : "es";
+  const cmsField = waterPageContent?.fields;
+  const mapSecondaryCaption = cmsField?.map_caption_secondary[locale];
+  const parameterList = cmsField?.menuList["en-US"].map(({ fields }) => {
+    return fields;
+  });
+  const downloadNutrientsButtonTxt =
+    cmsField?.download_nutrients_data_button[locale];
+  const downloadSenorButtonTxt = cmsField?.download_sensor_data_button[locale];
+  const downloadReadMERef = cmsField?.readMe["en-US"].fields.file["en-US"].url;
+  const parameterFilter = useMemo(
+    () =>
+      parameterList?.filter(({ paramKey, unit }) => {
+        if (paramKey["en-US"] === parameter) {
+          return unit["en-US"];
+        }
+      }),
+    [parameterList, parameter]
+  );
+  const mapCaptionMain =
+    parameterFilter &&
+    parameterFilter[0].description[locale].content[0].content[0].value;
+  //============================= CMS const end ============================
   useEffect(() => {
     if (mapData) {
       setActiveRange(getRange(parameter as keyof SiteData, mapData));
@@ -143,17 +168,12 @@ const WaterQuality = () => {
                     value={parameter}
                     onChange={handleChangeParameter}
                   >
-                    {Object.keys(Parameter).map((key) => (
+                    {parameterList?.map(({ name, paramKey }) => (
                       <MenuItem
-                        key={Parameter[key as keyof typeof Parameter]}
-                        value={Parameter[key as keyof typeof Parameter]}
+                        key={paramKey["en-US"]}
+                        value={paramKey["en-US"]}
                       >
-                        <Translation
-                          component="span"
-                          path={`parameters.language.parameters.${
-                            Parameter[key as keyof typeof Parameter]
-                          }.name`}
-                        />
+                        {name[locale]}
                       </MenuItem>
                     ))}
                   </TextField>
@@ -163,10 +183,9 @@ const WaterQuality = () => {
             <Grid item xs md={6}>
               <WithLoading variant="rect" height={40} isLoading={isDataLoading}>
                 <Box pl={0.5}>
-                  <Translation
-                    variant="caption"
-                    path={`parameters.language.parameters.${parameter}.unit`}
-                  />
+                  <Typography variant="caption">
+                    {parameterFilter && parameterFilter[0].unit["en-US"]}
+                  </Typography>
                   {activeRange.min !== undefined &&
                     activeRange.mid !== undefined &&
                     activeRange.max !== undefined && (
@@ -194,13 +213,18 @@ const WaterQuality = () => {
                 }}
                 alignItems="center"
               >
-                <DownloadDataButtonsSection isLoading={isDataLoading} />
+                <DownloadDataButtonsSection
+                  isLoading={isDataLoading}
+                  nutrientButtonText={downloadNutrientsButtonTxt}
+                  sensorButtonText={downloadSenorButtonTxt}
+                  readMeSrc={downloadReadMERef ?? ""}
+                />
               </Box>
             </Grid>
           </Grid>
           <Grid item xs={12}>
             <WithLoading isLoading={isDataLoading} width="100%">
-              <Translation
+              <Typography
                 variant="caption"
                 component="div"
                 style={{
@@ -208,20 +232,22 @@ const WaterQuality = () => {
                   alignItems: "center",
                   paddingBottom: "10px"
                 }}
-                path={`parameters.language.parameters.${parameter}.description`}
-              />
+              >
+                {mapCaptionMain}
+              </Typography>
             </WithLoading>
           </Grid>
           <Grid item xs={12}>
             <WithLoading isLoading={isDataLoading} width="100%">
-              <Translation
+              <Typography
                 variant="caption"
                 component="p"
-                path="pages.dashboard.language.content.map_caption_secondary"
                 style={{
                   fontWeight: "bold"
                 }}
-              />
+              >
+                {mapSecondaryCaption}
+              </Typography>
             </WithLoading>
           </Grid>
         </Grid>
@@ -342,7 +368,22 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center"
   }
 }));
-
+export const getStaticProps = async () => {
+  let waterPageContent;
+  try {
+    waterPageContent = await getCmsContent<DashboardPage>("dashboard");
+  } catch (error) {
+    console.error(
+      "Error while fetching water quality dashboard content: ",
+      error
+    );
+  }
+  return {
+    props: {
+      waterPageContent
+    }
+  };
+};
 WaterQuality.getLayout = function getLayout(page: React.ReactElement) {
   return <DashboardLayout>{page}</DashboardLayout>;
 };
