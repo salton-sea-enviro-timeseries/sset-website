@@ -68,52 +68,50 @@ const SubscriptionForm = () => {
         SIGN UP TO RECEIVE EMAIL AND ALERTS ON UP COMING COMMUNITY UPDATES,
         EVENTS, AND WAYS YOU CAN HELP CONTRIBUTE.
       </Typography>
-      <Box display="flex" flexDirection="column">
-        <Box className={classes.inputNameEmailWrapper}>
-          <TextField
-            error={formError}
-            id="first-name"
-            label="First Name:"
-            inputRef={firstNameRef}
-            autoComplete="current-email"
-            helperText={formError ? "Incorrect entry try again." : "Optional"}
-          />
-          <TextField
-            error={formError}
-            id="last-name"
-            label="Last Name:"
-            inputRef={lastNameRef}
-            autoComplete="current-email"
-            helperText={formError ? "Incorrect entry try again." : "Optional"}
-          />
-          <TextField
-            error={formError}
-            required
-            id="standard-email-input"
-            label="Email:"
-            type="email"
-            inputRef={emailRef}
-            autoComplete="current-email"
-            helperText={formError ?? "Incorrect entry try again."}
-          />
-        </Box>
+      <Box className={classes.inputNameEmailWrapper}>
+        <TextField
+          error={formError}
+          id="first-name"
+          label="First Name:"
+          inputRef={firstNameRef}
+          autoComplete="current-email"
+          helperText={formError ? "Incorrect entry try again." : "Optional"}
+        />
+        <TextField
+          error={formError}
+          id="last-name"
+          label="Last Name:"
+          inputRef={lastNameRef}
+          autoComplete="current-email"
+          helperText={formError ? "Incorrect entry try again." : "Optional"}
+        />
+        <TextField
+          error={formError}
+          required
+          id="standard-email-input"
+          label="Email:"
+          type="email"
+          inputRef={emailRef}
+          autoComplete="current-email"
+          helperText={formError ?? "Incorrect entry try again."}
+        />
+        <TextField
+          required
+          error={formError}
+          id="phone-number"
+          label="Phone Num:"
+          inputProps={{
+            pattern: "\\+?[0-9]*\\([0-9]{3}\\) ?[0-9]{3}-[0-9]{4}"
+          }}
+          inputRef={phoneRef}
+          autoComplete="current-email"
+          helperText={
+            formError
+              ? "Incorrect entry try again."
+              : "*Phone Num Required ex: +1(123) 123-1234"
+          }
+        />
       </Box>
-      <TextField
-        required
-        error={formError}
-        id="phone-number"
-        label="Phone Num:"
-        inputProps={{
-          pattern: "\\+?[0-9]*\\([0-9]{3}\\) ?[0-9]{3}-[0-9]{4}"
-        }}
-        inputRef={phoneRef}
-        autoComplete="current-email"
-        helperText={
-          formError
-            ? "Incorrect entry try again."
-            : "*Phone Num Required ex: +1(123) 123-1234"
-        }
-      />
       <Button
         variant="contained"
         className={classes.subscribeButton}
@@ -138,7 +136,9 @@ const useStyles = makeStyles(() => ({
 
   inputNameEmailWrapper: {
     display: "flex",
-    gap: "2rem"
+    gap: "2rem",
+    flexWrap: "wrap",
+    marginBottom: "2rem"
   },
   subscribeButton: ({ isSubscribed }: { isSubscribed: boolean }) => ({
     backgroundColor: isSubscribed ? "#b2e5ed" : "#00abc5",
