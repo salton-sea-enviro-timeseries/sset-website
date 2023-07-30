@@ -255,7 +255,7 @@ export type NestedObjBodyText = {
   data: NodeData;
 };
 
-type PageContent = [
+export type PageContent = [
   Fields<{
     body: LocaleOption<NestedObjBodyText>;
     title: LocaleOption<string>;

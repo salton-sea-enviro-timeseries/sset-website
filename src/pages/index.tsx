@@ -1,9 +1,9 @@
 import { useState } from "react";
 import type { InferGetStaticPropsType } from "next";
-import { Button, makeStyles } from "@material-ui/core";
+import { Button, Container, makeStyles } from "@material-ui/core";
 import Link from "next/link";
 import { getCmsContent } from "util/getCmsContent";
-import { HomePage } from "types";
+import { HomePage, MediaObject, PageContent } from "types";
 import Layout from "components/Layout";
 import Hero from "components/Hero";
 import PageSection from "components/PageSection";
@@ -13,6 +13,8 @@ import { useAppContext } from "components/AppContext";
 import { LocaleOption, NestedObjBodyText } from "types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { Document } from "@contentful/rich-text-types";
+import SubscriptionForm from "components/SubscriptionForm";
+import Section from "components/Section";
 
 // Contentful rich text helper
 const renderDocument = (document: Document) => {
@@ -27,7 +29,30 @@ const renderDocument = (document: Document) => {
   };
   return documentToReactComponents(document, options);
 };
-// TODO: Retrieve content from contentful for tutorial video translations
+const generateSectionContent = (
+  contentList: PageContent | undefined,
+  locale: string,
+  newsMediaData: MediaObject[] | undefined
+) => {
+  return contentList?.map(({ fields }: any, index: number) => {
+    const { body, title } = fields;
+    return (
+      <PageSection
+        key={`section-${index}`}
+        bodyText={
+          body
+            ? renderDocument(
+                body[locale as keyof LocaleOption<NestedObjBodyText>]
+              )
+            : null
+        }
+        section={index}
+        title={title[locale as keyof LocaleOption<NestedObjBodyText>]}
+        newsMediaData={body ? undefined : newsMediaData}
+      />
+    );
+  });
+};
 const Home = ({
   newsMediaData,
   homepageContent
@@ -37,11 +62,9 @@ const Home = ({
   const { language } = useAppContext();
   const currentLocale = language === "en" ? "en-US" : "es";
   const [open, setOpen] = useState(false);
-
   const handleOpen = () => {
     setOpen(true);
   };
-
   const handleClose = () => {
     setOpen(false);
   };
@@ -52,30 +75,16 @@ const Home = ({
     heroContentBase?.heroImage["en-US"].fields.file["en-US"].url;
   const buttonText = heroContentBase?.buttonText;
   const heroSubTitle = heroContentBase?.subTitle;
+  const sections = homepageContent?.fields.content["en-US"];
   const gradImages = homepageContent?.fields.media["en-US"].map(
     ({ fields: { file } }) => {
       return file["en-US"].url;
     }
   );
-  const sectionContent = homepageContent?.fields.content["en-US"].map(
-    ({ fields }, index) => {
-      const { body, title } = fields;
-      return (
-        <PageSection
-          key={`section-${index}`}
-          bodyText={
-            body
-              ? renderDocument(
-                  body[currentLocale as keyof LocaleOption<NestedObjBodyText>]
-                )
-              : null
-          }
-          section={index}
-          title={title[currentLocale as keyof LocaleOption<NestedObjBodyText>]}
-          newsMediaData={body ? undefined : newsMediaData}
-        />
-      );
-    }
+  const sectionContent = generateSectionContent(
+    sections,
+    currentLocale,
+    newsMediaData
   );
   //================== cms end ============================
   return (
@@ -105,6 +114,7 @@ const Home = ({
           </>
         }
       />
+      {/* TODO: Retrieve content from contentful for tutorial video translations */}
       <TutorialModal open={open} onClose={handleClose} locale={currentLocale} />
       {sectionContent}
       <PageSection
@@ -113,6 +123,11 @@ const Home = ({
         title={"Congratulations Recent Grads"}
         images={gradImages}
       />
+      <Section>
+        <Container>
+          <SubscriptionForm />
+        </Container>
+      </Section>
     </Layout>
   );
 };
@@ -138,7 +153,6 @@ export const getStaticProps = async () => {
     console.error("Error while scraping URLs:", error);
     throw new Error(`An unexpected error has ocurred Error:${error}`);
   }
-  // const newsMediaData = await scrape(urls);
   try {
     homepageContent = await getCmsContent<HomePage>("homePage");
   } catch (error) {
