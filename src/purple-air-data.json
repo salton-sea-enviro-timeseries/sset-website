@@ -1,0 +1,68 @@
+[
+  {
+    "site": "Thermal",
+    "value": "purple_air",
+    "sensorId": "SCAQA_02",
+    "latitude": "33.5446",
+    "longitude": "-116.14945",
+    "color": "rgb(170, 68, 170)",
+    "location": ""
+  },
+
+  {
+    "site": "Thermal",
+    "value": "purple_air",
+    "sensorId": "SCAQA_03",
+    "latitude": "33.635544",
+    "longitude": "-116.14586",
+    "color": "rgb(170, 68, 170)",
+    "location": ""
+  },
+  {
+    "site": "Thermal",
+    "value": "purple_air",
+    "latitude": "33.30278",
+    "longitude": "-115.94624",
+    "sensorId": "SCAQA_04",
+    "location": "",
+    "color": "rgb(170, 68, 170)"
+  },
+
+  {
+    "site": "Oasis",
+    "value": "purple_air",
+    "sensorId": "SCAQA_05",
+    "latitude": "33.498432",
+    "longitude": "-116.10838",
+    "color": "rgb(170, 68, 170)",
+    "location": ""
+  },
+  {
+    "site": "North Shore",
+    "value": "purple_air",
+    "sensorId": "SCAQA_06",
+    "latitude": "33.522453",
+    "longitude": "-115.914474",
+    "color": "rgb(170, 68, 170)",
+    "location": ""
+  },
+  {
+    "site": "Mecca",
+    "value": "purple_air",
+    "sensorId": "SCAQA_09",
+    "latitude": "33.58146",
+    "longitude": " -116.07639",
+    "color": "rgb(170, 68, 170)",
+    "location": ""
+  },
+
+  {
+    "site": "Thermal",
+    "value": "purple_air",
+    "sensorId": "SCAQA_14",
+    "latitude": "33.56908",
+    "longitude": "-116.17881",
+    "color": "rgb(170, 68, 170)",
+    "location": ""
+  }
+]

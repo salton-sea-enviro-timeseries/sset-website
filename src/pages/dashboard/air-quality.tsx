@@ -8,14 +8,33 @@ import DashboardLayout from "components/DashboardLayout";
 import { fetcher } from "utils";
 import { MapPinIcon } from "../../constants";
 import Map from "components/Dashboard/Map";
+
 import { Device } from "lib/aqmd";
 import AirQualityGroupDeviceDataLogic from "components/AirQualityGroupDeviceDataLogic";
+import PurpleAirSensorData from "purple-air-data.json";
+import { AirQualityDevices } from "types";
+import Legend from "components/Dashboard/Legend";
 
 const PIN_SIZE = 20;
 async function multiFetcher(...urls: string[]) {
   const promises: string | Device[] = [];
   const deviceArrays = await Promise.all(urls.map((url) => fetcher(url)));
   return promises.concat(...deviceArrays);
+}
+const DeviceNames: { [key: string]: string | null | undefined } = {
+  "AQY BD-1071": "Indio",
+  "AQY BD-1080": "Mecca",
+  "AQY BD-1072": "Indio",
+  "AQY BD-1065": null,
+  "AQY BD-1092": "Mission San Jose",
+  "AQY BD-1074": null,
+  "AQY BD-1094": null,
+  "AQY BD-1063": null,
+  "AQY BD-1152": null,
+  "MOD-PM-00404": "Palm Desert"
+};
+function filteredSensors(sensors: AirQualityDevices[]) {
+  return sensors.filter(({ value }) => value !== "purple_air");
 }
 const AirQuality = () => {
   const classes = useStyles();
@@ -25,37 +44,17 @@ const AirQuality = () => {
   );
 
   const airQualityDevices = useMemo(() => {
-    return data.map((device) => {
+    const transformedSensorData = data.map((device) => {
       let status: string = "";
-      const DeviceNames: { [key: string]: string | null | undefined } = {
-        "AQY BD-1071": "Indio",
-        "AQY BD-1080": "Mecca",
-        "AQY BD-1072": "Indio",
-        "AQY BD-1065": null,
-        "AQY BD-1092": "Mission San Jose",
-        "AQY BD-1074": null,
-        "AQY BD-1094": null,
-        "AQY BD-1063": null,
-        "AQY BD-1152": null,
-        "MOD-PM-00404": "Palm Desert"
-      };
       const name = DeviceNames[device.DeviceId] ?? device.DeviceTitle;
-      switch (device.WorkingStatus) {
-        case "Not Working":
-          status = "🔴";
-          break;
-        case "Offline":
-          status = "⭕";
-          break;
-        case "Working":
-          status = "🟢";
-          break;
-        case "Working-Quant":
-          status = "🟩";
-          break;
-        case "Not Working-Quant":
-          status = "🟥";
-      }
+      const statusMapping: { [key: string]: string } = {
+        "Not Working": "🔴",
+        Offline: "⭕",
+        Working: "🟢",
+        "Working-Quant": "🟩",
+        "Not Working-Quant": "🟥"
+      };
+      status = statusMapping[device.WorkingStatus] || "";
       return {
         site: `${status} ${name}`,
         value: device.WorkingStatus,
@@ -66,7 +65,17 @@ const AirQuality = () => {
         color: "#040273"
       };
     });
+
+    const purpleAirData = PurpleAirSensorData.map((sensor) => ({
+      ...sensor,
+      site: `${sensor.sensorId}: ${sensor.site} `,
+      latitude: parseFloat(sensor.latitude),
+      longitude: parseFloat(sensor.longitude)
+    }));
+
+    return [...transformedSensorData, ...purpleAirData];
   }, [data]);
+
   const isLoading = !data.length && !error;
   if (error) return <Typography>Error Loading data</Typography>;
   return (
@@ -75,9 +84,14 @@ const AirQuality = () => {
       <Typography gutterBottom component="h1" variant="h4">
         Air Quality
       </Typography>
-      <AirQualityGroupDeviceDataLogic devices={airQualityDevices} />
+      <AirQualityGroupDeviceDataLogic
+        devices={filteredSensors(airQualityDevices)}
+      />
       <WithLoading isLoading={isLoading} variant="rect" height="500px">
         {data && (
+          //TODO move map caption to its own component
+          //Modify caption input for air or water quality
+          //TODO import caption text from contentful
           <Map
             caption={false}
             LATITUDE={33.638421}
@@ -126,8 +140,23 @@ const AirQuality = () => {
                 </Marker>
               )
             )}
+            <Legend />
           </Map>
         )}
+        <Typography variant="caption">
+          This map shows various air quality sensors placed in the communities
+          surrounding the Salton Sea. Sensors placed include those from AQMD,
+          QUANT-AQ, and Purple Air. Sensor data from Purple Air can be retrieved
+          from their site{" "}
+          <a
+            className={classes.purpleAirLink}
+            href="https://map.purpleair.com/1/mAQI/a10/p604800/cC0#12/33.52245/-115.91447"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <b>here</b>
+          </a>{" "}
+        </Typography>
       </WithLoading>
     </>
   );
@@ -146,11 +175,12 @@ const useStyles = makeStyles(() => ({
   },
   tooltip: {
     fontSize: 11,
-    width: 200,
     backgroundColor: "rgba(0, 0, 0, 0.8)",
+    whiteSpace: "nowrap",
     display: "flex",
     justifyContent: "center"
-  }
+  },
+  purpleAirLink: { color: "#3a7ca5", cursor: "pointer" }
 }));
 
 AirQuality.getLayout = function getLayout(page: React.ReactElement) {

@@ -1,7 +1,6 @@
 import React, { useMemo } from "react";
 import useSWR from "swr";
 import { AirQualityDevices, CommonDeviceType } from "types";
-import "chartjs-adapter-date-fns";
 import determineSourceOfData from "lib/determineSourceOfData";
 import { fetchMultipleDeviceDetails } from "util/fetchMultipleDeviceDetails";
 import { mapDeviceNames } from "util/mapDeviceNames";
