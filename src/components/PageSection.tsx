@@ -15,14 +15,14 @@ type Props = {
   bodyText: any;
   title: string;
   section: number;
-  images?: string[];
+  gradImages?: string[];
 };
 const PageSection: React.FC<Props> = ({
   bodyText,
   title,
   newsMediaData,
   section,
-  images
+  gradImages
 }: Props) => {
   const classes = useStyles();
 
@@ -63,9 +63,9 @@ const PageSection: React.FC<Props> = ({
           ) : (
             <Typography component="div">{bodyText}</Typography>
           )}
-          {images && (
+          {gradImages && (
             <Box className={classes.gradContainer}>
-              {images.map((item, index) => (
+              {gradImages.map((item, index) => (
                 <div key={index} className={classes.imageWrapper}>
                   <Image
                     src={`https:${item}`}

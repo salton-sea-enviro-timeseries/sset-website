@@ -121,7 +121,7 @@ const Home = ({
         bodyText={null}
         section={homepageContent?.fields.content["en-US"].length ?? 0}
         title={"Congratulations Recent Grads"}
-        images={gradImages}
+        gradImages={gradImages}
       />
       <Section>
         <Container>
@@ -138,7 +138,8 @@ export const getStaticProps = async () => {
   const urls = [
     "https://www.hcn.org/issues/55.6/south-water-in-search-of-answers-at-the-salton-sea?utm_medium=email&utm_source=govdelivery",
     "https://atmos.earth/salton-sea-california-drought-pollution/",
-    "https://thehill.com/policy/equilibrium-sustainability/3633056-dried-up-in-utah-drying-great-salt-lake-leads-to-air-pollution/",
+    //TODO: 403 error; come back to fix
+    // "https://thehill.com/policy/equilibrium-sustainability/3633056-dried-up-in-utah-drying-great-salt-lake-leads-to-air-pollution",
     "https://grist.org/health/how-californias-salton-sea-went-from-vacation-destination-to-toxic-nightmare/",
     "https://ca.audubon.org/news/it-takes-village-dr-ryan-sinclair-and-community-science-salton-sea",
     "https://www.cnbc.com/2021/11/06/californias-salton-sea-spewing-toxic-fumes-creating-ghost-towns-.html",
