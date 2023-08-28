@@ -36,9 +36,11 @@ const generateSectionContent = (
 ) => {
   return contentList?.map(({ fields }: any, index: number) => {
     const { body, title } = fields;
+    const sectionTitle = title[locale as keyof LocaleOption<NestedObjBodyText>];
     return (
       <PageSection
-        key={`section-${index}`}
+        key={`section-${sectionTitle}`}
+        id={`section-${index}`}
         bodyText={
           body
             ? renderDocument(
@@ -47,7 +49,7 @@ const generateSectionContent = (
             : null
         }
         section={index}
-        title={title[locale as keyof LocaleOption<NestedObjBodyText>]}
+        title={sectionTitle}
         newsMediaData={body ? undefined : newsMediaData}
       />
     );
@@ -118,6 +120,7 @@ const Home = ({
       <TutorialModal open={open} onClose={handleClose} locale={currentLocale} />
       {sectionContent}
       <PageSection
+        id="section-grads"
         bodyText={null}
         section={homepageContent?.fields.content["en-US"].length ?? 0}
         title={"Congratulations Recent Grads"}
@@ -135,10 +138,10 @@ const Home = ({
 export default Home;
 
 export const getStaticProps = async () => {
-  const urls = [
+  const urls: string[] = [
     "https://www.hcn.org/issues/55.6/south-water-in-search-of-answers-at-the-salton-sea?utm_medium=email&utm_source=govdelivery",
     "https://atmos.earth/salton-sea-california-drought-pollution/",
-    //TODO: 403 error; come back to fix
+    //TODO: 403 error; come back to fix: anti scrap enabled
     // "https://thehill.com/policy/equilibrium-sustainability/3633056-dried-up-in-utah-drying-great-salt-lake-leads-to-air-pollution",
     "https://grist.org/health/how-californias-salton-sea-went-from-vacation-destination-to-toxic-nightmare/",
     "https://ca.audubon.org/news/it-takes-village-dr-ryan-sinclair-and-community-science-salton-sea",
