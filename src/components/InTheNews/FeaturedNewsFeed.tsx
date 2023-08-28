@@ -39,10 +39,22 @@ const FeaturedNewsFeed = ({ newsMediaData }: FeaturedNewsFeedProps) => {
             description={`${SWBRCB_DESCRIPTION} Community voices and projects panel is from about 2:29:30-3:11:45.`}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          <NewsCard media={newsMediaData[0]} />
-        </Grid>
+        {/* check back to see if this code worked,  */}
+        {newsMediaData.length > 0 ? (
+          <Grid item xs={12} sm={6} md={4}>
+            <NewsCard media={newsMediaData[0]} />
+          </Grid>
+        ) : (
+          <Grid item xs={12} sm={6} md={4}>
+            <VideoCard
+              src="https://www.youtube.com/embed/WDjUyaD869I"
+              title="Community Science Forum"
+              description="The Alianza community science team presented a live webinar on the 7/20/22 to present the findings of water quality research conducted at the Salton Sea between 2021 and 2022. We hope you find it informative and illuminating as we continue to conduct community science-based research in the future."
+            />
+          </Grid>
+        )}
       </Grid>
+
       <Collapse
         in={showMoreInfo}
         onExited={() => setTransitionExited(false)}
@@ -63,18 +75,21 @@ const FeaturedNewsFeed = ({ newsMediaData }: FeaturedNewsFeedProps) => {
           </Grid>
         </Grid>
       </Collapse>
-      <Box display={"flex"} justifyContent={"center"}>
-        <Link
-          component="button"
-          style={{ display: "flex", alignItems: "center" }}
-          onClick={() => setShowMoreInfo(!showMoreInfo)}
-        >
-          <Typography>{showMoreInfo ? "Show Less" : "See More"}</Typography>
-          <DoubleArrowSharpIcon
-            className={`${classes.arrowStyles} ${classes.rotate}`}
-          />
-        </Link>
-      </Box>
+      {/* come back and see if this change worked after using all links */}
+      {newsMediaData.length > 0 && (
+        <Box display={"flex"} justifyContent={"center"}>
+          <Link
+            component="button"
+            style={{ display: "flex", alignItems: "center" }}
+            onClick={() => setShowMoreInfo(!showMoreInfo)}
+          >
+            <Typography>{showMoreInfo ? "Show Less" : "See More"}</Typography>
+            <DoubleArrowSharpIcon
+              className={`${classes.arrowStyles} ${classes.rotate}`}
+            />
+          </Link>
+        </Box>
+      )}
     </>
   );
 };
