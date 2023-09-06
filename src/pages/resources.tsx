@@ -9,6 +9,7 @@ import Layout from "components/Layout";
 import Meta from "components/Meta";
 import Translation from "components/Translation";
 import ResourceSection from "components/ResourceSection";
+import PackedBubbleChart from "components/resources/PackedBubbleChart";
 type ArticleData = {
   data: {
     key: string;
@@ -117,6 +118,7 @@ const Resources = () => {
             link={"/salton-sea-mdl-public-letter-2023.pdf"}
             download={true}
           />
+          <PackedBubbleChart />
         </Container>
       </Section>
     </Layout>
