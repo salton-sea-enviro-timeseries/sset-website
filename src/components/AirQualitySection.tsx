@@ -1,15 +1,13 @@
 import { useState } from "react";
 import { format } from "date-fns";
 import { Typography, Box, MenuItem, TextField } from "@material-ui/core";
-import { Skeleton } from "@material-ui/lab";
-import { AirQualityDevices, CommonDeviceType } from "types";
+import { CommonDeviceType } from "types";
 import {
   inspectData,
   isMODRawDeviceDataResponse,
   isRawDeviceAverageDataResponse,
   safeAccess
 } from "util/typeGuardFunctions";
-import AQLegend from "./AQLegend";
 import WithLoading from "./WithLoading";
 import { RawDeviceAverageDataResponse } from "lib/aqmd";
 import AirQualityParamBox from "./AirQualityParamBox";
@@ -33,67 +31,45 @@ const paramAQIStandardMap: ParamAQIStandardMap = {
   NO2: 100,
   PM1: null // set to null since there is no standard,
 };
+type MenuItem = {
+  id: string;
+  name: string;
+};
 
-const generateMenuItems = (deviceList: AirQualityDevices[]) => {
-  return deviceList.map(({ sensorId, value }) => {
-    const sensorInfoArray = sensorId.split(":");
-    return value[0] === "W" ? (
-      <MenuItem key={sensorId} value={sensorInfoArray[0]}>
-        {sensorId}
-      </MenuItem>
-    ) : null;
-  });
+const generateMenuItems = (
+  deviceMenuList: Record<string, DeviceRawData>
+): MenuItem[] => {
+  return Object.values(deviceMenuList).map((sensor) => ({
+    id: sensor.id,
+    name: sensor.name
+  }));
 };
 
 const AirQualitySection = ({
-  normalizedData,
-  isLoading,
-  deviceList,
-  error
+  normalizedData
 }: {
   normalizedData: Record<string, DeviceRawData>;
-  isLoading: boolean;
-  deviceList: AirQualityDevices[];
-  error: any;
 }) => {
-  const [selectedSensor, setSelectedSensor] = useState("MOD-PM-00404");
+  const deviceMenuList = generateMenuItems(normalizedData);
+  const [selectedSensor, setSelectedSensor] = useState(deviceMenuList[0].id);
   const [isLoadingSensor, setIsLoadingSensor] = useState(false);
-  const sanitizedValue = deviceList.length > 0 ? selectedSensor : "";
+  const sanitizedValue = deviceMenuList.length > 0 ? selectedSensor : "";
 
-  if (isLoading) {
-    return (
-      <Box pb={5}>
-        {/* selector start */}
-        <Box pr={0.5} pb={1}>
-          <Skeleton height={50} width="100%" />
-        </Box>
-        {/* selector end */}
-
-        {/* Parameter and AQI data */}
-        <Box display="flex" flexWrap="wrap">
-          {Array.from({ length: 3 }).map((item, index) => (
-            <Box flex={1} p={1} key={index} m={0.5}>
-              <Skeleton variant="rect" height={85} width="100%" />
-            </Box>
-          ))}
-        </Box>
-      </Box>
-    );
-  }
-  const singleDeviceData =
-    normalizedData && normalizedData[selectedSensor].data;
-  if (error) {
-    console.error(error);
-    return <Typography>Error loading data</Typography>;
-  }
   const handleChangeSensor = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsLoadingSensor(true);
     setSelectedSensor(event.target.value);
     setTimeout(() => {
       setIsLoadingSensor(false);
-    }, 300);
+    }, 100);
   };
-  const recentDeviceData = inspectData(singleDeviceData);
+
+  const singleDeviceData = normalizedData[selectedSensor].data;
+  if (!singleDeviceData)
+    return (
+      <Typography>No recent data available for {selectedSensor}.</Typography>
+    );
+  const recentDeviceData: CommonDeviceType | null =
+    singleDeviceData && inspectData(singleDeviceData);
 
   let dateTime;
   if (isMODRawDeviceDataResponse(recentDeviceData)) {
@@ -107,7 +83,6 @@ const AirQualitySection = ({
       "MMM d yyyy hh:mm a "
     );
   }
-  const workingDeviceList = generateMenuItems(deviceList);
 
   const parameterValues = Object.keys(paramAQIStandardMap).map(
     (parameter, index) => {
@@ -146,7 +121,7 @@ const AirQualitySection = ({
     <Box pb={5}>
       {/* selector start */}
       <Box pr={0.5} pb={1}>
-        <AQLegend />
+        {/* <AQLegend /> */}
         <WithLoading variant="rect" height={40} isLoading={isLoadingSensor}>
           <TextField
             fullWidth
@@ -156,8 +131,13 @@ const AirQualitySection = ({
             variant="outlined"
             value={sanitizedValue}
             onChange={handleChangeSensor}
+            helperText="Select a working sensor from above to view current parameter values."
           >
-            {workingDeviceList}
+            {deviceMenuList.map(({ id, name }) => (
+              <MenuItem key={id} value={id}>
+                {`${id}: ${name} `}
+              </MenuItem>
+            ))}
           </TextField>
           {Array.isArray(recentDeviceData) && recentDeviceData.length === 0 && (
             <Typography>No Data Available for {selectedSensor}</Typography>

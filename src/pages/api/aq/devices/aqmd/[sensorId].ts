@@ -6,13 +6,13 @@ export default async function handler(
   res: NextApiResponse<Device[]>
 ) {
   const { method, query } = req;
-
   if (method !== "GET")
     return res.status(405).end(`Method ${method} Not Allowed`);
 
   try {
     const data = await getDeviceData({
-      sensorId: query.sensorId as string
+      sensorId: query.sensorId as string,
+      days: parseInt(query.days as string, 10)
     });
 
     return res.status(200).json(data);
