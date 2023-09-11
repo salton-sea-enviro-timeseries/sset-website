@@ -26,7 +26,6 @@ const AirQualityGroupDeviceDataLogic = ({
   devices: AirQualityDevices[];
 }) => {
   const [currentDate, setCurrentDate] = useState("");
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
     setCurrentDate(new Date(Date.now()).toLocaleDateString());
@@ -50,12 +49,9 @@ const AirQualityGroupDeviceDataLogic = ({
     () => [selectedValue, ...sensorUrls],
     fetchMultipleDeviceDetails,
     {
-      onSuccess: () => {
-        setIsInitialLoad(false);
-      },
-      onError: () => {
-        setIsInitialLoad(false);
-      }
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      dedupingInterval: 60000
     }
   );
 
@@ -113,22 +109,15 @@ const AirQualityGroupDeviceDataLogic = ({
           </Box>
           <LoadingChart />
         </>
+      ) : sensorData.length > 0 ? (
+        <>
+          <AirQualitySection normalizedData={groupedData} key={selectedValue} />
+          <AirQualityPlots
+            normalizedData={groupedData}
+            isLoading={isValidating}
+          />
+        </>
       ) : (
-        Object.keys(groupedData).length > 0 && (
-          <>
-            <AirQualitySection
-              normalizedData={groupedData}
-              key={selectedValue}
-            />
-            <AirQualityPlots
-              normalizedData={groupedData}
-              isLoading={isValidating}
-            />
-          </>
-        )
-      )}
-
-      {!isValidating && !isInitialLoad && sensorData.length === 0 && (
         <Typography>
           No data available for the specified days as of {currentDate}
         </Typography>
