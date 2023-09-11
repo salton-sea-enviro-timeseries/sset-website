@@ -26,6 +26,7 @@ const AirQualityGroupDeviceDataLogic = ({
   devices: AirQualityDevices[];
 }) => {
   const [currentDate, setCurrentDate] = useState("");
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
     setCurrentDate(new Date(Date.now()).toLocaleDateString());
@@ -47,7 +48,15 @@ const AirQualityGroupDeviceDataLogic = ({
     isValidating
   } = useSWR<DataType>(
     () => [selectedValue, ...sensorUrls],
-    fetchMultipleDeviceDetails
+    fetchMultipleDeviceDetails,
+    {
+      onSuccess: () => {
+        setIsInitialLoad(false);
+      },
+      onError: () => {
+        setIsInitialLoad(false);
+      }
+    }
   );
 
   const groupedData = useMemo(() => {
@@ -69,11 +78,7 @@ const AirQualityGroupDeviceDataLogic = ({
     );
   }, [sensorData]);
 
-  if (error)
-    return (
-      <Typography>{`Data for sensors is currently unavailable ${currentDate}`}</Typography>
-    );
-
+  if (error) return <Typography>{`Error loading data`}</Typography>;
   //TODO: add a date range selector for user
   return (
     <>
@@ -108,15 +113,22 @@ const AirQualityGroupDeviceDataLogic = ({
           </Box>
           <LoadingChart />
         </>
-      ) : Object.keys(groupedData).length > 0 ? (
-        <>
-          <AirQualitySection normalizedData={groupedData} key={selectedValue} />
-          <AirQualityPlots
-            normalizedData={groupedData}
-            isLoading={isValidating}
-          />
-        </>
       ) : (
+        Object.keys(groupedData).length > 0 && (
+          <>
+            <AirQualitySection
+              normalizedData={groupedData}
+              key={selectedValue}
+            />
+            <AirQualityPlots
+              normalizedData={groupedData}
+              isLoading={isValidating}
+            />
+          </>
+        )
+      )}
+
+      {!isValidating && !isInitialLoad && sensorData.length === 0 && (
         <Typography>
           No data available for the specified days as of {currentDate}
         </Typography>
