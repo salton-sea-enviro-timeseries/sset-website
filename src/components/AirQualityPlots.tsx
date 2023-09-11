@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -19,20 +19,13 @@ import {
 import { AirQualityParameter, CommonDeviceType } from "types";
 import "chartjs-adapter-date-fns";
 import { Line } from "react-chartjs-2";
-import {
-  FormControl,
-  Select,
-  MenuItem,
-  makeStyles,
-  FormHelperText,
-  Box,
-  Typography,
-  Link
-} from "@material-ui/core";
+import { makeStyles, Box, Typography, Link } from "@material-ui/core";
 import LoadingChart from "./LoadingChart";
 import { calcParamAQI } from "util/calcParamAQI";
 import { filterHourlyData } from "../util/filterHourlyData";
 import { AirQualityParameterMapping } from "types";
+import useSelect from "hooks/useSelect";
+import SelectMenuList from "./SelectMenuList";
 
 ChartJS.register(
   CategoryScale,
@@ -156,7 +149,7 @@ const canvasBackgroundColor = {
 };
 const plugins: any = [canvasBackgroundColor];
 // all chart options and selected param as y axis
-const options = (selectedParam: string): ChartOptions<"line"> => {
+const chartOptions = (selectedParam: string): ChartOptions<"line"> => {
   return {
     responsive: true,
     maintainAspectRatio: false,
@@ -236,6 +229,17 @@ const options = (selectedParam: string): ChartOptions<"line"> => {
     }
   };
 };
+
+function hasNonNullValueForParam<T extends { [key: string]: any }>(
+  data: { datasets: { data: T[] }[] },
+  param: string
+): boolean {
+  return data.datasets.some((dataset) => {
+    return dataset.data.some(
+      (item) => item[param] !== null && item[param] !== undefined
+    );
+  });
+}
 const AirQualityPlots = ({
   normalizedData,
   isLoading
@@ -244,10 +248,10 @@ const AirQualityPlots = ({
   isLoading: boolean;
 }) => {
   const classes = useStyles();
-  const [selectedParam, setSelectedParam] = useState("PM10");
-  const handleTitleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setSelectedParam(event.target.value as string);
-  };
+  const { selectedValue, handleSelectChange, options } = useSelect<string>({
+    initialValues: Object.keys(paramAQIStandardMap),
+    defaultValue: "PM10"
+  });
   // dataset used for line chart
   const datasets = useMemo(() => {
     return Object.values(normalizedData).map(({ data, name, id }, index) => ({
@@ -281,36 +285,31 @@ const AirQualityPlots = ({
   const chartData = {
     datasets
   };
-  //  TODO Update chart so that it doesnt show if param value is undefined
+  const shouldRenderChart = hasNonNullValueForParam(chartData, selectedValue);
   return (
     <>
-      <FormControl className={classes.formControl}>
-        <Select
-          value={selectedParam}
-          onChange={handleTitleChange}
-          displayEmpty
-          className={classes.selectEmpty}
-        >
-          {Object.keys(paramAQIStandardMap).map((param, index) => (
-            <MenuItem key={`${index}${param}`} value={param}>
-              {param}
-            </MenuItem>
-          ))}
-        </Select>
-        <FormHelperText>Select Param to Chart</FormHelperText>
-      </FormControl>
+      <SelectMenuList
+        options={options}
+        helperText={"Select Param to Chart"}
+        selectedValue={selectedValue}
+        handleSelectChange={handleSelectChange}
+      />
       {isLoading ? (
         <LoadingChart />
-      ) : (
-        // Todo change min height depending on y-max
+      ) : // Todo change min height depending on y-max
+      shouldRenderChart ? (
         <Box minHeight={350} m="2 2 0 2">
           <Line
-            key={selectedParam}
+            key={selectedValue}
             plugins={plugins}
-            options={options(selectedParam)}
+            options={chartOptions(selectedValue)}
             data={chartData}
           />
         </Box>
+      ) : (
+        <Typography align="center" gutterBottom={true}>
+          No data available for <b>{selectedValue}</b>
+        </Typography>
       )}
       <Box marginBottom={1}>
         <Typography
@@ -328,16 +327,16 @@ const AirQualityPlots = ({
           <Link
             className={classes.airPollutant}
             href={
-              AirQualityParameterMapping[selectedParam as AirQualityParameter]
+              AirQualityParameterMapping[selectedValue as AirQualityParameter]
                 .href
             }
             target="_blank"
             rel="noopener"
           >
-            <b>{selectedParam}:</b>
+            <b>{selectedValue}:</b>
           </Link>{" "}
           {
-            AirQualityParameterMapping[selectedParam as AirQualityParameter]
+            AirQualityParameterMapping[selectedValue as AirQualityParameter]
               .description
           }
         </Typography>
