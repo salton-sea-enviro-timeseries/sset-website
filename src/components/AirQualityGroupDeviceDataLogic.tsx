@@ -41,6 +41,7 @@ const AirQualityGroupDeviceDataLogic = ({
     const sensorIdList = determineSourceOfData(sensorInfoArray[0]);
     return sensorIdList;
   });
+  //TODO: quant device does not need a `days` parameter consider editing fetching function
   const {
     data: sensorData = [],
     error,
@@ -115,6 +116,7 @@ const AirQualityGroupDeviceDataLogic = ({
           <AirQualityPlots
             normalizedData={groupedData}
             isLoading={isValidating}
+            dataDateRangeInDays={selectedValue}
           />
         </>
       ) : (

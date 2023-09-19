@@ -168,6 +168,7 @@ const chartOptions = (selectedParam: string): ChartOptions<"line"> => {
       legend: {
         position: "bottom" as const,
         labels: {
+          // filter out sensors whose data is undefined or null
           filter: (legendItem: LegendItem, chartData: ChartData<"line">) => {
             const datasetIndex = legendItem.datasetIndex;
             const datasetData =
@@ -176,7 +177,10 @@ const chartOptions = (selectedParam: string): ChartOptions<"line"> => {
                 : [];
             const isDefined = datasetData.some((data) => {
               const item = data as DataItem;
-              return item[selectedParam as keyof DataItem] !== undefined;
+              return (
+                item[selectedParam as keyof DataItem] !== undefined &&
+                item[selectedParam as keyof DataItem] !== null
+              );
             });
             return isDefined;
           }
@@ -242,10 +246,12 @@ function hasNonNullValueForParam<T extends { [key: string]: any }>(
 }
 const AirQualityPlots = ({
   normalizedData,
-  isLoading
+  isLoading,
+  dataDateRangeInDays
 }: {
   normalizedData: Record<string, DeviceRawData>;
   isLoading: boolean;
+  dataDateRangeInDays: number;
 }) => {
   const classes = useStyles();
   const { selectedValue, handleSelectChange, options } = useSelect<string>({
@@ -308,7 +314,8 @@ const AirQualityPlots = ({
         </Box>
       ) : (
         <Typography align="center" gutterBottom={true}>
-          No data available for <b>{selectedValue}</b>
+          No data available for <b>{selectedValue}</b> in the past{" "}
+          <u>{dataDateRangeInDays} days</u>
         </Typography>
       )}
       <Box marginBottom={1}>
