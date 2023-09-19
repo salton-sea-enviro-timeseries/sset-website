@@ -68,8 +68,8 @@ export const getColorFromScale = (value: number, min: number, max: number) => {
   return color.hex();
 };
 
-export const fetcher = async (url: string) => {
-  const res = await fetch(url);
+export const fetcher = async (url: string, days?: number) => {
+  const res = await fetch(`${url}?days=${days}`);
   if (!res.ok) {
     const error = new Error("An error occurred while fetching the data.");
     // @ts-ignore

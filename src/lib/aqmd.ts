@@ -79,7 +79,15 @@ export async function getDevices({ groupId }: DevicesRequestParams) {
   return data.data as Device[];
 }
 
-export async function getDeviceData({ sensorId }: { sensorId: string }) {
+export async function getDeviceData({
+  sensorId,
+  days
+}: {
+  sensorId: string;
+  days: number;
+}) {
+  // default 10 days
+  const startDateFromDaysSelected = days ? days * 24 : 240;
   try {
     const options = {
       method: "GET",
@@ -101,8 +109,8 @@ export async function getDeviceData({ sensorId }: { sensorId: string }) {
      * within now - 1 hour and now. Need to check with AQMD.
      */
     const startDate = formatInTimeZone(
-      // set to past 10 days
-      startOfHour(subHours(today, 240)),
+      // set default to past 10 days
+      startOfHour(subHours(today, startDateFromDaysSelected)),
       "UTC",
       "yyyy-MM-dd HH:mm:ss"
     );
@@ -118,9 +126,7 @@ export async function getDeviceData({ sensorId }: { sensorId: string }) {
     url.searchParams.append("EndDateTime", endDate);
 
     const requestUrl = decodeURIComponent(url.toString()).replace(/\+/g, "%20");
-
     const data = await (await fetch(requestUrl, options)).json();
-
     return data.data.length === 0
       ? { DeviceId: sensorId, data: [] }
       : data.data;
