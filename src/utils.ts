@@ -1,7 +1,8 @@
 import { maxBy, minBy, meanBy, isNumber } from "lodash";
 import chroma from "chroma-js";
-
 import { Data, SiteData } from "types";
+import { startOfHour, subHours, addHours, format } from "date-fns";
+import { utcToZonedTime } from "date-fns-tz";
 
 export const getAverage = (prop: string, collection: any[]) => {
   const filteredCollection = collection.filter((item: any) =>
@@ -69,7 +70,7 @@ export const getColorFromScale = (value: number, min: number, max: number) => {
 };
 
 export const fetcher = async (url: string, days?: number) => {
-  const res = await fetch(`${url}?days=${days}`);
+  const res = await fetch(days ? `${url}?days=${days}` : url);
   if (!res.ok) {
     const error = new Error("An error occurred while fetching the data.");
     // @ts-ignore
@@ -101,4 +102,36 @@ export const truncateQuestion = (
     return question;
   }
   return question.slice(0, 80) + "...";
+};
+const formatInTimeZone = (date: Date, timeZone: string, formatStr: string) => {
+  const zonedDate = utcToZonedTime(date, timeZone);
+  return format(zonedDate, formatStr);
+};
+
+const getAdjustedHour = (baseDate: Date, hoursDiff: number) => {
+  return hoursDiff < 0
+    ? startOfHour(subHours(baseDate, Math.abs(hoursDiff)))
+    : startOfHour(addHours(baseDate, hoursDiff));
+};
+
+export const getStartDate = (
+  baseDate: Date,
+  daysSelected: number,
+  formatIso: boolean = false
+) => {
+  const startDate = getAdjustedHour(baseDate, -(daysSelected * 24));
+  return formatInTimeZone(
+    startDate,
+    "UTC",
+    formatIso ? "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" : "yyyy-MM-dd HH:mm:ss"
+  );
+};
+
+export const getEndDate = (baseDate: Date, formatIso: boolean = false) => {
+  const endDate = getAdjustedHour(baseDate, 1);
+  return formatInTimeZone(
+    endDate,
+    "UTC",
+    formatIso ? "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" : "yyyy-MM-dd HH:mm:ss"
+  );
 };

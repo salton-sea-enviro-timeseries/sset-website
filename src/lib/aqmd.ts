@@ -1,11 +1,12 @@
-import { addHours, startOfHour, subHours } from "date-fns";
-import { utcToZonedTime, formatInTimeZone } from "date-fns-tz";
+import { utcToZonedTime } from "date-fns-tz";
+import { getEndDate, getStartDate } from "utils";
 
 const USERNAME = process.env.AQMD_USERNAME as string;
 const PASSWORD = process.env.AQMD_PASSWORD as string;
 
 const ENDPOINT_BASE_URL = "https://aqportal.aqmd.gov/external/api";
-
+// TODO: look into the api and register for api key, add limits etc
+// https://docs.openaq.org/docs/getting-started
 export type DeviceAvergeDataRequestParams = {
   startDate?: string;
   endDate?: string;
@@ -87,7 +88,7 @@ export async function getDeviceData({
   days: number;
 }) {
   // default 10 days
-  const startDateFromDaysSelected = days ? days * 24 : 240;
+  // const startDateFromDaysSelected = days ? days : 10;
   try {
     const options = {
       method: "GET",
@@ -96,30 +97,15 @@ export async function getDeviceData({
         token: PASSWORD
       }
     };
-
+    // console.log("aqmd days:", days);
     /**
      * TODO: Get most recent data for now. Will want to allow
      * start and end date params in the future.
      */
     const timeZone = "America/Los_Angeles";
     const today = utcToZonedTime(new Date(), timeZone);
-    /**
-     * Start date is 24 hours ago because I wasn't getting any data
-     * for some reason even though it device "DataLastRecoded" is
-     * within now - 1 hour and now. Need to check with AQMD.
-     */
-    const startDate = formatInTimeZone(
-      // set default to past 10 days
-      startOfHour(subHours(today, startDateFromDaysSelected)),
-      "UTC",
-      "yyyy-MM-dd HH:mm:ss"
-    );
-    const endDate = formatInTimeZone(
-      startOfHour(addHours(today, 1)),
-      "UTC",
-      "yyyy-MM-dd HH:mm:ss"
-    );
-
+    const startDate = getStartDate(today, days);
+    const endDate = getEndDate(today);
     const url = new URL(`${ENDPOINT_BASE_URL}/deviceaveragedata`);
     url.searchParams.append("sensorId", sensorId);
     url.searchParams.append("StartDateTime", startDate);
