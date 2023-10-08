@@ -30,10 +30,10 @@ const AirQualityGroupDeviceDataLogic = ({
   useEffect(() => {
     setCurrentDate(new Date(Date.now()).toLocaleDateString());
   }, []);
-
+  // Day range
   const { selectedValue, handleSelectChange, options } = useSelect<number>({
-    initialValues: [30, 60, 90, 120],
-    defaultValue: 30
+    initialValues: [15, 60, 90, 120],
+    defaultValue: 15
   });
 
   const sensorUrls = devices.map(({ sensorId }) => {
@@ -55,7 +55,6 @@ const AirQualityGroupDeviceDataLogic = ({
       dedupingInterval: 60000
     }
   );
-
   const groupedData = useMemo(() => {
     return sensorData.reduce(
       (sensors: Record<string, DeviceRawData>, curr: CommonDeviceType) => {
@@ -110,19 +109,20 @@ const AirQualityGroupDeviceDataLogic = ({
           </Box>
           <LoadingChart />
         </>
-      ) : sensorData.length > 0 ? (
-        <>
-          <AirQualitySection normalizedData={groupedData} key={selectedValue} />
-          <AirQualityPlots
-            normalizedData={groupedData}
-            isLoading={isValidating}
-            dataDateRangeInDays={selectedValue}
-          />
-        </>
       ) : (
-        <Typography>
-          No data available for the specified days as of {currentDate}
-        </Typography>
+        sensorData.length > 0 && (
+          <>
+            <AirQualitySection
+              normalizedData={groupedData}
+              key={selectedValue}
+            />
+            <AirQualityPlots
+              normalizedData={groupedData}
+              isLoading={isValidating}
+              dataDateRangeInDays={selectedValue}
+            />
+          </>
+        )
       )}
     </>
   );
