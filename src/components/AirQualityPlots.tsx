@@ -52,13 +52,15 @@ type ParamAQIStandardMap = {
   PM10: number;
   NO2: number;
   PM1: null;
+  CO?: number;
 };
 const paramAQIStandardMap: ParamAQIStandardMap = {
   O3: 70,
   PM2_5: 35,
   PM10: 150,
   NO2: 100,
-  PM1: null
+  PM1: null,
+  CO: 35000
 };
 type DataItem = {
   x: number;
@@ -66,6 +68,7 @@ type DataItem = {
   PM10?: number;
   NO2?: number;
   O3?: number;
+  CO?: number;
 };
 
 // ==============================================================
@@ -262,10 +265,9 @@ const AirQualityPlots = ({
   const datasets = useMemo(() => {
     return Object.values(normalizedData).map(({ data, name, id }, index) => ({
       label: name,
-      data:
-        id === "MOD-PM-00404"
-          ? calcParamAQI(filterHourlyData(data))
-          : calcParamAQI(data),
+      data: id.startsWith("MOD")
+        ? calcParamAQI(filterHourlyData(data))
+        : calcParamAQI(data),
       borderColor: colors[index],
       fill: false,
       lineTension: 0.1,
