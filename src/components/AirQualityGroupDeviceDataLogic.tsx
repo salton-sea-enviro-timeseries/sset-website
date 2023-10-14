@@ -1,17 +1,19 @@
-import React, { useEffect, useMemo, useState } from "react";
-import useSWR from "swr";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  makeStyles
+} from "@material-ui/core";
+import { Skeleton } from "@material-ui/lab";
 import { AirQualityDevices, CommonDeviceType } from "types";
-import determineSourceOfData from "lib/determineSourceOfData";
-import { fetchMultipleDeviceDetails } from "util/fetchMultipleDeviceDetails";
 import { mapDeviceNames } from "util/mapDeviceNames";
 import AirQualityPlots from "./AirQualityPlots";
 import AirQualitySection from "./AirQualitySection";
-import { Box, Typography } from "@material-ui/core";
-import { Skeleton } from "@material-ui/lab";
 import LoadingChart from "./LoadingChart";
 import AQLegend from "./AQLegend";
-import SelectMenuList from "./SelectMenuList";
-import useSelect from "hooks/useSelect";
+import useSensorData from "hooks/useSensorData";
 
 type DeviceRawData = {
   id: string;
@@ -19,73 +21,92 @@ type DeviceRawData = {
   data: CommonDeviceType[];
 };
 type DataType = CommonDeviceType[];
+function groupSensorData(data: DataType): Record<string, DeviceRawData> {
+  return data.reduce(
+    (sensors: Record<string, DeviceRawData>, curr: CommonDeviceType) => {
+      const id = curr.DeviceID || curr.sn || curr.DeviceId;
+      if (!sensors[id]) {
+        sensors[id] = {
+          id,
+          name: mapDeviceNames(id),
+          data: [{ ...curr }]
+        };
+      } else {
+        sensors[id].data.push({ ...curr });
+      }
+      return sensors;
+    },
+    {}
+  );
+}
+
 // ==============================================================
 const AirQualityGroupDeviceDataLogic = ({
   devices
 }: {
   devices: AirQualityDevices[];
 }) => {
-  const [currentDate, setCurrentDate] = useState("");
+  const classes = useStyles();
+  const startDateRef = useRef<HTMLInputElement>(null);
+  const endDateRef = useRef<HTMLInputElement>(null);
+  const { sensorData, fetchError, isValidating, formError, handleFormSubmit } =
+    useSensorData({ devices, startDateRef, endDateRef });
 
   useEffect(() => {
-    setCurrentDate(new Date(Date.now()).toLocaleDateString());
-  }, []);
-  // Day range
-  const { selectedValue, handleSelectChange, options } = useSelect<number>({
-    initialValues: [15, 60, 90, 120],
-    defaultValue: 15
-  });
-
-  const sensorUrls = devices.map(({ sensorId }) => {
-    const sensorInfoArray = sensorId.split(":");
-    const sensorIdList = determineSourceOfData(sensorInfoArray[0]);
-    return sensorIdList;
-  });
-  //TODO: quant device does not need a `days` parameter consider editing fetching function
-  const {
-    data: sensorData = [],
-    error,
-    isValidating
-  } = useSWR<DataType>(
-    () => [selectedValue, ...sensorUrls],
-    fetchMultipleDeviceDetails,
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      dedupingInterval: 60000
+    if (sensorData && sensorData.length > 0) {
+      sessionStorage.setItem("sensorData", JSON.stringify(sensorData));
     }
-  );
+  }, [sensorData]);
   const groupedData = useMemo(() => {
-    return sensorData.reduce(
-      (sensors: Record<string, DeviceRawData>, curr: CommonDeviceType) => {
-        const id = curr.DeviceID || curr.sn || curr.DeviceId;
-        if (!sensors[id]) {
-          sensors[id] = {
-            id,
-            name: mapDeviceNames(id),
-            data: [{ ...curr }]
-          };
-        } else {
-          sensors[id].data.push({ ...curr });
-        }
-        return sensors;
-      },
-      {}
-    );
+    return groupSensorData(sensorData);
   }, [sensorData]);
 
-  if (error) return <Typography>{`Error loading data`}</Typography>;
-  //TODO: add a date range selector for user
+  if (fetchError) return <Typography>{`Error loading data`}</Typography>;
+  //TODO: abstract skeleton and date pickers to its own component
   return (
     <>
-      <Box display={"flex"} justifyContent={"flex-end"}>
-        <SelectMenuList
-          options={options}
-          helperText={"Select number of days from current day to view data"}
-          selectedValue={selectedValue}
-          handleSelectChange={handleSelectChange}
+      <Box
+        className={classes.dateContainer}
+        component="form"
+        onSubmit={handleFormSubmit}
+      >
+        <Button
+          variant="outlined"
+          size="small"
+          color="primary"
+          type="submit"
+          disabled={isValidating}
+        >
+          Generate Plots
+        </Button>
+        <TextField
+          error={formError.error}
+          helperText={formError.error && formError.startDateErrorMsg}
+          id="start-date"
+          label="Start Date"
+          type="date"
+          inputRef={startDateRef}
+          InputLabelProps={{
+            shrink: true
+          }}
+        />
+        <TextField
+          error={formError.error}
+          helperText={formError.error && formError.endDateErrorMsg}
+          id="end-date"
+          label="End Date"
+          type="date"
+          inputRef={endDateRef}
+          InputLabelProps={{
+            shrink: true
+          }}
         />
       </Box>
+      <Typography variant="caption" className={classes.dateRangeCaption}>
+        <span className={classes.modCaption}>*MOD</span> sensors currently
+        limited to an 8 day range
+      </Typography>
+
       <AQLegend />
 
       {isValidating ? (
@@ -110,16 +131,13 @@ const AirQualityGroupDeviceDataLogic = ({
           <LoadingChart />
         </>
       ) : (
-        sensorData.length > 0 && (
+        sensorData.length > 0 &&
+        groupedData && (
           <>
-            <AirQualitySection
-              normalizedData={groupedData}
-              key={selectedValue}
-            />
+            <AirQualitySection normalizedData={groupedData} />
             <AirQualityPlots
               normalizedData={groupedData}
               isLoading={isValidating}
-              dataDateRangeInDays={selectedValue}
             />
           </>
         )
@@ -127,4 +145,25 @@ const AirQualityGroupDeviceDataLogic = ({
     </>
   );
 };
-export default AirQualityGroupDeviceDataLogic;
+const useStyles = makeStyles((theme) => ({
+  dateContainer: {
+    display: "flex",
+    justifyContent: "flex-end",
+    "& > *": {
+      marginRight: "2rem"
+    },
+    "& > *:last-child": {
+      marginRight: "0"
+    }
+  },
+  modCaption: {
+    color: theme.palette.secondary.main
+  },
+  dateRangeCaption: {
+    display: "block",
+    textAlign: "right",
+    margin: 0,
+    padding: 0
+  }
+}));
+export default React.memo(AirQualityGroupDeviceDataLogic);
