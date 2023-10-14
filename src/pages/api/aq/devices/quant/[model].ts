@@ -1,4 +1,4 @@
-import { getQuantDevice } from "lib/quant";
+import ApiResponse, { getQuantDevice } from "lib/quant";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -11,9 +11,16 @@ export default async function handler(
     return res.status(405).end(`Method ${method} Not Allowed`);
 
   try {
-    const data = await getQuantDevice(parseInt(query.days as string, 10));
-    //filter out missing geo.lat and geo.lon
-    const filteredData = data.filter(
+    const result: ApiResponse = await getQuantDevice(
+      query.startDate as string,
+      query.endDate as string
+    );
+    if (result.error) {
+      console.warn(result.error);
+      return res.status(200).json([]);
+    }
+    const device = result.data || [];
+    const filteredData = device.filter(
       (entry) => entry["geo.lon"] && entry["geo.lat"]
     );
 
@@ -63,4 +70,3 @@ export default async function handler(
     return res.status(500).json({ message: err.message });
   }
 }
-//TODO find out why CO isnt appearing in raw
