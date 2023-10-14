@@ -12,9 +12,9 @@ export default async function handler(
   try {
     const data = await getDeviceData({
       sensorId: query.sensorId as string,
-      days: parseInt(query.days as string, 10)
+      startDate: query.startDate as string,
+      endDate: query.endDate as string
     });
-
     return res.status(200).json(data);
   } catch (err) {
     // @ts-ignore

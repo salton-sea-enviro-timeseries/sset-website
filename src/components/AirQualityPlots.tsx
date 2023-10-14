@@ -249,12 +249,10 @@ function hasNonNullValueForParam<T extends { [key: string]: any }>(
 }
 const AirQualityPlots = ({
   normalizedData,
-  isLoading,
-  dataDateRangeInDays
+  isLoading
 }: {
   normalizedData: Record<string, DeviceRawData>;
   isLoading: boolean;
-  dataDateRangeInDays: number;
 }) => {
   const classes = useStyles();
   const { selectedValue, handleSelectChange, options } = useSelect<string>({
@@ -317,7 +315,6 @@ const AirQualityPlots = ({
       ) : (
         <Typography align="center" gutterBottom={true}>
           No data available for <b>{selectedValue}</b> in the past{" "}
-          <u>{dataDateRangeInDays} days</u>
         </Typography>
       )}
       <Box marginBottom={1}>
@@ -326,7 +323,6 @@ const AirQualityPlots = ({
           align="center"
           style={{
             fontSize: "14px",
-            // marginTop: "-5px",
             fontWeight: "lighter"
           }}
         >

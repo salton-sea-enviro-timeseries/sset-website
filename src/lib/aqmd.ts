@@ -1,4 +1,5 @@
-import { utcToZonedTime } from "date-fns-tz";
+import { endOfDay, parse, startOfDay } from "date-fns";
+import { format, utcToZonedTime } from "date-fns-tz";
 import { getEndDate, getStartDate } from "utils";
 
 const USERNAME = process.env.AQMD_USERNAME as string;
@@ -23,7 +24,6 @@ export interface RawDeviceAverageDataResponse {
   WorkingStatus: string;
   ProgramId: number;
   CommunityId: number;
-  // TODO look into DeviceID for all o
   DeviceId: string;
   Longitude: number;
   Latitude: number;
@@ -82,13 +82,13 @@ export async function getDevices({ groupId }: DevicesRequestParams) {
 
 export async function getDeviceData({
   sensorId,
-  days
+  startDate,
+  endDate
 }: {
   sensorId: string;
-  days: number;
+  startDate?: string;
+  endDate?: string;
 }) {
-  // default 10 days
-  // const startDateFromDaysSelected = days ? days : 10;
   try {
     const options = {
       method: "GET",
@@ -97,26 +97,49 @@ export async function getDeviceData({
         token: PASSWORD
       }
     };
-    // console.log("aqmd days:", days);
-    /**
-     * TODO: Get most recent data for now. Will want to allow
-     * start and end date params in the future.
-     */
     const timeZone = "America/Los_Angeles";
     const today = utcToZonedTime(new Date(), timeZone);
-    const startDate = getStartDate(today, days);
-    const endDate = getEndDate(today);
+    if (!startDate || !endDate) {
+      startDate = getStartDate(today, 8);
+      endDate = getEndDate(today);
+    } else {
+      startDate = format(
+        startOfDay(parse(startDate, "yyyy-M-d", new Date())),
+        "yyyy-MM-dd HH:mm:ss"
+      );
+      endDate = format(
+        endOfDay(parse(endDate, "yyyy-M-d", new Date())),
+        "yyyy-MM-dd HH:mm:ss"
+      );
+    }
     const url = new URL(`${ENDPOINT_BASE_URL}/deviceaveragedata`);
     url.searchParams.append("sensorId", sensorId);
     url.searchParams.append("StartDateTime", startDate);
     url.searchParams.append("EndDateTime", endDate);
 
     const requestUrl = decodeURIComponent(url.toString()).replace(/\+/g, "%20");
-    const data = await (await fetch(requestUrl, options)).json();
+    const response = await fetch(requestUrl, options);
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch aqmd device data. HTTP Status: ${response.status}`
+      );
+    }
+
+    const data = await response.json();
     return data.data.length === 0
       ? { DeviceId: sensorId, data: [] }
       : data.data;
-  } catch (err) {
-    console.log(err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(
+        `Error fetching aqmd device data for sensor ID ${sensorId}: ${err.message}`
+      );
+    } else {
+      console.error(
+        "An unknown error occurred while fetching device data: ",
+        err
+      );
+    }
   }
 }
