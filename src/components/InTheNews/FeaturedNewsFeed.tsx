@@ -39,7 +39,6 @@ const FeaturedNewsFeed = ({ newsMediaData }: FeaturedNewsFeedProps) => {
             description={`${SWBRCB_DESCRIPTION} Community voices and projects panel is from about 2:29:30-3:11:45.`}
           />
         </Grid>
-        {/* check back to see if this code worked,  */}
         {newsMediaData.length > 0 ? (
           <Grid item xs={12} sm={6} md={4}>
             <NewsCard media={newsMediaData[0]} />
@@ -75,7 +74,6 @@ const FeaturedNewsFeed = ({ newsMediaData }: FeaturedNewsFeedProps) => {
           </Grid>
         </Grid>
       </Collapse>
-      {/* come back and see if this change worked after using all links */}
       {newsMediaData.length > 0 && (
         <Box display={"flex"} justifyContent={"center"}>
           <Link
