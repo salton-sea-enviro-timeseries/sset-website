@@ -139,6 +139,7 @@ export default Home;
 
 export const getStaticProps = async () => {
   const urls: string[] = [
+    "https://www.alianzacv.org/news/aeroqual-air-quality-sensor-installed-in-the-salton-sea/",
     "https://www.hcn.org/issues/55.6/south-water-in-search-of-answers-at-the-salton-sea?utm_medium=email&utm_source=govdelivery",
     "https://atmos.earth/salton-sea-california-drought-pollution/",
     //TODO: 403 error; come back to fix: anti scrap enabled
