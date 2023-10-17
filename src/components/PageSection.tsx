@@ -11,6 +11,7 @@ import Image from "next/image";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 // TODO: add links to definitions
 // or add a glossary section ???
+
 type Props = {
   newsMediaData?: MediaObject[];
   bodyText: React.ReactNode | null;
@@ -24,7 +25,10 @@ interface GradSectionClasses {
   imageWrapper: string;
 }
 const generateContent = (
-  classes: { timeLineImage: string; graphDivider: string },
+  classes: {
+    timeLineImage: string;
+    graphDivider: string;
+  },
   id: string,
   newsSection?: MediaObject[],
   bodyText?: React.ReactNode | null
@@ -143,6 +147,16 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     marginTop: "1rem"
   },
+  "@global": {
+    "@keyframes fade": {
+      from: {
+        opacity: 0
+      },
+      to: {
+        opacity: 1
+      }
+    }
+  },
   timeLineImage: {
     [theme.breakpoints.down("sm")]: {
       height: 300
@@ -152,7 +166,10 @@ const useStyles = makeStyles((theme) => ({
     },
     width: "100%",
     marginTop: "2rem",
-    position: "relative"
+    position: "relative",
+    animation: "fade linear both",
+    animationTimeline: "view()",
+    animationRange: "entry 50% cover 50%"
   },
   graphDivider: {
     margin: "auto",
