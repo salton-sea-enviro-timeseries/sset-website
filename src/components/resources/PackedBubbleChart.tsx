@@ -264,7 +264,7 @@ const PackedBubbleChart: React.FC = () => {
   }, []);
 
   return (
-    <Container style={{ backgroundColor: "red" }}>
+    <Container>
       <figure className={classes.highchartsFigure}>
         <div id="container" />
       </figure>
@@ -273,10 +273,6 @@ const PackedBubbleChart: React.FC = () => {
 };
 const useStyles = makeStyles((theme) => ({
   highchartsFigure: {
-    // minWidth: "320px",
-    width: "800px",
-    // maxWidth: "1000px",
-
     "& a": {
       textDecoration: "none",
       color: "inherit",

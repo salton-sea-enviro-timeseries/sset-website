@@ -10,6 +10,7 @@ import Meta from "components/Meta";
 import Translation from "components/Translation";
 import ResourceSection from "components/ResourceSection";
 import PackedBubbleChart from "components/resources/PackedBubbleChart";
+import { useEffect } from "react";
 type ArticleData = {
   data: {
     key: string;
@@ -26,105 +27,118 @@ type ArticleData = {
   meta: { creatorSummary: string };
 };
 const Resources = () => {
-  const classes = useStyles();
   const groupID = 4854089;
   const zoteroUrl = `https://api.zotero.org/groups/${groupID}/items/top?limit=10&order=dateModified&v=3`;
   // @ts-ignore
-  const { language } = useAppContext();
+  const { language, width, setWidth } = useAppContext();
   // TODO add Translations and import content from Contentful
   //  TODO Refactor : Make dry...
+  useEffect(() => {
+    setWidth("825px");
+    return () => {
+      setWidth("100%");
+    };
+  }, []);
+
+  const classes = useStyles({ width });
   return (
     <Layout>
-      <Meta title="Resources | Salton Sea Environmental Timeseries" />
-      <Translation
-        path="site.language.navLinks.resources"
-        propsToTranslate={{
-          title: "site.language.navLinks.resources"
-        }}
-      >
-        <Hero
-          bgColor="secondary"
-          size="medium"
-          salton-sea-flyer-front
-          bgImage="/topography.svg"
-          sectionHeaderProps={{
-            titleProps: {
-              align: "center",
-              className: classes.header,
-              display: "inline"
-            },
-            display: "flex",
-            justifyContent: "center",
-            size: 4
-          }}
-        />
-      </Translation>
-      <Section>
-        <Container
-          maxWidth="xl"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center"
+      <div style={{ minWidth: width }}>
+        <Meta title="Resources | Salton Sea Environmental Timeseries" />
+        <Translation
+          path="site.language.navLinks.resources"
+          propsToTranslate={{
+            title: "site.language.navLinks.resources"
           }}
         >
-          <Box className={classes.flyerContainerWrapper}>
-            <Box className={classes.flyerContainer}>
-              <Card className={classes.backCard}>
-                <Image
-                  src="/salton-sea-flyer-back.jpg"
-                  alt="Alianza CV"
-                  width={400}
-                  height={(400 * 3300) / 2550}
-                  priority
-                />
-              </Card>
-              <Card className={classes.frontCard} elevation={5}>
-                <Image
-                  src="/salton-sea-flyer-front.jpg"
-                  alt="Alianza CV"
-                  width={400}
-                  height={(400 * 3300) / 2550}
-                  priority
-                />
-              </Card>
+          <Hero
+            bgColor="secondary"
+            size="medium"
+            salton-sea-flyer-front
+            bgImage="/topography.svg"
+            sectionHeaderProps={{
+              titleProps: {
+                align: "center",
+                className: classes.header,
+                display: "inline"
+              },
+              display: "flex",
+              justifyContent: "center",
+              size: 4
+            }}
+          />
+        </Translation>
+        <Section>
+          <Container
+            maxWidth="xl"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              minWidth: "800px"
+            }}
+          >
+            <Box className={classes.flyerContainerWrapper}>
+              <Box className={classes.flyerContainer}>
+                <Card className={classes.backCard}>
+                  <Image
+                    src="/salton-sea-flyer-back.jpg"
+                    alt="Alianza CV"
+                    width={400}
+                    height={(400 * 3300) / 2550}
+                    priority
+                  />
+                </Card>
+                <Card className={classes.frontCard} elevation={5}>
+                  <Image
+                    src="/salton-sea-flyer-front.jpg"
+                    alt="Alianza CV"
+                    width={400}
+                    height={(400 * 3300) / 2550}
+                    priority
+                  />
+                </Card>
+              </Box>
             </Box>
-          </Box>
-          <Box display="flex" justifyContent={"center"}>
-            <Button
-              color="primary"
-              href={`/salton-sea-flyer-${language}.pdf`}
-              download
-            >
-              {language === "en"
-                ? "Download Our Flyer (EN)"
-                : "Descarga nuestro volante (ES)"}
-            </Button>
-          </Box>
-          <ResourceSection
-            title={"Scientific Articles"}
-            body="This links to a repository in Zotero of scientific articles. You
+            <Box display="flex" justifyContent={"center"}>
+              <Button
+                color="primary"
+                href={`/salton-sea-flyer-${language}.pdf`}
+                download
+              >
+                {language === "en"
+                  ? "Download Our Flyer (EN)"
+                  : "Descarga nuestro volante (ES)"}
+              </Button>
+            </Box>
+            <ResourceSection
+              title={"Scientific Articles"}
+              body="This links to a repository in Zotero of scientific articles. You
               can sign up for an account and request membership in the
               repository to get free access to PDFs of scientific articles. Feel
               free to add articles to this collaborative repository or reach out
               if there is an article that you want to read but don’t have access
               to!"
-            link={`https://www.zotero.org/groups/${groupID}/saltonseascience/`}
-            download={false}
-          />
-          <ResourceSection
-            title={"2023 Salton Sea TMDL Public Letter"}
-            body="Download PDF Establishment of Salton Sea TMDLs in 2023"
-            link={"/salton-sea-mdl-public-letter-2023.pdf"}
-            download={true}
-          />
-          <PackedBubbleChart />
-        </Container>
-      </Section>
+              link={`https://www.zotero.org/groups/${groupID}/saltonseascience/`}
+              download={false}
+            />
+            <ResourceSection
+              title={"2023 Salton Sea TMDL Public Letter"}
+              body="Download PDF Establishment of Salton Sea TMDLs in 2023"
+              link={"/salton-sea-mdl-public-letter-2023.pdf"}
+              download={true}
+            />
+            <PackedBubbleChart />
+          </Container>
+        </Section>
+      </div>
     </Layout>
   );
 };
 const useStyles = makeStyles((theme) => ({
+  pageWidth: ({ width }: { width: string }) => ({
+    width: width
+  }),
   header: {
     boxShadow: `inset 0 -5px 0 ${theme.palette.primary.light}`,
     transition: "color 0.2s ease",

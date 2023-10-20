@@ -9,10 +9,16 @@ import Typography from "@material-ui/core/Typography";
 // import ListItemText from "@material-ui/core/ListItemText";
 // import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { makeStyles } from "@material-ui/core/styles";
+import { useAppContext } from "./AppContext";
 // import Image from "next/image";
 
 function Footer() {
   const classes = useStyles();
+  const ctx = useAppContext();
+  if (!ctx) {
+    return null;
+  }
+  const { width } = ctx;
 
   return (
     <Box
@@ -21,6 +27,7 @@ function Footer() {
       color="white"
       py={2}
       className={classes.root}
+      style={{ minWidth: width }}
     >
       <Container>
         <Grid container={true} justifyContent="space-between" spacing={4}>
