@@ -5,19 +5,28 @@ import useLocalStorage from "./useLocalStorage";
 interface AppContextInterface {
   language: Language;
   setLanguage: (language: Language) => void;
+  width: string;
+  setWidth: (width: string) => void;
 }
 
-export const AppContext = React.createContext<AppContextInterface | null>(null);
+export const AppContext = React.createContext<AppContextInterface | null>({
+  language: "en",
+  setLanguage: () => {},
+  width: "100%",
+  setWidth: () => {}
+});
 
 const AppContextProvider: React.FC = (props) => {
   const [language, setLanguage] = useLocalStorage<Language>("language", "en");
-  // const [language, setLanguage] = React.useState<Language>("en");
+  const [width, setWidth] = React.useState<string>("100%");
 
   return (
     <AppContext.Provider
       value={{
         language,
-        setLanguage
+        setLanguage,
+        width,
+        setWidth
       }}
     >
       {props.children}
