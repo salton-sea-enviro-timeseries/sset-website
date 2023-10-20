@@ -67,7 +67,8 @@ export enum AirQualityParameter {
   PM10 = "PM10",
   PM2_5 = "PM2_5",
   NO2 = "NO2",
-  PM1 = "PM1"
+  PM1 = "PM1",
+  CO = "CO"
 }
 
 export enum Units {
@@ -114,6 +115,12 @@ export const AirQualityParameterMapping = {
     href: "https://www.epa.gov/pm-pollution/particulate-matter-pm-basics",
     description:
       "Particulate matter also known at particle pollution or PM, is a general term for a mixture of solid and liquid droplets suspended in the air. PM1 stands for inhalable particles, with a diameter that are fewer than 1 microns."
+  },
+  [AirQualityParameter.CO]: {
+    name: "Carbon Monoxide",
+    href: "https://www.epa.gov/co-pollution/basic-information-about-carbon-monoxide-co-outdoor-air-pollution#What%20is%20CO",
+    description:
+      "CO is a colorless, odorless gas that can be harmful when inhaled in large amounts. It is released usually from burning fossil fuels or machinery."
   }
 };
 

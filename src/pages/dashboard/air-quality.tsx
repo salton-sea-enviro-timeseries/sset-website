@@ -14,6 +14,7 @@ import AirQualityGroupDeviceDataLogic from "components/AirQualityGroupDeviceData
 import PurpleAirSensorData from "purple-air-data.json";
 import { AirQualityDevices } from "types";
 import Legend from "components/Dashboard/Legend";
+import { mapDeviceNames } from "util/mapDeviceNames";
 
 const PIN_SIZE = 20;
 async function multiFetcher(...urls: string[]) {
@@ -21,18 +22,6 @@ async function multiFetcher(...urls: string[]) {
   const deviceArrays = await Promise.all(urls.map((url) => fetcher(url)));
   return promises.concat(...deviceArrays);
 }
-const DeviceNames: { [key: string]: string | null | undefined } = {
-  "AQY BD-1071": "Indio",
-  "AQY BD-1080": "Mecca",
-  "AQY BD-1072": "Indio",
-  "AQY BD-1065": null,
-  "AQY BD-1092": "Mission San Jose",
-  "AQY BD-1074": null,
-  "AQY BD-1094": null,
-  "AQY BD-1063": null,
-  "AQY BD-1152": null,
-  "MOD-PM-00404": "Palm Desert"
-};
 function filteredSensors(sensors: AirQualityDevices[]) {
   return sensors.filter(({ value }) => value !== "purple_air");
 }
@@ -42,11 +31,10 @@ const AirQuality = () => {
     [`../api/aq/devices/aqmd`, `../api/aq/devices/quant`],
     multiFetcher
   );
-
   const airQualityDevices = useMemo(() => {
     const transformedSensorData = data.map((device) => {
       let status: string = "";
-      const name = DeviceNames[device.DeviceId] ?? device.DeviceTitle;
+      const name = mapDeviceNames(device.DeviceId);
       const statusMapping: { [key: string]: string } = {
         "Not Working": "🔴",
         Offline: "⭕",
@@ -75,7 +63,6 @@ const AirQuality = () => {
 
     return [...transformedSensorData, ...purpleAirData];
   }, [data]);
-
   const isLoading = !data.length && !error;
   if (error) return <Typography>Error Loading data</Typography>;
   return (

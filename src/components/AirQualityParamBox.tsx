@@ -30,7 +30,7 @@ const AirQualityParamBox = ({
     return (
       <Box flex={1} border={`1px solid ${colors.grey[300]}`} p={1} m={0.5}>
         <Typography variant="h6" component="p">
-          {parameter} &bull; {parameterValue} {unitOfMeasure}
+          {parameter} &bull; {parameterValue ?? "N/A"} {unitOfMeasure}
         </Typography>
       </Box>
     );

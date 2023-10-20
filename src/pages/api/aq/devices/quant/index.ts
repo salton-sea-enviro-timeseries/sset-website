@@ -1,4 +1,4 @@
-import { getQuantDevice } from "lib/quant";
+import ApiResponse, { getQuantDevice } from "lib/quant";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -10,7 +10,12 @@ export default async function handler(
     return res.status(405).end(`Method ${method} Not Allowed`);
 
   try {
-    const devices = await getQuantDevice();
+    const result: ApiResponse = await getQuantDevice();
+    if (result.error) {
+      console.warn(result.error);
+      return res.status(200).json([]);
+    }
+    const devices = result.data || [];
     if (devices.length === 0) {
       return res.status(200).json([]);
     }
