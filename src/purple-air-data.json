@@ -47,21 +47,74 @@
     "location": ""
   },
   {
+    "site": "North Shore",
+    "value": "purple_air",
+    "sensorId": "SCAQA_07",
+    "latitude": "33.53441629",
+    "longitude": "-115.93744842",
+    "color": "rgb(170, 68, 170)",
+    "location": ""
+  },
+  {
+    "site": "North Shore",
+    "value": "purple_air",
+    "sensorId": "SCAQA_08",
+    "latitude": "33.5221081",
+    "longitude": "-115.92008685",
+    "color": "rgb(170, 68, 170)",
+    "location": ""
+  },
+  {
     "site": "Mecca",
     "value": "purple_air",
     "sensorId": "SCAQA_09",
     "latitude": "33.58146",
-    "longitude": " -116.07639",
+    "longitude": "-116.07639",
     "color": "rgb(170, 68, 170)",
     "location": ""
   },
-
+  {
+    "site": "North Shore",
+    "value": "purple_air",
+    "sensorId": "SCAQA_10",
+    "latitude": "33.54720006",
+    "longitude": "-115.94120768",
+    "color": "rgb(170, 68, 170)",
+    "location": ""
+  },
+  {
+    "site": "Mecca",
+    "value": "purple_air",
+    "sensorId": "SCAQA_12",
+    "latitude": "33.5711022",
+    "longitude": "-116.0703661",
+    "color": "rgb(170, 68, 170)",
+    "location": ""
+  },
+  {
+    "site": "Mecca",
+    "value": "purple_air",
+    "sensorId": "SCAQA_13",
+    "latitude": "33.51821472",
+    "longitude": "-115.92088993",
+    "color": "rgb(170, 68, 170)",
+    "location": ""
+  },
   {
     "site": "Thermal",
     "value": "purple_air",
     "sensorId": "SCAQA_14",
     "latitude": "33.56908",
     "longitude": "-116.17881",
+    "color": "rgb(170, 68, 170)",
+    "location": ""
+  },
+  {
+    "site": "Mecca",
+    "value": "purple_air",
+    "sensorId": "SCAQA_15",
+    "latitude": "33.5699929",
+    "longitude": "-116.06511976",
     "color": "rgb(170, 68, 170)",
     "location": ""
   }
