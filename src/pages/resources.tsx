@@ -1,6 +1,6 @@
 import { Container, Button, Box } from "@material-ui/core";
 import Image from "next/image";
-import { Card, CardMedia } from "@material-ui/core";
+import { Card } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useAppContext } from "components/AppContext";
 import Hero from "components/Hero";
@@ -33,6 +33,8 @@ const Resources = () => {
   const { language, width, setWidth } = useAppContext();
   // TODO add Translations and import content from Contentful
   //  TODO Refactor : Make dry...
+  //
+  // reset width to fit bubble chart-width correctly on mobile devices.
   useEffect(() => {
     setWidth("825px");
     return () => {
@@ -128,7 +130,45 @@ const Resources = () => {
               link={"/salton-sea-mdl-public-letter-2023.pdf"}
               download={true}
             />
-            <PackedBubbleChart />
+          </Container>
+        </Section>
+        <Section>
+          <PackedBubbleChart />
+        </Section>
+        <Section>
+          <Container>
+            <ResourceSection
+              title={"Salton Sea Ownership"}
+              link={`/salton-sea-ownership-map.pdf`}
+              download={true}
+            />
+            <Box display="flex" alignItems="center" flexDirection={"column"}>
+              <Box
+                className={`${classes.imageWrapper} ${classes.zoomAnimation}`}
+                mb="1rem"
+              >
+                <Image
+                  src="/ssa-ownership-map.png"
+                  alt="SSA Ownership Map"
+                  objectFit="contain"
+                  width={400}
+                  height={300}
+                  layout="responsive"
+                />
+              </Box>
+              <Box
+                className={`${classes.imageWrapper} ${classes.zoomAnimation}`}
+              >
+                <Image
+                  src="/ssa-ownership-map-legend.png"
+                  alt="SSA Ownership Map"
+                  objectFit="contain"
+                  width={650}
+                  height={350}
+                  layout="responsive"
+                />
+              </Box>
+            </Box>
           </Container>
         </Section>
       </div>
@@ -146,6 +186,7 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.secondary.light
     }
   },
+
   section: {
     boxShadow: `inset 0 -5px 0 ${theme.palette.secondary.light}`
   },
@@ -206,10 +247,30 @@ const useStyles = makeStyles((theme) => ({
       left: "0"
     }
   },
+  "@global": {
+    "@keyframes zoom": {
+      from: {
+        width: "50%",
+        opacity: "25%"
+      },
+      to: {
+        opacity: 1,
+        width: "100%"
+      }
+    }
+  },
   imageWrapper: {
-    position: "relative",
-    width: "100%",
-    height: "100%"
+    maxWidth: "100%",
+    height: "auto",
+    verticalAlign: "middle",
+    fontStyle: "italic",
+    backgroundRepeat: "no-repeat",
+    shapeMargin: "1rem"
+  },
+  zoomAnimation: {
+    animation: "zoom linear both",
+    animationTimeline: "view()",
+    animationRange: "entry 50% cover 45%"
   }
 }));
 

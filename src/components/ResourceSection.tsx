@@ -2,7 +2,7 @@ import { Typography, Container, Link, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 type Props = {
   title: string;
-  body: string;
+  body?: string;
   link: string;
   download: boolean;
 };
