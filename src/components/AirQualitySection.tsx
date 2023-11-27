@@ -19,19 +19,22 @@ type ParamAQIStandardMap = {
   NO2: number;
   PM1: null;
   CO: number;
+  H2S: null;
 };
 type DeviceRawData = {
   id: string;
   name: string;
   data: CommonDeviceType[];
 };
+//Standards bases on NAAQS
 const paramAQIStandardMap: ParamAQIStandardMap = {
   O3: 70, //ppb
   "PM2.5": 35, //UOM ug/m3
   PM10: 150, //ppb -> 150ug/m3
   NO2: 100, // ppb
   PM1: null, // set to null since there is no standard,  //UOM ug/m3
-  CO: 35000 // ppb
+  CO: 35000, // ppb,
+  H2S: null
 };
 type MenuItem = {
   id: string;
