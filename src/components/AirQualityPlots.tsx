@@ -53,6 +53,7 @@ type ParamAQIStandardMap = {
   NO2: number;
   PM1: null;
   CO?: number;
+  H2S: null;
 };
 const paramAQIStandardMap: ParamAQIStandardMap = {
   O3: 70,
@@ -60,7 +61,8 @@ const paramAQIStandardMap: ParamAQIStandardMap = {
   PM10: 150,
   NO2: 100,
   PM1: null,
-  CO: 35000
+  CO: 35000,
+  H2S: null
 };
 type DataItem = {
   x: number;
@@ -314,7 +316,8 @@ const AirQualityPlots = ({
         </Box>
       ) : (
         <Typography align="center" gutterBottom={true}>
-          No data available for <b>{selectedValue}</b> in the past{" "}
+          No data available for <b>{selectedValue}</b> for the date range
+          selected.
         </Typography>
       )}
       <Box marginBottom={1}>

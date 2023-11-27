@@ -9,7 +9,8 @@ export function mapDeviceNames(id: string) {
     "AQY BD-1094": "Thermal Airport",
     "AQY BD-1063": "Torres Martinez - Headquarters",
     "AQY BD-1152": "Torres Martinez - Near Shore",
-    "MOD-00069": "Palm Desert"
+    "MOD-00069": "Palm Desert",
+    "AQS1 13122022-2194": "Aeroqual"
   };
   return DeviceNames[id];
 }

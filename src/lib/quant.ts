@@ -49,7 +49,7 @@ export async function getQuantDevice(startDate?: string, endDate?: string) {
     const end = endOfDay(parse(endDate, "yyyy-M-d", new Date()));
     const daysDifference = differenceInDays(end, start);
     if (daysDifference > 8) {
-      console.error("Error:  Selected range exceeds 8 days.");
+      console.error("Error:  Selected range exceeds 8 days for Quant sensors.");
       return { data: [], error: "Selected range exceeds 8 days" };
     }
     startDate = format(start, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");

@@ -1,4 +1,5 @@
 import { BLOCKS, NodeData, TopLevelBlock } from "@contentful/rich-text-types";
+import { TransformedData } from "lib/aeroqual";
 import { RawDeviceAverageDataResponse } from "lib/aqmd";
 import { MODRawDeviceDataResponse } from "lib/quant";
 
@@ -68,7 +69,8 @@ export enum AirQualityParameter {
   PM2_5 = "PM2_5",
   NO2 = "NO2",
   PM1 = "PM1",
-  CO = "CO"
+  CO = "CO",
+  H2S = "H2S"
 }
 
 export enum Units {
@@ -121,6 +123,12 @@ export const AirQualityParameterMapping = {
     href: "https://www.epa.gov/co-pollution/basic-information-about-carbon-monoxide-co-outdoor-air-pollution#What%20is%20CO",
     description:
       "CO is a colorless, odorless gas that can be harmful when inhaled in large amounts. It is released usually from burning fossil fuels or machinery."
+  },
+  [AirQualityParameter.H2S]: {
+    name: "Hydrogen Sulfide",
+    href: "https://ww2.arb.ca.gov/resources/hydrogen-sulfide-and-health",
+    description:
+      "Hydrogen sulfide is a colorless gas with the odor of rotten eggs. The most common sources of H2S emissions are oil and natural gas extraction and processing, and natural emissions from geothermal fields."
   }
 };
 
@@ -368,4 +376,6 @@ export type AirQualityDevices = {
 export interface DeviceDataResponse extends RawDeviceAverageDataResponse {
   DeviceID: string;
 }
-export type CommonDeviceType = DeviceDataResponse & MODRawDeviceDataResponse;
+export type CommonDeviceType = DeviceDataResponse &
+  MODRawDeviceDataResponse &
+  TransformedData;

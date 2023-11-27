@@ -8,10 +8,10 @@ import DashboardLayout from "components/DashboardLayout";
 import { fetcher } from "utils";
 import { MapPinIcon } from "../../constants";
 import Map from "components/Dashboard/Map";
-
 import { Device } from "lib/aqmd";
 import AirQualityGroupDeviceDataLogic from "components/AirQualityGroupDeviceDataLogic";
 import PurpleAirSensorData from "purple-air-data.json";
+import AeroqualSensor from "aeroqual-sensor.json";
 import { AirQualityDevices } from "types";
 import Legend from "components/Dashboard/Legend";
 import { mapDeviceNames } from "util/mapDeviceNames";
@@ -60,8 +60,8 @@ const AirQuality = () => {
       latitude: parseFloat(sensor.latitude),
       longitude: parseFloat(sensor.longitude)
     }));
-
-    return [...transformedSensorData, ...purpleAirData];
+    const aeroqualSensor = AeroqualSensor;
+    return [...transformedSensorData, ...purpleAirData, aeroqualSensor];
   }, [data]);
   const isLoading = !data.length && !error;
   if (error) return <Typography>Error Loading data</Typography>;
