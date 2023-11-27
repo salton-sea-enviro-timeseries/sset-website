@@ -21,9 +21,8 @@ const AirQualityParamBox = ({
   ) => {
     if (typeof parameterValue === "number") {
       return Math.round((parameterValue / aqiStandard) * 100);
-    } else {
-      return null;
     }
+    return;
   };
   if (parameterValue === undefined) return null;
   if (!aqiStandard)
@@ -59,7 +58,7 @@ const AirQualityParamBox = ({
     return aqiIndex;
   };
   const aqi = calculateAQI(parameterValue, aqiStandard);
-  const aqiIndex = aqi && findAqiIndex(aqi);
+  const aqiIndex = aqi !== undefined && findAqiIndex(aqi);
   return (
     <Box flex={1} border={`1px solid ${colors.grey[300]}`} p={1} m={0.5}>
       <Typography variant="h6" component="p">
