@@ -316,7 +316,8 @@ const AirQualityPlots = ({
         </Box>
       ) : (
         <Typography align="center" gutterBottom={true}>
-          No data available for <b>{selectedValue}</b> in the past{" "}
+          No data available for <b>{selectedValue}</b> for the date range
+          selected.
         </Typography>
       )}
       <Box marginBottom={1}>
