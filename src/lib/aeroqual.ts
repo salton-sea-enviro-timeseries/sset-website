@@ -6,7 +6,6 @@ interface AeroqualDeviceDataParams {
   sensorId: string;
   startDate?: string;
   endDate?: string;
-  cookies: string;
 }
 interface OriginalInstrumentData {
   Serial: string;
@@ -55,19 +54,17 @@ function getDefaultOriginalData(): OriginalData {
     Instruments: []
   };
 }
+const aqCookie = `aq_auth=${process.env.AEROQUAL_COOKIE}`;
 export async function getAeroqualDeviceData({
   sensorId,
   startDate,
-  endDate,
-  cookies
+  endDate
 }: AeroqualDeviceDataParams): Promise<OriginalData> {
   try {
     const options = {
       method: "GET",
       headers: {
-        ...(cookies && {
-          Cookie: cookies
-        })
+        Cookie: aqCookie
       }
     };
     const timeZone = "America/Los_Angeles";
