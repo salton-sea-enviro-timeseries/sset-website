@@ -27,7 +27,7 @@ export default async function handler(
   try {
     const cookies = await getCookies(req, "aq_auth");
     if (cookies) {
-      const secureCookie = `${cookies}; Domain=cloud.aeroqual.com.com; Secure; HttpOnly;`;
+      const secureCookie = `${cookies}; Domain=cloud.aeroqual.com; Secure; HttpOnly;`;
       res.setHeader("set-cookie", secureCookie);
     }
     const data = await getAeroqualDeviceData({
