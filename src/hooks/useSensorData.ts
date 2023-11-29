@@ -1,5 +1,5 @@
 import { differenceInDays } from "date-fns";
-import determineSourceOfData from "lib/determineSourceOfData";
+import determineSourceOfData from "util/determineSourceOfData";
 import { useState } from "react";
 import useSWR from "swr";
 import { AirQualityDevices, CommonDeviceType } from "types";
