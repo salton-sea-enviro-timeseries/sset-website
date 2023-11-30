@@ -27,7 +27,7 @@ export default async function handler(
     return res.status(405).end(`Method ${method} Not Allowed`);
   try {
     const cookies = await getCookies(req, "aq_auth");
-    let cookieString = `${cookies}; Path=/; Secure; HttpOnly; SameSite=Lax`;
+    let cookieString = `${cookies}; Path=/; Secure; HttpOnly; SameSite=None`;
     if (COOKIE_DOMAIN) {
       cookieString += `;Domain=${COOKIE_DOMAIN}`;
     }
