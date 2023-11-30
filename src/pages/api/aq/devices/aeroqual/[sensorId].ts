@@ -17,8 +17,8 @@ function transformData(originalData: OriginalData): TransformedData[] {
     }))
   );
 }
-// const COOKIE_DOMAIN = process.env.AEROQUAL_COOKIE_DOMAIN;
-const COOKIE_DOMAIN = ".saltonsea.netlify.app";
+const COOKIE_DOMAIN = process.env.AEROQUAL_COOKIE_DOMAIN;
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
