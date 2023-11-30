@@ -28,9 +28,9 @@ export default async function handler(
   try {
     const cookies = await getCookies(req, "aq_auth");
     let cookieString = `${cookies}; Path=/; Secure; HttpOnly; SameSite=None`;
-    if (COOKIE_DOMAIN) {
-      cookieString += `;Domain=${COOKIE_DOMAIN}`;
-    }
+    // if (COOKIE_DOMAIN) {
+    //   cookieString += `;Domain=${COOKIE_DOMAIN}`;
+    // }
     res.setHeader("set-cookie", cookieString);
     const data = await getAeroqualDeviceData({
       sensorId: query.sensorId as string,
