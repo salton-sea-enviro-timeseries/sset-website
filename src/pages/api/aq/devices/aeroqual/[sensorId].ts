@@ -3,8 +3,8 @@ import {
   TransformedData,
   getAeroqualDeviceData
 } from "lib/aeroqual";
-import { loginAndGetCookies } from "lib/loginAndGetCookies";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { getCookies } from "util/getCookies";
 
 function transformData(originalData: OriginalData): TransformedData[] {
   if (!originalData.Instruments || originalData.Instruments.length === 0) {
@@ -18,6 +18,8 @@ function transformData(originalData: OriginalData): TransformedData[] {
     }))
   );
 }
+const COOKIE_DOMAIN = process.env.AEROQUAL_COOKIE_DOMAIN;
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -25,9 +27,13 @@ export default async function handler(
   const { method, query } = req;
   if (method !== "GET")
     return res.status(405).end(`Method ${method} Not Allowed`);
-
   try {
-    const cookies = await loginAndGetCookies();
+    const cookies = await getCookies(req, "aq_auth");
+    let cookieString = `${cookies}; Path=/; Secure; HttpOnly; SameSite=None`;
+    if (COOKIE_DOMAIN) {
+      cookieString += `;Domain=${COOKIE_DOMAIN}`;
+    }
+    res.setHeader("set-cookie", cookieString);
     const data = await getAeroqualDeviceData({
       sensorId: query.sensorId as string,
       startDate: query.startDate as string,
