@@ -58,7 +58,7 @@ const DownloadDataButtonsSection = ({
             startIcon={<DownloadIcon />}
             size="small"
             variant="contained"
-            href="/api/download?range=YSI_probe&filename=probe-data.csv"
+            href="/api/download?range=probe_surface&filename=probe-surface.csv"
             download
           >
             {sensorButtonText}
