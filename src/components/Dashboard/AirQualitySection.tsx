@@ -8,7 +8,7 @@ import {
   isRawDeviceAverageDataResponse,
   safeAccess
 } from "util/typeGuardFunctions";
-import WithLoading from "./WithLoading";
+import WithLoading from "../WithLoading";
 import { RawDeviceAverageDataResponse } from "lib/aqmd";
 import AirQualityParamBox from "./AirQualityParamBox";
 

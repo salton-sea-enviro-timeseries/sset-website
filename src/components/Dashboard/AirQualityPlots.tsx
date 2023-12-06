@@ -22,7 +22,7 @@ import { Line } from "react-chartjs-2";
 import { makeStyles, Box, Typography, Link } from "@material-ui/core";
 import LoadingChart from "./LoadingChart";
 import { calcParamAQI } from "util/calcParamAQI";
-import { filterHourlyData } from "../util/filterHourlyData";
+import { filterHourlyData } from "../../util/filterHourlyData";
 import { AirQualityParameterMapping } from "types";
 import useSelect from "hooks/useSelect";
 import SelectMenuList from "./SelectMenuList";

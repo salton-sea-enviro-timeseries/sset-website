@@ -1,6 +1,6 @@
 import { Box, Button, Tooltip } from "@material-ui/core";
 import DownloadIcon from "@material-ui/icons/CloudDownload";
-import WithLoading from "./WithLoading";
+import WithLoading from "../WithLoading";
 import useSWR from "swr";
 import { useCallback } from "react";
 import { saveAs } from "file-saver";

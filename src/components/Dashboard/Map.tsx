@@ -1,11 +1,6 @@
 import { Box, Collapse, Link } from "@material-ui/core";
 import React, { FC } from "react";
-import ReactMapGL, {
-  NavigationControl,
-  ViewportProps,
-  Popup
-} from "react-map-gl";
-
+import ReactMapGL, { NavigationControl, ViewportProps } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Translation from "components/Translation";
 
