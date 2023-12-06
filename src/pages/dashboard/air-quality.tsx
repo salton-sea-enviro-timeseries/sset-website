@@ -1,12 +1,10 @@
 import { useMemo } from "react";
 import useSWR from "swr";
 import { Typography, Tooltip, makeStyles } from "@material-ui/core";
-import { Marker } from "react-map-gl";
 import WithLoading from "components/WithLoading";
 import Meta from "components/Meta";
 import DashboardLayout from "components/Dashboard/DashboardLayout";
 import { fetcher } from "utils";
-import { MapPinIcon } from "../../constants";
 import Map from "components/Dashboard/Map";
 import { Device } from "lib/aqmd";
 import AirQualityGroupDeviceDataLogic from "components/Dashboard/AirQualityGroupDeviceDataLogic";
@@ -15,6 +13,7 @@ import AeroqualSensor from "aeroqual-sensor.json";
 import { AirQualityDevices } from "types";
 import Legend from "components/Dashboard/Legend";
 import { mapDeviceNames } from "util/mapDeviceNames";
+import MapMarker from "components/Dashboard/MapMarker";
 
 const PIN_SIZE = 20;
 async function multiFetcher(...urls: string[]) {
@@ -80,57 +79,21 @@ const AirQuality = () => {
           //Modify caption input for air or water quality
           //TODO import caption text from contentful
           <Map
-            caption={false}
+            //   caption={true}
+            caption={undefined}
+            purpleAirClass={classes.purpleAirLink}
             LATITUDE={33.638421}
             LONGITUDE={-116.075339}
             ZOOM={10}
           >
-            {airQualityDevices.map(
-              ({ latitude, longitude, color, site }, i) => (
-                <Marker
-                  key={`${i}-${latitude}-${longitude}`}
-                  latitude={latitude}
-                  longitude={longitude}
-                >
-                  <Tooltip
-                    title={site}
-                    open={true}
-                    arrow
-                    placement="right-start"
-                    PopperProps={{
-                      disablePortal: true
-                    }}
-                    classes={{
-                      arrow: classes.arrow,
-                      popper: classes.popper,
-                      tooltip: classes.tooltip
-                    }}
-                  >
-                    <svg
-                      height={PIN_SIZE}
-                      viewBox="0 0 24 24"
-                      style={{
-                        cursor: "pointer",
-                        fill: color,
-                        stroke: "none",
-                        transform: `translate(${
-                          -PIN_SIZE / 2
-                        }px,${-PIN_SIZE}px)`
-                      }}
-                      // onClick={() => {
-                      //   setSelectedPin(pins[i]);
-                      // }}
-                    >
-                      <path d={MapPinIcon} />
-                    </svg>
-                  </Tooltip>
-                </Marker>
-              )
-            )}
+            {airQualityDevices.map((marker, i) => (
+              <MapMarker {...marker} i={i} key={i} />
+            ))}
             <Legend />
           </Map>
         )}
-        <Typography variant="caption">
+        {/* TODO:Remove below once caption from cms is loaded */}
+        {/* <Typography variant="caption">
           This map shows various air quality sensors placed in the communities
           surrounding the Salton Sea. Sensors placed include those from AQMD,
           QUANT-AQ, and Purple Air. Sensor data from Purple Air can be retrieved
@@ -143,7 +106,7 @@ const AirQuality = () => {
           >
             <b>here</b>
           </a>{" "}
-        </Typography>
+        </Typography> */}
       </WithLoading>
     </>
   );
