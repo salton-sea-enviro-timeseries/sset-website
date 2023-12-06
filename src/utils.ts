@@ -3,6 +3,7 @@ import chroma from "chroma-js";
 import { Data, SiteData } from "types";
 import { startOfHour, subHours, addHours, format } from "date-fns";
 import { utcToZonedTime } from "date-fns-tz";
+import { Device } from "lib/aqmd";
 
 export const getAverage = (prop: string, collection: any[]) => {
   const filteredCollection = collection.filter((item: any) =>
@@ -90,6 +91,12 @@ export const fetcher = async (
 
   return res.json();
 };
+
+export async function multiFetcher(...urls: string[]) {
+  const promises: string | Device[] = [];
+  const deviceArrays = await Promise.all(urls.map((url) => fetcher(url)));
+  return promises.concat(...deviceArrays);
+}
 
 export const shuffleArray = (array: any[]) => {
   for (let i = array.length - 1; i > 0; i--) {

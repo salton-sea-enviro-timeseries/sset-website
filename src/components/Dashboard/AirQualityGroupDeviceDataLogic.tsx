@@ -7,38 +7,13 @@ import {
   makeStyles
 } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
-import { AirQualityDevices, CommonDeviceType } from "types";
-import { mapDeviceNames } from "util/mapDeviceNames";
+import { AirQualityDevices } from "types";
 import AirQualityPlots from "./AirQualityPlots";
 import AirQualitySection from "./AirQualitySection";
 import LoadingChart from "./LoadingChart";
 import AQLegend from "./AQLegend";
 import useSensorData from "hooks/useSensorData";
-
-type DeviceRawData = {
-  id: string;
-  name: string;
-  data: CommonDeviceType[];
-};
-type DataType = CommonDeviceType[];
-function groupSensorData(data: DataType): Record<string, DeviceRawData> {
-  return data.reduce(
-    (sensors: Record<string, DeviceRawData>, curr: CommonDeviceType) => {
-      const id = curr.DeviceID || curr.sn || curr.DeviceId;
-      if (!sensors[id]) {
-        sensors[id] = {
-          id,
-          name: mapDeviceNames(id),
-          data: [{ ...curr }]
-        };
-      } else {
-        sensors[id].data.push({ ...curr });
-      }
-      return sensors;
-    },
-    {}
-  );
-}
+import { groupSensorData } from "util/sensorDataFormating";
 
 // ==============================================================
 const AirQualityGroupDeviceDataLogic = ({

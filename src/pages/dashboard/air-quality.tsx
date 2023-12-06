@@ -1,31 +1,25 @@
 import { useMemo } from "react";
 import useSWR from "swr";
-import { Typography, Tooltip, makeStyles } from "@material-ui/core";
-import WithLoading from "components/WithLoading";
-import Meta from "components/Meta";
-import DashboardLayout from "components/Dashboard/DashboardLayout";
-import { fetcher } from "utils";
-import Map from "components/Dashboard/Map";
-import { Device } from "lib/aqmd";
-import AirQualityGroupDeviceDataLogic from "components/Dashboard/AirQualityGroupDeviceDataLogic";
 import PurpleAirSensorData from "purple-air-data.json";
 import AeroqualSensor from "aeroqual-sensor.json";
-import { AirQualityDevices, AirQualityPage } from "types";
-import Legend from "components/Dashboard/Legend";
-import { mapDeviceNames } from "util/mapDeviceNames";
-import MapMarker from "components/Dashboard/MapMarker";
+import { Typography, makeStyles } from "@material-ui/core";
 import { getCmsContent } from "util/getCmsContent";
+import { multiFetcher } from "utils";
+import WithLoading from "components/WithLoading";
 import { InferGetStaticPropsType } from "next";
+import Meta from "components/Meta";
+import DashboardLayout from "components/Dashboard/DashboardLayout";
+import Map from "components/Dashboard/Map";
+import AirQualityGroupDeviceDataLogic from "components/Dashboard/AirQualityGroupDeviceDataLogic";
+import Legend from "components/Dashboard/Legend";
+import { AirQualityPage } from "types";
+import MapMarker from "components/Dashboard/MapMarker";
+import {
+  filteredSensors,
+  transformPurpleAirSensorData,
+  transformSensorData
+} from "util/sensorDataFormating";
 
-const PIN_SIZE = 20;
-async function multiFetcher(...urls: string[]) {
-  const promises: string | Device[] = [];
-  const deviceArrays = await Promise.all(urls.map((url) => fetcher(url)));
-  return promises.concat(...deviceArrays);
-}
-function filteredSensors(sensors: AirQualityDevices[]) {
-  return sensors.filter(({ value }) => value !== "purple_air");
-}
 const AirQuality = ({
   airQualityPageContent
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
@@ -35,40 +29,15 @@ const AirQuality = ({
     multiFetcher
   );
   // ====================================================== cms content ===================================================
-  console.log("airQualityPageContent: ", airQualityPageContent);
+
   // === cms content end ======================================================================================
   const airQualityDevices = useMemo(() => {
-    const transformedSensorData = data.map((device) => {
-      let status: string = "";
-      const name = mapDeviceNames(device.DeviceId);
-      const statusMapping: { [key: string]: string } = {
-        "Not Working": "🔴",
-        Offline: "⭕",
-        Working: "🟢",
-        "Working-Quant": "🟩",
-        "Not Working-Quant": "🟥"
-      };
-      status = statusMapping[device.WorkingStatus] || "";
-      return {
-        site: `${status} ${name}`,
-        value: device.WorkingStatus,
-        latitude: device.Latitude,
-        longitude: device.Longitude,
-        sensorId: `${device.DeviceId}: ${name}`,
-        location: name,
-        color: "#040273"
-      };
-    });
-
-    const purpleAirData = PurpleAirSensorData.map((sensor) => ({
-      ...sensor,
-      site: `${sensor.sensorId}: ${sensor.site} `,
-      latitude: parseFloat(sensor.latitude),
-      longitude: parseFloat(sensor.longitude)
-    }));
+    const transformedSensorData = transformSensorData(data);
+    const purpleAirData = transformPurpleAirSensorData(PurpleAirSensorData);
     const aeroqualSensor = AeroqualSensor;
     return [...transformedSensorData, ...purpleAirData, aeroqualSensor];
   }, [data]);
+
   const isLoading = !data.length && !error;
   if (error) return <Typography>Error Loading data</Typography>;
   return (
@@ -86,7 +55,6 @@ const AirQuality = ({
           //Modify caption input for air or water quality
           //TODO import caption text from contentful
           <Map
-            //   caption={true}
             caption={undefined}
             purpleAirClass={classes.purpleAirLink}
             LATITUDE={33.638421}
@@ -120,25 +88,9 @@ const AirQuality = ({
 };
 
 const useStyles = makeStyles(() => ({
-  arrow: {
-    "&::before": {
-      backgroundColor: "rgba(0, 0, 0, 0.8)"
-    }
-  },
-  popper: {
-    left: "-10px !important",
-    cursor: "pointer",
-    pointerEvents: "unset"
-  },
-  tooltip: {
-    fontSize: 11,
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
-    whiteSpace: "nowrap",
-    display: "flex",
-    justifyContent: "center"
-  },
   purpleAirLink: { color: "#3a7ca5", cursor: "pointer" }
 }));
+
 export const getStaticProps = async () => {
   let airQualityPageContent;
   try {
