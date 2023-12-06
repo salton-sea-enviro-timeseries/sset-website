@@ -295,10 +295,12 @@ type HeroContent = LocaleDefault<
   }>
 >;
 type MenuItem = Fields<{
-  description: LocaleOption<{ content: [BodyValues] }>;
+  short_hand_identifier: LocaleOption<string>;
   name: LocaleOption<string>;
   unit: LocaleDefault<string>;
+  description: LocaleOption<{ content: [BodyValues] }>;
   paramKey: LocaleDefault<string>;
+  url: LocaleDefault<string>;
 }>;
 type memberInfo = Fields<{
   name: LocaleDefault<string>;
@@ -307,6 +309,7 @@ type memberInfo = Fields<{
   affiliation: HeroImage;
 }>;
 type MenuList = LocaleDefault<[MenuItem]>;
+
 export type Profile = {
   community: string;
   fullName: string;
@@ -346,6 +349,17 @@ export type DashboardPage = {
   map_caption_secondary: LocaleOption<string>;
   menuList: MenuList;
   readMe: LocaleOption<MediaFile>;
+};
+
+export type AirQualityPage = {
+  label: LocaleDefault<string>;
+  start_date: LocaleOption<string>;
+  end_date: LocaleOption<string>;
+  param_aqi_title: LocaleOption<string>;
+  param_selection_text: LocaleOption<string>;
+  chart_main_caption: LocaleOption<string>;
+  map_caption: LocaleOption<string>;
+  param_descriptions_list: MenuList;
 };
 
 export type ContactPage = {

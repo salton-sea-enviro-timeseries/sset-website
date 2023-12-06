@@ -10,10 +10,12 @@ import { Device } from "lib/aqmd";
 import AirQualityGroupDeviceDataLogic from "components/Dashboard/AirQualityGroupDeviceDataLogic";
 import PurpleAirSensorData from "purple-air-data.json";
 import AeroqualSensor from "aeroqual-sensor.json";
-import { AirQualityDevices } from "types";
+import { AirQualityDevices, AirQualityPage } from "types";
 import Legend from "components/Dashboard/Legend";
 import { mapDeviceNames } from "util/mapDeviceNames";
 import MapMarker from "components/Dashboard/MapMarker";
+import { getCmsContent } from "util/getCmsContent";
+import { InferGetStaticPropsType } from "next";
 
 const PIN_SIZE = 20;
 async function multiFetcher(...urls: string[]) {
@@ -24,12 +26,17 @@ async function multiFetcher(...urls: string[]) {
 function filteredSensors(sensors: AirQualityDevices[]) {
   return sensors.filter(({ value }) => value !== "purple_air");
 }
-const AirQuality = () => {
+const AirQuality = ({
+  airQualityPageContent
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
   const classes = useStyles();
   const { data = [], error } = useSWR(
     [`../api/aq/devices/aqmd`, `../api/aq/devices/quant`],
     multiFetcher
   );
+  // ====================================================== cms content ===================================================
+  console.log("airQualityPageContent: ", airQualityPageContent);
+  // === cms content end ======================================================================================
   const airQualityDevices = useMemo(() => {
     const transformedSensorData = data.map((device) => {
       let status: string = "";
@@ -132,7 +139,22 @@ const useStyles = makeStyles(() => ({
   },
   purpleAirLink: { color: "#3a7ca5", cursor: "pointer" }
 }));
-
+export const getStaticProps = async () => {
+  let airQualityPageContent;
+  try {
+    airQualityPageContent = await getCmsContent<AirQualityPage>("airQuality");
+  } catch (error) {
+    console.error(
+      "Error while fetching water quality dashboard content: ",
+      error
+    );
+  }
+  return {
+    props: {
+      airQualityPageContent
+    }
+  };
+};
 AirQuality.getLayout = function getLayout(page: React.ReactElement) {
   return <DashboardLayout>{page}</DashboardLayout>;
 };
