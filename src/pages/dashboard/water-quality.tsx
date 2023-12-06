@@ -77,6 +77,7 @@ const WaterQuality = ({
   // ============================ CMS const start ==========================
   const locale = language === "en" ? "en-US" : "es";
   const cmsField = waterPageContent?.fields;
+  const mapMainCaption = cmsField?.map_caption_main[locale];
   const mapSecondaryCaption = cmsField?.map_caption_secondary[locale];
   const parameterList = cmsField?.menuList["en-US"].map(({ fields }) => {
     return fields;
@@ -94,9 +95,10 @@ const WaterQuality = ({
       }),
     [parameterList, parameter]
   );
-  const mapCaptionMain =
+  const parameterDescription =
     parameterFilter &&
     parameterFilter[0].description[locale].content[0].content[0].value;
+  // console.log("mapCaptionMain: ", mapMainCaption);
   //============================= CMS const end ============================
   useEffect(() => {
     if (mapData) {
@@ -233,7 +235,7 @@ const WaterQuality = ({
                   paddingBottom: "10px"
                 }}
               >
-                {mapCaptionMain}
+                {parameterDescription}
               </Typography>
             </WithLoading>
           </Grid>
@@ -256,7 +258,12 @@ const WaterQuality = ({
         <Grid item xs={12}>
           <WithLoading isLoading={isDataLoading} variant="rect" height="500px">
             {mapData && (
-              <Map caption LATITUDE={33.47634} LONGITUDE={-116.03884} ZOOM={12}>
+              <Map
+                caption={mapMainCaption}
+                LATITUDE={33.47634}
+                LONGITUDE={-116.03884}
+                ZOOM={12}
+              >
                 {sites.map(({ latitude, longitude, color, site, value }, i) => {
                   return (
                     <Marker
