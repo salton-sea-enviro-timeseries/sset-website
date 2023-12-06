@@ -1,11 +1,12 @@
-import { Box, Collapse, Link } from "@material-ui/core";
+import { Box, Collapse, Link, Typography } from "@material-ui/core";
 import React, { FC } from "react";
 import ReactMapGL, { NavigationControl, ViewportProps } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import Translation from "components/Translation";
 
 interface MapProps {
-  caption: Boolean;
+  caption?: string;
+  link?: string;
+  purpleAirClass?: string;
   LATITUDE: number;
   LONGITUDE: number;
   ZOOM: number;
@@ -15,6 +16,8 @@ interface ToolTipStyleProps {
 }
 const Map: FC<MapProps> = ({
   caption,
+  link,
+  purpleAirClass,
   children,
   LATITUDE,
   LONGITUDE,
@@ -41,14 +44,24 @@ const Map: FC<MapProps> = ({
         onEnter={() => setTransitionExited(true)}
       >
         <Box display="flex" flexDirection="column">
-          <Translation
+          <Typography
             gutterBottom
             component="div"
             variant="caption"
             noWrap={transitionExited || showMoreInfo ? false : true}
-            path="pages.dashboard.language.content.map_caption_main"
-          />
-
+          >
+            {caption}
+            {link && (
+              <a
+                className={purpleAirClass}
+                href="https://map.purpleair.com/1/mAQI/a10/p604800/cC0#12/33.52245/-115.91447"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <b>here</b>
+              </a>
+            )}
+          </Typography>
           <Box display="flex" justifyContent="center">
             <Link
               component="button"
