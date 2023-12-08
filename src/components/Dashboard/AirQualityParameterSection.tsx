@@ -50,7 +50,7 @@ const generateMenuItems = (
   }));
 };
 
-const AirQualitySection = ({
+const AirQualityParameterSection = ({
   normalizedData
 }: {
   normalizedData: Record<string, DeviceRawData>;
@@ -161,4 +161,4 @@ const AirQualitySection = ({
   );
 };
 
-export default AirQualitySection;
+export default AirQualityParameterSection;
