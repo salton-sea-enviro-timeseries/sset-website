@@ -250,11 +250,9 @@ function hasNonNullValueForParam<T extends { [key: string]: any }>(
   });
 }
 const AirQualityPlots = ({
-  normalizedData,
-  isLoading
+  normalizedData
 }: {
   normalizedData: Record<string, DeviceRawData>;
-  isLoading: boolean;
 }) => {
   const classes = useStyles();
   const { selectedValue, handleSelectChange, options } = useSelect<string>({
@@ -302,10 +300,7 @@ const AirQualityPlots = ({
         selectedValue={selectedValue}
         handleSelectChange={handleSelectChange}
       />
-      {isLoading ? (
-        <LoadingChart />
-      ) : // Todo change min height depending on y-max
-      shouldRenderChart ? (
+      {shouldRenderChart ? (
         <Box minHeight={350} m="2 2 0 2">
           <Line
             key={selectedValue}
