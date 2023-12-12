@@ -6,11 +6,11 @@ import { AirQualityDevices, CommonDeviceType } from "types";
 import { fetchMultipleDeviceDetails } from "util/fetchMultipleDeviceDetails";
 
 type UseSensorDataProps = {
-  devices: AirQualityDevices[];
+  filterOutPurpleAirSensor: AirQualityDevices[];
   startDateRef: React.RefObject<HTMLInputElement>;
   endDateRef: React.RefObject<HTMLInputElement>;
 };
-type FormErrorRange = {
+export type FormErrorRange = {
   error: boolean;
   startDateErrorMsg: string | null;
   endDateErrorMsg: string | null;
@@ -31,11 +31,11 @@ function validateDateRange(startDate: Date, endDate: Date): string | null {
   return null;
 }
 function useSensorData({
-  devices,
+  filterOutPurpleAirSensor,
   startDateRef,
   endDateRef
 }: UseSensorDataProps) {
-  const sensorUrls = devices.map(({ sensorId }) => {
+  const sensorUrls = filterOutPurpleAirSensor.map(({ sensorId }) => {
     const sensorInfoArray = sensorId.split(":");
     return determineSourceOfData(sensorInfoArray[0]);
   });
