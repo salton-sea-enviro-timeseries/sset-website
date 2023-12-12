@@ -126,7 +126,6 @@ const AirQualityParameterSection = ({
     <Box pb={5}>
       {/* selector start */}
       <Box pr={0.5} pb={1}>
-        {/* <AQLegend /> */}
         <WithLoading variant="rect" height={40} isLoading={isLoadingSensor}>
           <TextField
             fullWidth
