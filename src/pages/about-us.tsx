@@ -118,7 +118,7 @@ const AboutUsPage = ({ listOfProfiles }: AboutUsPageProps) => {
             }}
             display="flex"
             justifyContent="center"
-            size={4}
+            size={"h4"}
           />
           <Grid container spacing={1} justifyContent="center">
             <Grid item xs={12} className={classes.questionWrapper}>

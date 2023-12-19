@@ -120,7 +120,7 @@ const PageSection: React.FC<Props> = ({
             }}
             display="flex"
             justifyContent="center"
-            size={4}
+            size={"h4"}
           />
           {generateContent(classes, id, newsMediaData, bodyText)}
           {generateGradSection(classes, gradImages)}
