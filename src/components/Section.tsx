@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 interface SectionProps {
   bgColor?: string;
-  bgImage?: string;
+  bgImage?: string | null;
   bgImageOpacity?: string;
   size?: string;
   className?: string;
