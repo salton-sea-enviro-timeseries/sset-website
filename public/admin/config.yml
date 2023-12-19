@@ -1,0 +1,826 @@
+backend:
+  name: git-gateway
+  branch: main
+media_folder: public/uploads
+public_folder: public/uploads
+site_url: https://saltonseascience.org/
+logo_url: https://saltonseascience.org/logo-red.png
+search: false
+collections:
+  - name: "global"
+    label: "Site Settings"
+    delete: false
+    description: "Settings that are used throughout the entire site"
+    extension: "json"
+    files:
+      - file: "__store__/metadata.json"
+        label: "Metadata"
+        name: "site"
+        fields:
+          - {
+              label: "Site Title",
+              name: "site_title",
+              widget: "string",
+              hint: "Used for SEO"
+            }
+          - {
+              label: "Default Site Description",
+              name: "default_site_description",
+              widget: "text",
+              required: false,
+              hint: "Used for SEO"
+            }
+          - { label: "Email", name: "email", widget: "string" }
+          - { label: Twitter Url, name: twitter_url, widget: string }
+          - { label: Facebook Url, name: facebook_url, widget: string }
+          - {
+              label: Open Graph Image,
+              name: open_graph_image,
+              widget: image,
+              required: false,
+              default: /logo-red.jpg,
+              hint: This is the thumbnail that shows up when you share your site on Facebook or via an iMessage
+            }
+      - file: "__store__/parameters.json"
+        label: "Parameters"
+        name: "parameters"
+        fields:
+          - label: "Parameters (English)"
+            name: "en"
+            widget: "object"
+            collapsed: true
+            fields:
+              - label: "Parameters"
+                name: parameters
+                widget: object
+                fields:
+                  - label: "Salinity"
+                    name: "salinity"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+                  - label: "Water Temperature"
+                    name: "water_temperature"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+                  - label: "pH"
+                    name: "ph"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+                  - label: "Turbidity"
+                    name: "turbidity"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+                  - label: "Dissolved Oxygen"
+                    name: "dissolved_oxygen"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+                  - label: "Chlorophyll"
+                    name: "chlorophyll"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+                  - label: "Phycoerythrin"
+                    name: "phycoerythrin"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+                  - label: "Nitrate"
+                    name: "nitrate"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+                  - label: "Ammonia"
+                    name: "ammonia"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+                  - label: "Phosphate"
+                    name: "phosphate"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+                  - label: "Sulphate"
+                    name: "sulphate"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+                  - label: "Sulphide"
+                    name: "sulphide"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+          - label: "Parameters (Spanish)"
+            name: "es"
+            widget: "object"
+            collapsed: true
+            fields:
+              - label: "Parameters"
+                name: parameters
+                widget: object
+                fields:
+                  - label: "Salinity"
+                    name: "salinity"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+                  - label: "Water Temperature"
+                    name: "water_temperature"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+                  - label: "pH"
+                    name: "ph"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+                  - label: "Turbidity"
+                    name: "turbidity"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+                  - label: "Dissolved Oxygen"
+                    name: "dissolved_oxygen"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+                  - label: "Chlorophyll"
+                    name: "chlorophyll"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+                  - label: "Phycoerythrin"
+                    name: "phycoerythrin"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+                  - label: "Nitrate"
+                    name: "nitrate"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+                  - label: "Ammonia"
+                    name: "ammonia"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+                  - label: "Phosphate"
+                    name: "phosphate"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+                  - label: "Sulphate"
+                    name: "sulphate"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+                  - label: "Sulphide"
+                    name: "sulphide"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Unit", name: "unit", widget: "string" }
+                      - {
+                          label: "Description",
+                          name: "description",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+      - file: "__store__/site.json"
+        label: "NavLinks"
+        name: "navLinks"
+        fields:
+          - label: "NavLinks (English)"
+            name: "en"
+            widget: "object"
+            collapsed: true
+            fields:
+              - label: "NavLinks"
+                name: "navLinks"
+                widget: object
+                fields:
+                  - { label: "Home", name: "home", widget: "string" }
+                  - { label: "Dashboard", name: "dashboard", widget: "string" }
+                  - { label: "Contact Us", name: "contact", widget: "string" }
+          - label: "NavLinks (Spanish)"
+            name: "es"
+            widget: "object"
+            collapsed: true
+            fields:
+              - label: "NavLinks"
+                name: "navLinks"
+                widget: object
+                fields:
+                  - { label: "Home", name: "home", widget: "string" }
+                  - { label: "Dashboard", name: "dashboard", widget: "string" }
+                  - { label: "Contact Us", name: "contact", widget: "string" }
+
+  - name: "pages"
+    label: "Pages"
+    delete: false
+    create: false
+    extension: "json"
+    files:
+      - label: "Home"
+        file: "__store__/pages/home.json"
+        extension: "json"
+        name: "home"
+        fields:
+          - label: "Home Page (English)"
+            name: "en"
+            widget: "object"
+            collapsed: true
+            fields:
+              - label: "Content"
+                name: content
+                widget: object
+                fields:
+                  - {
+                      label: "Hero",
+                      name: "hero",
+                      widget: "string",
+                      hint: "Main Home Page Title"
+                    }
+                  - {
+                      label: "Call to Action",
+                      name: "call_to_action",
+                      widget: "string",
+                      hint: "View Data Button Text"
+                    }
+                  - label: "Salton Sea Section"
+                    name: "salton_sea_section"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Title", name: "title", widget: "string" }
+                      - {
+                          label: "Content",
+                          name: "content",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+              - label: "Metadata"
+                name: "metadata"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - {
+                      label: "Site Title",
+                      name: "site_title",
+                      widget: "string",
+                      hint: "Used for SEO",
+                      required: false
+                    }
+                  - {
+                      label: "Default Site Description",
+                      name: "site_description",
+                      widget: "text",
+                      required: false,
+                      hint: "Used for SEO"
+                    }
+                  - {
+                      label: "Open Graph Image",
+                      name: "open_graph_image",
+                      widget: "image",
+                      default: "/logo-red.jpg",
+                      required: false,
+                      hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
+                    }
+                  - {
+                      label: "Open Graph Site URL",
+                      name: "open_graph_site_url",
+                      widget: "string",
+                      default: "/logo-red.jpg",
+                      required: false,
+                      hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
+                    }
+          - label: "Home Page (Spanish)"
+            name: "es"
+            widget: "object"
+            collapsed: true
+            fields:
+              - label: "Content"
+                name: content
+                widget: object
+                fields:
+                  - {
+                      label: "Hero",
+                      name: "hero",
+                      widget: "string",
+                      hint: "Main Home Page Title"
+                    }
+                  - {
+                      label: "Call to Action",
+                      name: "call_to_action",
+                      widget: "string",
+                      hint: "View Data Button Text"
+                    }
+                  - label: "Salton Sea Section"
+                    name: "salton_sea_section"
+                    widget: "object"
+                    collapsed: true
+                    fields:
+                      - { label: "Title", name: "title", widget: "string" }
+                      - {
+                          label: "Content",
+                          name: "content",
+                          widget: "markdown",
+                          buttons: ["bold", "italic", "quote", "link"],
+                          editor_components: []
+                        }
+              - label: "Metadata"
+                name: "metadata"
+                widget: "object"
+                collapsed: false
+                fields:
+                  - {
+                      label: "Site Title",
+                      name: "site_title",
+                      widget: "string",
+                      hint: "Used for SEO",
+                      required: false
+                    }
+                  - {
+                      label: "Default Site Description",
+                      name: "site_description",
+                      widget: "text",
+                      required: false,
+                      hint: "Used for SEO"
+                    }
+                  - {
+                      label: "Open Graph Image",
+                      name: "open_graph_image",
+                      widget: "image",
+                      default: "/logo-red.jpg",
+                      required: false,
+                      hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
+                    }
+                  - {
+                      label: "Open Graph Site URL",
+                      name: "open_graph_site_url",
+                      widget: "string",
+                      default: "/logo-red.jpg",
+                      required: false,
+                      hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
+                    }
+
+      - label: "Dashboard"
+        file: "__store__/pages/dashboard.json"
+        extension: "json"
+        name: "dashboard"
+        fields:
+          - label: "Dashboard Page (English)"
+            name: "en"
+            widget: "object"
+            collapsed: true
+            fields:
+              - label: "Content"
+                name: content
+                widget: object
+                fields:
+                  - {
+                      label: "Map Caption Main",
+                      name: "map_caption_main",
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
+                    }
+                  - {
+                      label: "Map Caption Secondary",
+                      name: "map_caption_secondary",
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
+                    }
+                  - {
+                      label: "Download Nutrients Data Button",
+                      name: "download_nutrients_data_button",
+                      widget: "string"
+                    }
+                  - {
+                      label: "Download Sensor Data Button",
+                      name: "download_sensor_data_button",
+                      widget: "string"
+                    }
+              - label: "Metadata"
+                name: "metadata"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - {
+                      label: "Site Title",
+                      name: "site_title",
+                      widget: "string",
+                      hint: "Used for SEO",
+                      required: false
+                    }
+                  - {
+                      label: "Default Site Description",
+                      name: "site_description",
+                      widget: "text",
+                      required: false,
+                      hint: "Used for SEO"
+                    }
+                  - {
+                      label: "Open Graph Image",
+                      name: "open_graph_image",
+                      widget: "image",
+                      default: "/logo-red.jpg",
+                      required: false,
+                      hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
+                    }
+                  - {
+                      label: "Open Graph Site URL",
+                      name: "open_graph_site_url",
+                      widget: "string",
+                      default: "/logo-red.jpg",
+                      required: false,
+                      hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
+                    }
+          - label: "Dashboard Page (Spanish)"
+            name: "es"
+            widget: "object"
+            collapsed: true
+            fields:
+              - label: "Content"
+                name: content
+                widget: object
+                fields:
+                  - {
+                      label: "Map Caption Main",
+                      name: "map_caption_main",
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
+                    }
+                  - {
+                      label: "Map Caption Secondary",
+                      name: "map_caption_secondary",
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
+                    }
+                  - {
+                      label: "Download Nutrients Data Button",
+                      name: "download_nutrients_data_button",
+                      widget: "string"
+                    }
+                  - {
+                      label: "Download Sensor Data Button",
+                      name: "download_sensor_data_button",
+                      widget: "string"
+                    }
+              - label: "Metadata"
+                name: "metadata"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - {
+                      label: "Site Title",
+                      name: "site_title",
+                      widget: "string",
+                      hint: "Used for SEO",
+                      required: false
+                    }
+                  - {
+                      label: "Default Site Description",
+                      name: "site_description",
+                      widget: "text",
+                      required: false,
+                      hint: "Used for SEO"
+                    }
+                  - {
+                      label: "Open Graph Image",
+                      name: "open_graph_image",
+                      widget: "image",
+                      default: "/logo-red.jpg",
+                      required: false,
+                      hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
+                    }
+                  - {
+                      label: "Open Graph Site URL",
+                      name: "open_graph_site_url",
+                      widget: "string",
+                      default: "/logo-red.jpg",
+                      required: false,
+                      hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
+                    }
+      - label: "Contact"
+        file: "__store__/pages/contact.json"
+        extension: "json"
+        name: "contact"
+        fields:
+          - label: "Contact Page (English)"
+            name: "en"
+            widget: "object"
+            collapsed: true
+            fields:
+              - label: "Content"
+                name: content
+                widget: object
+                fields:
+                  - { label: "Title", name: "title", widget: "string" }
+                  - {
+                      label: "Content",
+                      name: "content",
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
+                    }
+                  - {
+                      label: "Apply Button Text",
+                      name: "apply_button_text",
+                      widget: "string"
+                    }
+                  - {
+                      label: "Apply Button Link",
+                      name: "apply_button_link",
+                      widget: "string"
+                    }
+              - label: "Metadata"
+                name: "metadata"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - {
+                      label: "Site Title",
+                      name: "site_title",
+                      widget: "string",
+                      hint: "Used for SEO",
+                      required: false
+                    }
+                  - {
+                      label: "Default Site Description",
+                      name: "site_description",
+                      widget: "text",
+                      required: false,
+                      hint: "Used for SEO"
+                    }
+                  - {
+                      label: "Open Graph Image",
+                      name: "open_graph_image",
+                      widget: "image",
+                      default: "/logo-red.jpg",
+                      required: false,
+                      hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
+                    }
+                  - {
+                      label: "Open Graph Site URL",
+                      name: "open_graph_site_url",
+                      widget: "string",
+                      default: "/logo-red.jpg",
+                      required: false,
+                      hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
+                    }
+          - label: "Contact Page (Spanish)"
+            name: "es"
+            widget: "object"
+            collapsed: true
+            fields:
+              - label: "Content"
+                name: content
+                widget: object
+                fields:
+                  - { label: "Title", name: "title", widget: "string" }
+                  - {
+                      label: "Content",
+                      name: "content",
+                      widget: "markdown",
+                      buttons: ["bold", "italic", "quote", "link"],
+                      editor_components: []
+                    }
+                  - {
+                      label: "Apply Button Text",
+                      name: "apply_button_text",
+                      widget: "string"
+                    }
+                  - {
+                      label: "Apply Button Link",
+                      name: "apply_button_link",
+                      widget: "string"
+                    }
+              - label: "Metadata"
+                name: "metadata"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - {
+                      label: "Site Title",
+                      name: "site_title",
+                      widget: "string",
+                      hint: "Used for SEO",
+                      required: false
+                    }
+                  - {
+                      label: "Default Site Description",
+                      name: "site_description",
+                      widget: "text",
+                      required: false,
+                      hint: "Used for SEO"
+                    }
+                  - {
+                      label: "Open Graph Image",
+                      name: "open_graph_image",
+                      widget: "image",
+                      default: "/logo-red.jpg",
+                      required: false,
+                      hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
+                    }
+                  - {
+                      label: "Open Graph Site URL",
+                      name: "open_graph_site_url",
+                      widget: "string",
+                      default: "/logo-red.jpg",
+                      required: false,
+                      hint: "This is the thumbnail that shows up when you share your site on Facebook or via an iMessage"
+                    }

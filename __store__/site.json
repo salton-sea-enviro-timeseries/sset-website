@@ -1,0 +1,20 @@
+{
+  "en": {
+    "navLinks": {
+      "home": "Home",
+      "dashboard": "Dashboard",
+      "contact": "Contact Us",
+      "resources": "Resources",
+      "about": "About US"
+    }
+  },
+  "es": {
+    "navLinks": {
+      "home": "Página de Inicio",
+      "dashboard": "Tablero de Datos",
+      "contact": "Contáctenos",
+      "resources": "Recursos",
+      "about": "Sobre Nosotros"
+    }
+  }
+}

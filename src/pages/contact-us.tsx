@@ -5,39 +5,43 @@ import Typography from "@material-ui/core/Typography";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
-import { Box, Card, colors, Grid } from "@material-ui/core";
+import { Box, Card } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Hero from "components/Hero";
 import Section from "components/Section";
-import SectionHeader from "components/SectionHeader";
 import Layout from "components/Layout";
+import Translation from "components/Translation";
+import Meta from "components/Meta";
 
 const ContactUsPage = () => {
   const classes = useStyles();
   return (
     <Layout>
-      <Hero
-        bgColor="secondary"
-        size="medium"
-        bgImage="/topography.svg"
-        // bgImageOpacity={0.9}
-        title="Contact Us"
-        // subtitle="Some nice words here."
-        sectionHeaderProps={{
-          titleProps: {
-            align: "center",
-            className: classes.header,
-            display: "inline"
-          },
-          display: "flex",
-          justifyContent: "center",
-          size: 4
+      <Meta title="Contact Us | Salton Sea Environmental Timeseries" />
+      <Translation
+        path="pages.contact.language.content.title"
+        propsToTranslate={{
+          title: "pages.contact.language.content.title"
         }}
-      />
+      >
+        <Hero
+          bgColor="secondary"
+          size="medium"
+          bgImage="/topography.svg"
+          sectionHeaderProps={{
+            titleProps: {
+              align: "center",
+              className: classes.header,
+              display: "inline"
+            },
+            display: "flex",
+            justifyContent: "center",
+            size: 4
+          }}
+        />
+      </Translation>
       <Section>
         <Container maxWidth="sm" className={classes.container}>
           <Card className={classes.card}>
@@ -49,11 +53,11 @@ const ContactUsPage = () => {
                       dense
                       button
                       component="a"
-                      href="mailto:nilda@alianzacv.org"
+                      href="mailto:aydee@alianzacv.org"
                     >
                       <ListItemText
-                        primary="Nilda Ruiz"
-                        secondary="nilda@alianzacv.org"
+                        primary="Aydee Palomino"
+                        secondary="aydee@alianzacv.org"
                       />
                     </ListItem>
                     <ListItem
@@ -89,15 +93,6 @@ const ContactUsPage = () => {
                         secondary="rsinclair@llu.edu"
                       />
                     </ListItem>
-                    <ListItem
-                      dense
-                      button
-                      component="a"
-                      href="https://www.google.com/"
-                      target="_blank"
-                    >
-                      <ListItemText primary="www.somelink.org" />
-                    </ListItem>
                   </List>
                 </CardContent>
               </div>
@@ -110,15 +105,27 @@ const ContactUsPage = () => {
           </Card>
           <Card>
             <CardContent>
-              <Typography align="center" variant="h6" component="p">
-                We are always looking for volunteers to help us with our
-                research and outreach. If you are interested in volunteering for
-                our research, please apply
-              </Typography>
+              <Translation
+                align="center"
+                variant="h6"
+                component="p"
+                path="pages.contact.language.content.content"
+              />
               <Box pt={3} display="flex" justifyContent="center">
-                <Button size="large" variant="contained" color="primary">
-                  Register
-                </Button>
+                <Translation
+                  path="pages.contact.language.content.apply_button_text"
+                  propsToTranslate={{
+                    href: "pages.contact.language.content.apply_button_link"
+                  }}
+                >
+                  <Button
+                    href=""
+                    target="_blank"
+                    size="large"
+                    variant="contained"
+                    color="primary"
+                  />
+                </Translation>
               </Box>
             </CardContent>
           </Card>

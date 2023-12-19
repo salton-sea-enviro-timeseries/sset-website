@@ -1,13 +1,14 @@
 import React from "react";
-import { makeStyles, Divider } from "@material-ui/core";
-import { orange } from "@material-ui/core/colors";
+import { makeStyles } from "@material-ui/core";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
+import Meta from "./Meta";
 
 const Layout: React.FC = ({ children }) => {
   const classes = useStyles();
   return (
     <>
+      <Meta />
       <Navbar />
       <main className={classes.main}>{children}</main>
       <Footer />
@@ -15,14 +16,7 @@ const Layout: React.FC = ({ children }) => {
   );
 };
 
-const useStyles = makeStyles((theme) => ({
-  divider: {
-    // backgroundColor: theme.palette.secondary.main,
-    height: "2px"
-  },
-  header: {
-    fontWeight: theme.typography.fontWeightBold
-  },
+const useStyles = makeStyles(() => ({
   main: {
     flex: 1
     // display: "flex",
@@ -30,14 +24,6 @@ const useStyles = makeStyles((theme) => ({
     // justifyContent: "center",
     // alignItems: "center",
     // padding: theme.spacing(5, 0)
-  },
-  accentUnderline: {
-    boxShadow: `inset 0 -2px 0 ${orange[500]}`
-  },
-  accentWord: {
-    color: orange[500],
-    backgroundColor: orange[100],
-    padding: theme.spacing(0, 1)
   }
 }));
 

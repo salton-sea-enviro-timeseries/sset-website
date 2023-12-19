@@ -2,36 +2,40 @@ import React from "react";
 import Link from "next/link";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import MuiLink from "@material-ui/core/Link";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
+// import List from "@material-ui/core/List";
+// import ListItem from "@material-ui/core/ListItem";
+// import ListItemText from "@material-ui/core/ListItemText";
+// import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { makeStyles } from "@material-ui/core/styles";
-
-import logo from "../../public/logo.svg";
-import Image from "next/image";
+import { useAppContext } from "./AppContext";
+// import Image from "next/image";
 
 function Footer() {
   const classes = useStyles();
+  const ctx = useAppContext();
+  if (!ctx) {
+    return null;
+  }
+  const { width } = ctx;
 
   return (
-    <Box component="footer" bgcolor="grey.900" color="white" py={2}>
+    <Box
+      component="footer"
+      bgcolor="grey.900"
+      color="white"
+      py={2}
+      className={classes.root}
+      style={{ minWidth: width }}
+    >
       <Container>
         <Grid container={true} justifyContent="space-between" spacing={4}>
           <Grid item={true} xs={12} md={4}>
             <Link href="/">
               <a>
-                <Image
-                  src={"/logo"}
-                  height="60"
-                  width="120"
-                  alt="Logo Goes Here"
-                  //placeholder="blur"
-                  className={classes.brand}
-                />
+                {/* eslint-disable  @next/next/no-img-element */}
+                <img src={"/logo-alt.png"} width={100} alt="SSET Logo" />
               </a>
             </Link>
 
@@ -47,7 +51,7 @@ function Footer() {
               </Box>
             )} */}
           </Grid>
-          <Grid item={true} xs={12} md={6}>
+          {/* <Grid item={true} xs={12} md={6}>
             <Grid container={true} spacing={4} justifyContent="flex-end">
               <Grid item={true} xs={12} md={4}>
                 <List disablePadding={true} component="div">
@@ -100,7 +104,7 @@ function Footer() {
                 </List>
               </Grid>
             </Grid>
-          </Grid>
+          </Grid> */}
         </Grid>
         <Box pt={10}>
           <Typography align="center" variant="caption" component="p">
@@ -113,25 +117,24 @@ function Footer() {
 }
 
 const useStyles = makeStyles((theme) => ({
-  sticky: {
-    marginTop: "auto"
-  },
-  brand: {
-    display: "block",
-    height: 32
-  },
-  listItem: {
-    paddingTop: 2,
-    paddingBottom: 2,
-    paddingLeft: 12,
-    paddingRight: 12
-  },
-  listItemTextHeader: {
-    fontWeight: "bold"
-  },
-  socialIcon: {
-    minWidth: 30
+  root: {
+    zIndex: theme.zIndex.drawer + 1
   }
+  // sticky: {
+  //   marginTop: "auto"
+  // },
+  // listItem: {
+  //   paddingTop: 2,
+  //   paddingBottom: 2,
+  //   paddingLeft: 12,
+  //   paddingRight: 12
+  // },
+  // listItemTextHeader: {
+  //   fontWeight: "bold"
+  // },
+  // socialIcon: {
+  //   minWidth: 30
+  // }
 }));
 
 export default Footer;

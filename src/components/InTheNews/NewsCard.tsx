@@ -16,20 +16,20 @@ export default function NewsCard({ media }: NewsCardProps) {
       <CardActionArea
         className={classes.cardActionArea}
         target="_blank"
-        href={media.link}
+        href={media?.link}
       >
         <CardMedia
           component={"img"}
-          height="140"
-          image={media.imageUrl}
-          alt={media.title}
+          height="225"
+          image={media?.imageUrl}
+          alt={media?.title}
         />
         <CardContent>
           <Typography gutterBottom variant="h6" component="div">
-            {media.title}
+            {media?.title}
           </Typography>
           <Typography variant="body2" style={{ color: "text.secondary" }}>
-            {media.description}
+            {media?.description}
           </Typography>
         </CardContent>
       </CardActionArea>

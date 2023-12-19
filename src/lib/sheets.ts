@@ -1,3 +1,4 @@
+import { stringify } from "csv-stringify/sync";
 import { google } from "googleapis";
 import { RawNutrientsData, RawProbeData } from "types";
 
@@ -32,7 +33,7 @@ async function getSheetData(range: "probe_surface" | "nutrients") {
      * if date field is empty, all other fields are empty
      * so we can skip this row
      */
-    if (row[0] === "") return acc;
+    if (!row[0]?.trim()) return acc;
     acc.push(
       row.reduce((acc1, value, index) => {
         acc1[keys[index]] = sanitizeValue(value);
@@ -49,4 +50,13 @@ export function getProbeData() {
 
 export function getNutrientsData() {
   return getSheetData("nutrients") as unknown as Promise<RawNutrientsData[]>;
+}
+
+export async function downloadFile(range: "probe_surface" | "nutrients") {
+  const response = await sheets.spreadsheets.values.get({
+    spreadsheetId: process.env.PHOTOMETER_SHEET_ID,
+    range
+  });
+  // @ts-ignore
+  return stringify(response.data.values);
 }
