@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { emphasize } from "@material-ui/core/styles/colorManipulator";
 import capitalize from "@material-ui/core/utils/capitalize";
 import BackgroundImage from "./BackgroundImage";
+import { CSSProperties } from "@material-ui/core/styles/withStyles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
       }
     };
     return acc;
-  }, {}),
+  }, {} as { [key: string]: CSSProperties }),
 
   colorInherit: {
     color: "inherit"
@@ -48,8 +49,16 @@ const useStyles = makeStyles((theme) => ({
     color: "inherit"
   }
 }));
-
-function Section(props) {
+interface SectionProps {
+  bgColor?: string;
+  bgImage?: string | null;
+  bgImageOpacity?: string;
+  size?: string;
+  className?: string;
+  style?: Object;
+  children: JSX.Element;
+}
+function Section(props: SectionProps) {
   const classes = useStyles();
 
   const {
@@ -77,7 +86,7 @@ function Section(props) {
       py={verticalPadding}
       className={
         classes.root +
-        ` ${classes[`color${capitalize(bgColor)}`]}` +
+        ` ${classes[`color${capitalize(bgColor)}` as keyof typeof classes]}` +
         (className ? ` ${className}` : "")
       }
       {...otherProps}
