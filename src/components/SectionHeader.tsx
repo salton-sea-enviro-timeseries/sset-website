@@ -1,8 +1,19 @@
 import React from "react";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
+import { TypographyVariant, makeStyles } from "@material-ui/core/styles";
 
+type variantText = TypographyVariant;
+interface SectionHeaderProps {
+  subtitle?: string;
+  subtitleProps?: Object;
+  title?: string;
+  titleProps?: Object;
+  size?: variantText;
+  className?: string;
+  display?: string;
+  justifyContent?: string;
+}
 const useStyles = makeStyles((theme) => ({
   root: {
     // Add bottom margin if element below
@@ -20,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function SectionHeader(props) {
+function SectionHeader(props: SectionHeaderProps) {
   const classes = useStyles();
 
   const {
@@ -46,7 +57,7 @@ function SectionHeader(props) {
     >
       {title && (
         <Typography
-          variant={`h${size}`}
+          variant={size}
           gutterBottom={props.subtitle ? true : false}
           {...titleProps}
         >
