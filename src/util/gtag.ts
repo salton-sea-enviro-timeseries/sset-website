@@ -4,14 +4,14 @@ export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA_TRACKING_ID;
 export const pageview = (url: URL) => {
   // add null check in dev if gtag function is undefined during pageview
   // TODO: find why in dashboard this occurs
-  // if (window.gtag) {
-  //   window.gtag("config", GA_TRACKING_ID as string, {
-  //     page_path: url
-  //   });
-  // }
-  window.gtag("config", GA_TRACKING_ID as string, {
-    page_path: url
-  });
+  if (window.gtag) {
+    window.gtag("config", GA_TRACKING_ID as string, {
+      page_path: url
+    });
+  }
+  // window.gtag("config", GA_TRACKING_ID as string, {
+  //   page_path: url
+  // });
 };
 
 type GTagEvent = {

@@ -16,16 +16,21 @@ import {
   ChartData,
   Filler
 } from "chart.js";
-import { AirQualityParameter, CommonDeviceType } from "types";
+import {
+  BodyValues,
+  CommonDeviceType,
+  LocaleDefault,
+  LocaleOption,
+  MenuItemFields
+} from "types";
 import "chartjs-adapter-date-fns";
 import { Line } from "react-chartjs-2";
 import { makeStyles, Box, Typography, Link } from "@material-ui/core";
-import LoadingChart from "./LoadingChart";
 import { calcParamAQI } from "util/calcParamAQI";
-import { filterHourlyData } from "../util/filterHourlyData";
-import { AirQualityParameterMapping } from "types";
+import { filterHourlyData } from "../../util/filterHourlyData";
 import useSelect from "hooks/useSelect";
 import SelectMenuList from "./SelectMenuList";
+import { filterParameters } from "util/filterParameterFromCms";
 
 ChartJS.register(
   CategoryScale,
@@ -72,7 +77,6 @@ type DataItem = {
   O3?: number;
   CO?: number;
 };
-
 // ==============================================================
 //Todo refactor to export?
 const colors = [
@@ -251,17 +255,40 @@ function hasNonNullValueForParam<T extends { [key: string]: any }>(
 }
 const AirQualityPlots = ({
   normalizedData,
-  isLoading
+  chartMainCaption,
+  parameterListDetailsText,
+  locale,
+  paramSelectionHelperText
 }: {
   normalizedData: Record<string, DeviceRawData>;
-  isLoading: boolean;
+  chartMainCaption?: string;
+  parameterListDetailsText?: MenuItemFields[];
+  locale: string;
+  paramSelectionHelperText?: string;
 }) => {
   const classes = useStyles();
   const { selectedValue, handleSelectChange, options } = useSelect<string>({
     initialValues: Object.keys(paramAQIStandardMap),
     defaultValue: "PM10"
   });
-  // dataset used for line chart
+  //Filter selected param to retrieve its details
+  const parameterFilter = useMemo(
+    () =>
+      filterParameters<MenuItemFields>(
+        parameterListDetailsText,
+        "paramKey",
+        selectedValue
+      ),
+    [parameterListDetailsText, selectedValue]
+  );
+  const parameterDescription =
+    parameterFilter &&
+    parameterFilter[0].description[
+      locale as keyof LocaleOption<{ content: [BodyValues] }>
+    ].content[0].content[0].value;
+  const parameterInfoLink =
+    parameterFilter &&
+    parameterFilter[0].href[locale as keyof LocaleDefault<string>];
   const datasets = useMemo(() => {
     return Object.values(normalizedData).map(({ data, name, id }, index) => ({
       label: name,
@@ -298,14 +325,11 @@ const AirQualityPlots = ({
     <>
       <SelectMenuList
         options={options}
-        helperText={"Select Param to Chart"}
+        helperText={paramSelectionHelperText || "Select Param to Chart"}
         selectedValue={selectedValue}
         handleSelectChange={handleSelectChange}
       />
-      {isLoading ? (
-        <LoadingChart />
-      ) : // Todo change min height depending on y-max
-      shouldRenderChart ? (
+      {shouldRenderChart ? (
         <Box minHeight={350} m="2 2 0 2">
           <Line
             key={selectedValue}
@@ -329,24 +353,16 @@ const AirQualityPlots = ({
             fontWeight: "lighter"
           }}
         >
-          EPA establishes an AQI for five major air pollutants regulated by the
-          Clean Air Act. Each of these pollutants has a national air quality
-          standard set by EPA to protect public health.{" "}
+          {chartMainCaption}{" "}
           <Link
             className={classes.airPollutant}
-            href={
-              AirQualityParameterMapping[selectedValue as AirQualityParameter]
-                .href
-            }
+            href={parameterInfoLink}
             target="_blank"
             rel="noopener"
           >
             <b>{selectedValue}:</b>
           </Link>{" "}
-          {
-            AirQualityParameterMapping[selectedValue as AirQualityParameter]
-              .description
-          }
+          {parameterDescription}
         </Typography>
       </Box>
     </>

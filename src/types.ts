@@ -87,6 +87,7 @@ export enum Units {
   "sulphate" = "mg/L",
   "sulphide" = "mg/L"
 }
+//Removed form AirQualityPlots and using CMS instead for translations and content
 export const AirQualityParameterMapping = {
   [AirQualityParameter.O3]: {
     name: "Ground-level ozone",
@@ -261,7 +262,7 @@ type Fields<T> = {
   fields: T;
 };
 
-type BodyValues = {
+export type BodyValues = {
   content: [{ value: string }];
 };
 export type NestedObjBodyText = {
@@ -294,11 +295,13 @@ type HeroContent = LocaleDefault<
     heroImage: HeroImage;
   }>
 >;
-type MenuItem = Fields<{
-  description: LocaleOption<{ content: [BodyValues] }>;
+export type MenuItem = Fields<{
+  short_hand_identifier: LocaleOption<string>;
   name: LocaleOption<string>;
   unit: LocaleDefault<string>;
+  description: LocaleOption<{ content: [BodyValues] }>;
   paramKey: LocaleDefault<string>;
+  href: LocaleDefault<string>;
 }>;
 type memberInfo = Fields<{
   name: LocaleDefault<string>;
@@ -307,6 +310,7 @@ type memberInfo = Fields<{
   affiliation: HeroImage;
 }>;
 type MenuList = LocaleDefault<[MenuItem]>;
+export type MenuItemFields = MenuItem["fields"];
 export type Profile = {
   community: string;
   fullName: string;
@@ -346,6 +350,20 @@ export type DashboardPage = {
   map_caption_secondary: LocaleOption<string>;
   menuList: MenuList;
   readMe: LocaleOption<MediaFile>;
+};
+
+export type AirQualityPage = {
+  label: LocaleDefault<string>;
+  button_text: LocaleOption<string>;
+  start_date: LocaleOption<string>;
+  end_date: LocaleOption<string>;
+  param_aqi_title: LocaleOption<string>;
+  param_selection_text: LocaleOption<string>;
+  chart_main_caption: LocaleOption<string>;
+  map_caption: LocaleOption<string>;
+  param_descriptions_list: MenuList;
+  sensor_selection_helper_text: LocaleOption<string>;
+  mod_sensor_warning_text: LocaleOption<string>;
 };
 
 export type ContactPage = {

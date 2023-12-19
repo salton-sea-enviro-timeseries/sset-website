@@ -8,7 +8,7 @@ import {
   isRawDeviceAverageDataResponse,
   safeAccess
 } from "util/typeGuardFunctions";
-import WithLoading from "./WithLoading";
+import WithLoading from "../WithLoading";
 import { RawDeviceAverageDataResponse } from "lib/aqmd";
 import AirQualityParamBox from "./AirQualityParamBox";
 
@@ -50,10 +50,14 @@ const generateMenuItems = (
   }));
 };
 
-const AirQualitySection = ({
-  normalizedData
+const AirQualityParameterSection = ({
+  normalizedData,
+  paramAQITitle,
+  sensorSelectionHelperText
 }: {
   normalizedData: Record<string, DeviceRawData>;
+  paramAQITitle?: string;
+  sensorSelectionHelperText?: string;
 }) => {
   const deviceMenuList = generateMenuItems(normalizedData);
   const [selectedSensor, setSelectedSensor] = useState(deviceMenuList[0].id);
@@ -126,7 +130,6 @@ const AirQualitySection = ({
     <Box pb={5}>
       {/* selector start */}
       <Box pr={0.5} pb={1}>
-        {/* <AQLegend /> */}
         <WithLoading variant="rect" height={40} isLoading={isLoadingSensor}>
           <TextField
             fullWidth
@@ -136,7 +139,10 @@ const AirQualitySection = ({
             variant="outlined"
             value={sanitizedValue}
             onChange={handleChangeSensor}
-            helperText="Select a working sensor from above to view current parameter values."
+            helperText={
+              sensorSelectionHelperText ||
+              "Select a working sensor from above to view current parameter values."
+            }
           >
             {deviceMenuList.map(({ id, name }) => (
               <MenuItem key={id} value={id}>
@@ -151,7 +157,11 @@ const AirQualitySection = ({
       </Box>
       {/* selector end */}
       <WithLoading isLoading={isLoadingSensor}>
-        {dateTime && <Typography>AQI Values From {dateTime}</Typography>}
+        {dateTime && (
+          <Typography>
+            {paramAQITitle} {dateTime}
+          </Typography>
+        )}
       </WithLoading>
       {/* Parameter and AQI data */}
       <Box display="flex" flexWrap="wrap">
@@ -161,4 +171,4 @@ const AirQualitySection = ({
   );
 };
 
-export default AirQualitySection;
+export default AirQualityParameterSection;

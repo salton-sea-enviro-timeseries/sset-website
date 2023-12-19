@@ -11,12 +11,18 @@ import {
 } from "@material-ui/core";
 import { groupBy } from "lodash";
 import { Marker } from "react-map-gl";
-import { Parameter, Data, SiteData, DashboardPage } from "types";
+import {
+  Parameter,
+  Data,
+  SiteData,
+  DashboardPage,
+  MenuItemFields
+} from "types";
 import { colorScale, getAverage, getColorFromScale, getRange } from "utils";
-import DashboardLayout from "components/DashboardLayout";
+import DashboardLayout from "components/Dashboard/DashboardLayout";
 import Map from "components/Dashboard/Map";
 import Table from "components/Dashboard/Table";
-import DownloadDataButtonsSection from "components/DownloadDataButtonsSection";
+import DownloadDataButtonsSection from "components/Dashboard/DownloadDataButtonsSection";
 import WithLoading from "components/WithLoading";
 import Meta from "components/Meta";
 import ContinuousColorLegend from "components/ContinuousColorLegend";
@@ -24,6 +30,7 @@ import { MapPinIcon } from "../../constants";
 import { getCmsContent } from "util/getCmsContent";
 import { InferGetStaticPropsType } from "next";
 import { useAppContext } from "components/AppContext";
+import { filterParameters } from "util/filterParameterFromCms";
 
 const PIN_SIZE = 20;
 
@@ -77,6 +84,7 @@ const WaterQuality = ({
   // ============================ CMS const start ==========================
   const locale = language === "en" ? "en-US" : "es";
   const cmsField = waterPageContent?.fields;
+  const mapMainCaption = cmsField?.map_caption_main[locale];
   const mapSecondaryCaption = cmsField?.map_caption_secondary[locale];
   const parameterList = cmsField?.menuList["en-US"].map(({ fields }) => {
     return fields;
@@ -87,14 +95,10 @@ const WaterQuality = ({
   const downloadReadMERef = cmsField?.readMe["en-US"].fields.file["en-US"].url;
   const parameterFilter = useMemo(
     () =>
-      parameterList?.filter(({ paramKey, unit }) => {
-        if (paramKey["en-US"] === parameter) {
-          return unit["en-US"];
-        }
-      }),
+      filterParameters<MenuItemFields>(parameterList, "paramKey", parameter),
     [parameterList, parameter]
   );
-  const mapCaptionMain =
+  const parameterDescription =
     parameterFilter &&
     parameterFilter[0].description[locale].content[0].content[0].value;
   //============================= CMS const end ============================
@@ -233,7 +237,7 @@ const WaterQuality = ({
                   paddingBottom: "10px"
                 }}
               >
-                {mapCaptionMain}
+                {parameterDescription}
               </Typography>
             </WithLoading>
           </Grid>
@@ -256,7 +260,12 @@ const WaterQuality = ({
         <Grid item xs={12}>
           <WithLoading isLoading={isDataLoading} variant="rect" height="500px">
             {mapData && (
-              <Map caption LATITUDE={33.47634} LONGITUDE={-116.03884} ZOOM={12}>
+              <Map
+                caption={mapMainCaption}
+                LATITUDE={33.47634}
+                LONGITUDE={-116.03884}
+                ZOOM={12}
+              >
                 {sites.map(({ latitude, longitude, color, site, value }, i) => {
                   return (
                     <Marker

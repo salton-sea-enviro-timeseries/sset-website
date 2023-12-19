@@ -19,8 +19,8 @@ import WaterQualityIcon from "@material-ui/icons/Waves";
 import AirQualityIcon from "@material-ui/icons/FilterDrama";
 import { useRouter } from "next/router";
 
-import Footer from "./Footer";
-import Navbar from "./Navbar";
+import Footer from "../Footer";
+import Navbar from "../Navbar";
 
 const DRAWER_WIDTH = 240;
 const NAVBAR_HEIGHT = 80;
