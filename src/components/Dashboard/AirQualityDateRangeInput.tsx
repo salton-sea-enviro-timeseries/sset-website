@@ -13,6 +13,10 @@ type DateRangeProps = {
   formError: FormErrorRange;
   startDateRef: React.RefObject<HTMLInputElement>;
   endDateRef: React.RefObject<HTMLInputElement>;
+  buttonText?: string;
+  startDateText?: string;
+  endDateText?: string;
+  modSensorGeneratePlotHelperText?: string;
 };
 
 const AirQualityDateRangeInput = ({
@@ -20,7 +24,11 @@ const AirQualityDateRangeInput = ({
   isValidating,
   formError: { error, startDateErrorMsg, endDateErrorMsg },
   startDateRef,
-  endDateRef
+  endDateRef,
+  buttonText,
+  startDateText,
+  endDateText,
+  modSensorGeneratePlotHelperText
 }: DateRangeProps) => {
   const classes = useStyles();
 
@@ -38,13 +46,13 @@ const AirQualityDateRangeInput = ({
           type="submit"
           disabled={isValidating}
         >
-          Generate Plots
+          {buttonText}
         </Button>
         <TextField
           error={error}
           helperText={error && startDateErrorMsg}
           id="start-date"
-          label="Start Date"
+          label={startDateText}
           type="date"
           inputRef={startDateRef}
           InputLabelProps={{
@@ -55,7 +63,7 @@ const AirQualityDateRangeInput = ({
           error={error}
           helperText={error && endDateErrorMsg}
           id="end-date"
-          label="End Date"
+          label={endDateText}
           type="date"
           inputRef={endDateRef}
           InputLabelProps={{
@@ -64,8 +72,9 @@ const AirQualityDateRangeInput = ({
         />
       </Box>
       <Typography variant="caption" className={classes.dateRangeCaption}>
-        <span className={classes.modCaption}>*MOD</span> sensors currently
-        limited to an 8 day range
+        <span className={classes.modCaption}>*MOD</span>{" "}
+        {modSensorGeneratePlotHelperText ||
+          "sensors currently limited to an 8 day range"}
       </Typography>
     </>
   );
