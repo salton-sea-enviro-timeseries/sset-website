@@ -51,9 +51,13 @@ const generateMenuItems = (
 };
 
 const AirQualityParameterSection = ({
-  normalizedData
+  normalizedData,
+  paramAQITitle,
+  sensorSelectionHelperText
 }: {
   normalizedData: Record<string, DeviceRawData>;
+  paramAQITitle?: string;
+  sensorSelectionHelperText?: string;
 }) => {
   const deviceMenuList = generateMenuItems(normalizedData);
   const [selectedSensor, setSelectedSensor] = useState(deviceMenuList[0].id);
@@ -135,7 +139,10 @@ const AirQualityParameterSection = ({
             variant="outlined"
             value={sanitizedValue}
             onChange={handleChangeSensor}
-            helperText="Select a working sensor from above to view current parameter values."
+            helperText={
+              sensorSelectionHelperText ||
+              "Select a working sensor from above to view current parameter values."
+            }
           >
             {deviceMenuList.map(({ id, name }) => (
               <MenuItem key={id} value={id}>
@@ -150,7 +157,11 @@ const AirQualityParameterSection = ({
       </Box>
       {/* selector end */}
       <WithLoading isLoading={isLoadingSensor}>
-        {dateTime && <Typography>AQI Values From {dateTime}</Typography>}
+        {dateTime && (
+          <Typography>
+            {paramAQITitle} {dateTime}
+          </Typography>
+        )}
       </WithLoading>
       {/* Parameter and AQI data */}
       <Box display="flex" flexWrap="wrap">
