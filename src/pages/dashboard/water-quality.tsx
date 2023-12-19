@@ -11,7 +11,13 @@ import {
 } from "@material-ui/core";
 import { groupBy } from "lodash";
 import { Marker } from "react-map-gl";
-import { Parameter, Data, SiteData, DashboardPage } from "types";
+import {
+  Parameter,
+  Data,
+  SiteData,
+  DashboardPage,
+  MenuItemFields
+} from "types";
 import { colorScale, getAverage, getColorFromScale, getRange } from "utils";
 import DashboardLayout from "components/Dashboard/DashboardLayout";
 import Map from "components/Dashboard/Map";
@@ -24,6 +30,7 @@ import { MapPinIcon } from "../../constants";
 import { getCmsContent } from "util/getCmsContent";
 import { InferGetStaticPropsType } from "next";
 import { useAppContext } from "components/AppContext";
+import { filterParameters } from "util/filterParameterFromCms";
 
 const PIN_SIZE = 20;
 
@@ -88,17 +95,12 @@ const WaterQuality = ({
   const downloadReadMERef = cmsField?.readMe["en-US"].fields.file["en-US"].url;
   const parameterFilter = useMemo(
     () =>
-      parameterList?.filter(({ paramKey, unit }) => {
-        if (paramKey["en-US"] === parameter) {
-          return unit["en-US"];
-        }
-      }),
+      filterParameters<MenuItemFields>(parameterList, "paramKey", parameter),
     [parameterList, parameter]
   );
   const parameterDescription =
     parameterFilter &&
     parameterFilter[0].description[locale].content[0].content[0].value;
-  // console.log("mapCaptionMain: ", mapMainCaption);
   //============================= CMS const end ============================
   useEffect(() => {
     if (mapData) {
