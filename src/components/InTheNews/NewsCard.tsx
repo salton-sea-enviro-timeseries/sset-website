@@ -16,7 +16,7 @@ export default function NewsCard({ media }: NewsCardProps) {
       <CardActionArea
         className={classes.cardActionArea}
         target="_blank"
-        href={media?.link}
+        href={media.link ?? ""}
       >
         <CardMedia
           component={"img"}
