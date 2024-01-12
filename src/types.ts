@@ -26,9 +26,9 @@ export interface SiteData {
 export interface MediaObject {
   title?: string;
   provider?: string;
-  description?: string;
+  description?: string | null;
   imageUrl?: string;
-  link: string;
+  link?: string;
 }
 
 export interface Data {

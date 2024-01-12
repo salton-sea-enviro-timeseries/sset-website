@@ -60,7 +60,8 @@ const AboutUsPage = ({ listOfProfiles }: AboutUsPageProps) => {
           }: any) => {
             const avatar = image && image["en-US"].fields.file["en-US"].url;
             return (
-              responses["en-US"]["question-6"] && {
+              responses["en-US"]["question-6"] &&
+              responses["en-US"][selectedQuestion] && {
                 community: community["en-US"],
                 fullName: fullName["en-US"],
                 responses: responses["en-US"][selectedQuestion],

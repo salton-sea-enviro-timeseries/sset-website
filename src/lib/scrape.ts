@@ -11,13 +11,13 @@ async function scrape(urls: string[]) {
   if (urls) {
     try {
       const data = await Promise.all(promises);
-      const mediaData: MediaObject[] = data.map((article: any) => {
+      const mediaData: MediaObject[] = data.map((article) => {
         const { title, description, image, url, provider } = article;
         return {
           title,
           provider,
           description: description ?? null,
-          imageUrl: image,
+          imageUrl: image ?? "/alianzacv-logo.jpg",
           link: url
         };
       });
