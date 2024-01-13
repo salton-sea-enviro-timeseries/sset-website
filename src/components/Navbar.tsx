@@ -42,7 +42,7 @@ function Navbar() {
         label: getContent(`site.${language}.navLinks.resources`)
       },
       {
-        href: "/about-us",
+        href: "/our-community",
         label: getContent(`site.${language}.navLinks.about`)
       }
     ];
