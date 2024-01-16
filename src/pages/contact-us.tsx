@@ -56,8 +56,8 @@ const ContactUsPage = () => {
                       href="mailto:aydee@alianzacv.org"
                     >
                       <ListItemText
-                        primary="Aydee Palomino"
-                        secondary="aydee@alianzacv.org"
+                        primary="Juliana Taboada"
+                        secondary="juliana@alianzacv.org"
                       />
                     </ListItem>
                     <ListItem
