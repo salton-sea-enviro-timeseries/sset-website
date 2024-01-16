@@ -62,7 +62,7 @@ const SubscriptionForm = () => {
       onSubmit={handleFormSubmit}
     >
       <Typography variant="h5" gutterBottom>
-        Subscribe to our newsletter!
+        Subscribe To Our Newsletter!
       </Typography>
       <Typography>
         SIGN UP TO RECEIVE EMAIL AND ALERTS ON UP COMING COMMUNITY UPDATES,
