@@ -72,11 +72,12 @@ export async function getQuantDevice(startDate?: string, endDate?: string) {
         case 500:
           errorMsg = `Server error when fetching Quant Device.`;
         default:
-          errorMsg = `Unknown error when fetching Quant Device.`;
+          errorMsg = `Status ${response.status}: Unknown error when fetching Quant Device.`;
       }
       return {
         data: [],
-        error: errorMsg
+        error: errorMsg,
+        status: response.status
       };
     }
     const data: { data: RawMODDeviceDataResponse[] } = await response.json();
