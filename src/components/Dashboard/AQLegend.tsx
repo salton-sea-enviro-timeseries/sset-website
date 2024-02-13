@@ -19,8 +19,8 @@ const AQLegend = () => {
                 <b>Air Quality Index:</b>
               </Typography>
               <Typography color="inherit" variant="body2" component="p">
-                The U.S. AQI is EPA’s index for reporting air quality. This link
-                will take you to{" "}
+                The U.S. AQI is EPA’s index for reporting air quality for all
+                parameters except H2S. This link will take you to{" "}
                 <em>
                   <u>airnow.gov</u>
                 </em>{" "}

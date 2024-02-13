@@ -14,7 +14,8 @@ import {
   ChartOptions,
   LegendItem,
   ChartData,
-  Filler
+  Plugin,
+  ChartArea
 } from "chart.js";
 import {
   BodyValues,
@@ -39,7 +40,6 @@ ChartJS.register(
   LineElement,
   TimeScale,
   LineController,
-  Filler,
   Title,
   Tooltip,
   Legend,
@@ -70,12 +70,13 @@ const paramAQIStandardMap: ParamAQIStandardMap = {
   H2S: null
 };
 type DataItem = {
-  x: number;
+  x: string | number;
   PM2_5?: number;
   PM10?: number;
   NO2?: number;
   O3?: number;
   CO?: number;
+  H2S?: number;
 };
 // ==============================================================
 //Todo refactor to export?
@@ -92,23 +93,9 @@ const colors = [
   "#800080"
 ];
 // gradient background color for chart
-const canvasBackgroundColor = {
+const canvasBackgroundColor: Plugin<"line"> = {
   id: "canvasBackgroundColor",
-  beforeDraw(
-    chart: {
-      ctx: any;
-      chartArea: {
-        top: number;
-        bottom: number;
-        left: number;
-        right: number;
-        width: number;
-      };
-      scales: { x: any; y: any };
-    },
-    args: any,
-    pluginOptions: any
-  ) {
+  beforeDraw(chart, args, options) {
     const {
       ctx,
       chartArea: { top, bottom, left, right, width },
@@ -156,7 +143,76 @@ const canvasBackgroundColor = {
     }
   }
 };
-const plugins: any = [canvasBackgroundColor];
+const INSTRUMENTATION_THRESHOLD_H2S = 0.04;
+
+function isBelowThreshold(
+  dataPoint: DataItem | null
+): dataPoint is DataItem & { H2S: number } {
+  if (dataPoint !== null && typeof dataPoint.H2S === "number") {
+    return dataPoint.H2S >= 0 && dataPoint.H2S < INSTRUMENTATION_THRESHOLD_H2S;
+  }
+  return false;
+}
+const thresholdLinePlugin = (selectedParam: string) => ({
+  id: "thresholdLine",
+  afterDraw: (chart: ChartJS) => {
+    if (selectedParam !== "H2S") {
+      return; // Only draw the line for H2S parameter
+    }
+
+    const ctx = chart.ctx;
+    const chartArea: ChartArea = chart.chartArea;
+    const yScale = chart.scales.y;
+    const yPos = yScale.getPixelForValue(INSTRUMENTATION_THRESHOLD_H2S);
+    // Draw the dashed line
+    ctx.save();
+    ctx.beginPath();
+    ctx.strokeStyle = "red";
+    ctx.setLineDash([5, 5]); // Dashed line pattern
+    ctx.moveTo(chartArea.left, yPos);
+    ctx.lineTo(chartArea.right, yPos);
+    ctx.stroke();
+    // Draw the custom legend
+    drawCustomLegend(ctx, chartArea);
+    ctx.restore();
+  }
+});
+
+function drawCustomLegend(ctx: CanvasRenderingContext2D, chartArea: ChartArea) {
+  // Padding from the right edge and top of the chart
+  const paddingRight = 4;
+  //TODO change padding based on axis max width
+  const paddingTop = 60;
+
+  // Legend size
+  const legendWidth = 140;
+  const legendHeight = 50;
+
+  // Legend position
+  const legendX = chartArea.right - legendWidth - paddingRight;
+  const legendY = chartArea.top - paddingTop;
+
+  // Background
+  ctx.fillStyle = "whitesmoke";
+  ctx.fillRect(legendX, legendY, legendWidth, legendHeight);
+
+  // Border
+  ctx.strokeStyle = "black";
+  ctx.strokeRect(legendX, legendY, legendWidth, legendHeight);
+
+  // Dashed line sample
+  ctx.beginPath();
+  ctx.setLineDash([5, 5]);
+  ctx.moveTo(legendX + 10, legendY + 20); // Adjust as needed
+  ctx.lineTo(legendX + 90, legendY + 20); // Adjust as needed
+  ctx.strokeStyle = "red";
+  ctx.stroke();
+
+  // Text
+  ctx.fillStyle = "black";
+  ctx.fillText("Instrument\nThreshold", legendX + 10, legendY + 35); // Adjust as needed
+}
+
 // all chart options and selected param as y axis
 const chartOptions = (selectedParam: string): ChartOptions<"line"> => {
   return {
@@ -174,6 +230,7 @@ const chartOptions = (selectedParam: string): ChartOptions<"line"> => {
           size: 16
         }
       },
+
       legend: {
         position: "bottom" as const,
         labels: {
@@ -211,7 +268,7 @@ const chartOptions = (selectedParam: string): ChartOptions<"line"> => {
       y: {
         title: {
           display: true,
-          text: "AQI Value",
+          text: selectedParam === "H2S" ? "ppb" : "AQI Value",
           font: {
             size: 16
           }
@@ -219,9 +276,10 @@ const chartOptions = (selectedParam: string): ChartOptions<"line"> => {
         type: "linear" as const,
         display: true,
         position: "left" as const,
-        beginAtZero: true,
+        beginAtZero: false,
+        min: selectedParam === "H2S" ? INSTRUMENTATION_THRESHOLD_H2S : 0,
         grid: {
-          drawOnChartArea: false
+          drawOnChartArea: true
         }
       },
       x: {
@@ -267,19 +325,29 @@ const AirQualityPlots = ({
   paramSelectionHelperText?: string;
 }) => {
   const classes = useStyles();
-  const { selectedValue, handleSelectChange, options } = useSelect<string>({
+
+  const {
+    selectedValue: selectedParam,
+    handleSelectChange,
+    options
+  } = useSelect<string>({
     initialValues: Object.keys(paramAQIStandardMap),
     defaultValue: "PM10"
   });
+  // Combine the canvasBackgroundColor plugin with the threshold plugin
+  const combinedPlugins: Plugin<"line">[] = useMemo(
+    () => [canvasBackgroundColor, thresholdLinePlugin(selectedParam)],
+    [selectedParam]
+  );
   //Filter selected param to retrieve its details
   const parameterFilter = useMemo(
     () =>
       filterParameters<MenuItemFields>(
         parameterListDetailsText,
         "paramKey",
-        selectedValue
+        selectedParam
       ),
-    [parameterListDetailsText, selectedValue]
+    [parameterListDetailsText, selectedParam]
   );
   const parameterDescription =
     parameterFilter &&
@@ -289,58 +357,77 @@ const AirQualityPlots = ({
   const parameterInfoLink =
     parameterFilter &&
     parameterFilter[0].href[locale as keyof LocaleDefault<string>];
-  const datasets = useMemo(() => {
-    return Object.values(normalizedData).map(({ data, name, id }, index) => ({
-      label: name,
-      data: id.startsWith("MOD")
-        ? calcParamAQI(filterHourlyData(data))
-        : calcParamAQI(data),
-      borderColor: colors[index],
-      fill: false,
-      lineTension: 0.1,
-      backgroundColor: `${colors[index]}3F`,
-      borderCapStyle: "butt" as const,
-      borderDash: [],
-      borderDashOffset: 0.0,
-      borderJoinStyle: "miter" as const,
-      pointBorderColor: colors[index],
-      pointBackgroundColor: "#fff" as const,
-      pointBorderWidth: 1,
-      pointHoverRadius: 5,
-      pointHoverBackgroundColor: "blue" as const,
-      pointHoverBorderColor: "#fff" as const,
-      pointHoverBorderWidth: 2,
-      pointRadius: 1,
-      pointHitRadius: 10,
-      yAxisID: "y" as const
-    }));
-  }, [normalizedData]);
 
+  const datasets = useMemo(() => {
+    return Object.values(normalizedData).map(({ data, name, id }, index) => {
+      const transformedData = id.startsWith("MOD")
+        ? calcParamAQI(filterHourlyData(data))
+        : calcParamAQI(data);
+      return {
+        label: name,
+        data: transformedData,
+        borderColor: colors[index],
+        segment: {
+          borderColor: (ctx: { p0DataIndex: any; p1DataIndex: any }) => {
+            if (selectedParam !== "H2S") {
+              return colors[index];
+            }
+            const dataIndex = ctx.p0DataIndex as number; // Index of the starting point of the segment
+            const nextDataIndex = ctx.p1DataIndex as number; // Index of the ending point of the segment
+
+            const currentPoint = transformedData[dataIndex];
+            const nextPoint = transformedData[nextDataIndex];
+            if (isBelowThreshold(nextPoint)) {
+              return "red";
+            }
+            return colors[index]; // Default color
+          }
+        },
+        fill: false,
+        lineTension: 0.1,
+        backgroundColor: `${colors[index]}3F`,
+        borderCapStyle: "butt" as const,
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderJoinStyle: "miter" as const,
+        pointBorderColor: colors[index],
+        pointBackgroundColor: "#fff" as const,
+        pointBorderWidth: 1,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: "blue" as const,
+        pointHoverBorderColor: "#fff" as const,
+        pointHoverBorderWidth: 2,
+        pointRadius: 1,
+        pointHitRadius: 10,
+        yAxisID: "y" as const
+      };
+    });
+  }, [normalizedData, selectedParam]);
   // dataset as an object for chart prop
   const chartData = {
     datasets
   };
-  const shouldRenderChart = hasNonNullValueForParam(chartData, selectedValue);
+  const shouldRenderChart = hasNonNullValueForParam(chartData, selectedParam);
   return (
     <>
       <SelectMenuList
         options={options}
         helperText={paramSelectionHelperText || "Select Param to Chart"}
-        selectedValue={selectedValue}
+        selectedValue={selectedParam}
         handleSelectChange={handleSelectChange}
       />
       {shouldRenderChart ? (
         <Box minHeight={350} m="2 2 0 2">
           <Line
-            key={selectedValue}
-            plugins={plugins}
-            options={chartOptions(selectedValue)}
+            key={selectedParam}
+            plugins={combinedPlugins}
+            options={chartOptions(selectedParam)}
             data={chartData}
           />
         </Box>
       ) : (
         <Typography align="center" gutterBottom={true}>
-          No data available for <b>{selectedValue}</b> for the date range
+          No data available for <b>{selectedParam}</b> for the date range
           selected.
         </Typography>
       )}
@@ -360,7 +447,7 @@ const AirQualityPlots = ({
             target="_blank"
             rel="noopener"
           >
-            <b>{selectedValue}:</b>
+            <b>{selectedParam}:</b>
           </Link>{" "}
           {parameterDescription}
         </Typography>
