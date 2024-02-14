@@ -42,18 +42,18 @@ export async function getQuantDevice(startDate?: string, endDate?: string) {
   const today = utcToZonedTime(new Date(), timeZone);
 
   if (!startDate || !endDate) {
-    startDate = getStartDate(today, 8, true);
-    endDate = getEndDate(today, true);
+    startDate = getStartDate(today, 8, "quant");
+    endDate = getEndDate(today, "quant");
   } else {
-    const start = startOfDay(parse(startDate, "yyyy-M-d", new Date()));
-    const end = endOfDay(parse(endDate, "yyyy-M-d", new Date()));
+    const start = startOfDay(parse(startDate, "yyyy-MM-dd", new Date()));
+    const end = endOfDay(parse(endDate, "yyyy-MM-dd", new Date()));
     const daysDifference = differenceInDays(end, start);
     if (daysDifference > 8) {
       console.error("Error:  Selected range exceeds 8 days for Quant sensors.");
       return { data: [], error: "Selected range exceeds 8 days" };
     }
-    startDate = format(start, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-    endDate = format(end, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    startDate = format(start, "yyyy-MM-dd");
+    endDate = format(end, "yyyy-MM-dd");
   }
   const options = {
     method: "GET"
