@@ -31,8 +31,7 @@ function inspectData(sensorData: CommonDeviceType[]): CommonDeviceType | null {
   if (isNoDataAvailable(sensorData)) {
     return null;
   } else {
-    // latest data for quant is first item, aqmd is last item
-    return sensorData[0].sn ? sensorData[0] : sensorData[sensorData.length - 1];
+    return sensorData[sensorData.length - 1];
   }
 }
 function isMODRawDeviceDataResponse(

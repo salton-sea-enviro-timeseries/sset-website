@@ -28,7 +28,6 @@ import "chartjs-adapter-date-fns";
 import { Line } from "react-chartjs-2";
 import { makeStyles, Box, Typography, Link } from "@material-ui/core";
 import { calcParamAQI } from "util/calcParamAQI";
-import { filterHourlyData } from "../../util/filterHourlyData";
 import useSelect from "hooks/useSelect";
 import SelectMenuList from "./SelectMenuList";
 import { filterParameters } from "util/filterParameterFromCms";
@@ -357,12 +356,9 @@ const AirQualityPlots = ({
   const parameterInfoLink =
     parameterFilter &&
     parameterFilter[0].href[locale as keyof LocaleDefault<string>];
-
   const datasets = useMemo(() => {
     return Object.values(normalizedData).map(({ data, name, id }, index) => {
-      const transformedData = id.startsWith("MOD")
-        ? calcParamAQI(filterHourlyData(data))
-        : calcParamAQI(data);
+      const transformedData = calcParamAQI(data);
       return {
         label: name,
         data: transformedData,

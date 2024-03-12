@@ -23,6 +23,7 @@ export function calcParamAQI(data: CommonDeviceType[]) {
         PM1: PM1 ? _.round(PM1, 2) : PM1,
         CO: CO ? _.round((CO / 35000) * 100, 2) : CO,
         H2S: H2S,
+        // EndDate used for aqmd
         x: timestamp_local ? timestamp_local : EndDate
       };
     }

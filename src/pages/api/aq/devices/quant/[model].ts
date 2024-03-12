@@ -1,4 +1,4 @@
-import ApiResponse, { getQuantDevice } from "lib/quant";
+import ApiResponse, { getQuantDeviceData } from "lib/quant";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -6,12 +6,11 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const { method, query } = req;
-
   if (method !== "GET")
     return res.status(405).end(`Method ${method} Not Allowed`);
-
   try {
-    const result: ApiResponse = await getQuantDevice(
+    const result: ApiResponse = await getQuantDeviceData(
+      query.model as string,
       query.startDate as string,
       query.endDate as string
     );
@@ -19,20 +18,12 @@ export default async function handler(
       console.warn(result.error);
       return res.status(200).json([]);
     }
-    const device = result.data || [];
-    const filteredData = device.filter(
-      (entry) => entry["geo.lon"] && entry["geo.lat"]
-    );
-
+    const deviceData = result.data || [];
     return res.status(200).json(
-      filteredData.map(
+      deviceData.map(
         ({
-          "geo.lat": Longitude,
-          "geo.lon": Latitude,
-          "met.rh": RH,
-          "met.temp": Temp,
-          "model.pm.pm1": Model_PM_PM1,
-          "model.pm.pm10": Model_PM_PM10,
+          rh: RH,
+          temp: Temp,
           pm1: PM1,
           pm10: PM10,
           pm25,
@@ -40,17 +31,12 @@ export default async function handler(
           no2: NO2,
           o3: O3,
           sn,
-          timestamp,
-          timestamp_local,
-          url
+          //period_start used, and renamed as timestamp_local to match aqmd response
+          period_start_utc: timestamp_local
         }) => {
           return {
-            Longitude,
-            Latitude,
             RH,
             Temp,
-            Model_PM_PM1,
-            Model_PM_PM10,
             PM1,
             PM10,
             "PM2.5": pm25,
@@ -58,9 +44,7 @@ export default async function handler(
             NO2,
             O3,
             sn,
-            timestamp,
-            timestamp_local,
-            url
+            timestamp_local
           };
         }
       )
