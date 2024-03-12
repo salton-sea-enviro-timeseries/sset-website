@@ -35,7 +35,7 @@ import { filterParameters } from "util/filterParameterFromCms";
 const PIN_SIZE = 20;
 
 const getMapData = (data: SiteData[]) => {
-  const dataBySite = groupBy(data, "site");
+  const dataBySite = groupBy(data, (item) => item.site.trim().toLowerCase());
   const mapData = Object.keys(dataBySite).reduce((acc, key) => {
     // @ts-ignore
     acc[key] = {
@@ -268,51 +268,54 @@ const WaterQuality = ({
               >
                 {sites.map(({ latitude, longitude, color, site, value }, i) => {
                   return (
-                    <Marker
-                      key={`${i}-${latitude}-${longitude}`}
-                      latitude={latitude}
-                      longitude={longitude}
-                    >
-                      <Tooltip
-                        title={
-                          <>
-                            <b>{site}</b>
-                            &nbsp;
-                            {typeof value === "string"
-                              ? `: ${value}`
-                              : value.toPrecision(3)}
-                          </>
-                        }
-                        open={true}
-                        arrow
-                        placement="top-end"
-                        PopperProps={{
-                          disablePortal: true
-                        }}
-                        classes={{
-                          popper: classes.popper,
-                          tooltip: classes.tooltip
-                        }}
+                    latitude &&
+                    longitude && (
+                      <Marker
+                        key={`${i}-${latitude}-${longitude}`}
+                        latitude={latitude}
+                        longitude={longitude}
                       >
-                        <svg
-                          height={PIN_SIZE}
-                          viewBox="0 0 24 24"
-                          style={{
-                            cursor: "pointer",
-                            fill: color,
-                            stroke: "none",
-                            transform: `translate(${
-                              -PIN_SIZE / 2
-                            }px,${-PIN_SIZE}px)`
+                        <Tooltip
+                          title={
+                            <>
+                              <b>{site}</b>
+                              &nbsp;
+                              {typeof value === "string"
+                                ? `: ${value}`
+                                : value.toPrecision(3)}
+                            </>
+                          }
+                          open={true}
+                          arrow
+                          placement="top-end"
+                          PopperProps={{
+                            disablePortal: true
                           }}
-                          // onClick={() => {
-                          //   setSelectedPin(pins[i]);
-                          // }}
+                          classes={{
+                            popper: classes.popper,
+                            tooltip: classes.tooltip
+                          }}
                         >
-                          <path d={MapPinIcon} />
-                        </svg>
-                      </Tooltip>
-                    </Marker>
+                          <svg
+                            height={PIN_SIZE}
+                            viewBox="0 0 24 24"
+                            style={{
+                              cursor: "pointer",
+                              fill: color,
+                              stroke: "none",
+                              transform: `translate(${
+                                -PIN_SIZE / 2
+                              }px,${-PIN_SIZE}px)`
+                            }}
+                            // onClick={() => {
+                            //   setSelectedPin(pins[i]);
+                            // }}
+                          >
+                            <path d={MapPinIcon} />
+                          </svg>
+                        </Tooltip>
+                      </Marker>
+                    )
                   );
                 })}
               </Map>
