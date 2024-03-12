@@ -128,25 +128,40 @@ const getAdjustedHour = (baseDate: Date, hoursDiff: number) => {
     ? startOfHour(subHours(baseDate, Math.abs(hoursDiff)))
     : startOfHour(addHours(baseDate, hoursDiff));
 };
+const formatDeviceDate = (
+  deviceType: string,
+  includeTime: boolean = true
+): string => {
+  switch (deviceType) {
+    case "quant":
+      return "yyyy-MM-dd";
+    case "aqmd":
+      return includeTime ? "yyyy-MM-dd HH:mm:ss" : "yyyy-MM-dd";
+    case "aeroqual":
+      return includeTime ? "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" : "yyyy-MM-dd";
+    default:
+      return "yyyy-MM-dd";
+  }
+};
 
 export const getStartDate = (
   baseDate: Date,
   daysSelected: number,
-  formatIso: boolean = false
+  deviceType: string
 ) => {
   const startDate = getAdjustedHour(baseDate, -(daysSelected * 24));
   return formatInTimeZone(
     startDate,
     "UTC",
-    formatIso ? "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" : "yyyy-MM-dd HH:mm:ss"
+    formatDeviceDate(deviceType, deviceType !== "quant")
   );
 };
 
-export const getEndDate = (baseDate: Date, formatIso: boolean = false) => {
+export const getEndDate = (baseDate: Date, deviceType: string): string => {
   const endDate = getAdjustedHour(baseDate, 1);
   return formatInTimeZone(
     endDate,
     "UTC",
-    formatIso ? "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" : "yyyy-MM-dd HH:mm:ss"
+    formatDeviceDate(deviceType, deviceType !== "quant")
   );
 };

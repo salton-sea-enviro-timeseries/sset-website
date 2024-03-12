@@ -100,8 +100,8 @@ export async function getDeviceData({
     const timeZone = "America/Los_Angeles";
     const today = utcToZonedTime(new Date(), timeZone);
     if (!startDate || !endDate) {
-      startDate = getStartDate(today, 8);
-      endDate = getEndDate(today);
+      startDate = getStartDate(today, 8, "aqmd");
+      endDate = getEndDate(today, "aqmd");
     } else {
       startDate = format(
         startOfDay(parse(startDate, "yyyy-M-d", new Date())),

@@ -28,7 +28,6 @@ import "chartjs-adapter-date-fns";
 import { Line } from "react-chartjs-2";
 import { makeStyles, Box, Typography, Link } from "@material-ui/core";
 import { calcParamAQI } from "util/calcParamAQI";
-import { filterHourlyData } from "../../util/filterHourlyData";
 import useSelect from "hooks/useSelect";
 import SelectMenuList from "./SelectMenuList";
 import { filterParameters } from "util/filterParameterFromCms";
@@ -143,13 +142,13 @@ const canvasBackgroundColor: Plugin<"line"> = {
     }
   }
 };
-const INSTRUMENTATION_THRESHOLD_H2S = 0.04;
+const INSTRUMENTATION_THRESHOLD_H2S = 4;
 
 function isBelowThreshold(
   dataPoint: DataItem | null
 ): dataPoint is DataItem & { H2S: number } {
   if (dataPoint !== null && typeof dataPoint.H2S === "number") {
-    return dataPoint.H2S >= 0 && dataPoint.H2S < INSTRUMENTATION_THRESHOLD_H2S;
+    return dataPoint.H2S >= 0 && dataPoint.H2S <= INSTRUMENTATION_THRESHOLD_H2S;
   }
   return false;
 }
@@ -165,6 +164,7 @@ const thresholdLinePlugin = (selectedParam: string) => ({
     const yScale = chart.scales.y;
     const yPos = yScale.getPixelForValue(INSTRUMENTATION_THRESHOLD_H2S);
     // Draw the dashed line
+    ctx.lineWidth = 2;
     ctx.save();
     ctx.beginPath();
     ctx.strokeStyle = "red";
@@ -277,7 +277,7 @@ const chartOptions = (selectedParam: string): ChartOptions<"line"> => {
         display: true,
         position: "left" as const,
         beginAtZero: false,
-        min: selectedParam === "H2S" ? INSTRUMENTATION_THRESHOLD_H2S : 0,
+        // min: selectedParam === "H2S" ? INSTRUMENTATION_THRESHOLD_H2S : 0,
         grid: {
           drawOnChartArea: true
         }
@@ -357,12 +357,9 @@ const AirQualityPlots = ({
   const parameterInfoLink =
     parameterFilter &&
     parameterFilter[0].href[locale as keyof LocaleDefault<string>];
-
   const datasets = useMemo(() => {
     return Object.values(normalizedData).map(({ data, name, id }, index) => {
-      const transformedData = id.startsWith("MOD")
-        ? calcParamAQI(filterHourlyData(data))
-        : calcParamAQI(data);
+      const transformedData = calcParamAQI(data);
       return {
         label: name,
         data: transformedData,

@@ -74,8 +74,8 @@ export async function getAeroqualDeviceData({
     const today = utcToZonedTime(new Date(), timeZone);
 
     if (!startDate || !endDate) {
-      startDate = getStartDate(today, 8, true);
-      endDate = getEndDate(today, true);
+      startDate = getStartDate(today, 8, "aeroqual");
+      endDate = getEndDate(today, "aeroqual");
     } else {
       startDate = format(parseISO(startDate), "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
       endDate = format(parseISO(endDate), "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");

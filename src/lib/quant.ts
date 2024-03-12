@@ -1,17 +1,27 @@
-import { differenceInDays, endOfDay, parse, startOfDay } from "date-fns";
+import {
+  differenceInDays,
+  endOfDay,
+  parse,
+  startOfDay,
+  subDays
+} from "date-fns";
 import { format, utcToZonedTime } from "date-fns-tz";
 import { getEndDate, getStartDate } from "utils";
-//TODO create two functions to handle sensor details and sensor data
-const MODEL_NUM = "MOD-00069";
-const BASE_URL = `https://app.quant-aq.com/ui-device-data/modulair-pm/${MODEL_NUM}`;
+//NOTE: To keep the endpoint fast, at most 31 days of data can be requested at a time.
+//TODO : create group to query all sensors
+const ENDPOINT_BASE_URL = "https://api.quant-aq.com";
+const KEY = process.env.QUANTAQ_APIKEY as string;
+const base64Credentials = Buffer.from(`${KEY}:`).toString("base64");
+const options = {
+  method: "GET",
+  headers: {
+    Authorization: `Basic ${base64Credentials}`
+  }
+};
 export interface MODRawDeviceDataResponse {
-  "geo.lat": number;
-  "geo.lon": number;
-  "met.rh": number;
-  "met.temp": number;
-  "model.pm.pm1": number;
-  "model.pm.pm10": number;
-  "model.pm.pm25": number;
+  rh: string;
+  n_datapoints: number;
+  temp: string;
   pm1: number;
   pm10: number;
   pm25: number;
@@ -19,12 +29,12 @@ export interface MODRawDeviceDataResponse {
   PM10: number;
   "PM2.5": number;
   CO: number;
+  CO2: number;
   NO2: number;
   O3: number;
   sn: string;
-  timestamp: string;
-  timestamp_local: string;
-  url: string;
+  period_start_utc: string;
+  period_end: string;
 }
 //TODO move common types
 interface RawMODDeviceDataResponse
@@ -37,33 +47,64 @@ export default interface ApiResponse {
   data?: RawMODDeviceDataResponse[];
   error?: string;
 }
-export async function getQuantDevice(startDate?: string, endDate?: string) {
+
+export async function getQuantDevices() {
+  const DEVICES = ["MOD-PM-00174", "MOD-PM-00368", "MOD-00069"];
+  const devicesPromises = DEVICES.map(async (model) => {
+    const url = new URL(`v1/devices/${model}`, ENDPOINT_BASE_URL);
+    const response = await fetch(url.toString(), options);
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch quant devices. HTTP Status: ${response.status}`
+      );
+    }
+    const data = await response.json();
+    return {
+      Latitude: data.geo.lat,
+      Longitude: data.geo.lon,
+      DeviceId: data.sn,
+      WorkingStatus:
+        data.status === "ACTIVE" ? "Working-Quant" : "Not Working-Quant"
+    };
+  });
+  const devices = await Promise.all(devicesPromises);
+  return devices;
+}
+
+export async function getQuantDeviceData(
+  model: string,
+  startDate?: string,
+  endDate?: string
+) {
   const timeZone = "America/Los_Angeles";
   const today = utcToZonedTime(new Date(), timeZone);
+  const yesterday = subDays(today, 1);
 
   if (!startDate || !endDate) {
-    startDate = getStartDate(today, 8, true);
-    endDate = getEndDate(today, true);
+    startDate = getStartDate(today, 8, "quant");
+    endDate = getEndDate(yesterday, "quant");
   } else {
-    const start = startOfDay(parse(startDate, "yyyy-M-d", new Date()));
-    const end = endOfDay(parse(endDate, "yyyy-M-d", new Date()));
+    const start = startOfDay(parse(startDate, "yyyy-MM-dd", new Date()));
+    const end = endOfDay(parse(endDate, "yyyy-MM-dd", new Date()));
     const daysDifference = differenceInDays(end, start);
-    if (daysDifference > 8) {
-      console.error("Error:  Selected range exceeds 8 days for Quant sensors.");
-      return { data: [], error: "Selected range exceeds 8 days" };
+    if (daysDifference > 31) {
+      console.error(
+        "Error:  Selected range exceeds 31 days for Quant sensors."
+      );
+      return { data: [], error: "Selected range exceeds 31 days" };
     }
-    startDate = format(start, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-    endDate = format(end, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    startDate = format(start, "yyyy-MM-dd");
+    endDate = format(subDays(end, 1), "yyyy-MM-dd");
   }
-  const options = {
-    method: "GET"
-  };
-  const url = new URL(BASE_URL);
-  url.searchParams.append("t0", startDate);
-  url.searchParams.append("tf", endDate);
-  const requestUrl = decodeURIComponent(url.toString());
+  const url = new URL(ENDPOINT_BASE_URL);
+  url.pathname += "/device-api/v1/data/resampled";
+  url.searchParams.append("sn", model);
+  url.searchParams.append("start_date", startDate);
+  url.searchParams.append("end_date", endDate);
+  //TODO add option to change time period
+  url.searchParams.append("period", "1h");
   try {
-    const response = await fetch(requestUrl, options);
+    const response = await fetch(url.toString(), options);
     if (!response.ok) {
       let errorMsg: string;
       switch (response.status) {
