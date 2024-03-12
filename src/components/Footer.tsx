@@ -4,13 +4,13 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
-// import List from "@material-ui/core/List";
-// import ListItem from "@material-ui/core/ListItem";
-// import ListItemText from "@material-ui/core/ListItemText";
-// import ListItemIcon from "@material-ui/core/ListItemIcon";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { makeStyles } from "@material-ui/core/styles";
 import { useAppContext } from "./AppContext";
-// import Image from "next/image";
+import Image from "next/image";
 
 function Footer() {
   const classes = useStyles();
@@ -19,7 +19,7 @@ function Footer() {
     return null;
   }
   const { width } = ctx;
-
+  //TODO add styles
   return (
     <Box
       component="footer"
@@ -31,11 +31,44 @@ function Footer() {
     >
       <Container>
         <Grid container={true} justifyContent="space-between" spacing={4}>
-          <Grid item={true} xs={12} md={4}>
+          <Grid
+            container={true}
+            item={true}
+            xs={12}
+            md={6}
+            alignItems="center"
+            justifyContent="space-evenly"
+          >
             <Link href="/">
               <a>
                 {/* eslint-disable  @next/next/no-img-element */}
                 <img src={"/logo-alt.png"} width={100} alt="SSET Logo" />
+              </a>
+            </Link>
+            <Link href="https://llu.edu/">
+              <a target="_blank" rel="noopener noreferrer">
+                {/* eslint-disable  @next/next/no-img-element */}
+                <img
+                  src={"/loma-linda-university-2.png"}
+                  width={200}
+                  alt="Loma Linda University Logo"
+                />
+              </a>
+            </Link>
+            <Link href="https://www.alianzacv.org/">
+              <a target="_blank" rel="noopener noreferrer">
+                {/* eslint-disable  @next/next/no-img-element */}
+                <img
+                  src={"/alianzacv-logo.jpg"}
+                  width={100}
+                  alt="Alianza Logo"
+                />
+              </a>
+            </Link>
+            <Link href="https://www.ucla.edu/">
+              <a target="_blank" rel="noopener noreferrer">
+                {/* eslint-disable  @next/next/no-img-element */}
+                <img src={"/logo_UCLA_white.svg"} width={100} alt="UCLA Logo" />
               </a>
             </Link>
 
@@ -51,7 +84,7 @@ function Footer() {
               </Box>
             )} */}
           </Grid>
-          {/* <Grid item={true} xs={12} md={6}>
+          <Grid item={true} xs={12} md={6}>
             <Grid container={true} spacing={4} justifyContent="flex-end">
               <Grid item={true} xs={12} md={4}>
                 <List disablePadding={true} component="div">
@@ -104,7 +137,7 @@ function Footer() {
                 </List>
               </Grid>
             </Grid>
-          </Grid> */}
+          </Grid>
         </Grid>
         <Box pt={10}>
           <Typography align="center" variant="caption" component="p">
@@ -119,22 +152,22 @@ function Footer() {
 const useStyles = makeStyles((theme) => ({
   root: {
     zIndex: theme.zIndex.drawer + 1
+  },
+  sticky: {
+    marginTop: "auto"
+  },
+  listItem: {
+    paddingTop: 2,
+    paddingBottom: 2,
+    paddingLeft: 12,
+    paddingRight: 12
+  },
+  listItemTextHeader: {
+    fontWeight: "bold"
+  },
+  socialIcon: {
+    minWidth: 30
   }
-  // sticky: {
-  //   marginTop: "auto"
-  // },
-  // listItem: {
-  //   paddingTop: 2,
-  //   paddingBottom: 2,
-  //   paddingLeft: 12,
-  //   paddingRight: 12
-  // },
-  // listItemTextHeader: {
-  //   fontWeight: "bold"
-  // },
-  // socialIcon: {
-  //   minWidth: 30
-  // }
 }));
 
 export default Footer;
