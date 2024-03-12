@@ -26,7 +26,7 @@ type DeviceRawData = {
   name: string;
   data: CommonDeviceType[];
 };
-//Standards bases on NAAQS
+//Standards based on NAAQS
 const paramAQIStandardMap: ParamAQIStandardMap = {
   O3: 70, //ppb
   "PM2.5": 35, //UOM ug/m3
@@ -92,7 +92,6 @@ const AirQualityParameterSection = ({
       "MMM d yyyy hh:mm a "
     );
   }
-
   const parameterValues = Object.keys(paramAQIStandardMap).map(
     (parameter, index) => {
       return (
