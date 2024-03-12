@@ -142,13 +142,13 @@ const canvasBackgroundColor: Plugin<"line"> = {
     }
   }
 };
-const INSTRUMENTATION_THRESHOLD_H2S = 0.04;
+const INSTRUMENTATION_THRESHOLD_H2S = 4;
 
 function isBelowThreshold(
   dataPoint: DataItem | null
 ): dataPoint is DataItem & { H2S: number } {
   if (dataPoint !== null && typeof dataPoint.H2S === "number") {
-    return dataPoint.H2S >= 0 && dataPoint.H2S < INSTRUMENTATION_THRESHOLD_H2S;
+    return dataPoint.H2S >= 0 && dataPoint.H2S <= INSTRUMENTATION_THRESHOLD_H2S;
   }
   return false;
 }
@@ -164,6 +164,7 @@ const thresholdLinePlugin = (selectedParam: string) => ({
     const yScale = chart.scales.y;
     const yPos = yScale.getPixelForValue(INSTRUMENTATION_THRESHOLD_H2S);
     // Draw the dashed line
+    ctx.lineWidth = 2;
     ctx.save();
     ctx.beginPath();
     ctx.strokeStyle = "red";
@@ -276,7 +277,7 @@ const chartOptions = (selectedParam: string): ChartOptions<"line"> => {
         display: true,
         position: "left" as const,
         beginAtZero: false,
-        min: selectedParam === "H2S" ? INSTRUMENTATION_THRESHOLD_H2S : 0,
+        // min: selectedParam === "H2S" ? INSTRUMENTATION_THRESHOLD_H2S : 0,
         grid: {
           drawOnChartArea: true
         }
