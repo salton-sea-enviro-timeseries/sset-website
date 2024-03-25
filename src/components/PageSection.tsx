@@ -52,7 +52,7 @@ const generateContent = (
     <>
       <Typography component="div">{bodyText}</Typography>
       <Box display="flex" justifyContent={"space-evenly"}>
-        <Divider color={"red"} className={classes.graphDivider} />
+        <Divider className={classes.graphDivider} />
         <FiberManualRecordIcon color="primary" fontSize="small" />
         <Divider className={classes.graphDivider} />
       </Box>
