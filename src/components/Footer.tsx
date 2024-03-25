@@ -30,7 +30,7 @@ const socialMediaIcons = [
   },
 
   {
-    icon: "/youtube-color-icon2.svg",
+    icon: "/youtube_logo_icon2.png",
     url: "https://www.youtube.com/user/BHCECV",
     label: "Youtube"
   }
