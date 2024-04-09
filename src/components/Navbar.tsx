@@ -11,6 +11,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core/styles";
 import { useRouter } from "next/router";
 import { Box, Divider } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import { useAppContext } from "./AppContext";
@@ -78,11 +79,22 @@ function Navbar() {
     >
       {/* <Container disableGutters={true}> */}
       <Toolbar className={classes.toolbar}>
-        <Box display="flex" alignItems="center" justifyContent="center">
+        <Box
+          display="flex"
+          alignItems="center"
+          // style={{ justifyContent: "space-around" }}
+        >
           <Link href="/" passHref>
             <a>
               {/* eslint-disable  @next/next/no-img-element */}
               <img width={150} src="/logo-red.png" alt="SSET Logo" />
+            </a>
+          </Link>
+          <CloseIcon fontSize="small" style={{ marginLeft: "2" }} />
+          <Link href="https://www.alianzacv.org/" passHref>
+            <a target="_blank" rel="noopener noreferrer">
+              {/* eslint-disable  @next/next/no-img-element */}
+              <img width={150} src="/alianzacv-logo.jpg" alt="Alianza logo" />
             </a>
           </Link>
         </Box>
