@@ -30,21 +30,23 @@ const generateContent = (
     graphDivider: string;
   },
   id: string,
+  sectionId: string,
   newsSection?: MediaObject[],
   bodyText?: React.ReactNode | null
 ) => {
   return newsSection ? (
     <>
       <FeaturedNewsFeed newsMediaData={newsSection} />
-      <Box mt="1em">
-        <Typography component="p" align="center">
-          *Many of these articles use highly negative language such as “toxic”
-          and “death pit” in referring to the Salton Sea, portraying a hopeless
-          situation. While we are very aware of the environmental state of the
-          Salton Sea, we believe such language is damaging to the surrounding
-          community and discourages remediation efforts. We encourage the use of
-          positive language that centers not just biodiversity but the community
-          and their stories who deserve a restored sea.
+      <Box mt="1em" id={sectionId}>
+        <Typography component="p" align="center" style={{ fontWeight: "bold" }}>
+          <sup style={{ color: "red" }}>†</sup>Many of these articles use highly
+          negative language such as “toxic” and “death pit” in referring to the
+          Salton Sea, portraying a hopeless situation. While we are very aware
+          of the environmental state of the Salton Sea, we believe such language
+          is damaging to the surrounding community and discourages remediation
+          efforts. We encourage the use of positive language that centers not
+          just biodiversity but the community and their stories who deserve a
+          restored sea.
         </Typography>
       </Box>
     </>
@@ -103,7 +105,7 @@ const PageSection: React.FC<Props> = ({
   gradImages
 }: Props) => {
   const classes = useStyles();
-
+  const sectionId = title.split(" ").join("").toLocaleLowerCase() + "-section";
   return (
     <Section
       className={classes.section}
@@ -113,6 +115,8 @@ const PageSection: React.FC<Props> = ({
         <Box>
           <SectionHeader
             title={title}
+            sectionId={sectionId}
+            sectionFootNoteLink={!!newsMediaData}
             titleProps={{
               align: "center",
               className: classes.header,
@@ -122,7 +126,7 @@ const PageSection: React.FC<Props> = ({
             justifyContent="center"
             size={"h4"}
           />
-          {generateContent(classes, id, newsMediaData, bodyText)}
+          {generateContent(classes, id, sectionId, newsMediaData, bodyText)}
           {generateGradSection(classes, gradImages)}
         </Box>
       </Container>
