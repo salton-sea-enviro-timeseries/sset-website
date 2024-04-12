@@ -9,7 +9,7 @@ import {
 import { MediaObject } from "types";
 import NewsCard from "./NewsCard";
 import VideoCard from "./VideoCard";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import DoubleArrowSharpIcon from "@material-ui/icons/DoubleArrowSharp";
 
 interface FeaturedNewsFeedProps {
@@ -21,9 +21,29 @@ const SWBRCB_DESCRIPTION =
 const FeaturedNewsFeed = ({ newsMediaData }: FeaturedNewsFeedProps) => {
   const [showMoreInfo, setShowMoreInfo] = useState(false);
   const [transitionExited, setTransitionExited] = useState(false);
+  const scrollPositionRef = useRef(0);
   const classes = useStyles(transitionExited);
+  const handleToggle = () => {
+    if (typeof window !== "undefined") {
+      setShowMoreInfo((prevShowMoreInfo) => {
+        if (!prevShowMoreInfo) {
+          scrollPositionRef.current = window.scrollY;
+        }
+        return !prevShowMoreInfo;
+      });
+    }
+  };
+  useEffect(() => {
+    if (typeof window !== "undefined" && !showMoreInfo) {
+      window.scrollTo({
+        top: scrollPositionRef.current,
+        behavior: "instant"
+      });
+    }
+  }, [showMoreInfo]);
+
   return (
-    <>
+    <div>
       <Grid container spacing={2} className={classes.containerSpacing}>
         <Grid item xs={12} sm={6} md={4}>
           <VideoCard
@@ -74,12 +94,12 @@ const FeaturedNewsFeed = ({ newsMediaData }: FeaturedNewsFeedProps) => {
           </Grid>
         </Grid>
       </Collapse>
-      {newsMediaData.length > 0 && (
+      {newsMediaData?.length > 0 && (
         <Box display={"flex"} justifyContent={"center"}>
           <Link
             component="button"
             style={{ display: "flex", alignItems: "center" }}
-            onClick={() => setShowMoreInfo(!showMoreInfo)}
+            onClick={handleToggle}
           >
             <Typography>{showMoreInfo ? "Show Less" : "See More"}</Typography>
             <DoubleArrowSharpIcon
@@ -88,7 +108,7 @@ const FeaturedNewsFeed = ({ newsMediaData }: FeaturedNewsFeedProps) => {
           </Link>
         </Box>
       )}
-    </>
+    </div>
   );
 };
 const useStyles = makeStyles((theme) => ({
