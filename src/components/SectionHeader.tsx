@@ -9,7 +9,7 @@ interface SectionHeaderProps {
   subtitleProps?: Object;
   title?: string;
   sectionId: string;
-  sectionFootNoteLink: Boolean;
+  sectionFootNoteLink?: Boolean;
   titleProps?: Object;
   size?: variantText;
   className?: string;

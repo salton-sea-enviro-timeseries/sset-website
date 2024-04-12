@@ -36,8 +36,7 @@ const FeaturedNewsFeed = ({ newsMediaData }: FeaturedNewsFeedProps) => {
   useEffect(() => {
     if (typeof window !== "undefined" && !showMoreInfo) {
       window.scrollTo({
-        top: scrollPositionRef.current,
-        behavior: "instant"
+        top: scrollPositionRef.current
       });
     }
   }, [showMoreInfo]);
