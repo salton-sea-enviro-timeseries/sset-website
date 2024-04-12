@@ -15,7 +15,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function BackgroundImage(props) {
+function BackgroundImage(props: {
+  [x: string]: any;
+  image: any;
+  opacity: any;
+}) {
   const classes = useStyles();
 
   const { image, opacity, ...otherProps } = props;
@@ -25,7 +29,9 @@ function BackgroundImage(props) {
       className={classes.root}
       style={{
         backgroundImage: `url(${image})`,
-        opacity: opacity
+        opacity: opacity,
+        backgroundRepeat: "repeat",
+        backgroundSize: "auto"
       }}
       {...otherProps}
     />

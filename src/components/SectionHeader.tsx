@@ -8,6 +8,8 @@ interface SectionHeaderProps {
   subtitle?: string;
   subtitleProps?: Object;
   title?: string;
+  sectionId: string;
+  sectionFootNoteLink?: Boolean;
   titleProps?: Object;
   size?: variantText;
   className?: string;
@@ -28,16 +30,30 @@ const useStyles = makeStyles((theme) => ({
     // So we can have max-width but still
     // have alignment controlled by text-align.
     display: "inline-block"
+  },
+  footNoteStyledLink: {
+    color: "#336699",
+    fontWeight: "bold",
+    transition: "300ms",
+    "&:hover": {
+      color: "red"
+    }
   }
 }));
-
+const scrollToSection = (sectionId: string) => {
+  const section = document.getElementById(sectionId);
+  if (section) {
+    section.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+};
 function SectionHeader(props: SectionHeaderProps) {
   const classes = useStyles();
-
   const {
     subtitle,
     subtitleProps,
     title,
+    sectionId,
+    sectionFootNoteLink,
     titleProps,
     size,
     className,
@@ -61,7 +77,21 @@ function SectionHeader(props: SectionHeaderProps) {
           gutterBottom={props.subtitle ? true : false}
           {...titleProps}
         >
-          {title}
+          {sectionFootNoteLink ? (
+            <a
+              href={`#${sectionId}`}
+              style={{ color: "inherit", textDecoration: "none" }}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection(sectionId);
+              }}
+            >
+              {title}
+              <sup className={classes.footNoteStyledLink}>†</sup>
+            </a>
+          ) : (
+            title
+          )}
         </Typography>
       )}
 

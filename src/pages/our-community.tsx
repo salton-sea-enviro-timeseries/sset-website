@@ -120,6 +120,7 @@ const AboutUsPage = ({ listOfProfiles }: AboutUsPageProps) => {
             display="flex"
             justifyContent="center"
             size={"h4"}
+            sectionId={"ourCommunity-section"}
           />
           <Grid container spacing={1} justifyContent="center">
             <Grid item xs={12} className={classes.questionWrapper}>
