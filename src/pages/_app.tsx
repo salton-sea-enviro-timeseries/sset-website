@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import Script from "next/script";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import * as gtag from "../util/gtag";
@@ -17,7 +18,10 @@ type AppPropsWithLayout = AppProps & {
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
   const router = useRouter();
-
+  // TODO config cookies banners
+  {
+    /* <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="223ebf7c-c8d8-4dfb-bcc3-d4050accdd47" data-blockingmode="auto" type="text/javascript"></script> */
+  }
   useEffect(() => {
     const handleRouteChange = (url: URL) => {
       gtag.pageview(url);
@@ -30,6 +34,14 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <ThemeProvider>
       <AppContextProvider>
+        <Script
+          src="https://consent.cookiebot.com/uc.js"
+          strategy="afterInteractive"
+          id="Cookiebot"
+          data-cbid="223ebf7c-c8d8-4dfb-bcc3-d4050accdd47"
+          data-blockingmode="auto"
+          type="text/javascript"
+        />
         {getLayout(<Component {...pageProps} />)}
       </AppContextProvider>
     </ThemeProvider>
