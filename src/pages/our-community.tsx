@@ -27,7 +27,7 @@ interface AboutUsPageProps {
 interface RawProfile {
   fields: Profile;
 }
-const AboutUsPage = ({ listOfProfiles }: AboutUsPageProps) => {
+const OurCommunity = ({ listOfProfiles }: AboutUsPageProps) => {
   const classes = useStyles();
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down(960));
@@ -169,7 +169,7 @@ const AboutUsPage = ({ listOfProfiles }: AboutUsPageProps) => {
     </Layout>
   );
 };
-export default AboutUsPage;
+export default OurCommunity;
 
 export const getStaticProps = async () => {
   try {
