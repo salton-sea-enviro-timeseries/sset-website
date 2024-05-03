@@ -44,6 +44,10 @@ function Navbar() {
       },
       {
         href: "/our-community",
+        label: getContent(`site.${language}.navLinks.community`)
+      },
+      {
+        href: "/about-us",
         label: getContent(`site.${language}.navLinks.about`)
       }
     ];

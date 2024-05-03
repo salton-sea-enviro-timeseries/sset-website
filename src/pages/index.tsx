@@ -73,8 +73,9 @@ const Home = ({
   //================== cms start ==========================
   const heroContentBase = homepageContent?.fields.hero["en-US"].fields;
   const heroTitle = heroContentBase?.title;
-  const heroImage =
-    heroContentBase?.heroImage["en-US"].fields.file["en-US"].url;
+  //TODO: assign Hero Images on contentful for each page
+  // const heroImage =
+  //   heroContentBase?.heroImage["en-US"].fields.file["en-US"].url;
   const buttonText = heroContentBase?.buttonText;
   const heroSubTitle = heroContentBase?.subTitle;
   const sections = homepageContent?.fields.content["en-US"];
@@ -94,7 +95,6 @@ const Home = ({
       <Hero
         bgColor="primary"
         size="large"
-        bgImage={heroImage}
         bgImageOpacity={0.75}
         title={heroTitle && heroTitle[currentLocale]}
         subtitle={heroSubTitle && heroSubTitle[currentLocale]}

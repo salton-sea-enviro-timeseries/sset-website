@@ -26,21 +26,7 @@ const ContactUsPage = () => {
           title: "pages.contact.language.content.title"
         }}
       >
-        <Hero
-          bgColor="secondary"
-          size="medium"
-          bgImage="/topography.svg"
-          sectionHeaderProps={{
-            titleProps: {
-              align: "center",
-              className: classes.header,
-              display: "inline"
-            },
-            display: "flex",
-            justifyContent: "center",
-            size: 4
-          }}
-        />
+        <Hero bgColor="secondary" size="medium" />
       </Translation>
       <Section>
         <Container maxWidth="sm" className={classes.container}>
