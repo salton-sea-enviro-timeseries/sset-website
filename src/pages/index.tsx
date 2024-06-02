@@ -79,8 +79,8 @@ const Home = ({
   const heroSubTitle = heroContentBase?.subTitle;
   const sections = homepageContent?.fields.content["en-US"];
   const gradImages = homepageContent?.fields.media["en-US"].map(
-    ({ fields: { file } }) => {
-      return file["en-US"].url;
+    ({ fields: { file, title } }) => {
+      return { imageTitle: title["en-US"], imageUrl: file["en-US"].url };
     }
   );
   const sectionContent = generateSectionContent(
