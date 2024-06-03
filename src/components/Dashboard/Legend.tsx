@@ -13,13 +13,14 @@ interface LegendProps {
 const Legend: React.FC<LegendProps> = ({ items = [] }) => {
   const classes = useStyles();
   // Default items, can be overridden by props
+  //Remove purple air legend for now
   const defaultItems: LegendItem[] = [
-    { color: "#040273", label: "AQMD & QUANT_AQ" },
-    {
-      color: "rgb(170, 68, 170)",
-      label: "Purple Air Sensors",
-      link: "https://map.purpleair.com/1/mAQI/a10/p604800/cC0#12/33.52245/-115.91447"
-    }
+    { color: "#040273", label: "AQMD & QUANT_AQ" }
+    // {
+    //   color: "rgb(170, 68, 170)",
+    //   label: "Purple Air Sensors",
+    //   link: "https://map.purpleair.com/1/mAQI/a10/p604800/cC0#12/33.52245/-115.91447"
+    // }
   ];
   const legendItems = items.length ? items : defaultItems;
   return (

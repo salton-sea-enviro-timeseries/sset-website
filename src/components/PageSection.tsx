@@ -1,7 +1,7 @@
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
-import { Divider, colors } from "@material-ui/core";
+import { Avatar, Divider, colors } from "@material-ui/core";
 import FeaturedNewsFeed from "components/InTheNews/FeaturedNewsFeed";
 import Section from "components/Section";
 import SectionHeader from "components/SectionHeader";
@@ -11,16 +11,20 @@ import Image from "next/image";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 // TODO: add links to definitions
 // or add a glossary section ???
-
+interface GradImages {
+  imageTitle: string;
+  imageUrl: string;
+}
 type Props = {
   newsMediaData?: MediaObject[];
   bodyText: React.ReactNode | null;
   title: string;
   section: number;
-  gradImages?: string[];
+  gradImages?: GradImages[];
   id: string;
 };
 interface GradSectionClasses {
+  avatarStyle: string | undefined;
   gradContainer: string;
   imageWrapper: string;
 }
@@ -77,19 +81,22 @@ const generateContent = (
 };
 const generateGradSection = (
   classes: GradSectionClasses,
-  gradImages?: string[]
+  gradImages?: GradImages[]
 ) => {
   return (
     gradImages && (
       <Box className={classes.gradContainer}>
-        {gradImages.map((item, index) => (
+        {gradImages.map(({ imageTitle, imageUrl }, index) => (
           <div key={index} className={classes.imageWrapper}>
-            <Image
-              src={`https:${item}`}
-              alt={"grad image"}
-              layout="fill"
-              objectFit="contain"
-            />
+            <Avatar className={classes.avatarStyle}>
+              <Image
+                src={`https:${imageUrl}`}
+                alt={"grad image"}
+                layout="fill"
+                objectFit="cover"
+              />
+            </Avatar>
+            <Typography variant="h6">{imageTitle}</Typography>
           </div>
         ))}
       </Box>
@@ -146,10 +153,9 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: "wrap"
   },
   imageWrapper: {
-    minHeight: 400,
-    width: 300,
-    position: "relative",
-    marginTop: "1rem"
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
   },
   "@global": {
     "@keyframes fade": {
@@ -181,6 +187,10 @@ const useStyles = makeStyles((theme) => ({
     height: 2,
     borderRadius: 50,
     background: "#BCBCBC"
+  },
+  avatarStyle: {
+    width: 250,
+    height: 250
   }
 }));
 export default PageSection;
