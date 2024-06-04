@@ -80,8 +80,8 @@ const Home = ({
   const heroSubTitle = heroContentBase?.subTitle;
   const sections = homepageContent?.fields.content["en-US"];
   const gradImages = homepageContent?.fields.media["en-US"].map(
-    ({ fields: { file } }) => {
-      return file["en-US"].url;
+    ({ fields: { file, title } }) => {
+      return { imageTitle: title["en-US"], imageUrl: file["en-US"].url };
     }
   );
   const sectionContent = generateSectionContent(
@@ -146,8 +146,7 @@ export const getStaticProps = async () => {
     "https://tos.org/oceanography/article/salton-sea-environmental-work-and-the-importance-of-community-science",
     "https://www.hcn.org/issues/55.6/south-water-in-search-of-answers-at-the-salton-sea?utm_medium=email&utm_source=govdelivery",
     "https://atmos.earth/salton-sea-california-drought-pollution/",
-    //TODO: 403 error; come back to fix: anti scrap enabled
-    // "https://thehill.com/policy/equilibrium-sustainability/3633056-dried-up-in-utah-drying-great-salt-lake-leads-to-air-pollution",
+    //TODO: 403 error; come back to fix: anti scrap enabled the hill article
     "https://grist.org/health/how-californias-salton-sea-went-from-vacation-destination-to-toxic-nightmare/",
     "https://ca.audubon.org/news/it-takes-village-dr-ryan-sinclair-and-community-science-salton-sea",
     "https://www.cnbc.com/2021/11/06/californias-salton-sea-spewing-toxic-fumes-creating-ghost-towns-.html",

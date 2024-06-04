@@ -62,9 +62,10 @@ const AirQuality = ({
   // === cms content end ======================================================================================
   const airQualityDevices = useMemo(() => {
     const transformedSensorData = transformSensorData(sensorList);
-    const purpleAirData = transformPurpleAirSensorData(PurpleAirSensorData);
+    // const purpleAirData = transformPurpleAirSensorData(PurpleAirSensorData);
     const aeroqualSensor = AeroqualSensor;
-    return [...transformedSensorData, ...purpleAirData, aeroqualSensor];
+    //Removed purple air sensors for now
+    return [...transformedSensorData, aeroqualSensor];
   }, [sensorList]);
   const filterOutPurpleAirSensor = filteredSensors(airQualityDevices);
   //State to track if the first request is complete
