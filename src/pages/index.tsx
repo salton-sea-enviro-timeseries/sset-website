@@ -136,7 +136,8 @@ const Home = ({
 };
 
 export default Home;
-
+//TODO need to initiate rebuild for contenful changes
+// consider changing for instant fixes?
 export const getStaticProps = async () => {
   // TODO: Extract urls to contentful
   const urls: string[] = [
