@@ -27,7 +27,7 @@ interface AboutUsPageProps {
 interface RawProfile {
   fields: Profile;
 }
-const AboutUsPage = ({ listOfProfiles }: AboutUsPageProps) => {
+const OurCommunity = ({ listOfProfiles }: AboutUsPageProps) => {
   const classes = useStyles();
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down(960));
@@ -84,29 +84,14 @@ const AboutUsPage = ({ listOfProfiles }: AboutUsPageProps) => {
 
   return (
     <Layout>
-      <Meta title="About Us | Salton Sea Environmental Timeseries" />
+      <Meta title="Our Community | Salton Sea Environmental Timeseries" />
       <Translation
-        path="site.language.navLinks.about"
+        path="site.language.navLinks.community"
         propsToTranslate={{
-          title: "site.language.navLinks.about"
+          title: "site.language.navLinks.community"
         }}
       >
-        <Hero
-          bgColor="secondary"
-          size="medium"
-          salton-sea-flyer-front
-          bgImage="/topography.svg"
-          sectionHeaderProps={{
-            titleProps: {
-              align: "center",
-              className: classes.header,
-              display: "inline"
-            },
-            display: "flex",
-            justifyContent: "center",
-            size: 4
-          }}
-        />
+        <Hero bgColor="secondary" size="medium" />
       </Translation>
       <Section bgImage={"/curves.png"}>
         <Container className={classes.gridWrapper}>
@@ -169,7 +154,7 @@ const AboutUsPage = ({ listOfProfiles }: AboutUsPageProps) => {
     </Layout>
   );
 };
-export default AboutUsPage;
+export default OurCommunity;
 
 export const getStaticProps = async () => {
   try {

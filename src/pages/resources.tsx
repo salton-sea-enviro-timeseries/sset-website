@@ -53,22 +53,7 @@ const Resources = () => {
             title: "site.language.navLinks.resources"
           }}
         >
-          <Hero
-            bgColor="secondary"
-            size="medium"
-            salton-sea-flyer-front
-            bgImage="/topography.svg"
-            sectionHeaderProps={{
-              titleProps: {
-                align: "center",
-                className: classes.header,
-                display: "inline"
-              },
-              display: "flex",
-              justifyContent: "center",
-              size: 4
-            }}
-          />
+          <Hero bgColor="secondary" size="medium" />
         </Translation>
         <Section>
           <Container
