@@ -8,6 +8,7 @@ import Meta from "components/Meta";
 import PageSection from "components/PageSection";
 import Section from "components/Section";
 import Translation from "components/Translation";
+import SectionHeader from "components/SectionHeader";
 
 const ABOUT_US_INTRO_TEXT = (
   <>
@@ -22,6 +23,11 @@ const ABOUT_US_INTRO_TEXT = (
       Nulla lorem nibh, iaculis eleifend nunc lobortis, convallis sagittis
       mauris. Vivamus ac justo ac felis maximus volutpat a vitae augue.
     </p>
+  </>
+);
+
+const ABOUT_US_INTRO_TEXT_Section_Two = (
+  <>
     <p>
       Phasellus tincidunt sem mollis libero cursus, et vulputate lorem vehicula.
       Vivamus pretium nec metus non maximus. Lorem ipsum dolor sit amet,
@@ -48,7 +54,6 @@ const ABOUT_US_INTRO_TEXT = (
 );
 
 // TODO: change bgImage
-const SECTION_INDEX = 0;
 const OPTIONS: EmblaOptionsType = { dragFree: true, loop: true };
 const SLIDE_COUNT = 9;
 const SLIDES = Array.from(Array(SLIDE_COUNT).keys());
@@ -65,10 +70,45 @@ const AboutUs = () => {
       >
         <Hero bgColor="secondary" size="medium" />
       </Translation>
-      {/* <Section>
+      {/* TODO make its own component */}
+      <Section className={classes.topIntroSection} bgImage={"/curves.png"}>
+        <Container>
+          <Box>
+            <SectionHeader
+              title={"Who Are We?"}
+              sectionId={"section-about-us"}
+              titleProps={{
+                align: "center",
+                className: classes.header,
+                display: "inline"
+              }}
+              display="flex"
+              justifyContent="center"
+              size={"h4"}
+            />
+            <Typography component="div">{ABOUT_US_INTRO_TEXT}</Typography>
+          </Box>
+        </Container>
+      </Section>
+      <EmblaCarousel slides={SLIDES} options={OPTIONS} />
+      <Section className={classes.bottomIntroSection} bgImage={"/curves.png"}>
+        <Container>
+          <Box>
+            <Typography component="div">
+              {ABOUT_US_INTRO_TEXT_Section_Two}
+            </Typography>
+          </Box>
+        </Container>
+      </Section>
+      {/* embla section end */}
+      {/* TODO : add timeline here */}
+
+      {/* Timeline end */}
+      <Section>
         <Container>
           <SectionHeader
-            title="Questions Asked To Our Community Members"
+            title={"Core Team"}
+            sectionId={"section-core-team"}
             titleProps={{
               align: "center",
               className: classes.header,
@@ -77,32 +117,8 @@ const AboutUs = () => {
             display="flex"
             justifyContent="center"
             size={"h4"}
-            sectionId={"ourCommunity-section"}
           />
-        </Container>
-      </Section> */}
-      <PageSection
-        id="section-about-us"
-        bodyText={ABOUT_US_INTRO_TEXT}
-        section={SECTION_INDEX}
-        title={"Who are We?"}
-      />
-      <Section>
-        {/* <Container>
-          <EmblaCarousel slides={SLIDES} options={OPTIONS} />
-        </Container> */}
-        <EmblaCarousel slides={SLIDES} options={OPTIONS} />
-      </Section>
-      <Section>
-        <Container>
-          <Typography
-            variant="h4"
-            component="header"
-            className={classes.header}
-            display="inline"
-          >
-            {"Core Team"}
-          </Typography>
+
           <Box marginTop={4}>
             <Avatar
               alt="Remy Sharp"
@@ -186,6 +202,12 @@ const useStyles = makeStyles((theme) => ({
     shapeOutside: "circle(50%)",
     marginRight: "1rem"
     // shapeMargin: "1rem"
+  },
+  topIntroSection: {
+    paddingBottom: "2rem"
+  },
+  bottomIntroSection: {
+    paddingTop: "2rem "
   }
 }));
 export default AboutUs;
