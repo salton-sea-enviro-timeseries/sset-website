@@ -21,6 +21,7 @@
   flex: 0 0 var(--slide-size);
   min-width: 0;
   padding-left: var(--slide-spacing);
+  position: relative;
 }
 .embla__slide__img {
   border-radius: 1.8rem;
@@ -29,6 +30,18 @@
   width: 100%;
   object-fit: cover;
 }
+/* May use the styles bellow at some point */
+/* .embla__slide__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% - var(--slide-spacing));
+  height: 100%;
+  background-color: rgba(44, 62, 80, 0.6);
+  pointer-events: none;
+  border-radius: 1.8rem;
+  margin-left: var(--slide-spacing);
+} */
 /* .embla__controls {
   display: grid;
   grid-template-columns: auto 1fr;

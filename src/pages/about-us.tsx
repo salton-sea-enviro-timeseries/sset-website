@@ -1,4 +1,15 @@
 import { Avatar, Box, Container, Divider, Typography } from "@material-ui/core";
+import {
+  Timeline,
+  TimelineItem,
+  TimelineSeparator,
+  TimelineConnector
+} from "@material-ui/lab";
+import {
+  TimelineContent,
+  TimelineDot,
+  TimelineOppositeContent
+} from "@material-ui/lab";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import EmblaCarousel from "../components/Embla/EmblaCarousel";
 import { EmblaOptionsType } from "embla-carousel";
@@ -55,8 +66,6 @@ const ABOUT_US_INTRO_TEXT_Section_Two = (
 
 // TODO: change bgImage
 const OPTIONS: EmblaOptionsType = { dragFree: true, loop: true };
-const SLIDE_COUNT = 9;
-const SLIDES = Array.from(Array(SLIDE_COUNT).keys());
 const AboutUs = () => {
   const classes = useStyles();
   return (
@@ -90,7 +99,7 @@ const AboutUs = () => {
           </Box>
         </Container>
       </Section>
-      <EmblaCarousel slides={SLIDES} options={OPTIONS} />
+      <EmblaCarousel options={OPTIONS} />
       <Section className={classes.bottomIntroSection} bgImage={"/curves.png"}>
         <Container>
           <Box>
@@ -102,7 +111,120 @@ const AboutUs = () => {
       </Section>
       {/* embla section end */}
       {/* TODO : add timeline here */}
-
+      <Section>
+        <Container>
+          <Timeline align="alternate">
+            <TimelineItem>
+              <TimelineOppositeContent>
+                <Typography color="textSecondary">2016</Typography>
+              </TimelineOppositeContent>
+              <TimelineSeparator>
+                <TimelineDot />
+                <TimelineConnector />
+              </TimelineSeparator>
+              <TimelineContent>
+                <Typography variant="h6">
+                  Revealing the Invisible Coachella Valley
+                </Typography>
+                <Typography variant="h6">EJ Data Project</Typography>
+              </TimelineContent>
+            </TimelineItem>
+            <TimelineItem>
+              <TimelineOppositeContent>
+                <Typography color="textSecondary">2017</Typography>
+              </TimelineOppositeContent>
+              <TimelineSeparator>
+                <TimelineDot />
+                <TimelineConnector />
+              </TimelineSeparator>
+              <TimelineContent>
+                <Typography variant="h6">
+                  Purple Air Monitors Outside the Homes of ECV Residents
+                </Typography>
+                <Typography variant="h6">
+                  Infrastructure: Water and Public Spaces
+                </Typography>
+                <Typography variant="h6">
+                  BHC Community Survey of Water Sources in ECV with CIRS
+                </Typography>
+              </TimelineContent>
+            </TimelineItem>
+            <TimelineItem>
+              <TimelineOppositeContent>
+                <Typography color="textSecondary">2018</Typography>
+              </TimelineOppositeContent>
+              <TimelineSeparator>
+                <TimelineDot />
+                <TimelineConnector />
+              </TimelineSeparator>
+              <TimelineContent>
+                <Typography variant="h6">
+                  Wastewater Assessment in the ECV{" "}
+                </Typography>
+                <Typography variant="h6">Water Presentation at DM </Typography>
+                <Typography variant="h6">
+                  Air Quality Education and AirWalks with Coachella
+                  Unincorporated(now YLI) /COD Talks on the Salton Sea
+                </Typography>
+                <Typography variant="h6">
+                  Asthma Risk Associated with Indoor Mold Contamination in
+                  Hispanic Communities in Eastern Coachella Valley, California{" "}
+                </Typography>
+                <Typography variant="h6">Air Quality Bike Ride </Typography>
+                <Typography variant="h6">
+                  Save Our Sea-: Sierra Club + BHC{" "}
+                </Typography>
+                <Typography variant="h6">
+                  Estamos Aqui Documentary with Coachella Unincorporated(Video)
+                </Typography>
+                <Typography variant="h6">
+                  Balloon Mapping at DM and North Shore Park
+                </Typography>
+              </TimelineContent>
+            </TimelineItem>
+            <TimelineItem>
+              <TimelineOppositeContent>
+                <Typography color="textSecondary">2019</Typography>
+              </TimelineOppositeContent>
+              <TimelineSeparator>
+                <TimelineDot />
+                <TimelineConnector />
+              </TimelineSeparator>
+              <TimelineContent>
+                <Typography variant="h6">
+                  Dust Suppression Action Plan Draft
+                </Typography>
+                <Typography variant="h6">
+                  North Shore Park events: Education about Air Monitors
+                </Typography>
+                <Typography variant="h6">
+                  Advocacy for TMDLs in the Triennial Review
+                </Typography>
+                <Typography variant="h6">Resilient Salton Sea</Typography>
+                <Typography variant="h6">Thermal Dump Fire</Typography>
+              </TimelineContent>
+            </TimelineItem>
+            <TimelineItem>
+              <TimelineOppositeContent>
+                <Typography color="textSecondary">2020</Typography>
+              </TimelineOppositeContent>
+              <TimelineSeparator>
+                <TimelineDot />
+                <TimelineConnector />
+              </TimelineSeparator>
+              <TimelineContent>
+                <Typography variant="h6">
+                  Advocacy Letter From Oliviea from YLI about COVID with BHC
+                </Typography>
+                <Typography variant="h6">
+                  Comment from Dust Suppression Action Plan
+                </Typography>
+                <Typography variant="h6"></Typography>
+              </TimelineContent>
+            </TimelineItem>
+          </Timeline>
+        </Container>
+      </Section>
       {/* Timeline end */}
       <Section>
         <Container>
