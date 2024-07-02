@@ -5,7 +5,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate-image-slides": "ts-node src/util/generateImageSlides.js",
+    "watch-images-slides": "nodemon --watch public/slides --exec \"npm run generate-image-slides\""
   },
   "dependencies": {
     "@contentful/rich-text-react-renderer": "^15.12.1",
