@@ -1,4 +1,4 @@
-import { Container, Button, Box } from "@material-ui/core";
+import { Container, Button, Box, Typography } from "@material-ui/core";
 import Image from "next/image";
 import { Card } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -40,6 +40,7 @@ const Resources = () => {
     return () => {
       setWidth("100%");
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const classes = useStyles({ width });
@@ -171,6 +172,58 @@ const Resources = () => {
             </Box>
           </Container>
         </Section>
+        <Container>
+          <Typography
+            variant="h4"
+            component="header"
+            className={classes.fieldScopeTitle}
+            align="center"
+          >
+            Field Scope
+          </Typography>
+          <Box className={classes.flexContainer}>
+            <Box className={classes.flexItem}>
+              <ResourceSection
+                title="Monitoring Salton Sea"
+                body="A link to Field Scope, a tool used to design a pilot project led by the community to monitor the Salton Sea water quality."
+                link="https://saltonsea.fieldscope.org/"
+                download={false}
+                headerSize={5}
+              >
+                <Box className={classes.imageWrapper}>
+                  <Image
+                    src="/field-scope-monitoring-salton-sea-water-quality.png"
+                    alt="Field Scope: Monitoring Salton Sea Water Quality"
+                    objectFit="contain"
+                    width={400}
+                    height={200}
+                    layout="responsive"
+                  />
+                </Box>
+              </ResourceSection>
+            </Box>
+            <Box className={classes.flexItem}>
+              <ResourceSection
+                title="Salton Sea Air Quality"
+                body="A link to Field Scope, a tool used to make visualizations from community member contributions measuring Salton Sea air quality."
+                link="https://saltonair.fieldscope.org/"
+                download={false}
+                headerSize={5}
+              >
+                <Box className={classes.imageWrapper}>
+                  <Image
+                    src="/field-scope-salton-sea-air-quality.png"
+                    alt="Field Scope: Salton Sea Air Quality"
+                    objectFit="contain"
+                    width={400}
+                    height={200}
+                    layout="responsive"
+                  />
+                </Box>
+              </ResourceSection>
+            </Box>
+          </Box>
+        </Container>
       </div>
     </Layout>
   );
@@ -181,12 +234,29 @@ const useStyles = makeStyles((theme) => ({
   }),
   header: {
     boxShadow: `inset 0 -5px 0 ${theme.palette.primary.light}`,
+
     transition: "color 0.2s ease",
     "&:hover": {
       color: theme.palette.secondary.light
     }
   },
-
+  fieldScopeTitle: {
+    fontSize: "2rem",
+    marginBottom: "1rem"
+  },
+  flexContainer: {
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "space-between"
+  },
+  flexItem: {
+    flex: "1 1 45%", // Take up to 45% of the container's width
+    margin: "1rem",
+    boxSizing: "border-box",
+    [theme.breakpoints.down("sm")]: {
+      flex: "1 1 100%" // Full width on small screens
+    }
+  },
   section: {
     boxShadow: `inset 0 -5px 0 ${theme.palette.secondary.light}`
   },
