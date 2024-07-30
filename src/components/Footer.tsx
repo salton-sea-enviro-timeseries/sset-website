@@ -75,6 +75,9 @@ const logos = [
     width: 100
   }
 ];
+interface LayoutProps {
+  className?: string;
+}
 interface GridContainerProps {
   children: React.ReactNode;
   xs: GridSize;
@@ -147,7 +150,7 @@ const ImageLink: React.FC<ImageLinkProps> = ({ href, src, alt, width }) => (
   </Link>
 );
 
-const Footer = () => {
+const Footer: React.FC<LayoutProps> = ({ className }) => {
   const classes = useStyles();
   const ctx = useAppContext();
   if (!ctx) {
@@ -160,8 +163,9 @@ const Footer = () => {
       bgcolor="grey.900"
       color="white"
       py={2}
-      className={classes.root}
-      style={{ minWidth: width }}
+      className={`${classes.root} ${className}`}
+      //Adjust with for pages with a specific width need
+      style={{ minWidth: className ? "" : width }}
     >
       <Container>
         <Grid container spacing={4}>

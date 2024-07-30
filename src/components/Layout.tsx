@@ -4,14 +4,18 @@ import Footer from "./Footer";
 import Navbar from "./Navbar";
 import Meta from "./Meta";
 
-const Layout: React.FC = ({ children }) => {
+interface LayoutProps {
+  className?: string;
+}
+const Layout: React.FC<LayoutProps> = ({ children, className }) => {
   const classes = useStyles();
+
   return (
     <>
       <Meta />
       <Navbar />
-      <main className={classes.main}>{children}</main>
-      <Footer />
+      <main className={`${classes.main} ${className}`}>{children}</main>
+      <Footer className={className} />
     </>
   );
 };
