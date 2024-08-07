@@ -1,52 +1,9 @@
 import { parseISO } from "date-fns";
 import { format, utcToZonedTime } from "date-fns-tz";
+import { AeroqualDeviceDataParams, OriginalData } from "types";
 import { getEndDate, getStartDate } from "utils";
 const ENDPOINT_BASE_URL = "https://cloud.aeroqual.com/v2/instruments";
-interface AeroqualDeviceDataParams {
-  sensorId: string;
-  startDate?: string;
-  endDate?: string;
-  cookies: string;
-}
-interface OriginalInstrumentData {
-  Serial: string;
-  Name: string;
-  Organisation: string;
-  TimeZone: string;
-  SummerTimeAdjusted: boolean;
 
-  Data: Array<{
-    Time: string;
-    Data: {
-      H2S: number;
-      NO2: number;
-      "VOC L": number;
-      "Battery voltage": number;
-    };
-    LocationId: string;
-    SensorDisplayData: {
-      H2S: string;
-      NO2: string;
-      "VOC L": string;
-      "Battery voltage": string;
-    };
-    Inlet: string;
-  }>;
-}
-export interface OriginalData {
-  From: string;
-  To: string;
-  AveragingPeriod: number;
-  Instruments: OriginalInstrumentData[];
-}
-export interface TransformedData {
-  sn: string;
-  timestamp_local: string;
-  H2S: number;
-  NO2: number;
-  "VOC L": number;
-  "Battery voltage": number;
-}
 function getDefaultOriginalData(): OriginalData {
   return {
     From: "",
