@@ -1,10 +1,6 @@
-import { endOfDay, parse, startOfDay } from "date-fns";
-import { format, utcToZonedTime } from "date-fns-tz";
-import { getEndDate, getStartDate } from "utils";
-
 const USERNAME = process.env.AQMD_USERNAME as string;
 const PASSWORD = process.env.AQMD_PASSWORD as string;
-
+// api for scaqmd
 const ENDPOINT_BASE_URL = "https://aqportal.aqmd.gov/external/api";
 // TODO: look into the api and register for api key, add limits etc
 // https://docs.openaq.org/docs/getting-started
@@ -79,67 +75,64 @@ export async function getDevices({ groupId }: DevicesRequestParams) {
   const data = await (await fetch(url, options)).json();
   return data.data as Device[];
 }
+// device data no longer retrieved from aqportal api but from aeroqual api instead see /lib/aeroqual.ts
+// export async function getDeviceData({
+//   sensorId,
+//   startDate,
+//   endDate,
+//   cookies
+// }: AqmdAeroqualDeviceParams) {
+//   try {
+//     const options = {
+//       method: "GET",
+//       headers: {
+//         username: USERNAME,
+//         token: PASSWORD
+//       }
+//     };
+//     const timeZone = "America/Los_Angeles";
+//     const today = utcToZonedTime(new Date(), timeZone);
+//     if (!startDate || !endDate) {
+//       startDate = getStartDate(today, 8, "aqmd");
+//       endDate = getEndDate(today, "aqmd");
+//     } else {
+//       startDate = format(
+//         startOfDay(parse(startDate, "yyyy-M-d", new Date())),
+//         "yyyy-MM-dd HH:mm:ss"
+//       );
+//       endDate = format(
+//         endOfDay(parse(endDate, "yyyy-M-d", new Date())),
+//         "yyyy-MM-dd HH:mm:ss"
+//       );
+//     }
+//     const url = new URL(`${ENDPOINT_BASE_URL}/deviceaveragedata`);
+//     url.searchParams.append("sensorId", sensorId);
+//     url.searchParams.append("StartDateTime", startDate);
+//     url.searchParams.append("EndDateTime", endDate);
 
-export async function getDeviceData({
-  sensorId,
-  startDate,
-  endDate
-}: {
-  sensorId: string;
-  startDate?: string;
-  endDate?: string;
-}) {
-  try {
-    const options = {
-      method: "GET",
-      headers: {
-        username: USERNAME,
-        token: PASSWORD
-      }
-    };
-    const timeZone = "America/Los_Angeles";
-    const today = utcToZonedTime(new Date(), timeZone);
-    if (!startDate || !endDate) {
-      startDate = getStartDate(today, 8, "aqmd");
-      endDate = getEndDate(today, "aqmd");
-    } else {
-      startDate = format(
-        startOfDay(parse(startDate, "yyyy-M-d", new Date())),
-        "yyyy-MM-dd HH:mm:ss"
-      );
-      endDate = format(
-        endOfDay(parse(endDate, "yyyy-M-d", new Date())),
-        "yyyy-MM-dd HH:mm:ss"
-      );
-    }
-    const url = new URL(`${ENDPOINT_BASE_URL}/deviceaveragedata`);
-    url.searchParams.append("sensorId", sensorId);
-    url.searchParams.append("StartDateTime", startDate);
-    url.searchParams.append("EndDateTime", endDate);
+//     const requestUrl = decodeURIComponent(url.toString()).replace(/\+/g, "%20");
+//     const response = await fetch(requestUrl, options);
 
-    const requestUrl = decodeURIComponent(url.toString()).replace(/\+/g, "%20");
-    const response = await fetch(requestUrl, options);
+//     if (!response.ok) {
+//       throw new Error(
+//         `Failed to fetch aqmd device data. HTTP Status: ${response.status}`
+//       );
+//     }
 
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch aqmd device data. HTTP Status: ${response.status}`
-      );
-    }
-
-    const data = await response.json();
-    return data.data.length === 0
-      ? { DeviceId: sensorId, data: [] }
-      : data.data;
-  } catch (err: unknown) {
-    if (err instanceof Error) {
-      console.error(
-        `Error fetching aqmd device data for sensor ID ${sensorId}: ${err.message}`
-      );
-    } else {
-      console.error(
-        "An unknown error occurred while fetching device data: ",
-        err
-      );
-    }
-  }
-}
+//     const data = await response.json();
+//     return data.data.length === 0
+//       ? { DeviceId: sensorId, data: [] }
+//       : data.data;
+//   } catch (err: unknown) {
+//     if (err instanceof Error) {
+//       console.error(
+//         `Error fetching aqmd device data for sensor ID ${sensorId}: ${err.message}`
+//       );
+//     } else {
+//       console.error(
+//         "An unknown error occurred while fetching device data: ",
+//         err
+//       );
+//     }
+//   }
+// }

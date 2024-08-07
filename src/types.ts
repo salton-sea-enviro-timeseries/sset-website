@@ -1,5 +1,4 @@
 import { BLOCKS, NodeData, TopLevelBlock } from "@contentful/rich-text-types";
-import { TransformedData } from "lib/aeroqual";
 import { RawDeviceAverageDataResponse } from "lib/aqmd";
 import { MODRawDeviceDataResponse } from "lib/quant";
 
@@ -394,6 +393,56 @@ export type AirQualityDevices = {
 export interface DeviceDataResponse extends RawDeviceAverageDataResponse {
   DeviceID: string;
 }
+export interface TransformedData {
+  sn: string;
+  timestamp_local: string;
+  H2S: number;
+  NO2: number;
+  "VOC L": number;
+  "Battery voltage": number;
+}
 export type CommonDeviceType = DeviceDataResponse &
   MODRawDeviceDataResponse &
   TransformedData;
+
+export interface AeroqualDeviceDataParams {
+  sensorId: string;
+  startDate?: string;
+  endDate?: string;
+  cookies: string;
+}
+
+interface OriginalInstrumentData {
+  Serial: string;
+  Name: string;
+  Organisation: string;
+  TimeZone: string;
+  SummerTimeAdjusted: boolean;
+
+  Data: Array<{
+    Time: string;
+    Data: {
+      O3: number;
+      "PM2.5": number;
+      PM10?: number;
+      H2S: number;
+      NO2: number;
+      "VOC L": number;
+      "Battery voltage": number;
+    };
+    LocationId: string;
+    SensorDisplayData: {
+      H2S: string;
+      NO2: string;
+      "VOC L": string;
+      "Battery voltage": string;
+    };
+    Inlet: string;
+  }>;
+}
+export interface OriginalData {
+  From: string;
+  To: string;
+  AveragingPeriod: number;
+  Instruments: OriginalInstrumentData[];
+}
