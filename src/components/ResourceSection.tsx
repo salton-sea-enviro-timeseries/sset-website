@@ -5,12 +5,23 @@ type Props = {
   body?: string;
   link: string;
   download: boolean;
+  headerSize?: number;
+  children?: React.ReactNode;
 };
-const ResourceSection = ({ title, body, link, download }: Props) => {
+const ResourceSection = ({
+  title,
+  body,
+  link,
+  download,
+  headerSize = 4,
+  children
+}: Props) => {
   const classes = useStyles();
+  const variant = `h${headerSize}` as "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
   // TODO add Translations and import content from Contentful.
 
   return (
+    // lassName={classes.resourceSection}
     <Container className={classes.resourceSection}>
       {download ? (
         <Button
@@ -23,7 +34,7 @@ const ResourceSection = ({ title, body, link, download }: Props) => {
           download={download}
         >
           <Typography
-            variant="h4"
+            variant={variant}
             component="header"
             className={classes.header}
             display="inline"
@@ -41,7 +52,7 @@ const ResourceSection = ({ title, body, link, download }: Props) => {
           color="inherit"
         >
           <Typography
-            variant="h4"
+            variant={variant}
             component="header"
             className={classes.header}
             display="inline"
@@ -53,6 +64,7 @@ const ResourceSection = ({ title, body, link, download }: Props) => {
       <Typography variant="body2" style={{ marginTop: "1rem" }}>
         {body}
       </Typography>
+      {children}
     </Container>
   );
 };

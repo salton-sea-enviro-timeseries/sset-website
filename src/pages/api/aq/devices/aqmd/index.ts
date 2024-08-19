@@ -3,7 +3,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 const GROUP_ID = 5;
 const COMMUNITY = "Eastern Coachella Valley";
-
+//keeping aqportal api to retrieve aqmd sensor list
+//May need to change in the future if aqportal is non-responsive
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Device[]>
@@ -20,7 +21,6 @@ export default async function handler(
 
     // data contains all devices by groupId, we want to filter by "Community"
     const devices = data.filter((device) => device.Community === COMMUNITY);
-
     return res.status(200).json(devices);
   } catch (err) {
     // @ts-ignore
