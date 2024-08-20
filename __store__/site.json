@@ -5,7 +5,8 @@
       "dashboard": "Dashboard",
       "contact": "Contact Us",
       "resources": "Resources",
-      "about": "Our Community"
+      "community": "Our Community",
+      "about": "About Us"
     }
   },
   "es": {
@@ -14,7 +15,8 @@
       "dashboard": "Tablero de Datos",
       "contact": "Contáctenos",
       "resources": "Recursos",
-      "about": "Nuestra Comunidad"
+      "community": "Nuestra Comunidad",
+      "about": "Sobre Nosotros"
     }
   }
 }

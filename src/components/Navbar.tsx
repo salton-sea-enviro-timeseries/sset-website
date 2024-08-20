@@ -44,6 +44,10 @@ function Navbar() {
       },
       {
         href: "/our-community",
+        label: getContent(`site.${language}.navLinks.community`)
+      },
+      {
+        href: "/about-us",
         label: getContent(`site.${language}.navLinks.about`)
       }
     ];
@@ -77,13 +81,8 @@ function Navbar() {
       position="fixed"
       elevation={1}
     >
-      {/* <Container disableGutters={true}> */}
       <Toolbar className={classes.toolbar}>
-        <Box
-          display="flex"
-          alignItems="center"
-          // style={{ justifyContent: "space-around" }}
-        >
+        <Box display="flex" alignItems="center">
           <Link href="/" passHref>
             <a>
               {/* eslint-disable  @next/next/no-img-element */}
@@ -99,7 +98,7 @@ function Navbar() {
           </Link>
         </Box>
         <div className={classes.spacer} />
-        <Hidden smUp={true} implementation="css">
+        <Hidden mdUp={true} implementation="css">
           <div className={classes.menuWrapper}>
             <IconButton
               onClick={handleOpenMenu}
@@ -136,7 +135,7 @@ function Navbar() {
             </div>
           </Menu>
         </Hidden>
-        <Hidden xsDown={true} implementation="css">
+        <Hidden smDown={true} implementation="css">
           <Box height="100%" display="flex" alignItems="center">
             {Links.map((link, index) => (
               <Button

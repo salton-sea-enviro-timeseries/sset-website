@@ -2,8 +2,37 @@ import React, { useState, useEffect } from "react";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
 import { makeStyles, Typography } from "@material-ui/core";
+interface HeroProps {
+  title?: string;
+  subtitle?: string;
+  cta?: React.ReactNode;
+  bgColor?: "primary" | "secondary" | "default";
+  size?: "small" | "medium" | "large";
+  bgImage?: string;
+  bgImageOpacity?: number;
+  sectionHeaderProps?: {
+    titleProps?: {
+      align?: string;
+      className?: string;
+      display?: string;
+    };
+    display?: string;
+    justifyContent?: string;
+    size?: number;
+  };
+}
 
-function Hero(props) {
+const Hero: React.FC<HeroProps> = ({
+  title = "",
+  subtitle = "",
+  cta = null,
+  bgImage = "",
+  bgImageOpacity = 0.75,
+  bgColor = "primary",
+  size = "medium",
+  sectionHeaderProps = {}
+}) => {
+  //TODO fix props for custom Hero
   const classes = useStyles();
   const [isMounted, setIsMounted] = useState(false);
   const [isMobileDevice, setIsMobileDevice] = useState(false);
@@ -20,7 +49,7 @@ function Hero(props) {
   }, []);
   return (
     <Box position="relative" height="100vh">
-      {isMounted ? (
+      {!bgImage && isMounted ? (
         <video
           className={classes.video}
           playsInline
@@ -33,9 +62,20 @@ function Hero(props) {
         >
           <source src="/hero.mp4" type="video/mp4" />
         </video>
+      ) : bgImage ? (
+        <Box
+          style={{
+            backgroundImage: `url(${bgImage})`,
+            opacity: bgImageOpacity,
+            backgroundSize: "cover",
+            width: "100%",
+            height: "100%"
+          }}
+        />
       ) : null}
+
       <div className={classes.overlay}>
-        {(props.title || props.subtitle) && (
+        {(title || subtitle) && (
           <Container>
             <Box textAlign="center">
               <Typography
@@ -43,19 +83,19 @@ function Hero(props) {
                 variant="h4"
                 className={classes.subtitle}
               >
-                {props.subtitle}
+                {subtitle}
               </Typography>
               <Typography
                 component="h2"
                 variant="h3"
                 className={classes.header}
               >
-                {props.title}
+                {title}
               </Typography>
             </Box>
           </Container>
         )}
-        {props.cta && (
+        {cta && (
           <Box
             py={5}
             display="flex"
@@ -63,13 +103,13 @@ function Hero(props) {
             justifyContent="center"
             alignItems="center"
           >
-            {props.cta}
+            {cta}
           </Box>
         )}
       </div>
     </Box>
   );
-}
+};
 
 const useStyles = makeStyles(() => ({
   video: {

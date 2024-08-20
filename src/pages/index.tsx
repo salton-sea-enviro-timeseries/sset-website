@@ -73,8 +73,9 @@ const Home = ({
   //================== cms start ==========================
   const heroContentBase = homepageContent?.fields.hero["en-US"].fields;
   const heroTitle = heroContentBase?.title;
-  const heroImage =
-    heroContentBase?.heroImage["en-US"].fields.file["en-US"].url;
+  //TODO: assign Hero Images on contentful for each page
+  // const heroImage =
+  //   heroContentBase?.heroImage["en-US"].fields.file["en-US"].url;
   const buttonText = heroContentBase?.buttonText;
   const heroSubTitle = heroContentBase?.subTitle;
   const sections = homepageContent?.fields.content["en-US"];
@@ -94,7 +95,6 @@ const Home = ({
       <Hero
         bgColor="primary"
         size="large"
-        bgImage={heroImage}
         bgImageOpacity={0.75}
         title={heroTitle && heroTitle[currentLocale]}
         subtitle={heroSubTitle && heroSubTitle[currentLocale]}
@@ -141,7 +141,8 @@ export default Home;
 export const getStaticProps = async () => {
   // TODO: Extract urls to contentful
   const urls: string[] = [
-    "https://www.alianzacv.org/news/aeroqual-air-quality-sensor-installed-in-the-salton-sea/",
+    //TODO : alianzacv link is broken find error
+    // "https://www.alianzacv.org/news/aeroqual-air-quality-sensor-installed-in-the-salton-sea/",
     "https://nbcpalmsprings.com/2024/03/17/restoring-the-salton-sea-an-in-depth-look-at-lithium-wetlands-and-the-10-year-plan/",
     "https://www.kuer.org/health-science-environment/2024-01-02/the-salton-sea-shows-why-utah-should-pay-attention-to-great-salt-lakes-stench",
     "https://tos.org/oceanography/article/salton-sea-environmental-work-and-the-importance-of-community-science",
