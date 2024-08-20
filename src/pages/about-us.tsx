@@ -11,19 +11,19 @@ import Translation from "components/Translation";
 import SectionHeader from "components/SectionHeader";
 import TimelineYear from "components/TimeLine/TimelineYear";
 import NavigationTimeline from "components/TimeLine/NavigationTimeline";
+import MemberBio from "components/About-Us/MemberBio";
 
 const ABOUT_US_INTRO_TEXT = (
   <>
     <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut placerat, mi
-      et dictum semper, ex tortor bibendum sem, eget suscipit nunc diam feugiat
-      diam. Vestibulum nec ante justo. Ut vulputate arcu id venenatis dapibus.
-      Cras mollis eros sit amet velit egestas, eu egestas lectus imperdiet.
-      Integer non ornare sem. Donec pulvinar enim at scelerisque tempus. Fusce
-      bibendum fermentum hendrerit. Proin imperdiet lobortis mauris sed
-      facilisis. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-      Nulla lorem nibh, iaculis eleifend nunc lobortis, convallis sagittis
-      mauris. Vivamus ac justo ac felis maximus volutpat a vitae augue.
+      Alianza Coachella Valley leads a coalition of mission-aligned residents,
+      nonprofits, researchers, and civic leaders committed to bringing about
+      real change for a more vibrant and prosperous Salton Sea region by
+      addressing the intersectionality of the environment, public health, and
+      the economy. Salton Sea communities thrive when we address poor health
+      outcomes. We are conducting community science to produce publicly
+      available data and inform solutions to the challenges of the receding
+      Salton Sea and improve health outcomes for residents.
     </p>
   </>
 );
@@ -31,26 +31,14 @@ const ABOUT_US_INTRO_TEXT = (
 const ABOUT_US_INTRO_TEXT_Section_Two = (
   <>
     <p>
-      Phasellus tincidunt sem mollis libero cursus, et vulputate lorem vehicula.
-      Vivamus pretium nec metus non maximus. Lorem ipsum dolor sit amet,
-      consectetur adipiscing elit. Aliquam mattis quam vel molestie fringilla.
-      Curabitur fringilla feugiat dui eleifend tempus. Fusce sagittis
-      sollicitudin imperdiet. Pellentesque sed cursus odio. Donec vel euismod
-      nibh. Quisque tristique maximus dolor, nec sollicitudin dolor scelerisque
-      non. Nulla nec nibh lacus. Pellentesque ipsum nulla, congue sed tortor
-      sed, porttitor egestas elit. Sed semper mattis sagittis. Pellentesque
-      tristique arcu vel eros sodales, eget semper ipsum gravida. Proin a eros
-      eleifend, pellentesque urna non, placerat ex.
-    </p>
-    <p>
-      Suspendisse hendrerit est non mauris malesuada, quis mattis orci
-      imperdiet. Donec pharetra tincidunt magna quis feugiat. Quisque sit amet
-      nisi id metus gravida viverra. Aenean mi diam, molestie non purus vitae,
-      posuere hendrerit diam.
-    </p>
-    <p>
-      Vivamus pharetra maximus mattis. Cras iaculis ultricies erat, et congue
-      neque ultricies bibendum.
+      For a few years, we have routinely gone out to the Salton Sea with local
+      residents and partner researchers interested in learning more about the
+      quality of water and air impacted by the receding Salton Sea to equip them
+      with actionable data for advocacy purposes. Our team is comprised of
+      youth, other local residents, partner scientists from esteemed academic
+      institutions (Loma Linda, Brown, UCLA) who would like to use their
+      collective knowledge for the improved health and economic outcome of
+      Salton Sea communities.
     </p>
   </>
 );
@@ -433,6 +421,51 @@ const timelineData = [
     ]
   }
 ];
+//TODO add images
+const TEAM_BIOS = [
+  {
+    firstName: "Daniel",
+    lastName: "Ramirez",
+    title: "Asset Management Specialist",
+    bio: `Born and raised in the vibrant Eastern Coachella Valley, I proudly earned my B.S. in Biochemistry from UC Riverside. Beyond science, I have a passion for music. As a Mexican folklore dancer and guitarist, I find joy in expressing myself through these art forms. My journey into this space was ignited by a desire to learn about the complexities surrounding the Salton Sea and its impact on local communities' health. Eager to witness firsthand the challenges posed by its water quality, I joined the cause to amplify awareness of the environmental injustices facing underrepresented communities in the Coachella and Imperial Valley. My favorite memory is seeing a diverse group of individuals come together to leverage science to democratize data on the Salton Sea. Across varied backgrounds of education, age, and ethnicity, the Salton Sea Community Science space coalesced to empower our community with knowledge for safer, healthier lives. Looking ahead, my aspirations for the Salton Sea are rooted in the well-being of the communities I call home. I envision a future marked by improved water and air quality, fostering a conducive environment for cultural and economic prosperity.`,
+    img: ""
+  },
+  {
+    firstName: "Diego",
+    lastName: "Centeno",
+    title: "Research Assistant",
+    bio: `Diego Centeno (he/him) is a research assistant in the Department of Earth, Environmental, and Planetary Sciences at Brown University. Originally from the city of North Shore, he is working on the sulfur cycle in the Salton Sea, including geochemistry and impacts on human health. Diego joined this community science space with the hopes of representing his community in scientific political advocacy for Salton Sea restoration plans and aspires to one day hold an academic professor position at a university. When not doing science, he likes to be outdoors or play guitar.`,
+    img: ""
+  },
+  {
+    firstName: "Rushil",
+    lastName: "Ladhawala",
+    title: "High School Student",
+    bio: `Hello! My name is Rushil Ladhawala (he/him). I have been involved in this project since my freshman year, though I am currently a sophomore at Palm Desert High School. Outside of academics, I enjoy playing pickleball, and basketball, and listening to music. I'm fascinated by how abstract mathematical concepts can be applied to design engineering innovations and can shape a sustainable world around us. This space provided me with an amazing opportunity to collect hands-on data utilizing scientific equipment, learn about various data collection methods, and analyze them to form conclusions and recommendations. Furthermore, this project has enabled me to communicate the impact of the Salton Sea's chemistry on public health and the potential socio-economic as well as ecological implications through webinars/workshops to the general public. In particular, however, one aspect of my work with the SSET has stood out as the most memorable; I specifically remember sailing out to collect water samples from the Salton Sea itself, which was an incredible experience that I’ll cherish forever. I hope that in the future, all of the efforts made towards restoring the Salton Sea will create a general increase in quality of life for both the Sea itself and those living in the communities that surround it.`,
+    img: ""
+  },
+  {
+    firstName: "Aydee",
+    lastName: "Palomino",
+    title: "Environmental Justice Project Manager",
+    bio: `Works as Alianza Coachella Valley’s environmental justice project manager whose work currently focuses on implementing infrastructure projects that are at the intersection of environmental sustainability, economic development, and social wellbeing at the Salton Sea. Her work is to tackle environmental justice issues from a policy level and make sure that our community has a seat at the table when there are decisions being made. Her work with the Salton Sea campaign is in response to strong community concerns about the environmental degradation of the Salton Sea and its impacts on local public health and economy.`,
+    img: "/avatar-pics/aydee-palomino-avatar.jpg"
+  },
+  {
+    firstName: "Kaily",
+    lastName: "Heitz",
+    title: "Assistant Professor of Geography",
+    bio: `An Assistant Professor of Geography at the University of California, Los Angeles. As a critical human geographer, Dr. Heitz’s work focuses on cultural and community responses to racialized dispossession and gentrification in California. Her research utilizes archival, ethnographic, and sociological methods to examine historical and ongoing trends in the socioeconomic and racial makeup of places in the U.S. West, and the lived experiences thereof. She has also worked professionally as an environmental justice policy advocate and educator. She is currently writing a manuscript entitled Oakland is a Vibe: The Relational Geographies of Black Cultural Development and working with community partners to develop creative writing workshop series on local senses of place.`,
+    img: ""
+  },
+  {
+    firstName: "Ryan",
+    lastName: "Sinclair",
+    title: "Associate Professor of Environmental Microbiology",
+    bio: `Dr. Ryan G. Sinclair is an Associate Professor of Environmental Microbiology in the Loma Linda University School of Public Health, holding a joint appointment in the Department of Earth and Biological Sciences. He earned his PhD in water quality from Tulane University and completed postdoctoral research in environmental microbiology at the University of Arizona. Afterward, he worked as a Research Associate with the National Research Council on water infrastructure. His commitment to environmental justice is reflected throughout his research, and he now works as a scientist and advocate on several projects in the inland desert region of Southern California. His dedication earned him the prestigious 2021 SCAQMD Dr. Robert M. Zweig Clean Air Award.`,
+    img: ""
+  }
+];
 
 // TODO: change bgImage
 const OPTIONS: EmblaOptionsType = { dragFree: true, loop: true };
@@ -480,7 +513,8 @@ const AboutUs = () => {
         </Container>
       </Section>
       {/* embla section end */}
-      <Section>
+      {/* TODO: fix resource links and add timeline navigation for years */}
+      {/* <Section>
         <Container className={classes.timeLineWrapper}>
           <NavigationTimeline />
           <Paper className={classes.timeLineContainer} elevation={0}>
@@ -496,7 +530,7 @@ const AboutUs = () => {
             </Timeline>
           </Paper>
         </Container>
-      </Section>
+      </Section> */}
       {/* Timeline end */}
       <Section>
         <Container>
@@ -512,66 +546,16 @@ const AboutUs = () => {
             justifyContent="center"
             size={"h4"}
           />
-
-          <Box marginTop={4}>
-            <Avatar
-              alt="Remy Sharp"
-              src="/static/images/avatar/1.jpg"
-              className={classes.avatar}
+          {TEAM_BIOS.map((bio, index) => (
+            <MemberBio
+              key={index}
+              firstName={bio.firstName}
+              lastName={bio.lastName}
+              title={bio.title}
+              bio={bio.bio}
+              img={bio.img}
             />
-            <Box>
-              <Typography variant="h5" display="block">
-                Firstname Lastname
-              </Typography>
-              <Typography variant="body1" display="inline">
-                Phasellus tincidunt sem mollis libero cursus, et vulputate lorem
-                vehicula. Vivamus pretium nec metus non maximus. Lorem ipsum
-                dolor sit amet, consectetur adipiscing elit. Aliquam mattis quam
-                vel molestie fringilla. Curabitur fringilla feugiat dui eleifend
-                tempus. Fusce sagittis sollicitudin imperdiet. Pellentesque sed
-                cursus odio. Donec vel euismod nibh. Quisque tristique maximus
-                dolor, nec sollicitudin dolor scelerisque non. Nulla nec nibh
-                lacus. Pellentesque ipsum nulla, congue sed tortor sed,
-                porttitor egestas elit. Sed semper mattis sagittis. Pellentesque
-                tristique arcu vel eros sodales, eget semper ipsum gravida.
-                Proin a eros eleifend, pellentesque urna non, placerat ex.
-                Pellentesque ipsum nulla, congue sed tortor sed, porttitor
-                egestas elit. Sed semper mattis sagittis. Pellentesque tristique
-                arcu vel eros sodales, eget semper ipsum gravida. Proin a eros
-                eleifend, pellentesque urna non, placerat ex.
-              </Typography>
-            </Box>
-          </Box>
-
-          <Box marginTop={4}>
-            <Avatar
-              alt="Remy Sharp"
-              src="/static/images/avatar/1.jpg"
-              className={classes.avatarOdd}
-            />
-            <Box>
-              <Typography variant="h5" display="block">
-                Firstname Lastname
-              </Typography>
-              <Typography variant="body1" display="inline">
-                Phasellus tincidunt sem mollis libero cursus, et vulputate lorem
-                vehicula. Vivamus pretium nec metus non maximus. Lorem ipsum
-                dolor sit amet, consectetur adipiscing elit. Aliquam mattis quam
-                vel molestie fringilla. Curabitur fringilla feugiat dui eleifend
-                tempus. Fusce sagittis sollicitudin imperdiet. Pellentesque sed
-                cursus odio. Donec vel euismod nibh. Quisque tristique maximus
-                dolor, nec sollicitudin dolor scelerisque non. Nulla nec nibh
-                lacus. Pellentesque ipsum nulla, congue sed tortor sed,
-                porttitor egestas elit. Sed semper mattis sagittis. Pellentesque
-                tristique arcu vel eros sodales, eget semper ipsum gravida.
-                Proin a eros eleifend, pellentesque urna non, placerat ex.
-                Pellentesque ipsum nulla, congue sed tortor sed, porttitor
-                egestas elit. Sed semper mattis sagittis. Pellentesque tristique
-                arcu vel eros sodales, eget semper ipsum gravida. Proin a eros
-                eleifend, pellentesque urna non, placerat ex.
-              </Typography>
-            </Box>
-          </Box>
+          ))}
         </Container>
       </Section>
     </Layout>

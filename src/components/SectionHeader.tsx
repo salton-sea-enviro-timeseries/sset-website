@@ -3,7 +3,8 @@ import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import { TypographyVariant, makeStyles } from "@material-ui/core/styles";
 import Image from "next/image";
-
+import { LaunchOutlined } from "@material-ui/icons";
+import Link from "next/link";
 type variantText = TypographyVariant;
 interface SectionHeaderProps {
   subtitle?: string;
@@ -42,57 +43,67 @@ function SectionHeader(props: SectionHeaderProps) {
   if (!title && !subtitle) {
     return null;
   }
-
-  const SectionTitle = () => (
-    <Typography
-      variant={size}
-      gutterBottom={props.subtitle ? true : false}
-      {...titleProps}
+  const renderTitleWithLink = () => (
+    <a
+      href={`#${sectionId}`}
+      style={{ color: "inherit", textDecoration: "none" }}
+      onClick={(e) => {
+        e.preventDefault();
+        scrollToSection(sectionId);
+      }}
     >
-      {sectionFootNoteLink ? (
-        <a
-          href={`#${sectionId}`}
-          style={{ color: "inherit", textDecoration: "none" }}
-          onClick={(e) => {
-            e.preventDefault();
-            scrollToSection(sectionId);
-          }}
-        >
-          {title}
-          <sup className={classes.footNoteStyledLink}>†</sup>
-        </a>
-      ) : (
-        title
-      )}
+      {title}
+      <sup className={classes.footNoteStyledLink}>†</sup>
+    </a>
+  );
+  const SectionTitle = () => (
+    <Typography variant={size} gutterBottom={!!subtitle} {...titleProps}>
+      {sectionFootNoteLink ? renderTitleWithLink() : title}
     </Typography>
   );
+  const renderGraduationSection = () => (
+    <Box className={classes.graduationSectionTitleWrapper}>
+      <Image
+        src="/graduation-illustration-balloons.svg"
+        alt="balloons illustration"
+        layout="intrinsic"
+        width={150}
+        height={150}
+        objectFit="contain"
+      />
+      <SectionTitle />
+      <Image
+        src="/graduation-illustration-2.svg"
+        alt="graduation celebration"
+        layout="fixed"
+        width={150}
+        height={150}
+        objectFit="contain"
+      />
+    </Box>
+  );
+  const renderAboutUsSection = () => (
+    <Link href="/about-us">
+      <a className={classes.aboutLaunchLink}>
+        <Typography variant={size} gutterBottom={!!subtitle} {...titleProps}>
+          {title}
+        </Typography>
+        <LaunchOutlined />
+      </a>
+    </Link>
+  );
+
   return (
     <Box
       component="header"
-      className={classes.root + (props.className ? ` ${props.className}` : "")}
+      className={`${classes.root} ${className || ""}`}
       {...otherProps}
     >
       {title &&
         (sectionId === "congratulationsrecentgrads-section" ? (
-          <Box className={classes.graduationSectionTitleWrapper}>
-            <Image
-              src={"/graduation-illustration-balloons.svg"}
-              alt={"balloons illustration"}
-              layout="intrinsic"
-              width={150}
-              height={150}
-              objectFit="contain"
-            />
-            <SectionTitle />
-            <Image
-              src={"/graduation-illustration-2.svg"}
-              alt={"graduation celebration"}
-              layout="fixed"
-              width={150}
-              height={150}
-              objectFit="contain"
-            />
-          </Box>
+          renderGraduationSection()
+        ) : sectionId === "aboutus-section" ? (
+          renderAboutUsSection()
         ) : (
           <SectionTitle />
         ))}
@@ -136,6 +147,16 @@ const useStyles = makeStyles((theme) => ({
   graduationSectionTitleWrapper: {
     display: "flex",
     alignItems: "center"
+  },
+  aboutLaunchLink: {
+    color: "inherit",
+    textDecoration: "none",
+    "& > svg": {
+      transition: "color 300ms"
+    },
+    "&:hover > svg": {
+      color: "royalBlue"
+    }
   }
 }));
 
