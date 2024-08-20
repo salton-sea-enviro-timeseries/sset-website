@@ -141,7 +141,8 @@ export default Home;
 export const getStaticProps = async () => {
   // TODO: Extract urls to contentful
   const urls: string[] = [
-    "https://www.alianzacv.org/news/aeroqual-air-quality-sensor-installed-in-the-salton-sea/",
+    //TODO : alianzacv link is broken find error
+    // "https://www.alianzacv.org/news/aeroqual-air-quality-sensor-installed-in-the-salton-sea/",
     "https://nbcpalmsprings.com/2024/03/17/restoring-the-salton-sea-an-in-depth-look-at-lithium-wetlands-and-the-10-year-plan/",
     "https://www.kuer.org/health-science-environment/2024-01-02/the-salton-sea-shows-why-utah-should-pay-attention-to-great-salt-lakes-stench",
     "https://tos.org/oceanography/article/salton-sea-environmental-work-and-the-importance-of-community-science",
