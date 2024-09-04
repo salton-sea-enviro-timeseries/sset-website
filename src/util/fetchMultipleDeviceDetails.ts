@@ -13,10 +13,15 @@ export async function fetchMultipleDeviceDetails(
   try {
     const deviceArrays = await Promise.all(
       urls.map((url) =>
-        fetcher(url, startDate || undefined, endDate || undefined)
+        fetcher(url, startDate || undefined, endDate || undefined).catch(
+          (err) => {
+            console.error(`Error fetching data from ${url}:`, err);
+            return null;
+          }
+        )
       )
     );
-    const flattenedArray = deviceArrays.flat();
+    const flattenedArray = deviceArrays.flat().filter((i) => i !== null);
     const filteredList = flattenedArray.filter(
       (i) => !(Array.isArray(i.data) && i.data.length === 0)
     );
