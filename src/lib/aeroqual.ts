@@ -47,7 +47,12 @@ export async function getAeroqualDeviceData({
 
     const requestUrl = decodeURIComponent(url.toString()).replace(/\+/g, "%20");
     const response = await fetch(requestUrl, options);
+    if (response.status === 404) {
+      console.warn(`Data not found for sensor: ${sensorId}`);
+      return getDefaultOriginalData();
+    }
     if (!response.ok) {
+      console.error(`Failed to fetch data. HTTP Status: ${response.status}`);
       throw new Error(
         `Failed to fetch aeroqual device data. HTTP Status: ${response.status}`
       );
@@ -55,6 +60,7 @@ export async function getAeroqualDeviceData({
 
     const data: OriginalData = await response.json();
     if (data.Instruments[0].Data.length === 0) {
+      console.log(`No data available for sensor: ${sensorId}`);
       return getDefaultOriginalData();
     }
     return data;
