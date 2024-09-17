@@ -1,9 +1,9 @@
 {
-  "site": "AQS1 13122022-2194: Aeroqual",
+  "site": "AQS1 04072024-2724: Aeroqual",
   "value": "aeroqual",
-  "sensorId": "AQS1 13122022-2194",
-  "latitude": 33.480624,
-  "longitude": -116.04732,
+  "sensorId": "AQS1 04072024-2724",
+  "latitude": 33.475697,
+  "longitude": -116.04686,
   "color": "rgb(255, 172, 28)",
-  "location": ""
+  "location": "Mecca"
 }
