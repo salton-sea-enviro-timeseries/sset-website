@@ -84,6 +84,7 @@ const AirQuality = ({
   }, [sensorData]);
   //Group sensor data by id
   const groupedData = useMemo(() => {
+    //Prepare data for menu list
     return groupSensorData(sensorData);
   }, [sensorData]);
   const isLoadingMap = !sensorList.length && !error;
