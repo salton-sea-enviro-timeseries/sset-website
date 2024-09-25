@@ -112,7 +112,8 @@ const FeaturedNewsFeed = ({ newsMediaData }: FeaturedNewsFeedProps) => {
 };
 const useStyles = makeStyles((theme) => ({
   containerSpacing: {
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(2),
+    marginTop: theme.spacing(2)
   },
   arrowStyles: {
     fontSize: "1.2rem",
