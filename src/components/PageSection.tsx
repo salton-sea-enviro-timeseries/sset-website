@@ -21,7 +21,7 @@ type Props = {
   newsMediaData?: MediaObject[];
   bodyText: React.ReactNode | null;
   title: string;
-  section: number;
+  sectionNum: number;
   gradImages?: GradImages[];
   id: string;
 };
@@ -37,7 +37,6 @@ const generateContent = (
     graphDivider: string;
   },
   id: string,
-  sectionId: string,
   newsSection?: MediaObject[],
   bodyText?: React.ReactNode | null
 ) => {
@@ -123,7 +122,7 @@ const generateContent = (
         News Articles Relevant to the Salton Sea
       </Typography>
       <FeaturedNewsFeed newsMediaData={newsSection} />
-      <Box mt="1em" id={sectionId}>
+      <Box mt="1em" id={`inthenews-footnote`}>
         <Typography component="p" align="center" style={{ fontWeight: "bold" }}>
           <sup style={{ color: "red" }}>†</sup>Many of these articles use highly
           negative language such as “toxic” and “death pit” in referring to the
@@ -136,7 +135,7 @@ const generateContent = (
         </Typography>
       </Box>
     </>
-  ) : id === "section-0" ? (
+  ) : id === "thesaltonsea" ? (
     <>
       <Typography component="div">{bodyText}</Typography>
       <Box display="flex" justifyContent={"space-evenly"}>
@@ -190,21 +189,20 @@ const PageSection: React.FC<Props> = ({
   bodyText,
   title,
   newsMediaData,
-  section,
+  sectionNum,
   gradImages
 }: Props) => {
   const classes = useStyles();
-  const sectionId = title.split(" ").join("").toLocaleLowerCase() + "-section";
   return (
     <Section
       className={classes.section}
-      bgImage={section % 2 === 0 ? "/curves.png" : null}
+      bgImage={sectionNum % 2 === 0 ? "/curves.png" : null}
     >
       <Container>
         <Box>
           <SectionHeader
             title={title}
-            sectionId={sectionId}
+            sectionId={id}
             sectionFootNoteLink={!!newsMediaData}
             titleProps={{
               align: "center",
@@ -215,7 +213,7 @@ const PageSection: React.FC<Props> = ({
             justifyContent="center"
             size={"h4"}
           />
-          {generateContent(classes, id, sectionId, newsMediaData, bodyText)}
+          {generateContent(classes, id, newsMediaData, bodyText)}
           {generateGradSection(classes, gradImages)}
         </Box>
       </Container>
