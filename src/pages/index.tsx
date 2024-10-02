@@ -37,10 +37,11 @@ const generateSectionContent = (
   return contentList?.map(({ fields }: any, index: number) => {
     const { body, title } = fields;
     const sectionTitle = title[locale as keyof LocaleOption<NestedObjBodyText>];
+    const section = sectionTitle.split(" ").join("").toLocaleLowerCase();
     return (
       <PageSection
-        key={`section-${sectionTitle}`}
-        id={`section-${index}`}
+        key={section}
+        id={section}
         bodyText={
           body
             ? renderDocument(
@@ -48,7 +49,7 @@ const generateSectionContent = (
               )
             : null
         }
-        section={index}
+        sectionNum={index}
         title={sectionTitle}
         newsMediaData={body ? undefined : newsMediaData}
       />
@@ -122,7 +123,7 @@ const Home = ({
       <PageSection
         id="section-grads"
         bodyText={null}
-        section={homepageContent?.fields.content["en-US"].length ?? 0}
+        sectionNum={homepageContent?.fields.content["en-US"].length ?? 0}
         title={"Congratulations Recent Grads"}
         gradImages={gradImages}
       />

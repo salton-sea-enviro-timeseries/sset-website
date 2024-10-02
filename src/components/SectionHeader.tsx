@@ -38,18 +38,17 @@ function SectionHeader(props: SectionHeaderProps) {
     className,
     ...otherProps
   } = props;
-
   // Render nothing if no title or subtitle
   if (!title && !subtitle) {
     return null;
   }
   const renderTitleWithLink = () => (
     <a
-      href={`#${sectionId}`}
+      href={sectionId}
       style={{ color: "inherit", textDecoration: "none" }}
       onClick={(e) => {
         e.preventDefault();
-        scrollToSection(sectionId);
+        scrollToSection(`${sectionId}-footnote`);
       }}
     >
       {title}
@@ -92,17 +91,17 @@ function SectionHeader(props: SectionHeaderProps) {
       </a>
     </Link>
   );
-
   return (
     <Box
+      id={sectionId}
       component="header"
       className={`${classes.root} ${className || ""}`}
       {...otherProps}
     >
       {title &&
-        (sectionId === "congratulationsrecentgrads-section" ? (
+        (sectionId === "section-grads" ? (
           renderGraduationSection()
-        ) : sectionId === "aboutus-section" ? (
+        ) : sectionId === "aboutus" ? (
           renderAboutUsSection()
         ) : (
           <SectionTitle />
