@@ -424,17 +424,53 @@ const timelineData = [
 //TODO add images
 const TEAM_BIOS = [
   {
-    firstName: "Daniel",
-    lastName: "Ramirez",
-    title: "Asset Management Specialist",
-    bio: `Born and raised in the vibrant Eastern Coachella Valley, I proudly earned my B.S. in Biochemistry from UC Riverside. Beyond science, I have a passion for music. As a Mexican folklore dancer and guitarist, I find joy in expressing myself through these art forms. My journey into this space was ignited by a desire to learn about the complexities surrounding the Salton Sea and its impact on local communities' health. Eager to witness firsthand the challenges posed by its water quality, I joined the cause to amplify awareness of the environmental injustices facing underrepresented communities in the Coachella and Imperial Valley. My favorite memory is seeing a diverse group of individuals come together to leverage science to democratize data on the Salton Sea. Across varied backgrounds of education, age, and ethnicity, the Salton Sea Community Science space coalesced to empower our community with knowledge for safer, healthier lives. Looking ahead, my aspirations for the Salton Sea are rooted in the well-being of the communities I call home. I envision a future marked by improved water and air quality, fostering a conducive environment for cultural and economic prosperity.`,
+    firstName: "Ryan",
+    lastName: "Sinclair",
+    title: "Associate Professor of Environmental Microbiology",
+    bio: `Dr. Ryan G. Sinclair is an Associate Professor of Environmental Microbiology in the Loma Linda University School of Public Health, holding a joint appointment in the Department of Earth and Biological Sciences. He earned his PhD in water quality from Tulane University and completed postdoctoral research in environmental microbiology at the University of Arizona. Afterward, he worked as a Research Associate with the National Research Council on water infrastructure. His commitment to environmental justice is reflected throughout his research, and he now works as a scientist and advocate on several projects in the inland desert region of Southern California. His dedication earned him the prestigious 2021 SCAQMD Dr. Robert M. Zweig Clean Air Award.`,
     img: ""
+  },
+  {
+    firstName: "Mara",
+    lastName: "Freilich",
+    title: "Researcher",
+    bio: `Mara Freilich is a researcher who focuses on  fluid dynamics in systems such as lakes and oceans and their impact on ecosystems and the climate. She also studies the role of climate models in community justice and infrastructure. She uses methods including theoretical analysis, numerical modeling, interdisciplinary observations, and community-engaged research. She is an assistant professor at Brown University in the Department of Earth, Environmental, and Planetary Sciences and the Division of Applied Mathematics.`,
+    img: "/avatar-pics/mara-freilich-avatar.jpg"
+  },
+  {
+    firstName: "Isabella B.",
+    lastName: "Arzeno",
+    title: "Assistant Professor",
+    bio: `Isabella B. Arzeno Soltero is an assistant professor in the department of Civil and Environmental Engineering at the University of California Los Angeles (UCLA) and the Principal Investigator of the Coastal Community Resilience Lab (CCRL). She received her PhD from the Scripps Institution of Oceanography in 2020. That same year, she began to collaborate with communities around the Salton Sea. Her research spans a wide array of topics centered on the ability of communities and ecosystems to adapt and recover from environmental stressors. Arzeno-Soltero cultivates close collaborations with scholars from diverse disciplines to gain a comprehensive understanding of integrated socio-environmental systems, and she places a strong emphasis on active engagement with local communities. Born and raised in Puerto Rico, Arzeno-Soltero enjoys collaborating on issues that particularly affect Latines. When not doing science, Isabella can be found playing music, dancing, or engaged in community activism.`,
+    img: "/avatar-pics/isa-arzeno-avatar.jpeg"
+  },
+
+  {
+    firstName: "Aydee",
+    lastName: "Palomino",
+    title: "Environmental Justice Project Manager",
+    bio: `Works as Alianza Coachella Valley’s environmental justice project manager whose work currently focuses on implementing infrastructure projects that are at the intersection of environmental sustainability, economic development, and social wellbeing at the Salton Sea. Her work is to tackle environmental justice issues from a policy level and make sure that our community has a seat at the table when there are decisions being made. Her work with the Salton Sea campaign is in response to strong community concerns about the environmental degradation of the Salton Sea and its impacts on local public health and economy.`,
+    img: "/avatar-pics/aydee-palomino-avatar.jpg"
+  },
+  {
+    firstName: "Juliana",
+    lastName: "Taboada",
+    title: "Environmental Justice Coordinator",
+    bio: `Works as Alianza Coachella Valley’s environmental justice campaign coordinator whose work focuses on improving the socio-economic conditions of communities within the Salton Sea region. As an alumnus of Alianza CV’s Youth Organizing Council (YoC!) Juliana understands the importance of having community members, especially youth at the forefront of social movements. Her work focuses on meaningful community involvement and input on Salton Sea issues. Her work within the Salton Sea campaign responds to community needs and calls to action on Salton Sea issues.`,
+    img: "/avatar-pics/juliana-taboada-avatar.jpg"
   },
   {
     firstName: "Diego",
     lastName: "Centeno",
     title: "Research Assistant",
     bio: `Diego Centeno (he/him) is a research assistant in the Department of Earth, Environmental, and Planetary Sciences at Brown University. Originally from the city of North Shore, he is working on the sulfur cycle in the Salton Sea, including geochemistry and impacts on human health. Diego joined this community science space with the hopes of representing his community in scientific political advocacy for Salton Sea restoration plans and aspires to one day hold an academic professor position at a university. When not doing science, he likes to be outdoors or play guitar.`,
+    img: ""
+  },
+  {
+    firstName: "Daniel",
+    lastName: "Ramirez",
+    title: "Asset Management Specialist",
+    bio: `Born and raised in the vibrant Eastern Coachella Valley, I proudly earned my B.S. in Biochemistry from UC Riverside. Beyond science, I have a passion for music. As a Mexican folklore dancer and guitarist, I find joy in expressing myself through these art forms. My journey into this space was ignited by a desire to learn about the complexities surrounding the Salton Sea and its impact on local communities' health. Eager to witness firsthand the challenges posed by its water quality, I joined the cause to amplify awareness of the environmental injustices facing underrepresented communities in the Coachella and Imperial Valley. My favorite memory is seeing a diverse group of individuals come together to leverage science to democratize data on the Salton Sea. Across varied backgrounds of education, age, and ethnicity, the Salton Sea Community Science space coalesced to empower our community with knowledge for safer, healthier lives. Looking ahead, my aspirations for the Salton Sea are rooted in the well-being of the communities I call home. I envision a future marked by improved water and air quality, fostering a conducive environment for cultural and economic prosperity.`,
     img: ""
   },
   {
@@ -445,24 +481,10 @@ const TEAM_BIOS = [
     img: ""
   },
   {
-    firstName: "Aydee",
-    lastName: "Palomino",
-    title: "Environmental Justice Project Manager",
-    bio: `Works as Alianza Coachella Valley’s environmental justice project manager whose work currently focuses on implementing infrastructure projects that are at the intersection of environmental sustainability, economic development, and social wellbeing at the Salton Sea. Her work is to tackle environmental justice issues from a policy level and make sure that our community has a seat at the table when there are decisions being made. Her work with the Salton Sea campaign is in response to strong community concerns about the environmental degradation of the Salton Sea and its impacts on local public health and economy.`,
-    img: "/avatar-pics/aydee-palomino-avatar.jpg"
-  },
-  {
     firstName: "Kaily",
     lastName: "Heitz",
     title: "Assistant Professor of Geography",
     bio: `An Assistant Professor of Geography at the University of California, Los Angeles. As a critical human geographer, Dr. Heitz’s work focuses on cultural and community responses to racialized dispossession and gentrification in California. Her research utilizes archival, ethnographic, and sociological methods to examine historical and ongoing trends in the socioeconomic and racial makeup of places in the U.S. West, and the lived experiences thereof. She has also worked professionally as an environmental justice policy advocate and educator. She is currently writing a manuscript entitled Oakland is a Vibe: The Relational Geographies of Black Cultural Development and working with community partners to develop creative writing workshop series on local senses of place.`,
-    img: ""
-  },
-  {
-    firstName: "Ryan",
-    lastName: "Sinclair",
-    title: "Associate Professor of Environmental Microbiology",
-    bio: `Dr. Ryan G. Sinclair is an Associate Professor of Environmental Microbiology in the Loma Linda University School of Public Health, holding a joint appointment in the Department of Earth and Biological Sciences. He earned his PhD in water quality from Tulane University and completed postdoctoral research in environmental microbiology at the University of Arizona. Afterward, he worked as a Research Associate with the National Research Council on water infrastructure. His commitment to environmental justice is reflected throughout his research, and he now works as a scientist and advocate on several projects in the inland desert region of Southern California. His dedication earned him the prestigious 2021 SCAQMD Dr. Robert M. Zweig Clean Air Award.`,
     img: ""
   }
 ];
