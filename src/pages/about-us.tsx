@@ -433,7 +433,7 @@ const TEAM_BIOS = [
   {
     firstName: "Mara",
     lastName: "Freilich",
-    title: "Researcher",
+    title: "Assistant Professor",
     bio: `Mara Freilich is a researcher who focuses on  fluid dynamics in systems such as lakes and oceans and their impact on ecosystems and the climate. She also studies the role of climate models in community justice and infrastructure. She uses methods including theoretical analysis, numerical modeling, interdisciplinary observations, and community-engaged research. She is an assistant professor at Brown University in the Department of Earth, Environmental, and Planetary Sciences and the Division of Applied Mathematics.`,
     img: "/avatar-pics/mara-freilich-avatar.jpg"
   },
@@ -455,7 +455,7 @@ const TEAM_BIOS = [
   {
     firstName: "Juliana",
     lastName: "Taboada",
-    title: "Environmental Justice Coordinator",
+    title: "Campaign Coordinator",
     bio: `Works as Alianza Coachella Valley’s environmental justice campaign coordinator whose work focuses on improving the socio-economic conditions of communities within the Salton Sea region. As an alumnus of Alianza CV’s Youth Organizing Council (YoC!) Juliana understands the importance of having community members, especially youth at the forefront of social movements. Her work focuses on meaningful community involvement and input on Salton Sea issues. Her work within the Salton Sea campaign responds to community needs and calls to action on Salton Sea issues.`,
     img: "/avatar-pics/juliana-taboada-avatar.jpg"
   },
