@@ -93,7 +93,11 @@ function Navbar() {
           <Link href="https://www.alianzacv.org/" passHref>
             <a target="_blank" rel="noopener noreferrer">
               {/* eslint-disable  @next/next/no-img-element */}
-              <img width={150} src="/alianzacv-logo.jpg" alt="Alianza logo" />
+              <img
+                width={150}
+                src="/thriving-salton-sea-communities.png"
+                alt="Thriving Salton Sea Communities Logo"
+              />
             </a>
           </Link>
         </Box>
@@ -184,7 +188,6 @@ function Navbar() {
           </ToggleButtonGroup>
         </Box>
       </Toolbar>
-      {/* </Container> */}
     </AppBar>
   );
 }
