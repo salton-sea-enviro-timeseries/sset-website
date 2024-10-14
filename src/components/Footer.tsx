@@ -53,7 +53,7 @@ const logos = [
     src: "/alianzacv-logo.jpg",
     href: "https://www.alianzacv.org/",
     alt: "Alianza Logo",
-    width: 100
+    width: 150
   },
 
   {

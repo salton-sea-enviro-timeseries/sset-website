@@ -48,7 +48,7 @@ const Hero: React.FC<HeroProps> = ({
     }
   }, []);
   return (
-    <Box position="relative" height="100vh">
+    <Box position="relative" height="115vh">
       {!bgImage && isMounted ? (
         <video
           className={classes.video}
@@ -75,6 +75,27 @@ const Hero: React.FC<HeroProps> = ({
       ) : null}
 
       <div className={classes.overlay}>
+        {/* TODO: make logo its own component */}
+        <Box className={classes.thrivingLogoTextAndDescWrapper}>
+          <Box className={classes.thrivingLogoContainer}>
+            {/* eslint-disable  @next/next/no-img-element */}
+            <img
+              src="/thriving-health-banner.png"
+              alt="Thriving Health Logo"
+              className={classes.thrivingLogoStyles}
+            />
+            <Typography
+              component="div"
+              className={classes.thrivingLogoDescriptionText}
+            >
+              Salton Sea communities thrive when we address poor health
+              outcomes. We are conducting community science to produce publicly
+              available data and inform solutions to the challenges of the
+              receding Salton Sea and improve health outcomes for residents.
+            </Typography>
+          </Box>
+        </Box>
+
         {(title || subtitle) && (
           <Container>
             <Box textAlign="center">
@@ -136,6 +157,59 @@ const useStyles = makeStyles(() => ({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center"
+  },
+  thrivingLogoContainer: {
+    position: "relative",
+    width: "100%",
+    maxWidth: "400px",
+    height: "250px",
+    margin: "0 auto",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  thrivingLogoTextAndDescWrapper: {
+    marginTop: "2rem",
+    marginBottom: "2rem "
+  },
+  thrivingLogoStyles: {
+    position: "absolute",
+    width: "100%",
+    height: "250px",
+    objectFit: "contain",
+    zIndex: 1
+  },
+  thrivingLogoDescriptionText: {
+    position: "relative",
+    zIndex: 2,
+    color: "transparent",
+    textAlign: "left",
+    padding: "1rem",
+    width: "85%",
+    height: "85%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    whiteSpace: "normal",
+    wordWrap: "break-word",
+    transition: "transform .4s ease-in-out",
+    "&::before": {
+      content: '""',
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      backgroundColor: "rgba(0, 0, 0, 0)",
+      transition: "background-color .4s ease-in-out",
+      zIndex: -1
+    },
+    "&:hover::before": {
+      backgroundColor: "rgba(0, 0, 0, 0.8)"
+    },
+    "&:hover": {
+      color: "white"
+    }
   }
 }));
 
