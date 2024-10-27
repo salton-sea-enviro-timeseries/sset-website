@@ -65,6 +65,7 @@ const AirQuality = ({
     // const purpleAirData = transformPurpleAirSensorData(PurpleAirSensorData);
     const aeroqualSensor = AeroqualSensor;
     //Removed purple air sensors for now
+    //Add aeroqual sensor details to list
     return [...transformedSensorData, aeroqualSensor];
   }, [sensorList]);
   const filterOutPurpleAirSensor = filteredSensors(airQualityDevices);

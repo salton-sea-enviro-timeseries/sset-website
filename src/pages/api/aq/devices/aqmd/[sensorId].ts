@@ -2,7 +2,7 @@ import { getAeroqualDeviceData } from "lib/aeroqual";
 import CookieManager from "lib/CookieManager";
 import type { NextApiRequest, NextApiResponse } from "next";
 import transformAeroqualData from "util/transformAeroqualData";
-
+//Ryan has aqmd sensors on a different aeroqual account
 const credentials = {
   username: process.env.AQMD_AEROQUAL_USERNAME,
   password: process.env.AQMD_AEROQUAL_PASSWORD
