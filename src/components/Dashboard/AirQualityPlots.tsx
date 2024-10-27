@@ -152,6 +152,7 @@ function isBelowThreshold(
   }
   return false;
 }
+//Removed
 const thresholdLinePlugin = (selectedParam: string) => ({
   id: "thresholdLine",
   afterDraw: (chart: ChartJS) => {
@@ -212,7 +213,6 @@ function drawCustomLegend(ctx: CanvasRenderingContext2D, chartArea: ChartArea) {
   ctx.fillStyle = "black";
   ctx.fillText("Instrument\nThreshold", legendX + 10, legendY + 35); // Adjust as needed
 }
-
 // all chart options and selected param as y axis
 const chartOptions = (selectedParam: string): ChartOptions<"line"> => {
   return {
@@ -260,6 +260,7 @@ const chartOptions = (selectedParam: string): ChartOptions<"line"> => {
         }
       }
     },
+
     parsing: {
       xAxisKey: "x",
       yAxisKey: selectedParam
@@ -300,7 +301,6 @@ const chartOptions = (selectedParam: string): ChartOptions<"line"> => {
     }
   };
 };
-
 function hasNonNullValueForParam<T extends { [key: string]: any }>(
   data: { datasets: { data: T[] }[] },
   param: string
@@ -332,13 +332,17 @@ const AirQualityPlots = ({
     options
   } = useSelect<string>({
     initialValues: Object.keys(paramAQIStandardMap),
-    defaultValue: "PM10"
+    defaultValue: "H2S"
   });
+  //Removed threshold Line
+  //=========================================================================
   // Combine the canvasBackgroundColor plugin with the threshold plugin
-  const combinedPlugins: Plugin<"line">[] = useMemo(
-    () => [canvasBackgroundColor, thresholdLinePlugin(selectedParam)],
-    [selectedParam]
-  );
+  // const combinedPlugins: Plugin<"line">[] = useMemo(
+  //   () => [canvasBackgroundColor, thresholdLinePlugin(selectedParam)],
+  //   [selectedParam]
+  // );
+  //==========================================================================
+  const plugin: Plugin<"line">[] = [canvasBackgroundColor];
   //Filter selected param to retrieve its details
   const parameterFilter = useMemo(
     () =>
@@ -357,6 +361,7 @@ const AirQualityPlots = ({
   const parameterInfoLink =
     parameterFilter &&
     parameterFilter[0].href[locale as keyof LocaleDefault<string>];
+
   const datasets = useMemo(() => {
     return Object.values(normalizedData).map(({ data, name, id }, index) => {
       const transformedData = calcParamAQI(data);
@@ -374,9 +379,6 @@ const AirQualityPlots = ({
 
             const currentPoint = transformedData[dataIndex];
             const nextPoint = transformedData[nextDataIndex];
-            if (isBelowThreshold(nextPoint)) {
-              return "red";
-            }
             return colors[index]; // Default color
           }
         },
@@ -417,7 +419,7 @@ const AirQualityPlots = ({
         <Box minHeight={350} m="2 2 0 2">
           <Line
             key={selectedParam}
-            plugins={combinedPlugins}
+            plugins={plugin}
             options={chartOptions(selectedParam)}
             data={chartData}
           />
@@ -428,6 +430,14 @@ const AirQualityPlots = ({
           selected.
         </Typography>
       )}
+      <Box
+        marginBottom={1}
+        style={{ display: "flex", justifyContent: "center" }}
+      >
+        <Typography variant="caption">
+          Filter Sensors by Clicking on Legend Items Above
+        </Typography>
+      </Box>
       <Box marginBottom={1}>
         <Typography
           variant="body2"
