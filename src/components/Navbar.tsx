@@ -90,7 +90,7 @@ function Navbar() {
             </a>
           </Link>
           <CloseIcon fontSize="small" style={{ marginLeft: "2" }} />
-          <Link href="https://www.alianzacv.org/" passHref>
+          <Link href="https://thrivingsaltonsea.com/" passHref>
             <a target="_blank" rel="noopener noreferrer">
               {/* eslint-disable  @next/next/no-img-element */}
               <img
