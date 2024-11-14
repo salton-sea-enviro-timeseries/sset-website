@@ -1,20 +1,20 @@
 [
   {
-    "site": "AQS1 04072024-2724: Aeroqual",
+    "site": "AQS1 04072024-2724: Offshore North",
     "value": "aeroqual",
     "sensorId": "AQS1 04072024-2724",
     "latitude": 33.475697,
     "longitude": -116.04686,
     "color": "rgb(255, 172, 28)",
-    "location": "Mecca"
+    "location": "Offshore North"
   },
   {
-    "site": "AQS1 13122022-2194: Aeroqual",
+    "site": "AQS1 13122022-2194: Offshore South",
     "value": "aeroqual",
     "sensorId": "AQS1 13122022-2194",
     "latitude": 33.224329,
     "longitude": -115.83435,
     "color": "rgb(255, 172, 28)",
-    "location": "Salton City"
+    "location": "Offshore South"
   }
 ]
