@@ -360,6 +360,7 @@ export type AirQualityPage = {
   param_selection_text: LocaleOption<string>;
   chart_main_caption: LocaleOption<string>;
   map_caption: LocaleOption<string>;
+  map_captionV2: LocaleOption<Document | undefined>;
   param_descriptions_list: MenuList;
   sensor_selection_helper_text: LocaleOption<string>;
   mod_sensor_warning_text: LocaleOption<string>;

@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import useSWR from "swr";
-import PurpleAirSensorData from "purple-air-data.json";
 import AeroqualSensor from "aeroqual-sensor.json";
 import { Typography, makeStyles } from "@material-ui/core";
 import { getCmsContent } from "util/getCmsContent";
@@ -16,7 +15,6 @@ import MapMarker from "components/Dashboard/MapMarker";
 import {
   filteredSensors,
   groupSensorData,
-  transformPurpleAirSensorData,
   transformSensorData
 } from "util/sensorDataFormating";
 import useSensorData from "hooks/useSensorData";
@@ -26,6 +24,8 @@ import AirQualityParameterSection from "components/Dashboard/AirQualityParameter
 import AirQualityPlots from "components/Dashboard/AirQualityPlots";
 import AirQualityLoadingSkeleton from "components/Dashboard/AirQualityLoadingSkeleton";
 import { useAppContext } from "components/AppContext";
+import { renderDocument } from "util/contentfulUtils";
+import { Document } from "@contentful/rich-text-types";
 
 const AirQuality = ({
   airQualityPageContent
@@ -47,7 +47,7 @@ const AirQuality = ({
   const buttonText = cmsField?.button_text[locale];
   const endDate = cmsField?.end_date[locale];
   const startDate = cmsField?.start_date[locale];
-  const mapCaption = cmsField?.map_caption[locale];
+  const mapCaptionV2 = cmsField?.map_captionV2[locale] as Document | undefined;
   const paramAQITitle = cmsField?.param_aqi_title[locale];
   const parameterListDetails = cmsField?.param_descriptions_list["en-US"].map(
     ({ fields }) => {
@@ -132,7 +132,7 @@ const AirQuality = ({
       <WithLoading isLoading={isLoadingMap} variant="rect" height="500px">
         {sensorList && (
           <Map
-            caption={mapCaption}
+            caption={mapCaptionV2 ? renderDocument(mapCaptionV2) : ""}
             purpleAirClass={classes.purpleAirLink}
             LATITUDE={33.638421}
             LONGITUDE={-116.075339}
@@ -148,9 +148,14 @@ const AirQuality = ({
     </>
   );
 };
-
 const useStyles = makeStyles(() => ({
-  purpleAirLink: { color: "#3a7ca5", cursor: "pointer" }
+  purpleAirLink: { color: "#3a7ca5", cursor: "pointer" },
+  captionContainer: {
+    whiteSpace: "normal",
+    wordWrap: "break-word",
+    overflowWrap: "anywhere",
+    marginBottom: "3rem"
+  }
 }));
 
 export const getStaticProps = async () => {
