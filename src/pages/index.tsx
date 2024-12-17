@@ -3,11 +3,16 @@ import type { InferGetStaticPropsType } from "next";
 import { Button, Container, makeStyles } from "@material-ui/core";
 import Link from "next/link";
 import { getCmsContent } from "util/getCmsContent";
-import { HomePage, MediaObject, PageContent } from "types";
+import {
+  ArticleFields,
+  Content1,
+  Content2,
+  HomePage,
+  PageContent
+} from "types";
 import Layout from "components/Layout";
 import Hero from "components/Hero";
 import PageSection from "components/PageSection";
-import scrape from "../lib/scrape";
 import TutorialModal from "../components/TutorialModal";
 import { useAppContext } from "components/AppContext";
 import { LocaleOption, NestedObjBodyText } from "types";
@@ -30,34 +35,37 @@ const renderDocument = (document: Document) => {
   return documentToReactComponents(document, options);
 };
 const generateSectionContent = (
-  contentList: PageContent | undefined,
+  sections: PageContent | undefined,
   locale: string,
-  newsMediaData: MediaObject[] | undefined
+  newsArticleList: ArticleFields[]
 ) => {
-  return contentList?.map(({ fields }: any, index: number) => {
-    const { body, title } = fields;
-    const sectionTitle = title[locale as keyof LocaleOption<NestedObjBodyText>];
-    const section = sectionTitle.split(" ").join("").toLocaleLowerCase();
-    return (
-      <PageSection
-        key={section}
-        id={section}
-        bodyText={
-          body
-            ? renderDocument(
-                body[locale as keyof LocaleOption<NestedObjBodyText>]
-              )
-            : null
-        }
-        sectionNum={index}
-        title={sectionTitle}
-        newsMediaData={body ? undefined : newsMediaData}
-      />
-    );
-  });
+  if (Array.isArray(sections)) {
+    return sections?.map(({ fields }: any, index: number) => {
+      const { body, title } = fields;
+      const sectionTitle =
+        title[locale as keyof LocaleOption<NestedObjBodyText>];
+      const section = sectionTitle.split(" ").join("").toLocaleLowerCase();
+      return (
+        <PageSection
+          key={section}
+          id={section}
+          bodyText={
+            body
+              ? renderDocument(
+                  body[locale as keyof LocaleOption<NestedObjBodyText>]
+                )
+              : null
+          }
+          sectionNum={index}
+          title={sectionTitle}
+          newsArticleList={body ? undefined : newsArticleList}
+        />
+      );
+    });
+  }
 };
+
 const Home = ({
-  newsMediaData,
   homepageContent
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const classes = useStyles();
@@ -79,7 +87,20 @@ const Home = ({
   //   heroContentBase?.heroImage["en-US"].fields.file["en-US"].url;
   const buttonText = heroContentBase?.buttonText;
   const heroSubTitle = heroContentBase?.subTitle;
-  const sections = homepageContent?.fields.content["en-US"];
+  const allSections = homepageContent?.fields.content["en-US"] || [];
+  let sections: Content1[] = [];
+  let newsArticleList: ArticleFields[] = [];
+  if (Array.isArray(allSections)) {
+    sections = allSections.slice(0, 3) as Content1[];
+    const newsSection = (allSections.slice(3)[0] as Content2).fields
+      .newsArticles["en-US"];
+    if (Array.isArray(newsSection)) {
+      newsArticleList = newsSection.map((article) => article.fields);
+    }
+  } else {
+    console.error("allSections is not an array");
+  }
+
   const gradImages = homepageContent?.fields.media["en-US"].map(
     ({ fields: { file, title } }) => {
       return { imageTitle: title["en-US"], imageUrl: file["en-US"].url };
@@ -88,7 +109,7 @@ const Home = ({
   const sectionContent = generateSectionContent(
     sections,
     currentLocale,
-    newsMediaData
+    newsArticleList
   );
   //================== cms end ============================
   return (
@@ -123,7 +144,7 @@ const Home = ({
       <PageSection
         id="section-grads"
         bodyText={null}
-        sectionNum={homepageContent?.fields.content["en-US"].length ?? 0}
+        sectionNum={sections.length ?? 0}
         title={"Congratulations Recent Grads"}
         gradImages={gradImages}
       />
@@ -141,29 +162,7 @@ export default Home;
 // consider changing for instant fixes?
 export const getStaticProps = async () => {
   // TODO: Extract urls to contentful
-  const urls: string[] = [
-    //TODO : alianzacv link is broken find error
-    // "https://www.alianzacv.org/news/aeroqual-air-quality-sensor-installed-in-the-salton-sea/",
-    "https://nbcpalmsprings.com/2024/03/17/restoring-the-salton-sea-an-in-depth-look-at-lithium-wetlands-and-the-10-year-plan/",
-    "https://www.kuer.org/health-science-environment/2024-01-02/the-salton-sea-shows-why-utah-should-pay-attention-to-great-salt-lakes-stench",
-    "https://tos.org/oceanography/article/salton-sea-environmental-work-and-the-importance-of-community-science",
-    "https://www.hcn.org/issues/55.6/south-water-in-search-of-answers-at-the-salton-sea?utm_medium=email&utm_source=govdelivery",
-    "https://atmos.earth/salton-sea-california-drought-pollution/",
-    //TODO: 403 error; come back to fix: anti scrap enabled the hill article
-    "https://grist.org/health/how-californias-salton-sea-went-from-vacation-destination-to-toxic-nightmare/",
-    "https://ca.audubon.org/news/it-takes-village-dr-ryan-sinclair-and-community-science-salton-sea",
-    "https://www.cnbc.com/2021/11/06/californias-salton-sea-spewing-toxic-fumes-creating-ghost-towns-.html",
-    "https://www.theguardian.com/us-news/2021/jul/23/salton-sea-california-lake-dust-drought-climate",
-    "https://ca.audubon.org/news/valley-voice-salton-sea-communities-needed-relief-long-coronavirus"
-  ];
-  let newsMediaData;
   let homepageContent;
-  try {
-    newsMediaData = await scrape(urls);
-  } catch (error) {
-    console.error("Error while scraping URLs:", error);
-    throw new Error(`An unexpected error has ocurred Error:${error}`);
-  }
   try {
     homepageContent = await getCmsContent<HomePage>("homePage");
   } catch (error) {
@@ -171,7 +170,6 @@ export const getStaticProps = async () => {
   }
   return {
     props: {
-      newsMediaData,
       homepageContent
     }
   };

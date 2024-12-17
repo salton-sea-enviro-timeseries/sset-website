@@ -257,7 +257,7 @@ type Metadata = {
   }>;
 };
 
-type Fields<T> = {
+export type Fields<T> = {
   fields: T;
 };
 
@@ -269,13 +269,28 @@ export type NestedObjBodyText = {
   nodeType: BLOCKS.DOCUMENT;
   data: NodeData;
 };
-
-export type PageContent = [
+export type Content1 = [
   Fields<{
     body: LocaleOption<NestedObjBodyText>;
     title: LocaleOption<string>;
   }>
 ];
+export type ArticleFields = {
+  articleDescriptionLong: LocaleOption<string>;
+  articleProvider: LocaleOption<string>;
+  articleTitle: LocaleOption<string>;
+  articleUrl: LocaleOption<string>;
+  imageUrl: LocaleOption<string>;
+  customImage?: LocaleOption<MediaFile>;
+  order: LocaleOption<number>;
+};
+export type ArticleTypes = Fields<ArticleFields>[];
+
+export type Content2 = Fields<{
+  newsArticles: LocaleDefault<ArticleTypes>;
+}>;
+
+export type PageContent = Content1[] | Content2[];
 
 type NavLinkItems = { href: string; label: string };
 

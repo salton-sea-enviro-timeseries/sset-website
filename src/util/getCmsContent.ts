@@ -8,7 +8,8 @@ export async function getCmsContent<T>(contentID: string) {
   const cmsRes = await client.getEntries<T>({
     content_type: contentID,
     select: "fields",
-    locale: "*"
+    locale: "*",
+    include: 2 // includes nested linked entries up to 2 levels
   });
   return cmsRes.items[0];
 }
