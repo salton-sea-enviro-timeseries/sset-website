@@ -1,101 +1,64 @@
 import React, { useEffect } from "react";
 import {
   createTheme,
-  ThemeProvider as MuiThemeProvider
-} from "@mui/material/styles";
-import CssBaseline from "@mui/styles/CssBaseline";
+  ThemeProvider as MuiThemeProvider,
+  CssBaseline
+} from "@mui/material";
 import { colors } from "@mui/material";
 
 const globalTheme = createTheme({
   palette: {
     primary: {
-      // Use hue from colors or hex
-      // main: "#14202B"
-      main: colors.teal[500]
+      main: colors.teal[500] // Use Material-UI's teal color
     },
     secondary: {
-      // main: "#ca6d68"
-      main: "#f896a6"
+      main: "#f896a6" // Custom secondary color
     },
     background: {
-      // Background for <body>
-      // and <Section color="default">
-      default: "#fff",
-      // Background for elevated
-      // components (<Card>, etc)
-      paper: "#fff"
+      default: "#fff", // Background for body
+      paper: "#fff" // Background for elevated components
     }
   },
   typography: {
     fontSize: 14,
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'
-    // Uncomment to make button lowercase
+    // Uncomment to make button text lowercase
     // button: { textTransform: "none" },
-  }
-});
-
-const theme = createTheme(
-  {
-    overrides: {
-      MuiCssBaseline: {
-        "@global": {
-          "#__next": {
-            // Flex column that is height
-            // of viewport so that footer
-            // can push self to bottom by
-            // with auto margin-top
-            minHeight: "100vh",
-            display: "flex",
-            flexDirection: "column",
-            // Prevent child elements from
-            // shrinking when content
-            // is taller than the screen
-            // (quirk of flex parent)
-            "& > *": {
-              flexShrink: 0
-            }
+  },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        // Global styles applied to <body> and Next.js root element
+        "#__next": {
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          "& > *": {
+            flexShrink: 0 // Prevent child elements from shrinking
           }
         }
       }
-      // MuiButton: {
-      //   root: {
-      //     // borderRadius: 0
-      //     textTransform: "none"
-      //   },
-      //   contained: {
-      //     backgroundColor: globalTheme.palette.primary.main,
-      //     color: globalTheme.palette.primary.contrastText,
-      //     boxShadow: `3px 3px 0 0 ${globalTheme.palette.secondary.main}`,
-      //     "&:hover": {
-      //       backgroundColor: globalTheme.palette.primary.dark,
-      //       boxShadow: `5px 5px 0 0 ${globalTheme.palette.secondary.main}`
-      //     }
-      //   }
-      //   // outlined: {
-      //   //   border: `1px solid ${globalTheme.palette.accent.main}`,
-      //   //   color: globalTheme.palette.accent.main
-      //   // },
-      //   // containedPrimary: {
-      //   //   backgroundColor: globalTheme.palette.accent.main,
-      //   //   color: globalTheme.palette.accent.contrastText,
-      //   //   "&:hover": {
-      //   //     backgroundColor: globalTheme.palette.accent.dark
-      //   //   }
-      //   // }
-
-      //   // containedSecondary: {
-      //   //   background: secondaryGradient
-      //   // },
-      // }
+    },
+    // Example customization for other components (optional)
+    MuiButton: {
+      styleOverrides: {
+        contained: {
+          backgroundColor: colors.teal[500],
+          color: "#fff",
+          boxShadow: `3px 3px 0 0 #f896a6`,
+          "&:hover": {
+            backgroundColor: colors.teal[700],
+            boxShadow: `5px 5px 0 0 #f896a6`
+          }
+        }
+      }
     }
-  },
-  globalTheme
-);
+  }
+});
 
+// ThemeProvider component to wrap your app
 export const ThemeProvider = (props) => {
-  // Since Next.js server-renders we need to remove
-  // the server-side injected CSS on mount so the
-  // client can take over with managing styles.
+  // Remove server-side injected CSS (no longer needed in MUI v5 if Emotion is used)
   useEffect(() => {
     const jssStyles = document.querySelector("#jss-server-side");
     if (jssStyles) {
@@ -104,8 +67,7 @@ export const ThemeProvider = (props) => {
   }, []);
 
   return (
-    <MuiThemeProvider theme={theme}>
-      {/* Set global MUI styles */}
+    <MuiThemeProvider theme={globalTheme}>
       <CssBaseline />
       {props.children}
     </MuiThemeProvider>
