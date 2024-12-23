@@ -1,27 +1,47 @@
 import React from "react";
 import Document, { Html, Head, Main, NextScript } from "next/document";
-import { ServerStyleSheets } from "@material-ui/core/styles";
+import { ServerStyleSheets } from "@mui/styles";
+import createEmotionServer from "@emotion/server/create-instance";
+import {cache} from "@emotion/react";
 import { GA_TRACKING_ID } from "../util/gtag";
+
+// Function to create an emotion cahce
+const createEmotionCache = ()=>{
+  return createCache({key:"css", prepend: true})
+};
 
 export default class MyDocument extends Document {
   static async getInitialProps(ctx) {
     // Render app and page and get the context of the page with collected side effects.
-    const sheets = new ServerStyleSheets();
     const originalRenderPage = ctx.renderPage;
-
-    ctx.renderPage = () =>
+    const cache = createEmotionCache();
+    const {extractCriticalToChunks} = createEmotionServer(cache);
+    ctx.renderPage = ()=>
       originalRenderPage({
-        enhanceApp: (App) => (props) => sheets.collect(<App {...props} />)
+        enchanceApp: (App)=>
+          function EnhanceApp(props){
+            return <App emotionCache = {cache} {...props}/>;
+          },
       });
+      
+    
 
     const initialProps = await Document.getInitialProps(ctx);
-
+      // Extract Emotion styles
+      const emotionStyles = extractcriticalToChuncks(initialProps.html);
+      const emotionStyleTags = emotionStyles.styles.map((style) => (
+        <style
+          key={style.key}
+          data-emotion={`${style.key} ${style.ids.join(" ")}`}
+          dangerouslySetInnerHTML={{ __html: style.css }}
+        />
+      ));
     return {
       ...initialProps,
       // Styles fragment is rendered after the app and page rendering finish.
       styles: [
         ...React.Children.toArray(initialProps.styles),
-        sheets.getStyleElement()
+        ...emotionStyleTags,
       ]
     };
   }

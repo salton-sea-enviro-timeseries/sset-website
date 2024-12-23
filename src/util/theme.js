@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import {
   createTheme,
   ThemeProvider as MuiThemeProvider
-} from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { colors } from "@material-ui/core";
+} from "@mui/material/styles";
+import CssBaseline from "@mui/styles/CssBaseline";
+import { colors } from "@mui/material";
 
 const globalTheme = createTheme({
   palette: {
