@@ -6,14 +6,14 @@ type BioProps = {
   lastName: string;
   title: string;
   bio: string;
-  img: string;
+  img?: string;
 };
 const MemberBio: React.FC<BioProps> = ({
   firstName,
   lastName,
   title,
   bio,
-  img
+  img = ""
 }) => {
   return (
     <BioWrapper>

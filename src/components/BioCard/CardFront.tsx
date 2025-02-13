@@ -1,22 +1,16 @@
-import { CardContent, Typography, CardActionArea } from "@material-ui/core";
-import { Card } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { useAppContext } from "components/AppContext";
+import { CardContent, Typography, CardActionArea, Card } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 interface Props {
   handleCardClick: React.MouseEventHandler<HTMLButtonElement>;
   selectedQuestion: string;
 }
 const CardFront = ({ handleCardClick, selectedQuestion }: Props) => {
-  // @ts-ignore
-  const { language } = useAppContext();
-  const classes = useStyles();
-
   return (
-    <Card className={classes.cardFront} elevation={4}>
+    <CardFrontRoot elevation={4}>
       <CardActionArea
         data-card-id={1}
-        style={{ height: "100%" }}
+        sx={{ height: "100%" }}
         onClick={handleCardClick}
       >
         <CardContent>
@@ -25,18 +19,16 @@ const CardFront = ({ handleCardClick, selectedQuestion }: Props) => {
           </Typography>
         </CardContent>
       </CardActionArea>
-    </Card>
+    </CardFrontRoot>
   );
 };
-const useStyles = makeStyles(() => ({
-  cardFront: {
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    width: "100%",
-    height: "100%",
-    backfaceVisibility: "hidden"
-  }
+const CardFrontRoot = styled(Card)(() => ({
+  position: "absolute",
+  top: 0,
+  bottom: 0,
+  width: "100%",
+  height: "100%",
+  backfaceVisibility: "hidden"
 }));
 
 export default CardFront;
