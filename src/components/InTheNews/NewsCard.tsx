@@ -1,11 +1,18 @@
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import Typography from "@material-ui/core/Typography";
-import { CardActionArea, makeStyles } from "@material-ui/core";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import { CardActionArea, CardActionAreaProps } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { ArticleFields } from "types";
 import { useAppContext } from "components/AppContext";
 // TODO: add articleProvider to the end of card and add custom links to end of card
+interface ExtendedCardActionAreaProps extends CardActionAreaProps {
+  component?: React.ElementType;
+  target?: string;
+  rel?: string;
+  href?: string;
+}
 export default function NewsCard({
   articleDescriptionLong,
   articleProvider,
@@ -15,15 +22,15 @@ export default function NewsCard({
   customImage,
   order
 }: ArticleFields) {
-  const classes = useStyles();
   // @ts-ignore
   const { language } = useAppContext();
   const currentLocale = language === "en" ? "en-US" : "es";
   return (
-    <Card className={classes.card} elevation={2}>
-      <CardActionArea
-        className={classes.cardActionArea}
+    <StyledCard elevation={2}>
+      <StyledCardActionArea
+        component="a"
         target="_blank"
+        rel="noopener noreferrer"
         href={articleUrl["en-US"] ?? ""}
       >
         <CardMedia
@@ -44,15 +51,16 @@ export default function NewsCard({
             {articleDescriptionLong[currentLocale]}
           </Typography>
         </CardContent>
-      </CardActionArea>
-    </Card>
+      </StyledCardActionArea>
+    </StyledCard>
   );
 }
-const useStyles = makeStyles(() => ({
-  card: {
-    height: "100%"
-  },
-  cardActionArea: {
-    height: "100%"
-  }
-}));
+const StyledCard = styled(Card)({
+  height: "100%"
+});
+const StyledCardActionArea = styled(CardActionArea, {
+  shouldForwardProp: (prop) =>
+    prop !== "target" && prop !== "rel" && prop !== "href"
+})<ExtendedCardActionAreaProps>({
+  height: "100%"
+});
