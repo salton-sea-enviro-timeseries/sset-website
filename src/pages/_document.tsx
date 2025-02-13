@@ -1,31 +1,35 @@
 import React from "react";
-import Document, { Html, Head, Main, NextScript } from "next/document";
+import Document, {
+  Html,
+  Head,
+  Main,
+  NextScript,
+  DocumentContext,
+  DocumentInitialProps
+} from "next/document";
 import createEmotionServer from "@emotion/server/create-instance";
-import { cache } from "@emotion/react";
+import createEmotionCache from "util/createEmotionCache";
 import { GA_TRACKING_ID } from "../util/gtag";
-
-// Function to create an emotion cahce
-const createEmotionCache = () => {
-  return createCache({ key: "css", prepend: true });
-};
+import { EmotionCache } from "@emotion/react";
 
 export default class MyDocument extends Document {
-  static async getInitialProps(ctx) {
+  static async getInitialProps(
+    ctx: DocumentContext
+  ): Promise<DocumentInitialProps> {
     // Render app and page and get the context of the page with collected side effects.
-    const originalRenderPage = ctx.renderPage;
     const cache = createEmotionCache();
     const { extractCriticalToChunks } = createEmotionServer(cache);
+    const originalRenderPage = ctx.renderPage;
+
     ctx.renderPage = () =>
       originalRenderPage({
-        enchanceApp: (App) =>
-          function EnhanceApp(props) {
-            return <App emotionCache={cache} {...props} />;
-          }
+        enhanceApp: (App: React.ComponentType<any>) => (props) =>
+          <App {...props} emotionCache={cache as EmotionCache} />
       });
 
     const initialProps = await Document.getInitialProps(ctx);
     // Extract Emotion styles
-    const emotionStyles = extractcriticalToChuncks(initialProps.html);
+    const emotionStyles = extractCriticalToChunks(initialProps.html);
     const emotionStyleTags = emotionStyles.styles.map((style) => (
       <style
         key={style.key}
@@ -62,13 +66,13 @@ export default class MyDocument extends Document {
               <script
                 dangerouslySetInnerHTML={{
                   __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', '${GA_TRACKING_ID}', {
-                page_path: window.location.pathname,
-              });
-          `
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '${GA_TRACKING_ID}', {
+        page_path: window.location.pathname,
+      });
+    `
                 }}
               />
             </>

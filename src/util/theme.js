@@ -12,7 +12,7 @@ const globalTheme = createTheme({
       main: colors.teal[500] // Use Material-UI's teal color
     },
     secondary: {
-      main: "#f896a6" // Custom secondary color
+      main: "#f896a6" // Custom secondary color soft red (pink)
     },
     background: {
       default: "#fff", // Background for body
@@ -38,21 +38,21 @@ const globalTheme = createTheme({
           }
         }
       }
-    },
-    // Example customization for other components (optional)
-    MuiButton: {
-      styleOverrides: {
-        contained: {
-          backgroundColor: colors.teal[500],
-          color: "#fff",
-          boxShadow: `3px 3px 0 0 #f896a6`,
-          "&:hover": {
-            backgroundColor: colors.teal[700],
-            boxShadow: `5px 5px 0 0 #f896a6`
-          }
-        }
-      }
     }
+    // Example customization for other components (optional)
+    // MuiButton: {
+    //   styleOverrides: {
+    //     contained: {
+    //       backgroundColor: colors.teal[500],
+    //       color: "#fff",
+    //       boxShadow: `3px 3px 0 0 #f896a6`,
+    //       "&:hover": {
+    //         backgroundColor: colors.teal[700],
+    //         boxShadow: `5px 5px 0 0 #f896a6`
+    //       }
+    //     }
+    //   }
+    // }
   }
 });
 
