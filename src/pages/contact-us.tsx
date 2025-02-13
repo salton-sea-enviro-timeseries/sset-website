@@ -1,14 +1,16 @@
-// import Head from "next/head";
-import Container from "@material-ui/core/Container";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import { Box, Card } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  Container,
+  List,
+  ListItemButton,
+  ListItemText
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 import Hero from "components/Hero";
 import Section from "components/Section";
 import Layout from "components/Layout";
@@ -16,7 +18,6 @@ import Translation from "components/Translation";
 import Meta from "components/Meta";
 
 const ContactUsPage = () => {
-  const classes = useStyles();
   return (
     <Layout>
       <Meta title="Contact Us | Salton Sea Environmental Timeseries" />
@@ -29,15 +30,14 @@ const ContactUsPage = () => {
         <Hero bgColor="secondary" size="medium" />
       </Translation>
       <Section>
-        <Container maxWidth="sm" className={classes.container}>
-          <Card className={classes.card}>
+        <Container maxWidth="sm" sx={{ top: "-6rem", position: "relative" }}>
+          <StyledCard>
             <Box width="100%" display="flex">
-              <div className={classes.details}>
-                <CardContent className={classes.content}>
+              <StyledDetails>
+                <StyledContent>
                   <List dense>
-                    <ListItem
+                    <ListItemButton
                       dense
-                      button
                       component="a"
                       href="mailto:aydee@alianzacv.org"
                     >
@@ -45,32 +45,26 @@ const ContactUsPage = () => {
                         primary="Juliana Taboada"
                         secondary="juliana@alianzacv.org"
                       />
-                    </ListItem>
-                    <ListItem
+                    </ListItemButton>
+                    <ListItemButton
                       dense
-                      button
                       component="a"
                       href="https://www.alianzacv.org/"
                       target="_blank"
                     >
                       <ListItemText primary="www.alianzacv.org" />
-                    </ListItem>
+                    </ListItemButton>
                   </List>
-                </CardContent>
-              </div>
-              <CardMedia
-                className={classes.cover}
-                image="/alianzacv-logo.jpg"
-                title="Alianza CV"
-              />
+                </StyledContent>
+              </StyledDetails>
+              <StyledCover image="/alianzacv-logo.jpg" title="Alianza CV" />
             </Box>
             <Box width="100%" display="flex">
-              <div className={classes.details}>
-                <CardContent className={classes.content}>
+              <StyledDetails>
+                <StyledContent>
                   <List>
-                    <ListItem
+                    <ListItemButton
                       dense
-                      button
                       component="a"
                       href="mailto:rsinclair@llu.edu"
                     >
@@ -78,17 +72,16 @@ const ContactUsPage = () => {
                         primary="Dr. Ryan Sinclair"
                         secondary="rsinclair@llu.edu"
                       />
-                    </ListItem>
+                    </ListItemButton>
                   </List>
-                </CardContent>
-              </div>
-              <CardMedia
-                className={classes.cover}
+                </StyledContent>
+              </StyledDetails>
+              <StyledCover
                 image="/loma-linda-university.png"
                 title="Loma Linda University"
               />
             </Box>
-          </Card>
+          </StyledCard>
           <Card>
             <CardContent>
               <Translation
@@ -120,36 +113,25 @@ const ContactUsPage = () => {
     </Layout>
   );
 };
-
-const useStyles = makeStyles((theme) => ({
-  header: {
-    boxShadow: `inset 0 -5px 0 ${theme.palette.primary.light}`
-  },
-  media: {
-    height: 150,
-    backgroundSize: "contain"
-  },
-  container: {
-    top: "-6rem"
-  },
-  card: {
-    display: "flex",
-    flexDirection: "column",
-    margin: "1rem 0"
-  },
-  details: {
-    display: "flex",
-    flexDirection: "column",
-    flex: "1 0 auto"
-  },
-  content: {
-    flex: "1 0 auto",
-    padding: "8px"
-  },
-  cover: {
-    width: "50%",
-    backgroundSize: "contain"
-  }
+const StyledCard = styled(Card)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  margin: theme.spacing(2, 0)
 }));
 
+const StyledDetails = styled("div")({
+  display: "flex",
+  flexDirection: "column",
+  flex: "1 0 auto"
+});
+
+const StyledContent = styled(CardContent)({
+  flex: "1 0 auto",
+  padding: "8px"
+});
+
+const StyledCover = styled(CardMedia)({
+  width: "50%",
+  backgroundSize: "contain"
+});
 export default ContactUsPage;
