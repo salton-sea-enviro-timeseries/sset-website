@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import useSWR from "swr";
+import { styled } from "@mui/material/styles";
 import AeroqualSensor from "aeroqual-sensor.json";
-import { Typography, makeStyles } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import { getCmsContent } from "util/getCmsContent";
 import { multiFetcher } from "utils";
 import WithLoading from "components/WithLoading";
@@ -30,7 +31,6 @@ import { Document } from "@contentful/rich-text-types";
 const AirQuality = ({
   airQualityPageContent
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const classes = useStyles();
   // @ts-ignore
   const { language } = useAppContext();
   const startDateRef = useRef<HTMLInputElement>(null);
@@ -129,11 +129,15 @@ const AirQuality = ({
           </>
         )
       )}
-      <WithLoading isLoading={isLoadingMap} variant="rect" height="500px">
+      <WithLoading
+        isLoading={isLoadingMap}
+        variant="rectangular"
+        height="500px"
+      >
         {sensorList && (
           <Map
             caption={mapCaptionV2 ? renderDocument(mapCaptionV2) : ""}
-            purpleAirClass={classes.purpleAirLink}
+            purpleAirLink={PurpleAirLink}
             LATITUDE={33.638421}
             LONGITUDE={-116.075339}
             ZOOM={10}
@@ -148,16 +152,10 @@ const AirQuality = ({
     </>
   );
 };
-const useStyles = makeStyles(() => ({
-  purpleAirLink: { color: "#3a7ca5", cursor: "pointer" },
-  captionContainer: {
-    whiteSpace: "normal",
-    wordWrap: "break-word",
-    overflowWrap: "anywhere",
-    marginBottom: "3rem"
-  }
-}));
-
+const PurpleAirLink = styled("span")({
+  color: "#3a7ca5",
+  cursor: "pointer"
+});
 export const getStaticProps = async () => {
   let airQualityPageContent;
   try {
@@ -177,4 +175,5 @@ export const getStaticProps = async () => {
 AirQuality.getLayout = function getLayout(page: React.ReactElement) {
   return <DashboardLayout>{page}</DashboardLayout>;
 };
+
 export default AirQuality;

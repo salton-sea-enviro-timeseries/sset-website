@@ -36,27 +36,29 @@ export function groupSensorData(data: DataType): Record<string, DeviceRawData> {
 }
 
 export function transformSensorData(sensorList: Device[]) {
-  return sensorList.map((device) => {
-    let status: string = "";
-    const name = mapDeviceNames(device.DeviceId);
-    const statusMapping: { [key: string]: string } = {
-      "Not Working": "🔴",
-      Offline: "⭕",
-      Working: "🟢",
-      "Working-Quant": "🟩",
-      "Not Working-Quant": "🟥"
-    };
-    status = statusMapping[device.WorkingStatus] || "";
-    return {
-      site: `${status} ${name}`,
-      value: device.WorkingStatus,
-      latitude: device.Latitude,
-      longitude: device.Longitude,
-      sensorId: `${device.DeviceId}: ${name}`,
-      location: name,
-      color: "#040273"
-    };
-  });
+  return sensorList
+    .filter((device) => device.DeviceId && device.DeviceId !== "Unknown")
+    .map((device) => {
+      let status: string = "";
+      const name = mapDeviceNames(device.DeviceId);
+      const statusMapping: { [key: string]: string } = {
+        "Not Working": "🔴",
+        Offline: "⭕",
+        Working: "🟢",
+        "Working-Quant": "🟩",
+        "Not Working-Quant": "🟥"
+      };
+      status = statusMapping[device.WorkingStatus] || "";
+      return {
+        site: `${status} ${name}`,
+        value: device.WorkingStatus,
+        latitude: device.Latitude,
+        longitude: device.Longitude,
+        sensorId: `${device.DeviceId}: ${name}`,
+        location: name,
+        color: "#040273"
+      };
+    });
 }
 
 export function transformPurpleAirSensorData(
