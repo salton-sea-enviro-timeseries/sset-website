@@ -1,14 +1,14 @@
 import React from "react";
 import {
-  Button,
   Dialog,
-  DialogActions,
-  DialogContent,
   DialogTitle,
-  Fade,
+  DialogContent,
+  DialogActions,
+  Button,
   Typography,
-  makeStyles
-} from "@material-ui/core";
+  Fade
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 interface TutorialModalProps {
   open: boolean;
@@ -21,8 +21,6 @@ const TutorialModal: React.FC<TutorialModalProps> = ({
   onClose,
   locale
 }) => {
-  const classes = useStyles();
-
   return (
     <Dialog
       open={open}
@@ -32,12 +30,9 @@ const TutorialModal: React.FC<TutorialModalProps> = ({
       TransitionComponent={Fade}
       transitionDuration={{ enter: 500, exit: 500 }}
     >
-      <DialogContent className={classes.dialogContent}>
-        <div className={classes.videoContainer}>
-          <iframe
-            className={classes.video}
-            width="100%"
-            height="100%"
+      <DialogContentStyled>
+        <VideoContainer>
+          <Video
             src={`https://www.youtube.com/embed/${
               locale === "en-US" ? "cpeo_u3RO3s" : "dTk0K0mipI4"
             }?showinfo=0`}
@@ -45,18 +40,16 @@ const TutorialModal: React.FC<TutorialModalProps> = ({
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
           />
-        </div>
-      </DialogContent>
-      <DialogTitle className={classes.title}>
-        SSET Dashboard Tutorial
-      </DialogTitle>
-      <DialogContent className={classes.descriptionContent}>
+        </VideoContainer>
+      </DialogContentStyled>
+      <TitleStyled>SSET Dashboard Tutorial</TitleStyled>
+      <DescriptionContentStyled>
         <Typography>
           {locale === "en-US"
             ? "A quick overview on how to use the dashboard for community members"
             : "Una descripción general sobre cómo usar el dashboard para miembros de la comunidad"}
         </Typography>
-      </DialogContent>
+      </DescriptionContentStyled>
       <DialogActions>
         <Button variant="contained" color="secondary" onClick={onClose}>
           Close
@@ -65,40 +58,32 @@ const TutorialModal: React.FC<TutorialModalProps> = ({
     </Dialog>
   );
 };
-
-export default TutorialModal;
-const useStyles = makeStyles((theme) => ({
-  dialogContent: {
-    padding: theme.spacing(2)
-  },
-  title: {
-    paddingBottom: 0
-  },
-  descriptionContent: {
-    overflow: "hidden"
-  },
-  videoContainer: {
-    width: "100%",
-    paddingTop: "56.25%",
-    position: "relative",
-    overflow: "hidden"
-  },
-  videoWrapper: {
-    borderRadius: theme.shape.borderRadius,
-    overflow: "hidden",
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%"
-  },
-  video: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-    borderRadius: theme.shape.borderRadius
-  }
+const DialogContentStyled = styled(DialogContent)(({ theme }) => ({
+  padding: theme.spacing(2)
 }));
+
+const TitleStyled = styled(DialogTitle)({
+  paddingBottom: 0
+});
+
+const DescriptionContentStyled = styled(DialogContent)({
+  overflow: "hidden"
+});
+
+const VideoContainer = styled("div")({
+  width: "100%",
+  paddingTop: "56.25%", // 16:9 aspect ratio
+  position: "relative",
+  overflow: "hidden"
+});
+
+const Video = styled("iframe")(({ theme }) => ({
+  position: "absolute",
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  objectFit: "cover",
+  borderRadius: theme.shape.borderRadius
+}));
+export default TutorialModal;
