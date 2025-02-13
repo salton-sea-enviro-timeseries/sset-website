@@ -6,14 +6,10 @@ import {
   TimelineDot,
   TimelineConnector,
   TimelineContent
-} from "@material-ui/lab";
+} from "@mui/lab";
+import { styled } from "@mui/material/styles";
 import TimelineItemContent from "./TimelineItemContent";
-import {
-  ButtonBase,
-  IconButton,
-  Typography,
-  makeStyles
-} from "@material-ui/core";
+import { ButtonBase, Typography } from "@mui/material";
 
 interface Content {
   title?: string;
@@ -25,7 +21,6 @@ interface Content {
     src: string;
   };
 }
-
 interface TimelineYearProps {
   year: string;
   contents: Content[];
@@ -37,7 +32,6 @@ const TimelineYear: React.FC<TimelineYearProps> = ({
   contents,
   timelineNav
 }) => {
-  const classes = useStyles();
   const [inView, setInView] = useState(false);
   const itemRef = useRef<HTMLDivElement>(null);
 
@@ -60,113 +54,74 @@ const TimelineYear: React.FC<TimelineYearProps> = ({
     };
   }, []);
   return (
-    <TimelineItem ref={itemRef}>
-      <TimelineOppositeContent>
+    <StyledTimelineItem ref={itemRef}>
+      <StyledTimelineOppositeContent>
         <Typography color="textSecondary">{year}</Typography>
-      </TimelineOppositeContent>
+      </StyledTimelineOppositeContent>
       <TimelineSeparator>
-        {timelineNav && (
+        {timelineNav ? (
           <>
-            {/* <IconButton aria-label="year" id={year}>
-              <TimelineDot variant={"outlined"} color={"inherit"} />
-            </IconButton> */}
-
-            {/* <TimelineDot variant={"outlined"} color={"inherit"} /> */}
-            <ButtonBase className={classes.buttonBase}>
-              <TimelineDot variant={"outlined"} color={"inherit"} />
-            </ButtonBase>
-            <TimelineConnector className={classes.secondaryTail} />
-          </>
-        )}
-        {!timelineNav && (
-          <>
-            <TimelineDot
-              variant={inView ? "default" : "outlined"}
-              color={inView ? "primary" : "inherit"}
-            />
-            <TimelineConnector
-              className={inView ? classes.inViewTail : classes.secondaryTail}
-            />
-          </>
-        )}
-
-        {/* {timelineNav ? (
-          <>
-            <TimelineDot variant={"outlined"} color={"inherit"} />
-            <TimelineConnector className={classes.secondaryTail} />
+            <StyledButtonBase>
+              <StyledTimelineDot variant="outlined" color="inherit" />
+              <StyledPulse />
+            </StyledButtonBase>
+            <StyledTimelineConnector className="secondary" />
           </>
         ) : (
           <>
-            <TimelineDot
-              variant={inView ? "default" : "outlined"}
+            <StyledTimelineDot
+              variant={inView ? "filled" : "outlined"}
               color={inView ? "primary" : "inherit"}
-            />
-            <TimelineConnector
-              className={inView ? classes.inViewTail : classes.secondaryTail}
-            />
+              inView={inView}
+            >
+              {inView && <StyledPulse />}
+            </StyledTimelineDot>
+            <StyledTimelineConnector inView={inView} />
           </>
-        )} */}
-
-        {/* <TimelineDot
-          variant={timelineNav || inView ? "default" : "outlined"}
-          color={inView ? "primary" : "inherit"}
-        />
-        <TimelineConnector
-          className={inView ? classes.inViewTail : classes.secondaryTail}
-        /> */}
-
-        {/* <TimelineDot
-          variant={inView ? "default" : "outlined"}
-          color={inView ? "primary" : "inherit"}
-        /> */}
-
-        {/* <TimelineConnector
-          className={inView ? classes.inViewTail : classes.secondaryTail}
-        /> */}
+        )}
       </TimelineSeparator>
       <TimelineContent>
         <TimelineItemContent contents={contents} />
       </TimelineContent>
-    </TimelineItem>
+    </StyledTimelineItem>
   );
 };
-// const useStyles = makeStyles((theme) => ({
-//   secondaryTail: {
-//     backgroundColor: theme.palette.primary.main
-//   }
-// }));
+const StyledTimelineItem = styled(TimelineItem)``;
 
-const useStyles = makeStyles((theme) => ({
-  secondaryTail: {
-    backgroundColor: "default"
-  },
-  inViewDot: {
-    borderColor: theme.palette.primary.main,
-    backgroundColor: theme.palette.primary.main
-  },
-  inViewTail: {
-    backgroundColor: theme.palette.primary.main
-  },
+const StyledTimelineOppositeContent = styled(TimelineOppositeContent)``;
 
-  buttonBase: {
-    width: 30,
-    height: 30,
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: "50%"
-  },
-  pulse: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    borderRadius: "50%",
-    backgroundColor: theme.palette.primary.main,
-    opacity: 0,
-    animation: "$pulse-animation 1.5s infinite"
-  },
+const StyledTimelineConnector = styled(TimelineConnector, {
+  shouldForwardProp: (prop) => prop !== "inView"
+})<{ inView?: boolean }>(({ theme, inView }) => ({
+  backgroundColor: inView ? theme.palette.primary.main : theme.palette.grey[300]
+}));
+
+const StyledTimelineDot = styled(TimelineDot, {
+  shouldForwardProp: (prop) => prop !== "inView"
+})<{ inView?: boolean }>(({ theme, inView }) => ({
+  borderColor: inView ? theme.palette.primary.main : undefined,
+  backgroundColor: inView ? theme.palette.primary.main : undefined
+}));
+
+const StyledButtonBase = styled(ButtonBase)({
+  width: 30,
+  height: 30,
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+  borderRadius: "50%"
+});
+
+const StyledPulse = styled("div")(({ theme }) => ({
+  position: "absolute",
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  borderRadius: "50%",
+  backgroundColor: theme.palette.primary.main,
+  opacity: 0,
+  animation: "pulse-animation 1.5s infinite",
   "@keyframes pulse-animation": {
     "0%": {
       transform: "scale(0.8)",

@@ -1,12 +1,12 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { styled } from "@mui/material/styles";
 import TimelineYear from "./TimelineYear";
-import Timeline from "@material-ui/lab/Timeline";
+import Timeline from "@mui/lab/Timeline";
 import {
   KeyboardArrowUpOutlined,
   KeyboardArrowDownOutlined
-} from "@material-ui/icons";
-import { IconButton } from "@material-ui/core";
+} from "@mui/icons-material";
+import { IconButton } from "@mui/material";
 const timelineData = [
   {
     year: "2016",
@@ -38,14 +38,12 @@ const timelineData = [
   }
 ];
 const NavigationTimeline: React.FC = () => {
-  const classes = useStyles();
-
   return (
-    <div className={classes.navContainer}>
+    <StyledNavContainer>
       <IconButton aria-label="previous year" color="primary" id="prev">
         <KeyboardArrowUpOutlined fontSize="large" />
       </IconButton>
-      <Timeline className={classes.timelineStyles}>
+      <TimelineStyles>
         {timelineData.map((item, index) => (
           <TimelineYear
             key={item.year}
@@ -54,27 +52,26 @@ const NavigationTimeline: React.FC = () => {
             timelineNav={true}
           />
         ))}
-      </Timeline>
+      </TimelineStyles>
       <IconButton aria-label="next year" color="primary" id="next">
         <KeyboardArrowDownOutlined fontSize="large" />
       </IconButton>
-    </div>
+    </StyledNavContainer>
   );
 };
-const useStyles = makeStyles({
-  navContainer: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    height: "100%",
-    border: "1px solid #ccc",
-    borderRadius: "8px",
-    backgroundColor: "#fff"
-  },
-  timelineStyles: {
-    boxSizing: "border-box",
-    margin: 0,
-    padding: 0
-  }
+const StyledNavContainer = styled("div")({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  height: "100%",
+  border: "1px solid #ccc",
+  borderRadius: "8px",
+  backgroundColor: "#fff"
 });
+const TimelineStyles = styled(Timeline)({
+  boxSizing: "border-box",
+  margin: 0,
+  padding: 0
+});
+
 export default NavigationTimeline;
