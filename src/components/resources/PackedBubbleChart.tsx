@@ -1,10 +1,8 @@
 import React, { useEffect, useRef } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
+import { styled } from "@mui/material/styles";
+import Container from "@mui/material/Container";
 
 const PackedBubbleChart: React.FC = () => {
-  const classes = useStyles();
-
   useEffect(() => {
     const loadHighcharts = async () => {
       const Highcharts = await import("highcharts");
@@ -49,9 +47,7 @@ const PackedBubbleChart: React.FC = () => {
             draggable: false,
             minSize: "30%",
             maxSize: "70%",
-            // useSimulation: false,
             layoutAlgorithm: {
-              // gravitationalConstant: 0.1,
               splitSeries: true,
               seriesInteraction: false,
               dragBetweenSeries: false,
@@ -265,48 +261,48 @@ const PackedBubbleChart: React.FC = () => {
 
   return (
     <Container>
-      <figure className={classes.highchartsFigure}>
+      <StyledHighChartsFigure>
         <div id="container" />
-      </figure>
+      </StyledHighChartsFigure>
     </Container>
   );
 };
-const useStyles = makeStyles((theme) => ({
-  highchartsFigure: {
-    "& a": {
-      textDecoration: "none",
-      color: "inherit",
-      "&:hover": {
-        textDecoration: "underline"
-      }
-    }
-  },
-  highchartsDataTable: {
-    fontFamily: "Verdana, sans-serif",
-    borderCollapse: "collapse",
-    border: "1px solid #ebebeb",
-    margin: "10px auto",
-    textAlign: "center",
-    width: "100%",
-    maxWidth: "500px",
-    "& caption": {
-      padding: "1em 0",
-      fontSize: "1.2em",
-      color: "#555"
-    },
-    "& th": {
-      fontWeight: 600,
-      padding: "0.5em"
-    },
-    "& td, & th, & caption": {
-      padding: "0.5em"
-    },
-    "& thead tr, & tr:nth-child(even)": {
-      background: "#f8f8f8"
-    },
-    "& tr:hover": {
-      background: "#f1f7ff"
+
+const StyledHighChartsFigure = styled("figure")({
+  "& a": {
+    textDecoration: "none",
+    color: "inherit",
+    "&:hover": {
+      textDecoration: "underline"
     }
   }
-}));
+});
+
+const StyledHighChartsTable = styled("table")({
+  fontFamily: "Verdana, sans-serif",
+  borderCollapse: "collapse",
+  border: "1px solid #ebebeb",
+  margin: "10px auto",
+  textAlign: "center",
+  width: "100%",
+  maxWidth: "500px",
+  "& caption": {
+    padding: "1em 0",
+    fontSize: "1.2em",
+    color: "#555"
+  },
+  "& th": {
+    fontWeight: 600,
+    padding: "0.5em"
+  },
+  "& td, & th, & caption": {
+    padding: "0.5em"
+  },
+  "& thead tr, & tr:nth-child(even)": {
+    background: "#f8f8f8"
+  },
+  "& tr:hover": {
+    background: "#f1f7ff"
+  }
+});
 export default PackedBubbleChart;
