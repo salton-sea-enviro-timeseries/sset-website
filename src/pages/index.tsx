@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { InferGetStaticPropsType } from "next";
-import { Button, Container, makeStyles } from "@material-ui/core";
+import { Button, Container } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import Link from "next/link";
 import { getCmsContent } from "util/getCmsContent";
 import {
@@ -68,7 +69,6 @@ const generateSectionContent = (
 const Home = ({
   homepageContent
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const classes = useStyles();
   // @ts-ignore
   const { language } = useAppContext();
   const currentLocale = language === "en" ? "en-US" : "es";
@@ -127,14 +127,14 @@ const Home = ({
                 {buttonText && buttonText[currentLocale]}
               </Button>
             </Link>
-            <Button
-              className={classes.tutorialButton}
+            <StyledTutorialButton
               variant="text"
               size="large"
               onClick={handleOpen}
             >
               {currentLocale === "en-US" ? "Watch Tutorial" : "Ver El Tutorial"}
-            </Button>
+            </StyledTutorialButton>
+            ;
           </>
         }
       />
@@ -157,6 +157,28 @@ const Home = ({
   );
 };
 
+const StyledTutorialButton = styled(Button)(({ theme }) => ({
+  marginTop: 4,
+  color: "white",
+  borderColor: "whitesmoke",
+  position: "absolute",
+  bottom: 15,
+  "&::after": {
+    content: '""',
+    position: "absolute",
+    width: "100%",
+    height: 3,
+    backgroundColor: "red",
+    bottom: 0,
+    left: 0,
+    transformOrigin: "center",
+    transform: "scaleX(.15)",
+    transition: "transform .4s ease-in-out"
+  },
+  "&:hover::after": {
+    transform: "scaleX(1)"
+  }
+}));
 export default Home;
 //TODO need to initiate rebuild for contenful changes
 // consider changing for instant fixes?
@@ -174,27 +196,3 @@ export const getStaticProps = async () => {
     }
   };
 };
-const useStyles = makeStyles((theme) => ({
-  tutorialButton: {
-    marginTop: 4,
-    color: "white",
-    borderColor: "whitesmoke",
-    position: "absolute",
-    bottom: 15,
-    "&::after": {
-      content: `""`,
-      position: "absolute",
-      width: "100%",
-      height: 3,
-      backgroundColor: "red",
-      bottom: 0,
-      left: 0,
-      transformOrigin: "center",
-      transform: "scaleX(.15)",
-      transition: "transform .4s ease-in-out"
-    },
-    "&:hover::after": {
-      transform: "scaleX(1)"
-    }
-  }
-}));
