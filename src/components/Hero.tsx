@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Container from "@material-ui/core/Container";
-import Box from "@material-ui/core/Box";
-import { makeStyles, Typography } from "@material-ui/core";
+import { Container, Box, Typography, styled } from "@mui/material";
 interface HeroProps {
   title?: string;
   subtitle?: string;
@@ -33,7 +31,6 @@ const Hero: React.FC<HeroProps> = ({
   sectionHeaderProps = {}
 }) => {
   //TODO fix props for custom Hero
-  const classes = useStyles();
   const [isMounted, setIsMounted] = useState(false);
   const [isMobileDevice, setIsMobileDevice] = useState(false);
   useEffect(() => {
@@ -48,10 +45,9 @@ const Hero: React.FC<HeroProps> = ({
     }
   }, []);
   return (
-    <Box position="relative" height="115vh">
+    <StyledHeroContainer>
       {!bgImage && isMounted ? (
-        <video
-          className={classes.video}
+        <StyledVideo
           playsInline
           autoPlay={!isMobileDevice}
           loop={!isMobileDevice}
@@ -61,10 +57,10 @@ const Hero: React.FC<HeroProps> = ({
           poster="/hero-poster.jpg"
         >
           <source src="/hero.mp4" type="video/mp4" />
-        </video>
+        </StyledVideo>
       ) : bgImage ? (
         <Box
-          style={{
+          sx={{
             backgroundImage: `url(${bgImage})`,
             opacity: bgImageOpacity,
             backgroundSize: "cover",
@@ -74,26 +70,21 @@ const Hero: React.FC<HeroProps> = ({
         />
       ) : null}
 
-      <div className={classes.overlay}>
+      <StyledOverlay>
         {/* TODO: make logo its own component */}
-        <Box className={classes.thrivingLogoTextAndDescWrapper}>
-          <Box className={classes.thrivingLogoContainer}>
-            {/* eslint-disable  @next/next/no-img-element */}
-            <img
+        <Box>
+          <ThrivingLogoContainer>
+            <ThrivingLogoStyles
               src="/thriving-health-banner.png"
               alt="Thriving Health Logo"
-              className={classes.thrivingLogoStyles}
             />
-            <Typography
-              component="div"
-              className={classes.thrivingLogoDescriptionText}
-            >
+            <ThrivingLogoDescription>
               Salton Sea communities thrive when we address poor health
               outcomes. We are conducting community science to produce publicly
               available data and inform solutions to the challenges of the
               receding Salton Sea and improve health outcomes for residents.
-            </Typography>
-          </Box>
+            </ThrivingLogoDescription>
+          </ThrivingLogoContainer>
         </Box>
 
         {(title || subtitle) && (
@@ -102,14 +93,14 @@ const Hero: React.FC<HeroProps> = ({
               <Typography
                 component="h1"
                 variant="h4"
-                className={classes.subtitle}
+                sx={{ fontWeight: 700, color: "white" }}
               >
                 {subtitle}
               </Typography>
               <Typography
                 component="h2"
                 variant="h3"
-                className={classes.header}
+                sx={{ fontWeight: 400, color: "white" }}
               >
                 {title}
               </Typography>
@@ -127,89 +118,83 @@ const Hero: React.FC<HeroProps> = ({
             {cta}
           </Box>
         )}
-      </div>
-    </Box>
+      </StyledOverlay>
+    </StyledHeroContainer>
   );
 };
+const StyledHeroContainer = styled(Box)(({ theme }) => ({
+  position: "relative",
+  height: "115vh"
+}));
 
-const useStyles = makeStyles(() => ({
-  video: {
-    objectFit: "cover",
-    width: "100%",
-    height: "100%"
-  },
-  header: {
-    fontWeight: 400,
-    color: "white"
-  },
-  subtitle: {
-    fontWeight: 700,
-    color: "white"
-  },
-  overlay: {
+const StyledVideo = styled("video")(() => ({
+  objectFit: "cover",
+  width: "100%",
+  height: "100%"
+}));
+
+const StyledOverlay = styled(Box)(({ theme }) => ({
+  position: "absolute",
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  backgroundColor: "rgba(44, 62, 80, 0.6)",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center"
+}));
+
+const ThrivingLogoContainer = styled(Box)(({ theme }) => ({
+  position: "relative",
+  width: "100%",
+  maxWidth: "400px",
+  height: "250px",
+  margin: "0 auto",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center"
+}));
+
+const ThrivingLogoStyles = styled("img")(() => ({
+  position: "absolute",
+  width: "100%",
+  height: "250px",
+  objectFit: "contain",
+  zIndex: 1
+}));
+
+const ThrivingLogoDescription = styled(Typography)(({ theme }) => ({
+  position: "relative",
+  zIndex: 2,
+  color: "transparent",
+  textAlign: "left",
+  padding: "1rem",
+  width: "85%",
+  height: "85%",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  whiteSpace: "normal",
+  wordWrap: "break-word",
+  transition: "transform .4s ease-in-out",
+  "&::before": {
+    content: '""',
     position: "absolute",
     top: 0,
     left: 0,
     width: "100%",
     height: "100%",
-    backgroundColor: "rgba(44, 62, 80, 0.6)",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center"
+    backgroundColor: "rgba(0, 0, 0, 0)",
+    transition: "background-color .4s ease-in-out",
+    zIndex: -1
   },
-  thrivingLogoContainer: {
-    position: "relative",
-    width: "100%",
-    maxWidth: "400px",
-    height: "250px",
-    margin: "0 auto",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center"
+  "&:hover::before": {
+    backgroundColor: "rgba(0, 0, 0, 0.8)"
   },
-  thrivingLogoTextAndDescWrapper: {
-    marginTop: "2rem",
-    marginBottom: "2rem "
-  },
-  thrivingLogoStyles: {
-    position: "absolute",
-    width: "100%",
-    height: "250px",
-    objectFit: "contain",
-    zIndex: 1
-  },
-  thrivingLogoDescriptionText: {
-    position: "relative",
-    zIndex: 2,
-    color: "transparent",
-    textAlign: "left",
-    padding: "1rem",
-    width: "85%",
-    height: "85%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    whiteSpace: "normal",
-    wordWrap: "break-word",
-    transition: "transform .4s ease-in-out",
-    "&::before": {
-      content: '""',
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: "100%",
-      height: "100%",
-      backgroundColor: "rgba(0, 0, 0, 0)",
-      transition: "background-color .4s ease-in-out",
-      zIndex: -1
-    },
-    "&:hover::before": {
-      backgroundColor: "rgba(0, 0, 0, 0.8)"
-    },
-    "&:hover": {
-      color: "white"
-    }
+  "&:hover": {
+    color: "white"
   }
 }));
 

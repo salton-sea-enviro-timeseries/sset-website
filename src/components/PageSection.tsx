@@ -1,14 +1,18 @@
-import Container from "@material-ui/core/Container";
-import Box from "@material-ui/core/Box";
-import { makeStyles } from "@material-ui/core/styles";
-import { Avatar, Divider, colors } from "@material-ui/core";
+import {
+  Avatar,
+  Box,
+  Container,
+  Divider,
+  Typography,
+  colors,
+  styled
+} from "@mui/material";
 import FeaturedNewsFeed from "components/InTheNews/FeaturedNewsFeed";
 import Section from "components/Section";
 import SectionHeader from "components/SectionHeader";
-import { Typography } from "@material-ui/core";
 import { ArticleFields } from "types";
 import Image from "next/image";
-import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 // TODO: add links to definitions
 // or add a glossary section ???
 interface GradImages {
@@ -23,17 +27,7 @@ type Props = {
   gradImages?: GradImages[];
   id: string;
 };
-interface GradSectionClasses {
-  avatarStyle: string | undefined;
-  gradContainer: string;
-  imageWrapper: string;
-}
-
 const generateContent = (
-  classes: {
-    timeLineImage: string;
-    graphDivider: string;
-  },
   id: string,
   newsArticleList?: ArticleFields[],
   bodyText?: React.ReactNode | null
@@ -59,48 +53,41 @@ const generateContent = (
     <>
       <Typography component="div">{bodyText}</Typography>
       <Box display="flex" justifyContent={"space-evenly"}>
-        <Divider className={classes.graphDivider} />
+        <StyledGraphDivider />
         <FiberManualRecordIcon color="primary" fontSize="small" />
-        <Divider className={classes.graphDivider} />
+        <StyledGraphDivider />
       </Box>
-      <Box
-        display={"flex"}
-        alignContent={"center"}
-        className={classes.timeLineImage}
-      >
+      <StyledTimeLineImage>
         <Image
           src="/salton-sea-timeline.png"
           alt="salton sea timeline"
           layout="fill"
           objectFit="contain"
         />
-      </Box>
+      </StyledTimeLineImage>
     </>
   ) : (
     <Typography component="div">{bodyText}</Typography>
   );
 };
-const generateGradSection = (
-  classes: GradSectionClasses,
-  gradImages?: GradImages[]
-) => {
+const generateGradSection = (gradImages?: GradImages[]) => {
   return (
     gradImages && (
-      <Box className={classes.gradContainer}>
+      <StyledGradContainer>
         {gradImages.map(({ imageTitle, imageUrl }, index) => (
-          <div key={index} className={classes.imageWrapper}>
-            <Avatar className={classes.avatarStyle}>
+          <StyledImageWrapper key={index}>
+            <StyledAvatar>
               <Image
                 src={`https:${imageUrl}`}
                 alt={"grad image"}
                 layout="fill"
                 objectFit="cover"
               />
-            </Avatar>
+            </StyledAvatar>
             <Typography variant="h6">{imageTitle}</Typography>
-          </div>
+          </StyledImageWrapper>
         ))}
-      </Box>
+      </StyledGradContainer>
     )
   );
 };
@@ -112,11 +99,10 @@ const PageSection: React.FC<Props> = ({
   sectionNum,
   gradImages
 }: Props) => {
-  const classes = useStyles();
   return (
-    <Section
-      className={classes.section}
+    <StyledSection
       bgImage={sectionNum % 2 === 0 ? "/curves.png" : null}
+      className={sectionNum % 2 === 0 ? "even" : "odd"}
     >
       <Container>
         <Box>
@@ -126,71 +112,67 @@ const PageSection: React.FC<Props> = ({
             sectionFootNoteLink={!!newsArticleList}
             titleProps={{
               align: "center",
-              className: classes.header,
+              component: StyledHeader,
               display: "inline"
             }}
             display="flex"
             justifyContent="center"
             size={"h4"}
           />
-          {generateContent(classes, id, newsArticleList, bodyText)}
-          {generateGradSection(classes, gradImages)}
+          {generateContent(id, newsArticleList, bodyText)}
+          {generateGradSection(gradImages)}
         </Box>
       </Container>
-    </Section>
+    </StyledSection>
   );
 };
-const useStyles = makeStyles((theme) => ({
-  header: {
-    boxShadow: `inset 0 -5px 0 ${theme.palette.secondary.light}`
+
+const StyledSection = styled(Section)(({ theme }) => ({
+  "&.odd": { backgroundColor: colors.teal[50] },
+  "&.even": { backgroundColor: theme.palette.background.default }
+}));
+
+const StyledHeader = styled("div")(({ theme }) => ({
+  boxShadow: `inset 0 -5px 0 ${theme.palette.secondary.light}`
+}));
+
+const StyledGradContainer = styled(Box)({
+  display: "flex",
+  justifyContent: "space-evenly",
+  flexWrap: "wrap"
+});
+
+const StyledImageWrapper = styled("div")({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center"
+});
+
+const StyledTimeLineImage = styled(Box)(({ theme }) => ({
+  width: "100%",
+  marginTop: "2rem",
+  position: "relative",
+  animation: "fade linear both",
+  animationTimeline: "view()",
+  animationRange: "entry 50% cover 50%",
+  [theme.breakpoints.down("sm")]: {
+    height: 300
   },
-  section: {
-    "&:nth-child(odd)": { backgroundColor: colors.teal[50] }
-  },
-  gradContainer: {
-    display: "flex",
-    justifyContent: "space-evenly",
-    flexWrap: "wrap"
-  },
-  imageWrapper: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center"
-  },
-  "@global": {
-    "@keyframes fade": {
-      from: {
-        opacity: 0
-      },
-      to: {
-        opacity: 1
-      }
-    }
-  },
-  timeLineImage: {
-    [theme.breakpoints.down("sm")]: {
-      height: 300
-    },
-    [theme.breakpoints.up("sm")]: {
-      height: 600
-    },
-    width: "100%",
-    marginTop: "2rem",
-    position: "relative",
-    animation: "fade linear both",
-    animationTimeline: "view()",
-    animationRange: "entry 50% cover 50%"
-  },
-  graphDivider: {
-    margin: "auto",
-    width: "50%",
-    height: 2,
-    borderRadius: 50,
-    background: "#BCBCBC"
-  },
-  avatarStyle: {
-    width: 250,
-    height: 250
+  [theme.breakpoints.up("sm")]: {
+    height: 600
   }
 }));
+
+const StyledGraphDivider = styled(Divider)({
+  margin: "auto",
+  width: "50%",
+  height: 2,
+  borderRadius: 50,
+  background: "#BCBCBC"
+});
+
+const StyledAvatar = styled(Avatar)({
+  width: 250,
+  height: 250
+});
 export default PageSection;

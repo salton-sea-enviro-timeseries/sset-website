@@ -1,11 +1,5 @@
 import React, { useRef, useState } from "react";
-import {
-  Box,
-  Button,
-  TextField,
-  Typography,
-  makeStyles
-} from "@material-ui/core";
+import { Box, Button, TextField, Typography, styled } from "@mui/material";
 
 const GROUPID = "27983909003";
 const SubscriptionForm = () => {
@@ -15,8 +9,6 @@ const SubscriptionForm = () => {
   const firstNameRef = useRef<HTMLInputElement>(null);
   const lastNameRef = useRef<HTMLInputElement>(null);
   const phoneRef = useRef<HTMLInputElement>(null);
-  const classes = useStyles({ isSubscribed });
-
   const handleFormSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     if (emailRef.current && phoneRef.current) {
@@ -54,13 +46,7 @@ const SubscriptionForm = () => {
   };
 
   return (
-    <Box
-      marginBottom="2rem"
-      marginTop="2rem"
-      component="form"
-      className={classes.formContainer}
-      onSubmit={handleFormSubmit}
-    >
+    <StyledFromContainer as="form" onSubmit={handleFormSubmit}>
       <Typography variant="h5" gutterBottom>
         Subscribe To Our Newsletter!
       </Typography>
@@ -68,7 +54,7 @@ const SubscriptionForm = () => {
         SIGN UP TO RECEIVE EMAIL AND ALERTS ON UP COMING COMMUNITY UPDATES,
         EVENTS, AND WAYS YOU CAN HELP CONTRIBUTE.
       </Typography>
-      <Box className={classes.inputNameEmailWrapper}>
+      <StyledInputWrapper>
         <TextField
           error={formError}
           id="first-name"
@@ -100,8 +86,10 @@ const SubscriptionForm = () => {
           error={formError}
           id="phone-number"
           label="Phone Num:"
-          inputProps={{
-            pattern: "\\+?[0-9]*\\([0-9]{3}\\) ?[0-9]{3}-[0-9]{4}"
+          slotProps={{
+            htmlInput: {
+              pattern: "\\+?[0-9]*\\([0-9]{3}\\) ?[0-9]{3}-[0-9]{4}"
+            }
           }}
           inputRef={phoneRef}
           autoComplete="current-email"
@@ -111,37 +99,39 @@ const SubscriptionForm = () => {
               : "*Phone Num Required ex: +1(123) 123-1234"
           }
         />
-      </Box>
-      <Button
+      </StyledInputWrapper>
+      <StyledSubscribeButton
         variant="contained"
-        className={classes.subscribeButton}
         size="medium"
+        isSubscribed={isSubscribed}
         disabled={isSubscribed}
         type="submit"
       >
         {isSubscribed ? "Subscribed!" : "Subscribe"}
-      </Button>
-    </Box>
+      </StyledSubscribeButton>
+    </StyledFromContainer>
   );
 };
-
-export default SubscriptionForm;
-
-const useStyles = makeStyles(() => ({
-  formContainer: {
-    display: "flex",
-    alignItems: "center",
-    flexDirection: "column"
-  },
-
-  inputNameEmailWrapper: {
-    display: "flex",
-    gap: "2rem",
-    flexWrap: "wrap",
-    marginBottom: "2rem"
-  },
-  subscribeButton: ({ isSubscribed }: { isSubscribed: boolean }) => ({
-    backgroundColor: isSubscribed ? "#b2e5ed" : "#00abc5",
-    color: "white"
-  })
+const StyledFromContainer = styled("form")({
+  display: "flex",
+  alignItems: "center",
+  flexDirection: "column",
+  marginBottom: "2rem",
+  marginTop: "2rem"
+});
+const StyledInputWrapper = styled(Box)({
+  display: "flex",
+  gap: "2rem",
+  flexWrap: "wrap",
+  marginBottom: "2rem"
+});
+const StyledSubscribeButton = styled(Button, {
+  shouldForwardProp: (prop) => prop !== "isSubscribed"
+})<{ isSubscribed: boolean }>(({ isSubscribed, theme }) => ({
+  backgroundColor: isSubscribed ? "#b2e5ed" : "#00abc5",
+  color: "white",
+  "&:hover": {
+    backgroundColor: "#b2e5ed"
+  }
 }));
+export default SubscriptionForm;

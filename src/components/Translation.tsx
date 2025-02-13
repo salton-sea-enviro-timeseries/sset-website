@@ -1,8 +1,7 @@
 import React from "react";
-
 import { getContent } from "util/getContent";
 import { useAppContext } from "components/AppContext";
-import { Typography, TypographyProps } from "@material-ui/core";
+import { Typography, TypographyProps } from "@mui/material";
 // Note: Replaced Translation component with contentful Locale
 interface TranslationProps extends TypographyProps {
   component?: React.ElementType;

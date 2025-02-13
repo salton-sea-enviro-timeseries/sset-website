@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core";
+import { styled } from "@mui/material/styles";
 
 interface ContinuousColorLegendProps {
   startColor: string;
@@ -11,7 +11,6 @@ interface ContinuousColorLegendProps {
   height?: number;
   width?: number;
 }
-
 function ContinuousColorLegend({
   startColor,
   midColor,
@@ -22,44 +21,39 @@ function ContinuousColorLegend({
   height,
   width
 }: ContinuousColorLegendProps) {
-  const classes = useStyles();
   const colors = [startColor];
   if (midColor) {
     colors.push(midColor);
   }
   colors.push(endColor);
   return (
-    <div className={classes.root}>
-      <div
-        className={classes.gradient}
-        style={{
+    <ColorLegendRoot>
+      <Gradient
+        sx={{
           background: `linear-gradient(to right, ${colors.join(",")})`,
           width,
           height
         }}
       />
-      <div className={classes.titles}>
+      <Titles>
         <span>{startTitle}</span>
         {midTitle && <span>{midTitle}</span>}
         <span>{endTitle}</span>
-      </div>
-    </div>
+      </Titles>
+    </ColorLegendRoot>
   );
 }
-
-const useStyles = makeStyles(() => ({
-  root: {
-    fontSize: 12
-  },
-  gradient: {
-    height: 4,
-    borderRadius: 2,
-    marginBottom: 5
-  },
-  titles: {
-    display: "flex",
-    justifyContent: "space-between"
-  }
+const ColorLegendRoot = styled("div")(() => ({
+  fontSize: 12
+}));
+const Gradient = styled("div")(() => ({
+  height: 4,
+  borderRadius: 2,
+  marginBottom: 5
+}));
+const Titles = styled("div")(() => ({
+  display: "flex",
+  justifyContent: "space-between"
 }));
 
 export default ContinuousColorLegend;
