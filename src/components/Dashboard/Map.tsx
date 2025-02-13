@@ -1,13 +1,12 @@
-import { Box, Typography } from "@material-ui/core";
+import { Box, Typography } from "@mui/material";
 import React, { FC, ReactNode } from "react";
 import ReactMapGL, { NavigationControl, ViewportProps } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 interface MapProps {
   caption?: string | ReactNode;
-
   link?: string;
-  purpleAirClass?: string;
+  purpleAirLink?: React.ElementType;
   LATITUDE: number;
   LONGITUDE: number;
   ZOOM: number;

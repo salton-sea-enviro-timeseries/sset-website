@@ -15,7 +15,7 @@ import {
 } from "chart.js";
 import "chartjs-adapter-date-fns";
 import { Line } from "react-chartjs-2";
-import { Box, makeStyles } from "@material-ui/core";
+import { Box } from "@mui/material";
 
 ChartJS.register(
   CategoryScale,

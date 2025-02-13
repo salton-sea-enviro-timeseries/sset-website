@@ -1,4 +1,4 @@
-import { Tooltip, makeStyles } from "@material-ui/core";
+import { Box, Tooltip, styled } from "@mui/material";
 
 interface LegendItem {
   color: string;
@@ -11,7 +11,6 @@ interface LegendProps {
 }
 
 const Legend: React.FC<LegendProps> = ({ items = [] }) => {
-  const classes = useStyles();
   // Default items, can be overridden by props
   //Remove purple air legend for now
   const defaultItems: LegendItem[] = [
@@ -24,71 +23,61 @@ const Legend: React.FC<LegendProps> = ({ items = [] }) => {
   ];
   const legendItems = items.length ? items : defaultItems;
   return (
-    <div className={classes.legend}>
+    <LegendContainer>
       {legendItems.map((item, index) => (
-        <div key={index} className={classes.legendItem}>
-          <span
-            style={{ background: item.color }}
-            className={classes.legendColor}
-          />
+        <LegendItem key={index}>
+          <LegendColor style={{ background: item.color }} />
           {item.link ? (
-            <Tooltip
-              title="View Purple air sensor data"
-              arrow
-              classes={{ tooltip: classes.tooltip }}
-            >
-              <a
-                href={item.link}
-                target="_blank"
-                rel="noreferrer"
-                className={classes.link}
-              >
+            <StyledTooltip title="View Purple air sensor data" arrow>
+              <StyledLink href={item.link} target="_blank" rel="noreferrer">
                 {item.label}
-              </a>
-            </Tooltip>
+              </StyledLink>
+            </StyledTooltip>
           ) : (
             <span>{item.label}</span>
           )}
-        </div>
+        </LegendItem>
       ))}
-    </div>
+    </LegendContainer>
   );
 };
 
-export default Legend;
-const useStyles = makeStyles(() => ({
-  legend: {
-    position: "absolute",
-    bottom: "10px",
-    left: "10px",
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
-    padding: "10px",
-    borderRadius: "5px",
-    zIndex: 1
-  },
+const LegendContainer = styled(Box)(({ theme }) => ({
+  position: "absolute",
+  bottom: "10px",
+  left: "10px",
+  backgroundColor: "rgba(255, 255, 255, 0.8)",
+  padding: "10px",
+  borderRadius: "5px",
+  zIndex: 1
+}));
 
-  legendItem: {
-    display: "flex",
-    alignItems: "center",
-    marginBottom: "5px"
-  },
+const LegendItem = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  marginBottom: "5px"
+}));
 
-  legendColor: {
-    width: "20px",
-    height: "20px",
-    marginRight: "5px"
-  },
-  tooltip: {
-    fontSize: 12,
-    whiteSpace: "nowrap",
-    display: "flex",
-    justifyContent: "center"
-  },
-  link: {
-    textDecoration: "none",
-    color: "inherit",
-    "&:hover": {
-      color: "rgb(170, 68, 170)"
-    }
+const LegendColor = styled("span")(({ theme }) => ({
+  width: "20px",
+  height: "20px",
+  marginRight: "5px",
+  backgroundColor: "transparent" // Placeholder for dynamic color
+}));
+
+const StyledTooltip = styled(Tooltip)(({ theme }) => ({
+  fontSize: 12,
+  whiteSpace: "nowrap",
+  display: "flex",
+  justifyContent: "center"
+}));
+
+const StyledLink = styled("a")(({ theme }) => ({
+  textDecoration: "none",
+  color: "inherit",
+  "&:hover": {
+    color: "rgb(170, 68, 170)"
   }
 }));
+
+export default Legend;

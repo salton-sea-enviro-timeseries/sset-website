@@ -1,13 +1,12 @@
-import { Box, Link, makeStyles, Typography } from "@material-ui/core";
+import { Box, Link, Typography } from "@mui/material";
 import { AirQualityIndex, AirQualityMapping } from "lib/airnow";
 import HoverTooltip from "./HoverToolTip";
 import React from "react";
 const AQLegend = () => {
-  const classes = useStyles();
   return (
     <Box pb={2}>
       <Typography
-        className={classes.header}
+        sx={{ fontWeight: "bold" }}
         variant="caption"
         color="textSecondary"
       >
@@ -97,11 +96,5 @@ const AQLegend = () => {
     </Box>
   );
 };
-
-const useStyles = makeStyles(() => ({
-  header: {
-    fontWeight: "bold"
-  }
-}));
 
 export default React.memo(AQLegend);
