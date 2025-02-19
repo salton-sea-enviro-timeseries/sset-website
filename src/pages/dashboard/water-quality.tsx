@@ -5,13 +5,12 @@ import {
   TextField,
   Typography,
   Tooltip,
-  Button,
-  Grid
+  Button
 } from "@mui/material";
 import Grid2 from "@mui/material/Grid2";
 import { styled } from "@mui/material/styles";
 import { groupBy } from "lodash";
-import { Marker } from "react-map-gl";
+import { Marker } from "react-map-gl/mapbox";
 import {
   Parameter,
   Data,
@@ -272,8 +271,13 @@ const WaterQuality = ({
           {/* Caption 1 & 2 end */}
         </Grid2>
       </Box>
-      <Grid2 container spacing={1}>
-        <Grid2 size={{ xs: 12 }}>
+      <Grid2 container>
+        <Grid2
+          size={{ xs: 12 }}
+          sx={{
+            height: "auto"
+          }}
+        >
           <WithLoading
             isLoading={isDataLoading}
             variant="rectangular"
@@ -286,66 +290,68 @@ const WaterQuality = ({
                 LONGITUDE={-116.03884}
                 ZOOM={12}
               >
-                {sites.map(({ latitude, longitude, color, site, value }, i) => {
-                  return (
-                    latitude &&
-                    longitude && (
-                      <Marker
-                        key={`${i}-${latitude}-${longitude}`}
-                        latitude={latitude}
-                        longitude={longitude}
-                      >
-                        <CustomTooltip
-                          title={
-                            <>
-                              <b>{site}</b>
-                              &nbsp;
-                              {typeof value === "string"
-                                ? `: ${value}`
-                                : value.toPrecision(3)}
-                            </>
-                          }
-                          open={true}
-                          arrow
-                          placement="top-end"
-                          slotProps={{
-                            popper: {
-                              sx: {
-                                top: "10px !important",
-                                cursor: "pointer",
-                                pointerEvents: "unset"
-                              },
-                              disablePortal: true
-                            }
-                          }}
+                {sites.map(
+                  ({ latitude = 0, longitude = 0, color, site, value }, i) => {
+                    return (
+                      latitude &&
+                      longitude && (
+                        <Marker
+                          key={`${i}-${latitude}-${longitude}`}
+                          latitude={latitude}
+                          longitude={longitude}
                         >
-                          <svg
-                            height={PIN_SIZE}
-                            viewBox="0 0 24 24"
-                            style={{
-                              cursor: "pointer",
-                              fill: color,
-                              stroke: "none",
-                              transform: `translate(${
-                                -PIN_SIZE / 2
-                              }px,${-PIN_SIZE}px)`
+                          <CustomTooltip
+                            title={
+                              <>
+                                <b>{site}</b>
+                                &nbsp;
+                                {typeof value === "string"
+                                  ? `: ${value}`
+                                  : value.toPrecision(3)}
+                              </>
+                            }
+                            open={true}
+                            arrow
+                            placement="top-end"
+                            slotProps={{
+                              popper: {
+                                sx: {
+                                  top: "10px !important",
+                                  cursor: "pointer",
+                                  pointerEvents: "unset"
+                                },
+                                disablePortal: true
+                              }
                             }}
-                            // onClick={() => {
-                            //   setSelectedPin(pins[i]);
-                            // }}
                           >
-                            <path d={MapPinIcon} />
-                          </svg>
-                        </CustomTooltip>
-                      </Marker>
-                    )
-                  );
-                })}
+                            <svg
+                              height={PIN_SIZE}
+                              viewBox="0 0 24 24"
+                              style={{
+                                cursor: "pointer",
+                                fill: color,
+                                stroke: "none",
+                                transform: `translate(${
+                                  -PIN_SIZE / 2
+                                }px,${-PIN_SIZE}px)`
+                              }}
+                              // onClick={() => {
+                              //   setSelectedPin(pins[i]);
+                              // }}
+                            >
+                              <path d={MapPinIcon} />
+                            </svg>
+                          </CustomTooltip>
+                        </Marker>
+                      )
+                    );
+                  }
+                )}
               </Map>
             )}
           </WithLoading>
         </Grid2>
-        <Grid2 size={{ xs: 12 }}>
+        <Grid2 size={{ xs: 12 }} sx={{ minHeight: "500px", height: "auto" }}>
           <WithLoading
             isLoading={isDataLoading}
             variant="rectangular"
