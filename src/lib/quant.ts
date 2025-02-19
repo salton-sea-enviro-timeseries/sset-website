@@ -50,24 +50,39 @@ export default interface ApiResponse {
 
 export async function getQuantDevices() {
   const DEVICES = ["MOD-PM-00174", "MOD-PM-00368", "MOD-00069"];
+  const DEFAULT_DATA = {
+    Latitude: null,
+    Longitude: null,
+    DeviceId: null,
+    WorkingStatus: null
+  };
   const devicesPromises = DEVICES.map(async (model) => {
-    const url = new URL(`v1/devices/${model}`, ENDPOINT_BASE_URL);
-    const response = await fetch(url.toString(), options);
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch quant devices. HTTP Status: ${response.status}`
-      );
+    try {
+      const url = new URL(`v1/devices/${model}`, ENDPOINT_BASE_URL);
+      const response = await fetch(url.toString(), options);
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch quant devices. HTTP Status: ${response.status}`
+        );
+      }
+      const data = await response.json();
+      return {
+        Latitude: data.geo.lat ?? "",
+        Longitude: data.geo.lon ?? "",
+        DeviceId: data?.sn ?? "",
+        WorkingStatus:
+          data?.status === "ACTIVE" ? "Working-Quant" : "Not Working-Quant"
+      };
+    } catch (error) {
+      console.error(`Error fetching device ${model}: `, error);
+      return DEFAULT_DATA;
     }
-    const data = await response.json();
-    return {
-      Latitude: data.geo.lat,
-      Longitude: data.geo.lon,
-      DeviceId: data.sn,
-      WorkingStatus:
-        data.status === "ACTIVE" ? "Working-Quant" : "Not Working-Quant"
-    };
   });
-  const devices = await Promise.all(devicesPromises);
+
+  const deviceResults = await Promise.allSettled(devicesPromises);
+  const devices = deviceResults.map((result) =>
+    result.status === "fulfilled" ? result.value : DEFAULT_DATA
+  );
   return devices;
 }
 
@@ -110,10 +125,13 @@ export async function getQuantDeviceData(
       switch (response.status) {
         case 404:
           errorMsg = `Quant Device not found. Check the request Url.`;
+          break;
         case 500:
           errorMsg = `Server error when fetching Quant Device.`;
+          break;
         default:
           errorMsg = `Status ${response.status}: Unknown error when fetching Quant Device.`;
+          break;
       }
       return {
         data: [],
@@ -122,15 +140,18 @@ export async function getQuantDeviceData(
       };
     }
     const data: { data: RawMODDeviceDataResponse[] } = await response.json();
+    console.log("data: ", data);
     return { data: data.data };
   } catch (err: unknown) {
+    let errorMsg = "Unexpected error occurred.";
     if (err instanceof Error) {
       console.log(`Error in getQuantDevices: ${err.message}`);
+      errorMsg = err.message;
     } else {
       console.error("An unknown error occurred: ", err);
       return {
         data: [],
-        error: "An unknown error occurred while fetching device data."
+        error: errorMsg
       };
     }
 

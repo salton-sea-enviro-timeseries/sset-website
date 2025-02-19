@@ -3,10 +3,10 @@ import {
   CardActionArea,
   Divider,
   useMediaQuery,
-  Card
-} from "@material-ui/core";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import { useAppContext } from "components/AppContext";
+  Card,
+  Box
+} from "@mui/material";
+import { styled, useTheme } from "@mui/material/styles";
 import CardDetails from "components/BioCard/CardDetails";
 import CardFront from "./CardFront";
 import ProfileNav from "./ProfileNav";
@@ -35,8 +35,6 @@ const AboutCard = ({
   handleCardClick,
   selectedQuestion
 }: Props) => {
-  // @ts-ignore
-  const { language } = useAppContext();
   const theme = useTheme();
   const matchesBreakpointSmallScreen = useMediaQuery(
     theme.breakpoints.down("xs")
@@ -49,20 +47,16 @@ const AboutCard = ({
     matchesBreakpointSmallScreen
   );
   const response = profiles[profileIndex];
-  const classes = useStyles({ cardHeight });
-
   return (
-    <div className={classes.cardContainer}>
-      <div
-        className={`${classes.flipCardInner} ${activeCard && classes.flipped}`}
-      >
+    <CardContainer cardHeight={cardHeight}>
+      <FlipCardInner className={activeCard ? "flipped" : ""}>
         <CardFront
           handleCardClick={handleCardClick}
           selectedQuestion={selectedQuestion}
         />
-        <Card className={classes.cardBack} elevation={4}>
+        <StyledCardBack elevation={4}>
           <CardActionArea data-card-id={1} onClick={handleCardClick}>
-            <CardContent className={classes.cardContent}>
+            <CardContent sx={{ padding: 2 }}>
               <CardDetails
                 image={response.image}
                 name={response.fullName}
@@ -77,44 +71,42 @@ const AboutCard = ({
           </CardActionArea>
           <Divider variant="middle" />
           <ProfileNav handleBiosNav={handleBiosNav} />
-        </Card>
-      </div>
-    </div>
+        </StyledCardBack>
+      </FlipCardInner>
+    </CardContainer>
   );
 };
-const useStyles = makeStyles((theme) => ({
-  cardContainer: ({ cardHeight }: { cardHeight: number }) => ({
-    perspective: "1000px",
-    transition: "height 0.9s",
-    height: cardHeight
-  }),
-  cardContent: {
-    padding: 8
-  },
-  flipCardInner: {
-    position: "relative",
-    width: "100%",
-    height: "100%",
-    transition: "transform 0.9s",
-    transformStyle: "preserve-3d"
-  },
+const CardContainer = styled(Box, {
+  shouldForwardProp: (prop) => prop !== "cardHeight"
+})<{ cardHeight: number }>(({ cardHeight }) => ({
+  perspective: "1000px",
+  transition: "height 0.9s",
+  height: cardHeight
+}));
 
-  cardBack: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    backfaceVisibility: "hidden",
-    transform: "rotateY(180deg)"
-  },
-  flipped: {
+const FlipCardInner = styled(Box)(() => ({
+  position: "relative",
+  width: "100%",
+  height: "100%",
+  transition: "transform 0.9s",
+  transformStyle: "preserve-3d",
+  "&.flipped": {
     transform: "rotateY(180deg)"
   }
+}));
+
+const StyledCardBack = styled(Card)(() => ({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+  position: "absolute",
+  top: 0,
+  bottom: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  backfaceVisibility: "hidden",
+  transform: "rotateY(180deg)"
 }));
 
 export default AboutCard;

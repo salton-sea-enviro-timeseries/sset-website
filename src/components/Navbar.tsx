@@ -1,27 +1,27 @@
 import React, { useState } from "react";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
+import {
+  AppBar,
+  Toolbar,
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
+  Button,
+  Divider,
+  ToggleButton,
+  ToggleButtonGroup,
+  styled
+} from "@mui/material";
 import Link from "next/link";
-import Hidden from "@material-ui/core/Hidden";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import Button from "@material-ui/core/Button";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import { makeStyles } from "@material-ui/core/styles";
 import { useRouter } from "next/router";
-import { Box, Divider } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import ToggleButton from "@material-ui/lab/ToggleButton";
-import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
+import CloseIcon from "@mui/icons-material/Close";
+import MenuIcon from "@mui/icons-material/Menu";
 import { useAppContext } from "./AppContext";
 import { Language } from "types";
 import { getContent } from "util/getContent";
 
-function Navbar() {
-  const classes = useStyles();
+function Navbar({ minWidth = "100vw" }: { minWidth?: string }) {
   const router = useRouter();
-
   // @ts-ignore
   const { language, setLanguage } = useAppContext();
   const Links = React.useMemo(() => {
@@ -54,17 +54,14 @@ function Navbar() {
   }, [language]);
 
   const isActiveLink = (href: string) => router.asPath === href;
-
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setMenuAnchor(event.currentTarget);
   };
-
   const handleCloseMenu = () => {
     setMenuAnchor(null);
   };
-
   const handleToggleLanguage = (
     event: React.MouseEvent<HTMLElement>,
     newLanguage: Language | null
@@ -73,73 +70,74 @@ function Navbar() {
       setLanguage(newLanguage as Language);
     }
   };
-
   return (
-    <AppBar
-      className={classes.navbar}
-      color="transparent"
-      position="fixed"
-      elevation={1}
-    >
-      <Toolbar className={classes.toolbar}>
+    (<StyledAppBar color="transparent" position="fixed" elevation={1}>
+      <StyledToolbar sx={{ minWidth: minWidth }}>
         <Box display="flex" alignItems="center">
           <Link href="/" passHref>
-            <a>
-              {/* eslint-disable  @next/next/no-img-element */}
-              <img width={150} src="/logo-red.png" alt="SSET Logo" />
-            </a>
+
+            {/* eslint-disable  @next/next/no-img-element */}
+            <img width={150} src="/logo-red.png" alt="SSET Logo" />
+
           </Link>
-          <CloseIcon fontSize="small" style={{ marginLeft: "2" }} />
-          <Link href="https://thrivingsaltonsea.com/" passHref>
-            <a target="_blank" rel="noopener noreferrer">
-              {/* eslint-disable  @next/next/no-img-element */}
-              <img
-                width={150}
-                src="/thriving-salton-sea-communities.png"
-                alt="Thriving Salton Sea Communities Logo"
-              />
-            </a>
+          <CloseIcon fontSize="small" sx={{ marginLeft: "2" }} />
+          <Link
+            href="https://thrivingsaltonsea.com/"
+            passHref
+            target="_blank"
+            rel="noopener noreferrer">
+
+            {/* eslint-disable  @next/next/no-img-element */}
+            <img
+              width={150}
+              src="/thriving-salton-sea-communities.png"
+              alt="Thriving Salton Sea Communities Logo"
+            />
+
           </Link>
         </Box>
-        <div className={classes.spacer} />
-        <Hidden mdUp={true} implementation="css">
-          <div className={classes.menuWrapper}>
+        <Box sx={{ flexGrow: 1, minWidth: "1px" }} />
+        {/* Hidden on mobile */}
+        <Box
+          sx={{
+            display: { xs: "flex", md: "none" }
+          }}
+        >
+          <Box display="flex" alignItems="center">
             <IconButton
               onClick={handleOpenMenu}
               color="inherit"
               aria-label="Menu"
+              aria-haspopup="true"
             >
               <MenuIcon />
             </IconButton>
-          </div>
-          <Menu
-            open={Boolean(menuAnchor)}
-            anchorEl={menuAnchor}
-            getContentAnchorEl={undefined}
-            onClick={handleCloseMenu}
-            onClose={handleCloseMenu}
-            keepMounted={true}
-            anchorOrigin={{
-              vertical: "center",
-              horizontal: "center"
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "center"
-            }}
-          >
-            <div>
+            <Menu
+              open={Boolean(menuAnchor)}
+              anchorEl={menuAnchor}
+              onClose={handleCloseMenu}
+              keepMounted={true}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left"
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left"
+              }}
+            >
               {Links.map((link, index) => (
-                <Link passHref href={link.href} key={index}>
+                <Link passHref href={link.href} key={index} legacyBehavior>
                   <MenuItem selected={isActiveLink(link.href)}>
                     {link.label}
                   </MenuItem>
                 </Link>
               ))}
-            </div>
-          </Menu>
-        </Hidden>
-        <Hidden smDown={true} implementation="css">
+            </Menu>
+          </Box>
+        </Box>
+        {/* Visible on larger screens */}
+        <Box sx={{ display: { xs: "none", md: "block" } }}>
           <Box height="100%" display="flex" alignItems="center">
             {Links.map((link, index) => (
               <Button
@@ -147,91 +145,54 @@ function Navbar() {
                 href={link.href}
                 size="small"
                 variant={isActiveLink(link.href) ? "outlined" : undefined}
-                color={isActiveLink(link.href) ? "primary" : undefined}
-                className={classes.navlink}
+                color={isActiveLink(link.href) ? "primary" : "inherit"}
+                sx={{ mx: 0.25 }}
               >
                 {link.label}
               </Button>
             ))}
           </Box>
-        </Hidden>
+        </Box>
         <Divider orientation="vertical" flexItem />
-        <Box display="flex" alignItems="center" pl={1}>
+        <Box display="flex" alignItems="center" pl={1} pr={1}>
           <ToggleButtonGroup
             value={language}
             exclusive
             onChange={handleToggleLanguage}
             aria-label="text alignment"
           >
-            <ToggleButton
-              size="small"
-              value="en"
-              aria-label="English"
-              className={classes.languageButton}
-              classes={{
-                selected: classes.selectedLanguageButton
-              }}
-            >
+            <StyledToggleButton size="small" value="en" aria-label="English">
               EN
-            </ToggleButton>
-            <ToggleButton
-              size="small"
-              value="es"
-              aria-label="Espanol"
-              className={classes.languageButton}
-              classes={{
-                selected: classes.selectedLanguageButton
-              }}
-            >
+            </StyledToggleButton>
+            <StyledToggleButton size="small" value="es" aria-label="Espanol">
               ES
-            </ToggleButton>
+            </StyledToggleButton>
           </ToggleButtonGroup>
         </Box>
-      </Toolbar>
-    </AppBar>
+      </StyledToolbar>
+    </StyledAppBar>)
   );
 }
+const StyledAppBar = styled(AppBar)(({ theme }) => ({
+  backgroundColor: theme.palette.background.default,
+  zIndex: theme.zIndex.drawer + 1,
+  width: "100%"
+}));
 
-const useStyles = makeStyles((theme) => ({
-  logo: {
-    height: 28,
-    marginRight: theme.spacing(2)
-  },
-  spacer: {
-    flexGrow: 1
-  },
-  navbar: {
-    // backgroundColor: "#181818"
-    backgroundColor: theme.palette.background.default,
-    zIndex: theme.zIndex.drawer + 1
-  },
-  navlink: {
-    margin: theme.spacing(0, 0.25)
-    // color: "#fff",
-    // height: "100%",
-    // borderRadius: 0,
-    // "&:hover, &.active": {
-    //   "& .MuiButton-label": {
-    //     height: "100%",
-    //     boxShadow: `inset 0 -2px 0 ${theme.palette.secondary.light}`
-    //   }
-    // }
-  },
-  toolbar: {
-    alignItems: "stretch"
-  },
-  menuWrapper: {
-    height: "100%",
-    display: "flex",
-    alignItems: "center"
-  },
-  languageButton: {
-    padding: "2px 5px",
-    fontWeight: "bold"
-  },
-  selectedLanguageButton: {
-    color: "#ffffff !important",
-    backgroundColor: "#181818 !important"
+const StyledToolbar = styled(Toolbar)({
+  alignItems: "stretch"
+});
+
+const StyledToggleButton = styled(ToggleButton)(({ theme }) => ({
+  padding: "2px 5px",
+  fontWeight: "bold",
+  "&.Mui-selected": {
+    color: "#ffffff",
+    backgroundColor: "#181818",
+    // Override hover for selected state
+    "&:hover": {
+      backgroundColor: "#181818"
+    }
   }
 }));
 

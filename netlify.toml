@@ -8,3 +8,6 @@
 [[redirects]]
   from = "/admin"
   to = "/admin/index.html"
+
+[build.environment]
+  NODE_VERSION = "20"

@@ -1,13 +1,13 @@
-import { Typography, Container, Link, Button } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Typography, Container, Link, Button, styled } from "@mui/material";
 type Props = {
   title: string;
   body?: string;
   link: string;
-  download: boolean;
+  download?: boolean | string;
   headerSize?: number;
   children?: React.ReactNode;
 };
+
 const ResourceSection = ({
   title,
   body,
@@ -16,32 +16,17 @@ const ResourceSection = ({
   headerSize = 4,
   children
 }: Props) => {
-  const classes = useStyles();
   const variant = `h${headerSize}` as "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
   // TODO add Translations and import content from Contentful.
 
   return (
-    // lassName={classes.resourceSection}
-    <Container className={classes.resourceSection}>
+    <StyledContainer>
       {download ? (
-        <Button
-          className={classes.downloadButton}
-          variant="text"
-          color="inherit"
-          href={link}
-          disableFocusRipple
-          disableRipple
-          download={download}
-        >
-          <Typography
-            variant={variant}
-            component="header"
-            className={classes.header}
-            display="inline"
-          >
+        <StyledDownloadLink href={link} download={download}>
+          <StyledHeader variant={variant} display="inline">
             {title}
-          </Typography>
-        </Button>
+          </StyledHeader>
+        </StyledDownloadLink>
       ) : (
         <Link
           variant="inherit"
@@ -51,42 +36,38 @@ const ResourceSection = ({
           href={link}
           color="inherit"
         >
-          <Typography
-            variant={variant}
-            component="header"
-            className={classes.header}
-            display="inline"
-          >
+          <StyledHeader variant={variant} display="inline">
             {title}
-          </Typography>
+          </StyledHeader>
         </Link>
       )}
-      <Typography variant="body2" style={{ marginTop: "1rem" }}>
+      <Typography variant="body2" sx={{ marginTop: "1rem" }}>
         {body}
       </Typography>
       {children}
-    </Container>
+    </StyledContainer>
   );
 };
-const useStyles = makeStyles((theme) => ({
-  header: {
-    boxShadow: `inset 0 -5px 0 ${theme.palette.primary.light}`,
-    transition: "color 0.2s ease",
-    "&:hover": {
-      color: theme.palette.secondary.light
-    }
-  },
-  resourceSection: {
-    marginBottom: "1rem"
-  },
-  downloadButton: {
-    ...theme.typography.h4,
-    textTransform: "none",
-    justifyContent: "flex-start",
-    padding: 0,
-    "&:hover": {
-      backgroundColor: "transparent"
-    }
+const StyledContainer = styled(Container)(({ theme }) => ({
+  marginBottom: "1rem"
+}));
+
+const StyledHeader = styled(Typography)(({ theme }) => ({
+  boxShadow: `inset 0 -5px 0 ${theme.palette.primary.light}`,
+  transition: "color 0.2s ease",
+  "&:hover": {
+    color: theme.palette.secondary.light
+  }
+}));
+const StyledDownloadLink = styled("a")(({ theme }) => ({
+  ...theme.typography.h4,
+  textTransform: "none",
+  justifyContent: "flex-start",
+  padding: 0,
+  textDecoration: "none",
+  "&:hover": {
+    backgroundColor: "transparent",
+    color: theme.palette.secondary.light
   }
 }));
 

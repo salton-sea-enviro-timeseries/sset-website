@@ -1,16 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   Box,
-  Grid,
   MenuItem,
   TextField,
   Typography,
-  makeStyles,
   Tooltip,
   Button
-} from "@material-ui/core";
+} from "@mui/material";
+import Grid2 from "@mui/material/Grid2";
+import { styled } from "@mui/material/styles";
 import { groupBy } from "lodash";
-import { Marker } from "react-map-gl";
+import { Marker } from "react-map-gl/mapbox";
 import {
   Parameter,
   Data,
@@ -33,7 +33,7 @@ import { useAppContext } from "components/AppContext";
 import { filterParameters } from "util/filterParameterFromCms";
 
 const PIN_SIZE = 20;
-
+// TODO: Fix NAN values for [Nitrate, Phosphate, ...etc]
 const getMapData = (data: SiteData[]) => {
   const dataBySite = groupBy(data, (item) => item.site.trim().toLowerCase());
   const mapData = Object.keys(dataBySite).reduce((acc, key) => {
@@ -68,7 +68,6 @@ const getMapData = (data: SiteData[]) => {
 const WaterQuality = ({
   waterPageContent
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const classes = useStyles();
   // @ts-ignore
   const { language } = useAppContext();
   const [parameter, setParameter] = useState<Parameter>(Parameter.Chlorophyll);
@@ -154,12 +153,21 @@ const WaterQuality = ({
       </Typography>
       {/* TODO: Refactor: Move to separate component */}
       <Box pb={1}>
-        <Grid container spacing={1}>
-          <Grid container item xs={12} md={6} alignItems="center">
-            <Grid item xs md={6}>
-              <Box pr={0.5}>
+        {/* outside wrapper  */}
+        <Grid2 container spacing={1}>
+          {/* Parameter and download section container*/}
+          <Grid2 container alignItems="center" size={{ xs: 12 }}>
+            {/* Param and legend section */}
+            <Grid2
+              container
+              display={"flex"}
+              alignItems="center"
+              size={{ xs: 12, md: 6 }}
+            >
+              {/* Parameter dropdown */}
+              <Grid2 size={6}>
                 <WithLoading
-                  variant="rect"
+                  variant="rectangular"
                   height={40}
                   isLoading={isDataLoading}
                 >
@@ -182,51 +190,57 @@ const WaterQuality = ({
                     ))}
                   </TextField>
                 </WithLoading>
-              </Box>
-            </Grid>
-            <Grid item xs md={6}>
-              <WithLoading variant="rect" height={40} isLoading={isDataLoading}>
-                <Box pl={0.5}>
-                  <Typography variant="caption">
-                    {parameterFilter && parameterFilter[0].unit["en-US"]}
-                  </Typography>
-                  {activeRange.min !== undefined &&
-                    activeRange.mid !== undefined &&
-                    activeRange.max !== undefined && (
-                      <ContinuousColorLegend
-                        height={15}
-                        startColor={colorScale[0]}
-                        startTitle={activeRange.min}
-                        midColor={colorScale[Math.floor(colorScale.length / 2)]}
-                        midTitle={activeRange.mid}
-                        endColor={colorScale[colorScale.length - 1]}
-                        endTitle={activeRange.max}
-                      />
-                    )}
-                </Box>
-              </WithLoading>
-            </Grid>
-          </Grid>
-          <Grid container item xs={12} md={6} alignItems="center">
-            <Grid item xs>
-              <Box
-                display="flex"
-                justifyContent={{
-                  xs: "space-between",
-                  md: "flex-end"
-                }}
-                alignItems="center"
-              >
-                <DownloadDataButtonsSection
+              </Grid2>
+              {/* Parameter Legend */}
+              <Grid2 size={6}>
+                <WithLoading
+                  variant="rectangular"
+                  height={40}
                   isLoading={isDataLoading}
-                  nutrientButtonText={downloadNutrientsButtonTxt}
-                  sensorButtonText={downloadSenorButtonTxt}
-                  readMeSrc={downloadReadMERef ?? ""}
-                />
-              </Box>
-            </Grid>
-          </Grid>
-          <Grid item xs={12}>
+                >
+                  <Box pl={0.5}>
+                    <Typography variant="caption">
+                      {parameterFilter && parameterFilter[0].unit["en-US"]}
+                    </Typography>
+                    {activeRange.min !== undefined &&
+                      activeRange.mid !== undefined &&
+                      activeRange.max !== undefined && (
+                        <ContinuousColorLegend
+                          height={15}
+                          startColor={colorScale[0]}
+                          startTitle={activeRange.min}
+                          midColor={
+                            colorScale[Math.floor(colorScale.length / 2)]
+                          }
+                          midTitle={activeRange.mid}
+                          endColor={colorScale[colorScale.length - 1]}
+                          endTitle={activeRange.max}
+                        />
+                      )}
+                  </Box>
+                </WithLoading>
+              </Grid2>
+            </Grid2>
+            {/* Param and legend section end */}
+            {/* Download section */}
+            <Grid2
+              container
+              display={"flex"}
+              alignItems="center"
+              justifyContent={{ md: "flex-end", sm: "flex-start" }}
+              size={{ xs: 12, md: 6 }}
+            >
+              <DownloadDataButtonsSection
+                isLoading={isDataLoading}
+                nutrientButtonText={downloadNutrientsButtonTxt}
+                sensorButtonText={downloadSenorButtonTxt}
+                readMeSrc={downloadReadMERef ?? ""}
+              />
+            </Grid2>
+            {/* Download section end */}
+          </Grid2>
+          {/* Captions 1 & 2 */}
+          <Grid2 size={{ xs: 12 }}>
             <WithLoading isLoading={isDataLoading} width="100%">
               <Typography
                 variant="caption"
@@ -240,8 +254,8 @@ const WaterQuality = ({
                 {parameterDescription}
               </Typography>
             </WithLoading>
-          </Grid>
-          <Grid item xs={12}>
+          </Grid2>
+          <Grid2 size={{ xs: 12 }}>
             <WithLoading isLoading={isDataLoading} width="100%">
               <Typography
                 variant="caption"
@@ -253,12 +267,22 @@ const WaterQuality = ({
                 {mapSecondaryCaption}
               </Typography>
             </WithLoading>
-          </Grid>
-        </Grid>
+          </Grid2>
+          {/* Caption 1 & 2 end */}
+        </Grid2>
       </Box>
-      <Grid container spacing={1}>
-        <Grid item xs={12}>
-          <WithLoading isLoading={isDataLoading} variant="rect" height="500px">
+      <Grid2 container>
+        <Grid2
+          size={{ xs: 12 }}
+          sx={{
+            height: "auto"
+          }}
+        >
+          <WithLoading
+            isLoading={isDataLoading}
+            variant="rectangular"
+            height="500px"
+          >
             {mapData && (
               <Map
                 caption={mapMainCaption}
@@ -266,120 +290,128 @@ const WaterQuality = ({
                 LONGITUDE={-116.03884}
                 ZOOM={12}
               >
-                {sites.map(({ latitude, longitude, color, site, value }, i) => {
-                  return (
-                    latitude &&
-                    longitude && (
-                      <Marker
-                        key={`${i}-${latitude}-${longitude}`}
-                        latitude={latitude}
-                        longitude={longitude}
-                      >
-                        <Tooltip
-                          title={
-                            <>
-                              <b>{site}</b>
-                              &nbsp;
-                              {typeof value === "string"
-                                ? `: ${value}`
-                                : value.toPrecision(3)}
-                            </>
-                          }
-                          open={true}
-                          arrow
-                          placement="top-end"
-                          PopperProps={{
-                            disablePortal: true
-                          }}
-                          classes={{
-                            popper: classes.popper,
-                            tooltip: classes.tooltip
-                          }}
+                {sites.map(
+                  ({ latitude = 0, longitude = 0, color, site, value }, i) => {
+                    return (
+                      latitude &&
+                      longitude && (
+                        <Marker
+                          key={`${i}-${latitude}-${longitude}`}
+                          latitude={latitude}
+                          longitude={longitude}
                         >
-                          <svg
-                            height={PIN_SIZE}
-                            viewBox="0 0 24 24"
-                            style={{
-                              cursor: "pointer",
-                              fill: color,
-                              stroke: "none",
-                              transform: `translate(${
-                                -PIN_SIZE / 2
-                              }px,${-PIN_SIZE}px)`
+                          <CustomTooltip
+                            title={
+                              <>
+                                <b>{site}</b>
+                                &nbsp;
+                                {typeof value === "string"
+                                  ? `: ${value}`
+                                  : value.toPrecision(3)}
+                              </>
+                            }
+                            open={true}
+                            arrow
+                            placement="top-end"
+                            slotProps={{
+                              popper: {
+                                sx: {
+                                  top: "10px !important",
+                                  cursor: "pointer",
+                                  pointerEvents: "unset"
+                                },
+                                disablePortal: true
+                              }
                             }}
-                            // onClick={() => {
-                            //   setSelectedPin(pins[i]);
-                            // }}
                           >
-                            <path d={MapPinIcon} />
-                          </svg>
-                        </Tooltip>
-                      </Marker>
-                    )
-                  );
-                })}
+                            <svg
+                              height={PIN_SIZE}
+                              viewBox="0 0 24 24"
+                              style={{
+                                cursor: "pointer",
+                                fill: color,
+                                stroke: "none",
+                                transform: `translate(${
+                                  -PIN_SIZE / 2
+                                }px,${-PIN_SIZE}px)`
+                              }}
+                              // onClick={() => {
+                              //   setSelectedPin(pins[i]);
+                              // }}
+                            >
+                              <path d={MapPinIcon} />
+                            </svg>
+                          </CustomTooltip>
+                        </Marker>
+                      )
+                    );
+                  }
+                )}
               </Map>
             )}
           </WithLoading>
-        </Grid>
-        <Grid item xs={12}>
-          <WithLoading isLoading={isDataLoading} variant="rect" height="500px">
+        </Grid2>
+        <Grid2 size={{ xs: 12 }} sx={{ minHeight: "500px", height: "auto" }}>
+          <WithLoading
+            isLoading={isDataLoading}
+            variant="rectangular"
+            height="500px"
+          >
             <Table data={tableData} />
           </WithLoading>
-        </Grid>
-        <Grid item xs={12}>
-          <Button
-            className={classes.downloadButton}
-            variant="text"
-            color="inherit"
-            href="/sset-protocols.pdf"
-            disableFocusRipple
-            disableRipple
-            download
-          >
-            <Typography
-              className={classes.downloadText}
-              variant="h5"
-              display="inline"
+        </Grid2>
+        <Grid2 size={{ xs: 12 }}>
+          <a download href="/sset-protocols.pdf">
+            <DownloadButton
+              variant="text"
+              color="inherit"
+              disableFocusRipple
+              disableRipple
             >
-              Protocol PDF
-            </Typography>
-          </Button>
-        </Grid>
-      </Grid>
+              <DownloadText variant="h5" display="inline">
+                Protocol PDF
+              </DownloadText>
+            </DownloadButton>
+          </a>
+        </Grid2>
+      </Grid2>
     </>
   );
 };
+const DownloadText = styled(Typography)(({ theme }) => ({
+  textDecoration: "none",
+  color: "black",
+  boxShadow: `inset 0 -4px 0 ${theme.palette.primary.light}`,
+  transition: "color 0.2s ease",
+  "&:hover": {
+    color: theme.palette.secondary.light
+  }
+}));
 
-const useStyles = makeStyles((theme) => ({
-  popper: {
-    top: "10px !important",
-    cursor: "pointer",
-    pointerEvents: "unset"
+const DownloadButton = styled(Button)(({ theme }) => ({
+  ...theme.typography.h5,
+  textTransform: "none",
+  justifyContent: "flex-start",
+  padding: 0,
+  "&:hover": {
+    backgroundColor: "transparent"
+  }
+}));
+
+const CustomTooltip = styled(Tooltip)(({ theme }) => ({
+  "& .MuiTooltip-arrow": {
+    color: theme.palette.background.paper
   },
-  downloadText: {
-    boxShadow: `inset 0 -4px 0 ${theme.palette.primary.light}`,
-    transition: "color 0.2s ease",
-    "&:hover": {
-      color: theme.palette.secondary.light
-    }
-  },
-  downloadButton: {
-    ...theme.typography.h5,
-    textTransform: "none",
-    justifyContent: "flex-start",
-    padding: 0,
-    "&:hover": {
-      backgroundColor: "transparent"
-    }
-  },
-  tooltip: {
+  "& .MuiTooltip-tooltip": {
     fontSize: 11,
     width: 70,
     display: "flex",
-    justifyContent: "center"
+    justifyContent: "center",
+    backgroundColor: theme.palette.background.paper,
+    color: theme.palette.text.primary
   }
 }));
+
 export const getStaticProps = async () => {
   let waterPageContent;
   try {

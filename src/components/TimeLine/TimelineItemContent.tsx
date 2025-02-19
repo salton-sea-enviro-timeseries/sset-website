@@ -1,7 +1,7 @@
 import React from "react";
-import { Box, Divider, IconButton, Paper, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import LinkOutlinedIcon from "@material-ui/icons/LinkOutlined";
+import { Box, Divider, IconButton, Paper, Typography } from "@mui/material";
+import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
+import { styled } from "@mui/material/styles";
 
 interface TimelineItemContentProps {
   contents: {
@@ -19,8 +19,6 @@ interface TimelineItemContentProps {
 const TimelineItemContent: React.FC<TimelineItemContentProps> = ({
   contents
 }) => {
-  const classes = useStyles();
-
   return (
     <>
       {contents.map(
@@ -34,7 +32,7 @@ const TimelineItemContent: React.FC<TimelineItemContentProps> = ({
           },
           i
         ) => (
-          <Paper key={i} elevation={3} className={classes.paper}>
+          <StyledPaper key={i} elevation={3}>
             <Typography
               variant="h6"
               component="h1"
@@ -43,106 +41,94 @@ const TimelineItemContent: React.FC<TimelineItemContentProps> = ({
             >
               {title}
             </Typography>
-            <Typography
-              component="p"
-              align="left"
-              className={classes.bulletPoint}
-            >
+            <BulletPoint as="p" align="left">
               {description}
-            </Typography>
-            <Typography
-              variant="subtitle1"
-              align="left"
-              className={classes.subtitleResult}
-            >
+            </BulletPoint>
+            <SubtitleResult variant="subtitle1" align="left">
               Systems Change Result
-            </Typography>
-            <Typography align="left" className={classes.bulletPoint}>
-              {result}
-            </Typography>
+            </SubtitleResult>
+            <BulletPoint align="left">{result}</BulletPoint>
             <Divider />
             <Typography variant="subtitle2" align="left">
               Community/Age Group
             </Typography>
-            <Box className={classes.contentFooter} component="footer">
-              <Box className={classes.communityAgeWrapper}>
+            <ContentFooter as="footer">
+              <CommunityAgeWrapper>
                 {communityAgeGroup?.map((text, i) => (
-                  <Typography
-                    key={i}
-                    component="p"
-                    className={classes.listItem}
-                    variant="body2"
-                  >
+                  <ListItem key={i} as="p" variant="body2">
                     {text}
-                  </Typography>
+                  </ListItem>
                 ))}
-              </Box>
+              </CommunityAgeWrapper>
               {docTitle && src && (
                 <Box display="flex" alignItems="center">
                   <Typography component="p" variant="body2">
                     {docTitle}:
                   </Typography>
-
-                  <IconButton
-                    color="inherit"
-                    aria-label="document link"
+                  <StyledLink
+                    href={src}
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={src}
-                    className={classes.iconButtonLink}
                   >
-                    <LinkOutlinedIcon />
-                  </IconButton>
+                    <IconButton color="inherit" aria-label="document link">
+                      <LinkOutlinedIcon />
+                    </IconButton>
+                  </StyledLink>
                 </Box>
               )}
-            </Box>
-          </Paper>
+            </ContentFooter>
+          </StyledPaper>
         )
       )}
     </>
   );
 };
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    padding: "6px 16px",
-    "&:nth-child(even)": {
-      marginTop: theme.spacing(2),
-      marginBottom: theme.spacing(2)
-    }
-  },
-  contentFooter: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center"
-  },
-  communityAgeWrapper: {
-    display: "flex",
-    flexWrap: "wrap"
-  },
-  listItem: {
-    color: "#8892b0 ",
-    marginRight: theme.spacing(1)
-  },
-  subtitleResult: {
-    color: "#0f52ba"
-  },
-  bulletPoint: {
-    marginRight: theme.spacing(1),
-    marginBottom: theme.spacing(1),
-    position: "relative",
-    paddingLeft: theme.spacing(2),
-    "&::before": {
-      content: '"•"',
-      position: "absolute",
-      left: 0,
-      color: "#000"
-    }
-  },
-  iconButtonLink: {
-    "&:hover": {
-      color: "blue"
-    }
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  padding: "6px 16px",
+  ":nth-of-type(even)": {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2)
   }
 }));
+
+const ContentFooter = styled(Box)({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center"
+});
+
+const CommunityAgeWrapper = styled(Box)({
+  display: "flex",
+  flexWrap: "wrap"
+});
+
+const ListItem = styled(Typography)(({ theme }) => ({
+  color: "#8892b0",
+  marginRight: theme.spacing(1)
+}));
+
+const SubtitleResult = styled(Typography)({
+  color: "#0f52ba"
+});
+
+const BulletPoint = styled(Typography)(({ theme }) => ({
+  marginRight: theme.spacing(1),
+  marginBottom: theme.spacing(1),
+  position: "relative",
+  paddingLeft: theme.spacing(2),
+  "&::before": {
+    content: '"\\2022"', // Unicode for bullet point
+    position: "absolute",
+    left: 0,
+    color: "#000"
+  }
+}));
+const StyledLink = styled("a")({
+  textDecoration: "none",
+  color: "inherit",
+  ":hover": {
+    color: "blue"
+  }
+});
 
 export default TimelineItemContent;

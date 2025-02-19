@@ -1,4 +1,8 @@
 function determineSourceOfData(sensor: string) {
+  if (!sensor || sensor === "Unknown") {
+    console.warn("Invalid or missing sensor ID.");
+    return null;
+  }
   // Regular expressions for each sensor type
   const quantRegex = /^MOD/g;
   const aqmdRegex = /^AQY/g;

@@ -1,25 +1,20 @@
-import { Box } from "@material-ui/core";
-import IconButton from "@material-ui/core/IconButton/IconButton";
-import DoubleArrow from "@material-ui/icons/DoubleArrowSharp";
-import { makeStyles } from "@material-ui/core/styles";
-import { useAppContext } from "components/AppContext";
+import { Box, IconButton } from "@mui/material";
+import { DoubleArrow } from "@mui/icons-material";
+import { styled } from "@mui/material/styles";
 
 interface Props {
   handleBiosNav: React.MouseEventHandler<HTMLButtonElement>;
 }
 const ProfileNav = ({ handleBiosNav }: Props) => {
-  // @ts-ignore
-  const { language } = useAppContext();
-  const classes = useStyles();
   return (
-    <Box className={classes.iconButtonWrapper}>
+    <IconButtonWrapper>
       <IconButton
         aria-label="previous profile"
         color="primary"
         id="prevQuest"
         onClick={handleBiosNav}
       >
-        <DoubleArrow style={{ transform: "rotate(180deg)" }} />
+        <DoubleArrow sx={{ transform: "rotate(180deg)" }} />
       </IconButton>
 
       <IconButton
@@ -30,17 +25,15 @@ const ProfileNav = ({ handleBiosNav }: Props) => {
       >
         <DoubleArrow />
       </IconButton>
-    </Box>
+    </IconButtonWrapper>
   );
 };
-const useStyles = makeStyles(() => ({
-  iconButtonWrapper: {
-    width: "100%",
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 4
-  }
+const IconButtonWrapper = styled(Box)(() => ({
+  width: "100%",
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-between",
+  padding: 4
 }));
 
 export default ProfileNav;

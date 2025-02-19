@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import clsx from "clsx";
 import {
   Box,
   Container,
@@ -9,22 +8,22 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  makeStyles,
+  styled,
+  ListItemButton,
   Theme,
-  useTheme
-} from "@material-ui/core";
-import ArrowRightIcon from "@material-ui/icons/ArrowForward";
-import ArrowLeftIcon from "@material-ui/icons/ArrowBack";
-import WaterQualityIcon from "@material-ui/icons/Waves";
-import AirQualityIcon from "@material-ui/icons/FilterDrama";
+  CSSObject,
+  IconButton
+} from "@mui/material";
+import ArrowRightIcon from "@mui/icons-material/ArrowForward";
+import ArrowLeftIcon from "@mui/icons-material/ArrowBack";
+import WaterQualityIcon from "@mui/icons-material/Waves";
+import AirQualityIcon from "@mui/icons-material/FilterDrama";
 import { useRouter } from "next/router";
-
 import Footer from "../Footer";
 import Navbar from "../Navbar";
 
 const DRAWER_WIDTH = 240;
 const NAVBAR_HEIGHT = 80;
-
 // TODO: move these out to a data file
 const DASHBOARD_LINKS = [
   {
@@ -43,110 +42,115 @@ const DASHBOARD_LINKS = [
 
 const DashboardLayout: React.FC = ({ children }) => {
   const router = useRouter();
-  const classes = useStyles();
-  const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-
+  const toggleDrawer = () => setOpen((prev) => !prev);
   const isActive = (pathname: string) => {
     return router.pathname === pathname;
   };
 
-  return (
-    <>
-      <Navbar />
-      <Box display="flex" flex={1} pb={5}>
-        <Drawer
-          variant="permanent"
-          className={clsx(classes.drawer, {
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open
-          })}
-          classes={{
-            paper: clsx({
-              [classes.drawerOpen]: open,
-              [classes.drawerClose]: !open
-            })
-          }}
-        >
-          <List>
-            <ListItem
-              button
-              onClick={!open ? handleDrawerOpen : handleDrawerClose}
-            >
-              <ListItemIcon>
-                {!open ? <ArrowRightIcon /> : <ArrowLeftIcon />}
-              </ListItemIcon>
-              <ListItemText />
-            </ListItem>
-            {DASHBOARD_LINKS.map(({ href, label, Icon }) => (
-              <Link key={label} href={href} passHref>
-                <ListItem button component="a">
-                  <ListItemIcon>
-                    <Icon color={isActive(href) ? "primary" : undefined} />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={label}
-                    primaryTypographyProps={{
-                      color: isActive(href) ? "primary" : undefined
-                    }}
-                  />
-                </ListItem>
-              </Link>
-            ))}
-          </List>
-        </Drawer>
-        <Container maxWidth="lg" className={classes.main}>
+  return (<>
+    <Navbar />
+    <Box display="flex" flex={1} pb={5}>
+      <MuiDrawer open={open} variant="permanent">
+        <DrawerHeader>
+          <IconButton
+            aria-label="open drawer"
+            onClick={toggleDrawer}
+            color="inherit"
+            edge="end"
+            sx={{ paddingTop: 2 }}
+          >
+            <ListItemIcon>
+              {!open ? <ArrowRightIcon /> : <ArrowLeftIcon />}
+            </ListItemIcon>
+          </IconButton>
+        </DrawerHeader>
+        <List>
+          {" "}
+          {DASHBOARD_LINKS.map(({ href, label, Icon }) => (
+            <Link key={label} href={href} passHref legacyBehavior>
+              <ListItemButton component="a">
+                <ListItemIcon>
+                  <Icon color={isActive(href) ? "primary" : undefined} />
+                </ListItemIcon>
+                <ListItemText
+                  primary={label}
+                  slotProps={{
+                    primary: { color: isActive(href) ? "primary" : undefined }
+                  }}
+                />
+              </ListItemButton>
+            </Link>
+          ))}
+        </List>
+      </MuiDrawer>
+      <StyledMain>
+        <StyledContainer maxWidth="lg">
           <>{children}</>
-        </Container>
-      </Box>
-      <Footer />
-    </>
-  );
+        </StyledContainer>
+      </StyledMain>
+    </Box>
+    <Footer />
+  </>);
 };
-
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    display: "flex",
-    flexDirection: "column"
-  },
-  main: {
-    flexGrow: 1,
-    paddingTop: NAVBAR_HEIGHT + theme.spacing(3),
-    width: `calc(100% - ${DRAWER_WIDTH}px)`
-  },
-  drawer: {
-    width: DRAWER_WIDTH,
-    flexShrink: 0,
-    whiteSpace: "nowrap"
-  },
-  drawerOpen: {
-    width: DRAWER_WIDTH,
-    paddingTop: NAVBAR_HEIGHT,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
-  },
-  drawerClose: {
-    paddingTop: NAVBAR_HEIGHT,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    }),
-    overflowX: "hidden",
-    width: theme.spacing(7) + 1,
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9) + 1
-    }
+const openedMixin = (theme: Theme): CSSObject => ({
+  width: DRAWER_WIDTH,
+  transition: theme.transitions.create("width", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen
+  }),
+  overflowX: "hidden"
+});
+const closedMixin = (theme: Theme): CSSObject => ({
+  transition: theme.transitions.create("width", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen
+  }),
+  overflowX: "hidden",
+  width: `calc(${theme.spacing(7)} + 1px)`,
+  [theme.breakpoints.up("sm")]: {
+    width: `calc(${theme.spacing(9)} + 1px)`
   }
+});
+const DrawerHeader = styled("div")(({ theme }) => ({
+  marginTop: NAVBAR_HEIGHT + 20,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "flex-end"
+}));
+
+const MuiDrawer = styled(Drawer, {
+  shouldForwardProp: (prop) => prop !== "open"
+})(({ theme }) => ({
+  width: DRAWER_WIDTH,
+  flexShrink: 0,
+  whiteSpace: "nowrap",
+  boxSizing: "border-box",
+  variants: [
+    {
+      props: ({ open }) => open,
+      style: {
+        ...openedMixin(theme),
+        "& .MuiDrawer-paper": openedMixin(theme)
+      }
+    },
+    {
+      props: ({ open }) => !open,
+      style: {
+        ...closedMixin(theme),
+        "& .MuiDrawer-paper": closedMixin(theme)
+      }
+    }
+  ]
+}));
+const StyledMain = styled("main")(({ theme }) => ({
+  flexGrow: 1,
+  width: `calc(100% - ${DRAWER_WIDTH}px)`
+}));
+
+const StyledContainer = styled(Container)(({ theme }) => ({
+  paddingTop: `calc(${theme.spacing(3)} + ${NAVBAR_HEIGHT}px)`,
+  width: "100%"
 }));
 
 export default DashboardLayout;

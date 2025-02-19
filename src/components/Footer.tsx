@@ -1,17 +1,17 @@
 import React from "react";
-import Link from "next/link";
-import Container from "@material-ui/core/Container";
-import Grid, { GridSize } from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import { makeStyles } from "@material-ui/core/styles";
-import { useAppContext } from "./AppContext";
+import {
+  Container,
+  Box,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon
+} from "@mui/material";
+import Grid2 from "@mui/material/Grid2";
+import { styled } from "@mui/material/styles";
 import Image from "next/image";
-
+import Link from "next/link";
 const socialMediaIcons = [
   {
     icon: "/icon-facebook.svg",
@@ -77,25 +77,12 @@ const logos = [
 ];
 interface LayoutProps {
   className?: string;
-}
-interface GridContainerProps {
-  children: React.ReactNode;
-  xs: GridSize;
-  md: GridSize;
-  alignItems?: "flex-start" | "center" | "flex-end" | "stretch" | "baseline";
-  justifyContent?:
-    | "flex-start"
-    | "center"
-    | "flex-end"
-    | "space-between"
-    | "space-around"
-    | "space-evenly";
+  sx?: object;
 }
 interface SocialLinkItemProps {
   icon: string;
   url: string;
   label: string;
-  classes: any;
 }
 interface ImageLinkProps {
   href: string;
@@ -103,146 +90,120 @@ interface ImageLinkProps {
   alt: string;
   width: number;
 }
-const GridContainer: React.FC<GridContainerProps> = ({
-  children,
-  xs,
-  md,
-  alignItems,
-  justifyContent
-}) => (
-  <Grid
-    container
-    item
-    xs={xs}
-    md={md}
-    alignItems={alignItems}
-    justifyContent={justifyContent}
-  >
-    {children}
-  </Grid>
-);
 const SocialLinkItem: React.FC<SocialLinkItemProps> = ({
   icon,
   url,
-  label,
-  classes
+  label
 }) => (
-  <ListItem
-    button
-    component="a"
-    href={url}
-    target="_blank"
-    rel="noreferrer"
-    className={classes.listItem}
-  >
-    <ListItemIcon className={classes.socialIcon}>
-      <Image src={icon} alt={label} width="24" height="24" />
-    </ListItemIcon>
-    <ListItemText>{label}</ListItemText>
-  </ListItem>
+  <Link href={url} passHref legacyBehavior>
+    <StyledBaseLink target="_blank" rel="noreferrer">
+      <StyledListItem>
+        <SocialIcon>
+          <Image
+            src={icon}
+            alt={label}
+            width="24"
+            height="24"
+            style={{
+              maxWidth: "100%",
+              height: "auto"
+            }}
+          />
+        </SocialIcon>
+        <ListItemText>{label}</ListItemText>
+      </StyledListItem>
+    </StyledBaseLink>
+  </Link>
 );
 const ImageLink: React.FC<ImageLinkProps> = ({ href, src, alt, width }) => (
-  <Link href={href}>
+  <Link href={href} passHref target="_blank" rel="noopener noreferrer">
     {/* eslint-disable @next/next/no-img-element*/}
-    <a target="_blank" rel="noopener noreferrer">
-      <img src={src} width={width} alt={alt} />
-    </a>
+
+    <img src={src} width={width} alt={alt} />
   </Link>
 );
 
-const Footer: React.FC<LayoutProps> = ({ className }) => {
-  const classes = useStyles();
-  const ctx = useAppContext();
-  if (!ctx) {
-    return null;
-  }
-  const { width } = ctx;
+const Footer: React.FC<LayoutProps> = ({ className, sx }) => {
   return (
-    <Box
-      component="footer"
-      bgcolor="grey.900"
-      color="white"
-      py={2}
-      className={`${classes.root} ${className}`}
-      //Adjust with for pages with a specific width need
-      style={{ minWidth: className ? "" : width }}
-    >
+    <StyledFooter as="footer" className={className}>
       <Container>
-        <Grid container spacing={4}>
-          <GridContainer xs={12} md={2}>
-            <List disablePadding component="div">
-              <ListItem className={classes.listItem} component="div">
-                <Typography
-                  variant="overline"
-                  className={classes.listItemTextHeader}
-                >
-                  Socials
-                </Typography>
-              </ListItem>
-              <Box className={classes.socialsContainer}>
+        <Grid2 container spacing={4}>
+          {/* Socials Section */}
+          <Grid2 size={{ xs: 12, md: 2 }}>
+            <List disablePadding>
+              <StyledListItem as="div">
+                <HeaderText variant="overline">Socials</HeaderText>
+              </StyledListItem>
+              <SocialsContainer>
                 {socialMediaIcons.map((iconData) => (
-                  <SocialLinkItem
-                    key={iconData.label}
-                    {...iconData}
-                    classes={classes}
-                  />
+                  <SocialLinkItem key={iconData.label} {...iconData} />
                 ))}
-              </Box>
+              </SocialsContainer>
             </List>
-          </GridContainer>
-          {/* socials end */}
-          <GridContainer
-            xs={12}
-            md={10}
-            alignItems="center"
-            justifyContent="space-evenly"
-          >
+          </Grid2>
+          {/* Logos Section */}
+          <LogoContainer>
             {logos.map((logoData) => (
               <ImageLink key={logoData.alt} {...logoData} />
             ))}
-          </GridContainer>
-        </Grid>
+          </LogoContainer>
+        </Grid2>
         <Box pt={10}>
           <Typography align="center" variant="caption" component="p">
             Built in the Coachella Valley ☀️
           </Typography>
         </Box>
       </Container>
-    </Box>
+    </StyledFooter>
   );
 };
+const StyledFooter = styled(Box)(({ theme }) => ({
+  zIndex: theme.zIndex.drawer + 1,
+  backgroundColor: theme.palette.grey[900],
+  color: theme.palette.common.white,
+  padding: theme.spacing(2),
+  width: "100%",
+  minWidth: "100%",
+  maxWidth: "100vw",
+  flexGrow: 1
+}));
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    zIndex: theme.zIndex.drawer + 1
-  },
-  sticky: {
-    marginTop: "auto"
-  },
-  socialsContainer: {
-    display: "flex",
-    [theme.breakpoints.down("sm")]: {
-      flexWrap: "wrap"
-    },
-    [theme.breakpoints.between("sm", "md")]: {
-      flexWrap: "nowrap"
-    },
-    [theme.breakpoints.up("md")]: {
-      flexWrap: "wrap"
-    }
-  },
-  listItem: {
-    paddingTop: 2,
-    paddingBottom: 2,
-    paddingLeft: 12,
-    paddingRight: 12
-  },
-  listItemTextHeader: {
-    fontWeight: "bold"
-  },
-  socialIcon: {
-    minWidth: 30
+const SocialsContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexWrap: "wrap",
+  gap: theme.spacing(1),
+  [theme.breakpoints.up("md")]: {
+    flexWrap: "wrap"
   }
+}));
+
+const LogoContainer = styled(Grid2)(({ theme }) => ({
+  display: "flex",
+  flexGrow: 1,
+  alignItems: "center",
+  justifyContent: "space-evenly",
+  flexWrap: "wrap"
+}));
+
+const StyledListItem = styled(ListItem, {
+  shouldForwardProp: (prop) => prop !== "classes" && prop !== "button"
+})(({ theme }) => ({
+  paddingTop: theme.spacing(0.5),
+  paddingBottom: theme.spacing(0.5),
+  paddingLeft: theme.spacing(1.5),
+  paddingRight: theme.spacing(1.5)
+}));
+const SocialIcon = styled(ListItemIcon)(() => ({
+  minWidth: 30
+}));
+
+const HeaderText = styled(Typography)(() => ({
+  fontWeight: "bold"
+}));
+
+const StyledBaseLink = styled("a")(({ theme }) => ({
+  color: theme.palette.common.white,
+  textDecoration: "none"
 }));
 
 export default Footer;

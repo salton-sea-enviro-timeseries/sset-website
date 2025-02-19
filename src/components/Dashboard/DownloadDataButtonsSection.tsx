@@ -1,9 +1,10 @@
-import { Box, Button, Tooltip } from "@material-ui/core";
-import DownloadIcon from "@material-ui/icons/CloudDownload";
+import { Box, Button, styled, Tooltip } from "@mui/material";
+import DownloadIcon from "@mui/icons-material/CloudDownload";
 import WithLoading from "../WithLoading";
 import useSWR from "swr";
 import { useCallback } from "react";
 import { saveAs } from "file-saver";
+import { theme } from "highcharts";
 
 interface DownloadDataButtonsSectionProps {
   isLoading: boolean;
@@ -32,11 +33,12 @@ const DownloadDataButtonsSection = ({
       <Box pr={0.5}>
         <WithLoading
           isLoading={isLoading}
-          variant="rect"
+          variant="rectangular"
           height={30}
           width="130px"
         >
           <Button
+            sx={{ backgroundColor: "#e0e0e0", color: "black" }}
             startIcon={<DownloadIcon />}
             size="small"
             variant="contained"
@@ -50,11 +52,12 @@ const DownloadDataButtonsSection = ({
       <Box pl={0.5}>
         <WithLoading
           isLoading={isLoading}
-          variant="rect"
+          variant="rectangular"
           height={30}
           width="130px"
         >
           <Button
+            sx={{ backgroundColor: "#e0e0e0", color: "black" }}
             startIcon={<DownloadIcon />}
             size="small"
             variant="contained"
@@ -68,7 +71,7 @@ const DownloadDataButtonsSection = ({
       <Box pl={1} pr={0.5}>
         <WithLoading
           isLoading={isLoading}
-          variant="rect"
+          variant="rectangular"
           height={30}
           width="130px"
         >
@@ -79,6 +82,7 @@ const DownloadDataButtonsSection = ({
           >
             <span>
               <Button
+                sx={{ backgroundColor: "#e0e0e0", color: "black" }}
                 startIcon={<DownloadIcon />}
                 size="small"
                 variant="contained"

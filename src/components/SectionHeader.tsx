@@ -1,11 +1,11 @@
 import React from "react";
-import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
-import { TypographyVariant, makeStyles } from "@material-ui/core/styles";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import Image from "next/image";
-import { LaunchOutlined } from "@material-ui/icons";
+import { LaunchOutlined } from "@mui/icons-material";
 import Link from "next/link";
-type variantText = TypographyVariant;
+import { styled } from "@mui/material/styles";
+// type variantText = TypographyVariant;
 interface SectionHeaderProps {
   subtitle?: string;
   subtitleProps?: Object;
@@ -13,7 +13,7 @@ interface SectionHeaderProps {
   sectionId: string;
   sectionFootNoteLink?: Boolean;
   titleProps?: Object;
-  size?: variantText;
+  size?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
   className?: string;
   display?: string;
   justifyContent?: string;
@@ -26,7 +26,6 @@ const scrollToSection = (sectionId: string) => {
   }
 };
 function SectionHeader(props: SectionHeaderProps) {
-  const classes = useStyles();
   const {
     subtitle,
     subtitleProps,
@@ -52,7 +51,7 @@ function SectionHeader(props: SectionHeaderProps) {
       }}
     >
       {title}
-      <sup className={classes.footNoteStyledLink}>†</sup>
+      <StyledSup>†</StyledSup>
     </a>
   );
   const SectionTitle = () => (
@@ -61,43 +60,40 @@ function SectionHeader(props: SectionHeaderProps) {
     </Typography>
   );
   const renderGraduationSection = () => (
-    <Box className={classes.graduationSectionTitleWrapper}>
+    <StyledGraduationSection>
       <Image
         src="/graduation-illustration-balloons.svg"
         alt="balloons illustration"
-        layout="intrinsic"
         width={150}
         height={150}
-        objectFit="contain"
+        style={{
+          objectFit: "contain"
+        }}
       />
       <SectionTitle />
       <Image
         src="/graduation-illustration-2.svg"
         alt="graduation celebration"
-        layout="fixed"
         width={150}
         height={150}
-        objectFit="contain"
+        style={{
+          objectFit: "contain"
+        }}
       />
-    </Box>
+    </StyledGraduationSection>
   );
   const renderAboutUsSection = () => (
-    <Link href="/about-us">
-      <a className={classes.aboutLaunchLink}>
+    <Link href="/about-us" passHref legacyBehavior>
+      <StyledAboutLink>
         <Typography variant={size} gutterBottom={!!subtitle} {...titleProps}>
           {title}
         </Typography>
         <LaunchOutlined />
-      </a>
+      </StyledAboutLink>
     </Link>
   );
   return (
-    <Box
-      id={sectionId}
-      component="header"
-      className={`${classes.root} ${className || ""}`}
-      {...otherProps}
-    >
+    <StyledHeader id={sectionId} className={className} {...otherProps}>
       {title &&
         (sectionId === "section-grads" ? (
           renderGraduationSection()
@@ -110,53 +106,46 @@ function SectionHeader(props: SectionHeaderProps) {
       {subtitle && (
         <Typography
           variant="subtitle1"
-          className={classes.subtitle}
+          sx={{ maxWidth: 700, display: "inline-block" }}
           {...subtitleProps}
         >
           {subtitle}
         </Typography>
       )}
-    </Box>
+    </StyledHeader>
   );
 }
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    // Add bottom margin if element below
-    "&:not(:last-child)": {
-      marginBottom: "2rem"
-    }
-  },
-  subtitle: {
-    // Subtitle text generally isn't very long
-    // so usually looks better to limit width.
-    maxWidth: 700,
-    // So we can have max-width but still
-    // have alignment controlled by text-align.
-    display: "inline-block"
-  },
-  footNoteStyledLink: {
-    color: "#336699",
-    fontWeight: "bold",
-    transition: "300ms",
-    "&:hover": {
-      color: "red"
-    }
-  },
-  graduationSectionTitleWrapper: {
-    display: "flex",
-    alignItems: "center"
-  },
-  aboutLaunchLink: {
-    color: "inherit",
-    textDecoration: "none",
-    "& > svg": {
-      transition: "color 300ms"
-    },
-    "&:hover > svg": {
-      color: "royalBlue"
-    }
+const StyledHeader = styled(Box)(({ theme }) => ({
+  "&:not(:last-child)": {
+    marginBottom: "2rem"
   }
 }));
 
+const StyledSup = styled("sup")(({ theme }) => ({
+  color: "#336699",
+  fontWeight: "bold",
+  transition: "300ms",
+  "&:hover": {
+    color: "red"
+  }
+}));
+
+const StyledGraduationSection = styled(Box)({
+  display: "flex",
+  alignItems: "center"
+});
+
+const StyledAboutLink = styled("a")(({ theme }) => ({
+  color: "inherit",
+  textDecoration: "none",
+  display: "flex",
+  alignItems: "center",
+  gap: theme.spacing(1),
+  "& > svg": {
+    transition: "color 300ms"
+  },
+  "&:hover > svg": {
+    color: "royalBlue"
+  }
+}));
 export default SectionHeader;

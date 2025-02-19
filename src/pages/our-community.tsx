@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import {
   Container,
-  Grid,
+  Grid2,
   Paper,
   Button,
   Typography,
   useMediaQuery
-} from "@material-ui/core";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+} from "@mui/material";
+import { styled, useTheme } from "@mui/material/styles";
 import { useAppContext } from "components/AppContext";
 import Hero from "components/Hero";
 import Section from "components/Section";
@@ -27,8 +27,11 @@ interface AboutUsPageProps {
 interface RawProfile {
   fields: Profile;
 }
+interface HeaderStylesProps {
+  boxShadow: (theme: any) => string;
+}
+
 const OurCommunity = ({ listOfProfiles }: AboutUsPageProps) => {
-  const classes = useStyles();
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down(960));
   // TODO: configure translations
@@ -94,12 +97,12 @@ const OurCommunity = ({ listOfProfiles }: AboutUsPageProps) => {
         <Hero bgColor="secondary" size="medium" />
       </Translation>
       <Section bgImage={"/curves.png"}>
-        <Container className={classes.gridWrapper}>
+        <StyledContainer>
           <SectionHeader
             title="Questions Asked To Our Community Members"
             titleProps={{
               align: "center",
-              className: classes.header,
+              sx: HeaderStyles,
               display: "inline"
             }}
             display="flex"
@@ -107,38 +110,27 @@ const OurCommunity = ({ listOfProfiles }: AboutUsPageProps) => {
             size={"h4"}
             sectionId={"ourCommunity-section"}
           />
-          <Grid container spacing={1} justifyContent="center">
-            <Grid item xs={12} className={classes.questionWrapper}>
+          <Grid2 container spacing={1} justifyContent="center">
+            <QuestionWrapper size={{ xs: 12 }}>
               {Object.entries(questionList).map(
                 ([key, value]) =>
                   key !== "question-6" &&
                   key !== "question-7" && (
-                    <Paper
+                    <StyledPaper
                       key={key}
-                      className={classes.questionPaper}
                       elevation={1}
                       onClick={handleQuestionClick(key)}
                     >
-                      <Button
-                        className={classes.questionButtonStyles}
-                        variant="text"
-                      >
-                        <Typography className={classes.questionTextStyles}>
+                      <QuestionButtonStyles variant="text">
+                        <QuestionTextStyles>
                           {truncateQuestion(value, isMatch)}
-                        </Typography>
-                      </Button>
-                    </Paper>
+                        </QuestionTextStyles>
+                      </QuestionButtonStyles>
+                    </StyledPaper>
                   )
               )}
-            </Grid>
-            <Grid
-              item
-              lg={6}
-              md={6}
-              sm={8}
-              xs={12}
-              className={classes.aboutCardsWrapper}
-            >
+            </QuestionWrapper>
+            <AboutCardsWrapper size={{ lg: 6, md: 6, sm: 8, xs: 12 }}>
               {shuffledProfiles.length > 0 && (
                 <AboutCard
                   profiles={shuffledProfiles}
@@ -147,12 +139,55 @@ const OurCommunity = ({ listOfProfiles }: AboutUsPageProps) => {
                   selectedQuestion={questionList[selectedQuestion]}
                 />
               )}
-            </Grid>
-          </Grid>
-        </Container>
+            </AboutCardsWrapper>
+          </Grid2>
+        </StyledContainer>
       </Section>
     </Layout>
   );
+};
+
+const StyledContainer = styled(Container)(({ theme }) => ({
+  minWidth: "350px"
+}));
+
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  width: 200,
+  height: 100,
+  margin: 4,
+  [theme.breakpoints.down("sm")]: {
+    width: 100
+  }
+}));
+
+const QuestionWrapper = styled(Grid2)(({ theme }) => ({
+  display: "flex",
+  flexWrap: "wrap",
+  justifyContent: "center"
+}));
+
+const AboutCardsWrapper = styled(Grid2)({
+  display: "flex",
+  flexDirection: "column"
+});
+
+const QuestionButtonStyles = styled(Button)({
+  width: "100%",
+  height: "100%",
+  color: "inherit"
+});
+
+const QuestionTextStyles = styled(Typography)({
+  fontSize: "small"
+});
+
+const HeaderStyles: HeaderStylesProps = {
+  boxShadow: (theme) => `inset 0 -5px 0 ${theme.palette.secondary.light}`
+};
+
+const MediaStyles = {
+  height: 150,
+  backgroundSize: "contain"
 };
 export default OurCommunity;
 
@@ -176,39 +211,3 @@ export const getStaticProps = async () => {
     };
   }
 };
-const useStyles = makeStyles((theme) => ({
-  header: {
-    boxShadow: `inset 0 -5px 0 ${theme.palette.secondary.light}`
-  },
-  media: {
-    height: 150,
-    backgroundSize: "contain"
-  },
-  gridWrapper: {
-    minWidth: "350px"
-  },
-  aboutCardsWrapper: {
-    display: "flex",
-    flexDirection: "column"
-  },
-  questionPaper: {
-    width: 200,
-    height: 100,
-    [theme.breakpoints.down("sm")]: {
-      width: 100
-    },
-    margin: 4
-  },
-  questionWrapper: {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "center"
-  },
-  questionTextStyles: {
-    fontSize: "small"
-  },
-  questionButtonStyles: {
-    width: "100%",
-    height: "100%"
-  }
-}));

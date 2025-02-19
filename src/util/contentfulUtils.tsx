@@ -30,10 +30,10 @@ const renderEmbeddedAsset = (node: Block) => {
   if (isAsset(target)) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
-      <img
+      (<img
         src={target.fields.file.url}
         alt={target.fields.title || "Embedded asset"}
-      />
+      />)
     );
   }
   return null; // Fallback if the asset is not available

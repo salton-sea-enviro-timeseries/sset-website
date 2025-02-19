@@ -2,18 +2,17 @@ import {
   FormControl,
   Select,
   MenuItem,
-  makeStyles,
-  FormHelperText
-} from "@material-ui/core";
+  FormHelperText,
+  styled,
+  SelectChangeEvent,
+  Box
+} from "@mui/material";
 
 type MenuProps<T extends string | number> = {
   options: T[];
   helperText: string;
   selectedValue: T;
-  handleSelectChange: (
-    event: React.ChangeEvent<{ name?: string; value: unknown }>,
-    child: React.ReactNode
-  ) => void;
+  handleSelectChange: (event: SelectChangeEvent<unknown>) => void;
   inputStyle?: React.CSSProperties;
 };
 
@@ -23,30 +22,31 @@ const SelectMenuList = <T extends string | number>({
   selectedValue,
   handleSelectChange
 }: MenuProps<T>) => {
-  const classes = useStyles();
   return (
-    <FormControl className={classes.formControl}>
-      <Select
-        value={selectedValue}
-        onChange={handleSelectChange}
-        displayEmpty
-        className={classes.selectEmpty}
-        autoWidth
-      >
-        {options.map((param, index) => (
-          <MenuItem key={`${index}${param}`} value={param}>
-            {param}
-          </MenuItem>
-        ))}
-      </Select>
-      <FormHelperText>{helperText}</FormHelperText>
-    </FormControl>
+    <Box display="flex" justifyContent="center" alignItems="center">
+      <StyledFormControl size="small">
+        <Select
+          value={selectedValue}
+          onChange={(event) =>
+            handleSelectChange(event as SelectChangeEvent<unknown>)
+          }
+          displayEmpty
+          autoWidth
+        >
+          {options.map((param, index) => (
+            <MenuItem key={`${index}${param}`} value={param}>
+              {param}
+            </MenuItem>
+          ))}
+        </Select>
+        <FormHelperText>{helperText}</FormHelperText>
+      </StyledFormControl>
+    </Box>
   );
 };
+const StyledFormControl = styled(FormControl)({
+  minWidth: 80,
+  textAlign: "center"
+});
+
 export default SelectMenuList;
-const useStyles = makeStyles(() => ({
-  formControl: {
-    minWidth: 110
-  },
-  selectEmpty: {}
-}));

@@ -1,11 +1,7 @@
-import {
-  Box,
-  Button,
-  TextField,
-  Typography,
-  makeStyles
-} from "@material-ui/core";
+import { Button, TextField, Typography } from "@mui/material";
 import { FormErrorRange } from "hooks/useSensorData";
+import { styled } from "@mui/material/styles";
+import { theme } from "highcharts";
 
 type DateRangeProps = {
   handleFormSubmit: (evt: React.FormEvent<HTMLFormElement>) => Promise<void>;
@@ -30,15 +26,9 @@ const AirQualityDateRangeInput = ({
   endDateText,
   modSensorGeneratePlotHelperText
 }: DateRangeProps) => {
-  const classes = useStyles();
-
   return (
     <>
-      <Box
-        className={classes.dateContainer}
-        component="form"
-        onSubmit={handleFormSubmit}
-      >
+      <DateContainer onSubmit={handleFormSubmit}>
         <Button
           variant="outlined"
           size="small"
@@ -55,8 +45,8 @@ const AirQualityDateRangeInput = ({
           label={startDateText}
           type="date"
           inputRef={startDateRef}
-          InputLabelProps={{
-            shrink: true
+          slotProps={{
+            inputLabel: { shrink: true }
           }}
         />
         <TextField
@@ -66,38 +56,35 @@ const AirQualityDateRangeInput = ({
           label={endDateText}
           type="date"
           inputRef={endDateRef}
-          InputLabelProps={{
-            shrink: true
+          slotProps={{
+            inputLabel: { shrink: true }
           }}
         />
-      </Box>
-      <Typography variant="caption" className={classes.dateRangeCaption}>
-        <span className={classes.modCaption}>*MOD</span>{" "}
+      </DateContainer>
+      <DateRangeCaption variant="caption">
+        <ModCaption>*MOD</ModCaption>{" "}
         {modSensorGeneratePlotHelperText ||
           "sensors currently limited to an 8 day range"}
-      </Typography>
+      </DateRangeCaption>
     </>
   );
 };
-const useStyles = makeStyles((theme) => ({
-  dateContainer: {
-    display: "flex",
-    justifyContent: "flex-end",
-    "& > *": {
-      marginRight: "2rem"
-    },
-    "& > *:last-child": {
-      marginRight: "0"
-    }
-  },
-  modCaption: {
-    color: theme.palette.secondary.main
-  },
-  dateRangeCaption: {
-    display: "block",
-    textAlign: "right",
-    margin: 0,
-    padding: 0
-  }
+const DateContainer = styled("form")(() => ({
+  display: "flex",
+  justifyContent: "flex-end",
+  gap: "1rem"
 }));
+const ModCaption = styled("span")(({ theme }) => ({
+  color: theme.palette.secondary.main,
+  marginRight: "0.25rem"
+}));
+const DateRangeCaption = styled(Typography)(() => ({
+  display: "flex",
+  justifyContent: "flex-end",
+  alignItems: "center",
+  textAlign: "right",
+  margin: 0,
+  padding: 0
+}));
+
 export default AirQualityDateRangeInput;

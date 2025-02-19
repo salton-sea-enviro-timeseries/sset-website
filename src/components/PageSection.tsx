@@ -1,16 +1,18 @@
-import Container from "@material-ui/core/Container";
-import Box from "@material-ui/core/Box";
-import { makeStyles } from "@material-ui/core/styles";
-import { Avatar, Divider, colors } from "@material-ui/core";
+import {
+  Avatar,
+  Box,
+  Container,
+  Divider,
+  Typography,
+  colors,
+  styled
+} from "@mui/material";
 import FeaturedNewsFeed from "components/InTheNews/FeaturedNewsFeed";
 import Section from "components/Section";
 import SectionHeader from "components/SectionHeader";
-import { Typography } from "@material-ui/core";
-import { MediaObject } from "types";
+import { ArticleFields } from "types";
 import Image from "next/image";
-import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
-import RowOfImages from "./custom-news-section/RowOfImages";
-import RowWithTextAndImage from "./custom-news-section/RowWithTextAndImage";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 // TODO: add links to definitions
 // or add a glossary section ???
 interface GradImages {
@@ -18,111 +20,23 @@ interface GradImages {
   imageUrl: string;
 }
 type Props = {
-  newsMediaData?: MediaObject[];
+  newsArticleList?: ArticleFields[];
   bodyText: React.ReactNode | null;
   title: string;
   sectionNum: number;
   gradImages?: GradImages[];
   id: string;
 };
-interface GradSectionClasses {
-  avatarStyle: string | undefined;
-  gradContainer: string;
-  imageWrapper: string;
-}
-
 const generateContent = (
-  classes: {
-    timeLineImage: string;
-    graphDivider: string;
-  },
   id: string,
-  newsSection?: MediaObject[],
+  newsArticleList?: ArticleFields[],
   bodyText?: React.ReactNode | null
 ) => {
-  return newsSection ? (
+  return newsArticleList ? (
     <>
-      <Typography variant="h5">
-        Salton Sea Communities Face Rising Challenges Amid New Water
-        Conservation Deal
-      </Typography>
-      {/* adding post for water irrigation deal */}
-      <Box mt={2} mb={4}>
-        <RowWithTextAndImage
-          text={`On August 12, 2024, the Imperial Irrigation District (IID) approved a water conservation deal with the federal government. 
-          This deal provides farmers with up to $300/af  for reducing water usage either through water conservation on farms,
-          deficit irrigation (halting irrigation for periods of 45-60 days), or fallowing fields.
-          This deal was approved with only a cursory public participation process with one month for public comment on an environmental
-          assessment and a public meeting announced only 24 hours in advance.
-          The environmental assessment did not comprehensively consider the impact on communities and downplayed the significant impact that 
-          water use reductions will have on the Salton Sea.\n\n
-
-          Now, just a month after the signing of the deal, the effects are already apparent, with communities scrambling to adapt amid the resulting challenges (Fig. 1).
-          Water level data collected by the USGS in collaboration with the IID show that during August the Salton Sea declined by ~0.21 inches per day (6.3 inches per month),
-          a significant increase over last year’s large decline of 0.14 inches per day (4.2 inches per month), as seen in Figs. 2 and 3.
-          Even more alarming, the water level rate of decline for September (through Sept. 22, 2024) is 0.215 inches per day (6.45 inches per month), 
-          more than twice as large as the rate of decline in September 2023 (Figs. 2 and 3).
-          This extraordinary water level decline will subject residents to even greater exposure to dust and other pollutants from the exposed lakebed. 
-          The effects of increased water level decline on harmful gas emissions such as hydrogen sulfide, from both the water and the newly exposed playa, remain unknown.\n\n
-
-          While farm owners have received compensation for this program, area residents have not received compensation for their loss of work and no additional effort 
-          has been made to mitigate the environmental health impacts of this increased shoreline exposure. Consequently, this has led to significant discontent 
-          among the communities surrounding the Salton Sea (e.g. Fig. 4).`}
-          imgSrc="/water-consv-deal-figs/figure-1-pier.jpg"
-          altText="Improvised pier at the Salton Sea made of wooden pallets"
-          captionText={
-            <>
-              <b>Figure 1</b>. Improvised pier used to launch an inflatable boat
-              (August 28, 2024). The 12-meter pier extends over playa that had
-              not been exposed on August 1, 2024.
-            </>
-          }
-          imgWidth={"400px"}
-          imgHeight={"600px"}
-        />
-        <RowOfImages
-          imgSrc1="/water-consv-deal-figs/figure-2-water-lvl-rateofchange.png"
-          altText1="Chart showing change of water at the Salton Sea"
-          captionText1={
-            <>
-              <b>Figure 2</b>. Monthly rate of Salton Sea water level increase
-              (positive) or decrease (negative) based on linear fits to USGS
-              water level data (station 10254005) for fits with R² &gt;= 0.9.
-              Missing data bars represent months where the fit had R² &lt; 0.9.
-              The water level change rate for September includes data up to
-              September 22, 2024, which was the most current data available at
-              the time of writing.
-            </>
-          }
-          imgSrc2="/water-consv-deal-figs/figure-3-total_water_level_ft.png"
-          altText2="Chart showing total water level at the Salton Sea from May to Oct in 2024"
-          captionText2={
-            <>
-              <b>Figure 3</b>. Salton Sea water level (ft) relative to the level
-              measured on May 15 of each year. The plot displays 3-day running
-              means of 15-minute raw water level data from USGS station
-              10254005. May 15 was selected as the reference point, as it
-              closely aligns with the seasonal high in water level driven by
-              farming practices.
-            </>
-          }
-          imgSrc3="/water-consv-deal-figs/figure-4-cpmmunity-discontent.jpg"
-          altText3="Pardon Our Dust sign posted as the Salton Sea"
-          captionText3={
-            <>
-              <b>Figure 4</b>. Artistic expression of community discontent with
-              the Imperial Irrigation District (IID) seen on Bombay Beach.
-            </>
-          }
-          imgWidth="400px"
-          imgHeight="400px"
-        />
-      </Box>
-      <Typography variant="h5">
-        News Articles Relevant to the Salton Sea
-      </Typography>
-      <FeaturedNewsFeed newsMediaData={newsSection} />
-      <Box mt="1em" id={`inthenews-footnote`}>
+      <FeaturedNewsFeed newsArticleList={newsArticleList} />
+      <Box mt="1em" id={`${id}-footnote`}>
+        {/* TODO: this content is on contentful now */}
         <Typography component="p" align="center" style={{ fontWeight: "bold" }}>
           <sup style={{ color: "red" }}>†</sup>Many of these articles use highly
           negative language such as “toxic” and “death pit” in referring to the
@@ -139,48 +53,47 @@ const generateContent = (
     <>
       <Typography component="div">{bodyText}</Typography>
       <Box display="flex" justifyContent={"space-evenly"}>
-        <Divider className={classes.graphDivider} />
+        <StyledGraphDivider />
         <FiberManualRecordIcon color="primary" fontSize="small" />
-        <Divider className={classes.graphDivider} />
+        <StyledGraphDivider />
       </Box>
-      <Box
-        display={"flex"}
-        alignContent={"center"}
-        className={classes.timeLineImage}
-      >
+      <StyledTimeLineImage>
         <Image
           src="/salton-sea-timeline.png"
           alt="salton sea timeline"
-          layout="fill"
-          objectFit="contain"
+          fill
+          sizes="100vw"
+          style={{
+            objectFit: "contain"
+          }}
         />
-      </Box>
+      </StyledTimeLineImage>
     </>
   ) : (
     <Typography component="div">{bodyText}</Typography>
   );
 };
-const generateGradSection = (
-  classes: GradSectionClasses,
-  gradImages?: GradImages[]
-) => {
+const generateGradSection = (gradImages?: GradImages[]) => {
   return (
     gradImages && (
-      <Box className={classes.gradContainer}>
+      <StyledGradContainer>
         {gradImages.map(({ imageTitle, imageUrl }, index) => (
-          <div key={index} className={classes.imageWrapper}>
-            <Avatar className={classes.avatarStyle}>
+          <StyledImageWrapper key={index}>
+            <StyledAvatar>
               <Image
                 src={`https:${imageUrl}`}
                 alt={"grad image"}
-                layout="fill"
-                objectFit="cover"
+                width={250}
+                height={250}
+                style={{
+                  objectFit: "cover"
+                }}
               />
-            </Avatar>
+            </StyledAvatar>
             <Typography variant="h6">{imageTitle}</Typography>
-          </div>
+          </StyledImageWrapper>
         ))}
-      </Box>
+      </StyledGradContainer>
     )
   );
 };
@@ -188,110 +101,84 @@ const PageSection: React.FC<Props> = ({
   id,
   bodyText,
   title,
-  newsMediaData,
+  newsArticleList,
   sectionNum,
   gradImages
 }: Props) => {
-  const classes = useStyles();
   return (
-    <Section
-      className={classes.section}
+    <StyledSection
       bgImage={sectionNum % 2 === 0 ? "/curves.png" : null}
+      className={sectionNum % 2 === 0 ? "even" : "odd"}
     >
       <Container>
         <Box>
           <SectionHeader
             title={title}
             sectionId={id}
-            sectionFootNoteLink={!!newsMediaData}
+            sectionFootNoteLink={!!newsArticleList}
             titleProps={{
               align: "center",
-              className: classes.header,
+              component: StyledHeader,
               display: "inline"
             }}
             display="flex"
             justifyContent="center"
             size={"h4"}
           />
-          {generateContent(classes, id, newsMediaData, bodyText)}
-          {generateGradSection(classes, gradImages)}
+          {generateContent(id, newsArticleList, bodyText)}
+          {generateGradSection(gradImages)}
         </Box>
       </Container>
-    </Section>
+    </StyledSection>
   );
 };
-const useStyles = makeStyles((theme) => ({
-  header: {
-    boxShadow: `inset 0 -5px 0 ${theme.palette.secondary.light}`
-  },
-  section: {
-    "&:nth-child(odd)": { backgroundColor: colors.teal[50] }
-  },
-  gradContainer: {
-    display: "flex",
-    justifyContent: "space-evenly",
-    flexWrap: "wrap"
-  },
-  imageWrapper: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center"
-  },
-  "@global": {
-    "@keyframes fade": {
-      from: {
-        opacity: 0
-      },
-      to: {
-        opacity: 1
-      }
-    }
-  },
-  timeLineImage: {
-    [theme.breakpoints.down("sm")]: {
-      height: 300
-    },
-    [theme.breakpoints.up("sm")]: {
-      height: 600
-    },
-    width: "100%",
-    marginTop: "2rem",
-    position: "relative",
-    animation: "fade linear both",
-    animationTimeline: "view()",
-    animationRange: "entry 50% cover 50%"
-  },
-  graphDivider: {
-    margin: "auto",
-    width: "50%",
-    height: 2,
-    borderRadius: 50,
-    background: "#BCBCBC"
-  },
-  avatarStyle: {
-    width: 250,
-    height: 250
-  }
-  // customNewsImageWrapper: {
-  //   position: "relative"
-  // },
-  // rowWrapper: {
-  //   display: "flex",
-  //   flexWrap: "wrap",
-  //   flexGrow: 1,
-  //   justifyContent: "space-between"
-  // },
 
-  // rowWrapperOneItem: {
-  //   display: "flex",
-  //   marginBottom: "1rem"
-  // },
-
-  // column: {
-  //   flex: "1 1 300px",
-  //   marginLeft: "1rem",
-  //   marginRight: "1rem"
-  //   // marginBottom: "5rem"
-  // }
+const StyledSection = styled(Section)(({ theme }) => ({
+  "&.odd": { backgroundColor: colors.teal[50] },
+  "&.even": { backgroundColor: theme.palette.background.default }
 }));
+
+const StyledHeader = styled("div")(({ theme }) => ({
+  boxShadow: `inset 0 -5px 0 ${theme.palette.secondary.light}`
+}));
+
+const StyledGradContainer = styled(Box)({
+  display: "flex",
+  justifyContent: "space-evenly",
+  flexWrap: "wrap"
+});
+
+const StyledImageWrapper = styled("div")({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center"
+});
+
+const StyledTimeLineImage = styled(Box)(({ theme }) => ({
+  width: "100%",
+  marginTop: "2rem",
+  position: "relative",
+  animation: "fade linear both",
+  animationTimeline: "view()",
+  animationRange: "entry 50% cover 50%",
+  [theme.breakpoints.down("sm")]: {
+    height: 300
+  },
+  [theme.breakpoints.up("sm")]: {
+    height: 600
+  }
+}));
+
+const StyledGraphDivider = styled(Divider)({
+  margin: "auto",
+  width: "50%",
+  height: 2,
+  borderRadius: 50,
+  background: "#BCBCBC"
+});
+
+const StyledAvatar = styled(Avatar)({
+  width: 250,
+  height: 250
+});
 export default PageSection;

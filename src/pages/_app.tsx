@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import Script from "next/script";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
+import { CacheProvider, EmotionCache } from "@emotion/react";
+import createEmotionCache from "util/createEmotionCache";
 import * as gtag from "../util/gtag";
 import { ThemeProvider } from "util/theme.js";
 import AppContextProvider from "components/AppContext";
@@ -11,11 +13,20 @@ export type NextPageWithLayout = NextPage & {
   getLayout?: (page: React.ReactElement) => React.ReactNode;
 };
 
-type AppPropsWithLayout = AppProps & {
+// Extend AppProps to include `emotionCache`
+type AppPropsWithEmotionCache = AppProps & {
   Component: NextPageWithLayout;
+  emotionCache?: EmotionCache;
 };
 
-function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+// Create a client-side Emotion cache
+const clientSideEmotionCache = createEmotionCache();
+
+function MyApp({
+  Component,
+  pageProps,
+  emotionCache = clientSideEmotionCache
+}: AppPropsWithEmotionCache) {
   const getLayout = Component.getLayout ?? ((page) => page);
   const router = useRouter();
   // TODO config cookies banners
@@ -32,19 +43,21 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     };
   }, [router.events]);
   return (
-    <ThemeProvider>
-      <AppContextProvider>
-        <Script
-          src="https://consent.cookiebot.com/uc.js"
-          strategy="afterInteractive"
-          id="Cookiebot"
-          data-cbid="223ebf7c-c8d8-4dfb-bcc3-d4050accdd47"
-          data-blockingmode="auto"
-          type="text/javascript"
-        />
-        {getLayout(<Component {...pageProps} />)}
-      </AppContextProvider>
-    </ThemeProvider>
+    <CacheProvider value={emotionCache}>
+      <ThemeProvider>
+        <AppContextProvider>
+          <Script
+            src="https://consent.cookiebot.com/uc.js"
+            strategy="afterInteractive"
+            id="Cookiebot"
+            data-cbid="223ebf7c-c8d8-4dfb-bcc3-d4050accdd47"
+            data-blockingmode="auto"
+            type="text/javascript"
+          />
+          {getLayout(<Component {...pageProps} />)}
+        </AppContextProvider>
+      </ThemeProvider>
+    </CacheProvider>
   );
 }
 

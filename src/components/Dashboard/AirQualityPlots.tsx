@@ -14,8 +14,7 @@ import {
   ChartOptions,
   LegendItem,
   ChartData,
-  Plugin,
-  ChartArea
+  Plugin
 } from "chart.js";
 import {
   BodyValues,
@@ -26,7 +25,7 @@ import {
 } from "types";
 import "chartjs-adapter-date-fns";
 import { Line } from "react-chartjs-2";
-import { makeStyles, Box, Typography, Link } from "@material-ui/core";
+import { Box, Typography, Link, SelectChangeEvent } from "@mui/material";
 import { calcParamAQI } from "util/calcParamAQI";
 import useSelect from "hooks/useSelect";
 import SelectMenuList from "./SelectMenuList";
@@ -142,77 +141,6 @@ const canvasBackgroundColor: Plugin<"line"> = {
     }
   }
 };
-const INSTRUMENTATION_THRESHOLD_H2S = 4;
-
-function isBelowThreshold(
-  dataPoint: DataItem | null
-): dataPoint is DataItem & { H2S: number } {
-  if (dataPoint !== null && typeof dataPoint.H2S === "number") {
-    return dataPoint.H2S >= 0 && dataPoint.H2S <= INSTRUMENTATION_THRESHOLD_H2S;
-  }
-  return false;
-}
-//Removed
-const thresholdLinePlugin = (selectedParam: string) => ({
-  id: "thresholdLine",
-  afterDraw: (chart: ChartJS) => {
-    if (selectedParam !== "H2S") {
-      return; // Only draw the line for H2S parameter
-    }
-
-    const ctx = chart.ctx;
-    const chartArea: ChartArea = chart.chartArea;
-    const yScale = chart.scales.y;
-    const yPos = yScale.getPixelForValue(INSTRUMENTATION_THRESHOLD_H2S);
-    // Draw the dashed line
-    ctx.lineWidth = 2;
-    ctx.save();
-    ctx.beginPath();
-    ctx.strokeStyle = "red";
-    ctx.setLineDash([5, 5]); // Dashed line pattern
-    ctx.moveTo(chartArea.left, yPos);
-    ctx.lineTo(chartArea.right, yPos);
-    ctx.stroke();
-    // Draw the custom legend
-    drawCustomLegend(ctx, chartArea);
-    ctx.restore();
-  }
-});
-
-function drawCustomLegend(ctx: CanvasRenderingContext2D, chartArea: ChartArea) {
-  // Padding from the right edge and top of the chart
-  const paddingRight = 4;
-  //TODO change padding based on axis max width
-  const paddingTop = 60;
-
-  // Legend size
-  const legendWidth = 140;
-  const legendHeight = 50;
-
-  // Legend position
-  const legendX = chartArea.right - legendWidth - paddingRight;
-  const legendY = chartArea.top - paddingTop;
-
-  // Background
-  ctx.fillStyle = "whitesmoke";
-  ctx.fillRect(legendX, legendY, legendWidth, legendHeight);
-
-  // Border
-  ctx.strokeStyle = "black";
-  ctx.strokeRect(legendX, legendY, legendWidth, legendHeight);
-
-  // Dashed line sample
-  ctx.beginPath();
-  ctx.setLineDash([5, 5]);
-  ctx.moveTo(legendX + 10, legendY + 20); // Adjust as needed
-  ctx.lineTo(legendX + 90, legendY + 20); // Adjust as needed
-  ctx.strokeStyle = "red";
-  ctx.stroke();
-
-  // Text
-  ctx.fillStyle = "black";
-  ctx.fillText("Instrument\nThreshold", legendX + 10, legendY + 35); // Adjust as needed
-}
 // all chart options and selected param as y axis
 const chartOptions = (selectedParam: string): ChartOptions<"line"> => {
   return {
@@ -225,7 +153,7 @@ const chartOptions = (selectedParam: string): ChartOptions<"line"> => {
     plugins: {
       title: {
         display: true,
-        text: selectedParam,
+        text: "",
         font: {
           size: 16
         }
@@ -324,24 +252,14 @@ const AirQualityPlots = ({
   locale: string;
   paramSelectionHelperText?: string;
 }) => {
-  const classes = useStyles();
-
   const {
     selectedValue: selectedParam,
-    handleSelectChange,
+    handleSelectChange: handleSelectChangeBase,
     options
   } = useSelect<string>({
     initialValues: Object.keys(paramAQIStandardMap),
     defaultValue: "H2S"
   });
-  //Removed threshold Line
-  //=========================================================================
-  // Combine the canvasBackgroundColor plugin with the threshold plugin
-  // const combinedPlugins: Plugin<"line">[] = useMemo(
-  //   () => [canvasBackgroundColor, thresholdLinePlugin(selectedParam)],
-  //   [selectedParam]
-  // );
-  //==========================================================================
   const plugin: Plugin<"line">[] = [canvasBackgroundColor];
   //Filter selected param to retrieve its details
   const parameterFilter = useMemo(
@@ -413,10 +331,10 @@ const AirQualityPlots = ({
         options={options}
         helperText={paramSelectionHelperText || "Select Param to Chart"}
         selectedValue={selectedParam}
-        handleSelectChange={handleSelectChange}
+        handleSelectChange={handleSelectChangeBase}
       />
       {shouldRenderChart ? (
-        <Box minHeight={350} m="2 2 0 2">
+        <Box minHeight={350} m="2 2 0 2" marginTop={-4} sx={{ paddingTop: 0 }}>
           <Line
             key={selectedParam}
             plugins={plugin}
@@ -449,7 +367,7 @@ const AirQualityPlots = ({
         >
           {chartMainCaption}{" "}
           <Link
-            className={classes.airPollutant}
+            sx={{ color: "#3a7ca5", cursor: "pointer" }}
             href={parameterInfoLink}
             target="_blank"
             rel="noopener"
@@ -463,10 +381,3 @@ const AirQualityPlots = ({
   );
 };
 export default AirQualityPlots;
-const useStyles = makeStyles(() => ({
-  formControl: {
-    minWidth: 120
-  },
-  airPollutant: { color: "#3a7ca5", cursor: "pointer" },
-  selectEmpty: {}
-}));

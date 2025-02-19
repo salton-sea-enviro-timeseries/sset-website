@@ -1,7 +1,7 @@
-import { Container, Button, Box, Typography } from "@material-ui/core";
+import { Container, Button, Box, Typography } from "@mui/material";
 import Image from "next/image";
-import { Card } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Card } from "@mui/material";
+import { styled, keyframes } from "@mui/material/styles";
 import { useAppContext } from "components/AppContext";
 import Hero from "components/Hero";
 import Section from "components/Section";
@@ -10,43 +10,31 @@ import Meta from "components/Meta";
 import Translation from "components/Translation";
 import ResourceSection from "components/ResourceSection";
 import PackedBubbleChart from "components/resources/PackedBubbleChart";
-import { useEffect } from "react";
-type ArticleData = {
-  data: {
-    key: string;
-    url: string;
-    title: string;
-    publicationTitle?: string;
-    date: string;
-  };
-  links: {
-    alternate: {
-      href: string;
-    };
-  };
-  meta: { creatorSummary: string };
-};
+// type ArticleData = {
+//   data: {
+//     key: string;
+//     url: string;
+//     title: string;
+//     publicationTitle?: string;
+//     date: string;
+//   };
+//   links: {
+//     alternate: {
+//       href: string;
+//     };
+//   };
+//   meta: { creatorSummary: string };
+// };
 const Resources = () => {
   const groupID = 4854089;
-  const zoteroUrl = `https://api.zotero.org/groups/${groupID}/items/top?limit=10&order=dateModified&v=3`;
+  // const zoteroUrl = `https://api.zotero.org/groups/${groupID}/items/top?limit=10&order=dateModified&v=3`;
   // @ts-ignore
-  const { language, width, setWidth } = useAppContext();
+  const { language } = useAppContext();
   // TODO add Translations and import content from Contentful
   //  TODO Refactor : Make dry...
-  //
-  // reset width to fit bubble chart-width correctly on mobile devices.
-  useEffect(() => {
-    setWidth("825px");
-    return () => {
-      setWidth("100%");
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const classes = useStyles({ width });
   return (
-    <Layout>
-      <div style={{ minWidth: width }}>
+    (<Layout minWidth={"825px"}>
+      <div>
         <Meta title="Resources | Salton Sea Environmental Timeseries" />
         <Translation
           path="site.language.navLinks.resources"
@@ -57,37 +45,35 @@ const Resources = () => {
           <Hero bgColor="secondary" size="medium" />
         </Translation>
         <Section>
-          <Container
-            maxWidth="xl"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              minWidth: "800px"
-            }}
-          >
-            <Box className={classes.flyerContainerWrapper}>
-              <Box className={classes.flyerContainer}>
-                <Card className={classes.backCard}>
+          <StyledContainer maxWidth="xl">
+            <FlyerContainerWrapper>
+              <FlyerContainer>
+                <BackCard>
                   <Image
                     src="/salton-sea-flyer-back.jpg"
                     alt="Alianza CV"
                     width={400}
                     height={(400 * 3300) / 2550}
                     priority
-                  />
-                </Card>
-                <Card className={classes.frontCard} elevation={5}>
+                    style={{
+                      maxWidth: "100%",
+                      height: "auto"
+                    }} />
+                </BackCard>
+                <FrontCard elevation={5}>
                   <Image
                     src="/salton-sea-flyer-front.jpg"
                     alt="Alianza CV"
                     width={400}
                     height={(400 * 3300) / 2550}
                     priority
-                  />
-                </Card>
-              </Box>
-            </Box>
+                    style={{
+                      maxWidth: "100%",
+                      height: "auto"
+                    }} />
+                </FrontCard>
+              </FlyerContainer>
+            </FlyerContainerWrapper>
             <Box display="flex" justifyContent={"center"}>
               <Button
                 color="primary"
@@ -116,7 +102,7 @@ const Resources = () => {
               link={"/salton-sea-mdl-public-letter-2023.pdf"}
               download={true}
             />
-          </Container>
+          </StyledContainer>
         </Section>
         <Section>
           <PackedBubbleChart />
@@ -129,45 +115,41 @@ const Resources = () => {
               download={true}
             />
             <Box display="flex" alignItems="center" flexDirection={"column"}>
-              <Box
-                className={`${classes.imageWrapper} ${classes.zoomAnimation}`}
-                mb="1rem"
-              >
+              <ZoomAnimation mb="1rem">
                 <Image
                   src="/ssa-ownership-map.png"
                   alt="SSA Ownership Map"
-                  objectFit="contain"
                   width={400}
                   height={300}
-                  layout="responsive"
-                />
-              </Box>
-              <Box
-                className={`${classes.imageWrapper} ${classes.zoomAnimation}`}
-              >
+                  sizes="100vw"
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    objectFit: "contain"
+                  }} />
+              </ZoomAnimation>
+              <ZoomAnimation>
                 <Image
                   src="/ssa-ownership-map-legend.png"
                   alt="SSA Ownership Map"
-                  objectFit="contain"
                   width={650}
                   height={350}
-                  layout="responsive"
-                />
-              </Box>
+                  sizes="100vw"
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    objectFit: "contain"
+                  }} />
+              </ZoomAnimation>
             </Box>
           </Container>
         </Section>
         <Container>
-          <Typography
-            variant="h4"
-            component="header"
-            className={classes.fieldScopeTitle}
-            align="center"
-          >
+          <FieldScopeTitle variant="h4" as="header" align="center">
             Field Scope
-          </Typography>
-          <Box className={classes.flexContainer}>
-            <Box className={classes.flexItem}>
+          </FieldScopeTitle>
+          <FlexContainer>
+            <FlexItem>
               <ResourceSection
                 title="Monitoring Salton Sea"
                 body="A link to Field Scope, a tool used to design a pilot project led by the community to monitor the Salton Sea water quality."
@@ -175,19 +157,22 @@ const Resources = () => {
                 download={false}
                 headerSize={5}
               >
-                <Box className={classes.imageWrapper}>
+                <ImageWrapper>
                   <Image
                     src="/field-scope-monitoring-salton-sea-water-quality.png"
                     alt="Field Scope: Monitoring Salton Sea Water Quality"
-                    objectFit="contain"
                     width={400}
                     height={200}
-                    layout="responsive"
-                  />
-                </Box>
+                    sizes="100vw"
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                      objectFit: "contain"
+                    }} />
+                </ImageWrapper>
               </ResourceSection>
-            </Box>
-            <Box className={classes.flexItem}>
+            </FlexItem>
+            <FlexItem>
               <ResourceSection
                 title="Salton Sea Air Quality"
                 body="A link to Field Scope, a tool used to make visualizations from community member contributions measuring Salton Sea air quality."
@@ -195,138 +180,132 @@ const Resources = () => {
                 download={false}
                 headerSize={5}
               >
-                <Box className={classes.imageWrapper}>
+                <ImageWrapper>
                   <Image
                     src="/field-scope-salton-sea-air-quality.png"
                     alt="Field Scope: Salton Sea Air Quality"
-                    objectFit="contain"
                     width={400}
                     height={200}
-                    layout="responsive"
-                  />
-                </Box>
+                    sizes="100vw"
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                      objectFit: "contain"
+                    }} />
+                </ImageWrapper>
               </ResourceSection>
-            </Box>
-          </Box>
+            </FlexItem>
+          </FlexContainer>
         </Container>
       </div>
-    </Layout>
+    </Layout>)
   );
 };
-const useStyles = makeStyles((theme) => ({
-  pageWidth: ({ width }: { width: string }) => ({
-    width: width
-  }),
-  header: {
-    boxShadow: `inset 0 -5px 0 ${theme.palette.primary.light}`,
+const StyledContainer = styled(Container)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center"
+}));
 
-    transition: "color 0.2s ease",
-    "&:hover": {
-      color: theme.palette.secondary.light
-    }
+const FlyerContainerWrapper = styled(Box)({
+  minWidth: "365px"
+});
+
+const FlyerContainer = styled(Box)(({ theme }) => ({
+  position: "relative",
+  display: "flex",
+  alignItems: "center",
+  [theme.breakpoints.down("sm")]: {
+    flexDirection: "column"
   },
-  fieldScopeTitle: {
-    fontSize: "2rem",
-    marginBottom: "1rem"
-  },
-  flexContainer: {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "space-between"
-  },
-  flexItem: {
-    flex: "1 1 45%", // Take up to 45% of the container's width
-    margin: "1rem",
-    boxSizing: "border-box",
-    [theme.breakpoints.down("sm")]: {
-      flex: "1 1 100%" // Full width on small screens
-    }
-  },
-  section: {
-    boxShadow: `inset 0 -5px 0 ${theme.palette.secondary.light}`
-  },
-  zotero: {
-    maxWidth: 800
-  },
-  flyerTitle: {
-    fontWeight: 400
-  },
-  zoteroContainer: {
-    display: "flex",
-    justifyContent: "center"
-  },
-  zoteroButton: {
-    justifyContent: "flex-end"
-  },
-  flyerContainerWrapper: {
-    minWidth: "365px"
-  },
-  flyerContainer: {
-    position: "relative",
-    display: "flex",
-    alignItems: "center",
-    [theme.breakpoints.down("sm")]: {
-      flexDirection: "column"
-    },
-    [theme.breakpoints.up("sm")]: {
-      flexDirection: "row"
-    }
-  },
-  frontCard: {
-    width: 300,
-    height: 385,
-    margin: "1rem 0",
-    transition: "transform 300ms",
-    [theme.breakpoints.up("sm")]: {
-      transform: "rotate(8deg)"
-    },
-    [theme.breakpoints.down("xs")]: {
-      position: "relative",
-      zIndex: 1,
-      left: "2.5em",
-      top: "1.5em"
-    }
-  },
-  backCard: {
-    width: 300,
-    height: 385,
-    margin: "1rem 0",
-    transition: "transform 300ms",
-    [theme.breakpoints.up("sm")]: {
-      transform: "rotate(-8deg)"
-    },
-    [theme.breakpoints.down("xs")]: {
-      position: "absolute",
-      zIndex: 0,
-      bottom: "2em",
-      left: "0"
-    }
-  },
-  "@global": {
-    "@keyframes zoom": {
-      from: {
-        width: "50%",
-        opacity: "25%"
-      },
-      to: {
-        opacity: 1,
-        width: "100%"
-      }
-    }
-  },
-  imageWrapper: {
-    maxWidth: "100%",
-    height: "auto",
-    verticalAlign: "middle",
-    fontStyle: "italic",
-    backgroundRepeat: "no-repeat",
-    shapeMargin: "1rem"
-  },
-  zoomAnimation: {
-    animation: "zoom linear both",
-    animationTimeline: "view()",
-    animationRange: "entry 50% cover 45%"
+  [theme.breakpoints.up("sm")]: {
+    flexDirection: "row"
   }
+}));
+
+const FrontCard = styled(Card)(({ theme }) => ({
+  width: 300,
+  height: 385,
+  margin: "1rem 0",
+  transition: "transform 300ms",
+  [theme.breakpoints.up("sm")]: {
+    transform: "rotate(8deg)"
+  },
+  [theme.breakpoints.down("xs")]: {
+    position: "relative",
+    zIndex: 1,
+    left: "2.5em",
+    top: "1.5em"
+  }
+}));
+
+const BackCard = styled(Card)(({ theme }) => ({
+  width: 300,
+  height: 385,
+  margin: "1rem 0",
+  transition: "transform 300ms",
+  [theme.breakpoints.up("sm")]: {
+    transform: "rotate(-8deg)"
+  },
+  [theme.breakpoints.down("xs")]: {
+    position: "absolute",
+    zIndex: 0,
+    bottom: "2em",
+    left: "0"
+  }
+}));
+const ImageWrapper = styled(Box)({
+  maxWidth: "100%",
+  height: "auto",
+  verticalAlign: "middle",
+  fontStyle: "italic",
+  backgroundRepeat: "no-repeat",
+  shapeMargin: "1rem"
+});
+
+const zoomAnimationKeyframes = keyframes`
+  from {
+    width: 50%;
+    opacity: 25%;
+  }
+  to {
+    opacity: 1;
+    width: 100%;
+  }
+`;
+
+const ZoomAnimation = styled(ImageWrapper)(({ theme }) => ({
+  animation: `${zoomAnimationKeyframes} linear both`,
+  animationTimeline: "view()",
+  animationRange: "entry 50% cover 45%"
+}));
+
+const FieldScopeTitle = styled(Typography)({
+  fontSize: "2rem",
+  marginBottom: "1rem"
+});
+
+const FlexContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexWrap: "wrap",
+  justifyContent: "space-between"
+}));
+
+const FlexItem = styled(Box)(({ theme }) => ({
+  flex: "1 1 45%",
+  margin: "1rem",
+  boxSizing: "border-box",
+  [theme.breakpoints.down("sm")]: {
+    flex: "1 1 100%"
+  }
+}));
+
+const StyledPackedBubbleChartContainer = styled(Section)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  minWidth: "825px",
+  maxWidth: "100vw"
 }));
 
 export default Resources;

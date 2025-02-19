@@ -1,6 +1,6 @@
-import { Avatar, Box, Container, Paper, Typography } from "@material-ui/core";
-import { Timeline } from "@material-ui/lab";
-import { makeStyles } from "@material-ui/core/styles";
+import { Box, Container, Typography } from "@mui/material";
+// import { styled } from "@mui/material/styles";
+// import { Timeline } from "@mui/lab";
 import EmblaCarousel from "../components/Embla/EmblaCarousel";
 import { EmblaOptionsType } from "embla-carousel";
 import Hero from "components/Hero";
@@ -9,8 +9,8 @@ import Meta from "components/Meta";
 import Section from "components/Section";
 import Translation from "components/Translation";
 import SectionHeader from "components/SectionHeader";
-import TimelineYear from "components/TimeLine/TimelineYear";
-import NavigationTimeline from "components/TimeLine/NavigationTimeline";
+// import TimelineYear from "components/TimeLine/TimelineYear";
+// import NavigationTimeline from "components/TimeLine/NavigationTimeline";
 import MemberBio from "components/About-Us/MemberBio";
 
 const ABOUT_US_INTRO_TEXT = (
@@ -492,9 +492,8 @@ const TEAM_BIOS = [
 // TODO: change bgImage
 const OPTIONS: EmblaOptionsType = { dragFree: true, loop: true };
 const AboutUs = () => {
-  const classes = useStyles();
   return (
-    <Layout className={classes.root}>
+    <Layout minWidth={"800px"}>
       <Meta title="About Us | Salton Sea Environmental Timeseries" />
       <Translation
         path="site.language.navLinks.about"
@@ -505,7 +504,7 @@ const AboutUs = () => {
         <Hero bgColor="secondary" size="medium" />
       </Translation>
       {/* TODO make its own component */}
-      <Section className={classes.topIntroSection} bgImage={"/curves.png"}>
+      <Section sx={{ paddingBottom: "2rem" }} bgImage={"/curves.png"}>
         <Container>
           <Box>
             <SectionHeader
@@ -513,7 +512,11 @@ const AboutUs = () => {
               sectionId={"section-about-us"}
               titleProps={{
                 align: "center",
-                className: classes.header,
+                sx: {
+                  boxShadow: (theme: {
+                    palette: { secondary: { light: any } };
+                  }) => `inset 0 -5px 0 ${theme.palette.secondary.light}`
+                },
                 display: "inline"
               }}
               display="flex"
@@ -525,7 +528,7 @@ const AboutUs = () => {
         </Container>
       </Section>
       <EmblaCarousel options={OPTIONS} />
-      <Section className={classes.bottomIntroSection} bgImage={"/curves.png"}>
+      <Section sx={{ paddingTop: "2rem" }} bgImage={"/curves.png"}>
         <Container>
           <Box>
             <Typography component="div">
@@ -561,7 +564,11 @@ const AboutUs = () => {
             sectionId={"section-core-team"}
             titleProps={{
               align: "center",
-              className: classes.header,
+              sx: {
+                boxShadow: (theme: {
+                  palette: { secondary: { light: any } };
+                }) => `inset 0 -5px 0 ${theme.palette.secondary.light}`
+              },
               display: "inline"
             }}
             display="flex"
@@ -583,49 +590,29 @@ const AboutUs = () => {
     </Layout>
   );
 };
+// const StyledAvatar = styled(Box)(({ theme }) => ({
+//   width: theme.spacing(25),
+//   height: theme.spacing(25),
+//   float: "left",
+//   shapeOutside: "circle(50%)",
+//   marginRight: "1rem"
+// }));
+
+// const StyledAvatarOdd = styled(Box)(({ theme }) => ({
+//   width: theme.spacing(25),
+//   height: theme.spacing(25),
+//   float: "right",
+//   shapeOutside: "circle(50%)",
+//   marginRight: "1rem"
+// }));
+
+// const StyledTimeLineContainer = styled(Paper)({
+//   height: "100vh",
+//   overflowY: "scroll",
+//   scrollbarWidth: "none",
+//   msOverflowStyle: "none",
+//   "&::-webkit-scrollbar": {
+//     display: "none"
+//   }
+// });
 export default AboutUs;
-const useStyles = makeStyles((theme) => ({
-  root: {
-    minWidth: "800px"
-  },
-  header: {
-    boxShadow: `inset 0 -5px 0 ${theme.palette.secondary.light}`
-  },
-  avatar: {
-    width: theme.spacing(25),
-    height: theme.spacing(25),
-    float: "left",
-    shapeOutside: "circle(50%)",
-    marginRight: "1rem"
-  },
-  avatarOdd: {
-    width: theme.spacing(25),
-    height: theme.spacing(25),
-    float: "right",
-    shapeOutside: "circle(50%)",
-    marginRight: "1rem"
-  },
-  topIntroSection: {
-    paddingBottom: "2rem"
-  },
-  bottomIntroSection: {
-    paddingTop: "2rem "
-  },
-  pageWrapper: {
-    //breakpoint at wich timeline is no longer correctly visible
-    minWidth: "800px"
-  },
-  timeLineWrapper: {
-    display: "flex"
-  },
-  timeLineContainer: {
-    height: "100vh",
-    overflowY: "scroll",
-    //hiding scrollbar for diff browsers
-    scrollbarWidth: "none",
-    msOverflowStyle: "none",
-    "&::-webkit-scrollbar": {
-      display: "none"
-    }
-  }
-}));

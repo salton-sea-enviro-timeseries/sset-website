@@ -1,5 +1,5 @@
-import { Marker } from "react-map-gl";
-import { Tooltip, makeStyles } from "@material-ui/core";
+import { Marker } from "react-map-gl/mapbox";
+import { Tooltip } from "@mui/material";
 import { MapPinIcon } from "../../constants";
 const PIN_SIZE = 20;
 
@@ -12,7 +12,6 @@ type MapMarker = {
 };
 
 const MapMarker = ({ latitude, longitude, color, site, i }: MapMarker) => {
-  const classes = useStyles();
   return (
     <Marker
       key={`${i}-${latitude}-${longitude}`}
@@ -24,13 +23,27 @@ const MapMarker = ({ latitude, longitude, color, site, i }: MapMarker) => {
         open={true}
         arrow
         placement="right-start"
-        PopperProps={{
-          disablePortal: true
-        }}
-        classes={{
-          arrow: classes.arrow,
-          popper: classes.popper,
-          tooltip: classes.tooltip
+        slotProps={{
+          popper: {
+            disablePortal: true
+          },
+          tooltip: {
+            sx: {
+              fontSize: "11px",
+              backgroundColor: "rgba(0, 0, 0, 0.8)",
+              color: "#fff",
+              whiteSpace: "nowrap",
+              display: "flex",
+              justifyContent: "center"
+            }
+          },
+          arrow: {
+            sx: {
+              "&::before": {
+                backgroundColor: "rgba(0, 0, 0, 0.8)"
+              }
+            }
+          }
         }}
       >
         <svg
@@ -42,9 +55,6 @@ const MapMarker = ({ latitude, longitude, color, site, i }: MapMarker) => {
             stroke: "none",
             transform: `translate(${-PIN_SIZE / 2}px,${-PIN_SIZE}px)`
           }}
-          // onClick={() => {
-          //   setSelectedPin(pins[i]);
-          // }}
         >
           <path d={MapPinIcon} />
         </svg>
@@ -52,24 +62,5 @@ const MapMarker = ({ latitude, longitude, color, site, i }: MapMarker) => {
     </Marker>
   );
 };
-export default MapMarker;
 
-const useStyles = makeStyles(() => ({
-  arrow: {
-    "&::before": {
-      backgroundColor: "rgba(0, 0, 0, 0.8)"
-    }
-  },
-  popper: {
-    left: "-10px !important",
-    cursor: "pointer",
-    pointerEvents: "unset"
-  },
-  tooltip: {
-    fontSize: 11,
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
-    whiteSpace: "nowrap",
-    display: "flex",
-    justifyContent: "center"
-  }
-}));
+export default MapMarker;

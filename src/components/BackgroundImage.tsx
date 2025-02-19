@@ -1,41 +1,32 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    content: "",
-    backgroundPosition: "center center",
-    backgroundSize: "cover",
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    position: "absolute",
-    zIndex: 0
-  }
-}));
+import { styled } from "@mui/material/styles";
 
 function BackgroundImage(props: {
   [x: string]: any;
-  image: any;
-  opacity: any;
+  image?: string;
+  opacity?: string | number;
 }) {
-  const classes = useStyles();
-
   const { image, opacity, ...otherProps } = props;
-
   return (
-    <div
-      className={classes.root}
-      style={{
-        backgroundImage: `url(${image})`,
-        opacity: opacity,
-        backgroundRepeat: "repeat",
-        backgroundSize: "auto"
-      }}
-      {...otherProps}
-    />
+    <BackgroundImageRoot image={image} opacity={opacity} {...otherProps} />
   );
 }
+const BackgroundImageRoot = styled("div")<{
+  image?: string;
+  opacity?: string | number;
+}>(({ theme, image, opacity }) => ({
+  content: '""',
+  backgroundPosition: "center center",
+  backgroundSize: "auto",
+  top: 0,
+  left: 0,
+  bottom: 0,
+  right: 0,
+  position: "absolute",
+  zIndex: 0,
+  //TODO provide default image
+  backgroundImage: image ? `url(${image})` : "none",
+  opacity: opacity
+}));
 
 export default BackgroundImage;

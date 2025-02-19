@@ -1,32 +1,22 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import { SiteData } from "types";
-import { DataGrid } from "@material-ui/data-grid";
-import Paper from "@material-ui/core/Paper";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import Paper from "@mui/material/Paper";
 import { Units } from "types";
 import { isArray } from "lodash";
-import { format } from "date-fns";
-
-const useStyles = makeStyles({
-  table: {
-    width: "100%",
-    minHeight: 500
-  }
-});
+import { styled } from "@mui/material/styles";
 
 interface TableProps {
   data: SiteData[];
 }
 
-const columns = [
+const columns: GridColDef[] = [
   {
     field: "date",
     headerName: "Date",
     width: 110,
     editable: false,
-    type: "date",
-    // @ts-ignore
-    valueFormatter: ({ value }) => format(value, "MM/dd/yyyy")
+    type: "date"
   },
   {
     field: "site",
@@ -39,7 +29,6 @@ const columns = [
     headerName: "Lat.",
     sortable: false,
     disableColumnMenu: true,
-    disableColumnFilter: true,
     width: 110,
     editable: false,
     filterable: false
@@ -49,7 +38,6 @@ const columns = [
     headerName: "Lon.",
     sortable: false,
     disableColumnMenu: true,
-    disableColumnFilter: true,
     filterable: false,
     width: 110,
     editable: false
@@ -151,9 +139,7 @@ const columns = [
     filterable: false
   }
 ];
-
-export default function Table(props: TableProps) {
-  const classes = useStyles();
+const Table = (props: TableProps) => {
   // HACK: need to handle error when google api key isnt set
   const rows = (isArray(props.data) ? props.data : []).map((row, index) => ({
     ...row,
@@ -162,15 +148,27 @@ export default function Table(props: TableProps) {
   }));
   return (
     <Paper>
-      <DataGrid
-        className={classes.table}
+      <StyledDataGrid
         density="compact"
         rows={rows}
+        pagination
+        rowCount={rows.length}
         columns={columns}
-        disableSelectionOnClick
-        pageSize={100}
+        rowSelection={false}
+        paginationModel={{ pageSize: 100, page: 0 }}
         sortModel={[{ field: "date", sort: "desc" }]}
+        paginationMode="server"
       />
     </Paper>
   );
-}
+};
+const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
+  width: "100%",
+  minHeight: 500,
+  maxHeight: 600,
+  height: "100%",
+  overflow: "auto",
+  marginBottom: 4
+}));
+
+export default Table;

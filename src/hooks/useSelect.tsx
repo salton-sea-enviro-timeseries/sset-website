@@ -1,3 +1,4 @@
+import { SelectChangeEvent } from "@mui/material";
 import { useState } from "react";
 
 type SelectOptions<T> = {
@@ -9,7 +10,7 @@ const useSelect = <T extends string | number>({
   defaultValue
 }: SelectOptions<T>) => {
   const [selectedValue, setSelectedValue] = useState<T>(defaultValue);
-  const handleSelectChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleSelectChange = (event: SelectChangeEvent<unknown>) => {
     setSelectedValue(event.target.value as T);
   };
 

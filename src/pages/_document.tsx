@@ -1,27 +1,48 @@
 import React from "react";
-import Document, { Html, Head, Main, NextScript } from "next/document";
-import { ServerStyleSheets } from "@material-ui/core/styles";
+import Document, {
+  Html,
+  Head,
+  Main,
+  NextScript,
+  DocumentContext,
+  DocumentInitialProps
+} from "next/document";
+import createEmotionServer from "@emotion/server/create-instance";
+import createEmotionCache from "util/createEmotionCache";
 import { GA_TRACKING_ID } from "../util/gtag";
+import { EmotionCache } from "@emotion/react";
 
 export default class MyDocument extends Document {
-  static async getInitialProps(ctx) {
+  static async getInitialProps(
+    ctx: DocumentContext
+  ): Promise<DocumentInitialProps> {
     // Render app and page and get the context of the page with collected side effects.
-    const sheets = new ServerStyleSheets();
+    const cache = createEmotionCache();
+    const { extractCriticalToChunks } = createEmotionServer(cache);
     const originalRenderPage = ctx.renderPage;
 
     ctx.renderPage = () =>
       originalRenderPage({
-        enhanceApp: (App) => (props) => sheets.collect(<App {...props} />)
+        enhanceApp: (App: React.ComponentType<any>) => (props) =>
+          <App {...props} emotionCache={cache as EmotionCache} />
       });
 
     const initialProps = await Document.getInitialProps(ctx);
-
+    // Extract Emotion styles
+    const emotionStyles = extractCriticalToChunks(initialProps.html);
+    const emotionStyleTags = emotionStyles.styles.map((style) => (
+      <style
+        key={style.key}
+        data-emotion={`${style.key} ${style.ids.join(" ")}`}
+        dangerouslySetInnerHTML={{ __html: style.css }}
+      />
+    ));
     return {
       ...initialProps,
       // Styles fragment is rendered after the app and page rendering finish.
       styles: [
         ...React.Children.toArray(initialProps.styles),
-        sheets.getStyleElement()
+        ...emotionStyleTags
       ]
     };
   }
@@ -45,13 +66,13 @@ export default class MyDocument extends Document {
               <script
                 dangerouslySetInnerHTML={{
                   __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', '${GA_TRACKING_ID}', {
-                page_path: window.location.pathname,
-              });
-          `
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '${GA_TRACKING_ID}', {
+        page_path: window.location.pathname,
+      });
+    `
                 }}
               />
             </>

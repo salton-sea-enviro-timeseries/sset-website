@@ -1,21 +1,17 @@
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import { styled } from "@mui/material/styles";
 
 interface VideoCardProps {
   title: string;
   description: string;
   src: string;
 }
-
 export default function VideoCard({ title, description, src }: VideoCardProps) {
-  const classes = useStyles();
   return (
-    <Card className={classes.card} elevation={2}>
-      <iframe
-        width="100%"
-        height={225}
+    <StyledCard elevation={2}>
+      <StyledIframe
         src={src}
         title="YouTube video player"
         frameBorder="0"
@@ -26,20 +22,20 @@ export default function VideoCard({ title, description, src }: VideoCardProps) {
         <Typography gutterBottom variant="h6" component="div">
           {title}
         </Typography>
-        <Typography variant="body2" style={{ color: "text.secondary" }}>
+        <Typography variant="body2" sx={{ color: "text.secondary" }}>
           {description}
         </Typography>
       </CardContent>
-    </Card>
+    </StyledCard>
   );
 }
+const StyledCard = styled(Card)(({ theme }) => ({
+  height: "100%"
+}));
 
-const useStyles = makeStyles(() => ({
-  card: {
-    height: "100%"
-  },
-  video: {
-    objectFit: "cover",
-    width: "100%"
-  }
+const StyledIframe = styled("iframe")(() => ({
+  width: "100%",
+  height: 225,
+  border: 0,
+  objectFit: "cover"
 }));

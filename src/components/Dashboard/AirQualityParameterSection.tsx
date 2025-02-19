@@ -1,6 +1,16 @@
 import { useState } from "react";
 import { format } from "date-fns";
-import { Typography, Box, MenuItem, TextField } from "@material-ui/core";
+import {
+  Typography,
+  Box,
+  MenuItem,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  FormHelperText,
+  SelectChangeEvent
+} from "@mui/material";
 import { CommonDeviceType } from "types";
 import {
   inspectData,
@@ -64,7 +74,7 @@ const AirQualityParameterSection = ({
   const [isLoadingSensor, setIsLoadingSensor] = useState(false);
   const sanitizedValue = deviceMenuList.length > 0 ? selectedSensor : "";
 
-  const handleChangeSensor = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeSensor = (event: SelectChangeEvent<string>) => {
     setIsLoadingSensor(true);
     setSelectedSensor(event.target.value);
     setTimeout(() => {
@@ -98,7 +108,7 @@ const AirQualityParameterSection = ({
         <WithLoading
           isLoading={isLoadingSensor}
           key={index}
-          variant="rect"
+          variant="rectangular"
           height={120}
           width={140}
           style={{
@@ -128,31 +138,38 @@ const AirQualityParameterSection = ({
   return (
     <Box pb={5}>
       {/* selector start */}
-      <Box pr={0.5} pb={1}>
-        <WithLoading variant="rect" height={40} isLoading={isLoadingSensor}>
-          <TextField
-            fullWidth
-            label="Sensor"
-            select
-            size="small"
-            variant="outlined"
+      <Box pr={0.5} pb={1} component="form">
+        <FormControl fullWidth size="small">
+          <InputLabel
+            id="sensor-label"
+            shrink={true}
+            sx={{ backgroundColor: "white", px: 1 }}
+          >
+            Sensor
+          </InputLabel>
+          <Select
+            labelId="sensor-label"
+            id="sensor-select"
             value={sanitizedValue}
             onChange={handleChangeSensor}
-            helperText={
-              sensorSelectionHelperText ||
-              "Select a working sensor from above to view current parameter values."
-            }
+            variant="outlined"
           >
             {deviceMenuList.map(({ id, name }) => (
               <MenuItem key={id} value={id}>
-                {`${id}: ${name} `}
+                {`${id}: ${name}`}
               </MenuItem>
             ))}
-          </TextField>
-          {Array.isArray(recentDeviceData) && recentDeviceData.length === 0 && (
-            <Typography>No Data Available for {selectedSensor}</Typography>
+          </Select>
+          {sensorSelectionHelperText && (
+            <FormHelperText>
+              {sensorSelectionHelperText ||
+                "Select a working sensor from above to view current parameter values."}
+            </FormHelperText>
           )}
-        </WithLoading>
+        </FormControl>
+        {Array.isArray(recentDeviceData) && recentDeviceData.length === 0 && (
+          <Typography>No Data Available for {selectedSensor}</Typography>
+        )}
       </Box>
       {/* selector end */}
       <WithLoading isLoading={isLoadingSensor}>
