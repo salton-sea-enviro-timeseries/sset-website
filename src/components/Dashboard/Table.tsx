@@ -4,7 +4,6 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import { Units } from "types";
 import { isArray } from "lodash";
-import { format } from "date-fns";
 import { styled } from "@mui/material/styles";
 
 interface TableProps {
@@ -152,17 +151,24 @@ const Table = (props: TableProps) => {
       <StyledDataGrid
         density="compact"
         rows={rows}
+        pagination
+        rowCount={rows.length}
         columns={columns}
         rowSelection={false}
         paginationModel={{ pageSize: 100, page: 0 }}
         sortModel={[{ field: "date", sort: "desc" }]}
+        paginationMode="server"
       />
     </Paper>
   );
 };
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   width: "100%",
-  minHeight: 500
+  minHeight: 500,
+  maxHeight: 600,
+  height: "100%",
+  overflow: "auto",
+  marginBottom: 4
 }));
 
 export default Table;

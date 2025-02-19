@@ -8,15 +8,13 @@ function BackgroundImage(props: {
 }) {
   const { image, opacity, ...otherProps } = props;
   return (
-    <BackgroundImageRoot
-      styleProps={{ image: image || "", opacity }}
-      image={image}
-      opacity={opacity}
-      {...otherProps}
-    />
+    <BackgroundImageRoot image={image} opacity={opacity} {...otherProps} />
   );
 }
-const BackgroundImageRoot = styled("div")(({ theme, styleProps }) => ({
+const BackgroundImageRoot = styled("div")<{
+  image?: string;
+  opacity?: string | number;
+}>(({ theme, image, opacity }) => ({
   content: '""',
   backgroundPosition: "center center",
   backgroundSize: "auto",
@@ -27,8 +25,8 @@ const BackgroundImageRoot = styled("div")(({ theme, styleProps }) => ({
   position: "absolute",
   zIndex: 0,
   //TODO provide default image
-  backgroundImage: styleProps.image ? `url(${styleProps.image})` : "none",
-  opacity: styleProps.opacity
+  backgroundImage: image ? `url(${image})` : "none",
+  opacity: opacity
 }));
 
 export default BackgroundImage;

@@ -33,7 +33,7 @@ const Resources = () => {
   // TODO add Translations and import content from Contentful
   //  TODO Refactor : Make dry...
   return (
-    <Layout minWidth={"825px"}>
+    (<Layout minWidth={"825px"}>
       <div>
         <Meta title="Resources | Salton Sea Environmental Timeseries" />
         <Translation
@@ -55,7 +55,10 @@ const Resources = () => {
                     width={400}
                     height={(400 * 3300) / 2550}
                     priority
-                  />
+                    style={{
+                      maxWidth: "100%",
+                      height: "auto"
+                    }} />
                 </BackCard>
                 <FrontCard elevation={5}>
                   <Image
@@ -64,7 +67,10 @@ const Resources = () => {
                     width={400}
                     height={(400 * 3300) / 2550}
                     priority
-                  />
+                    style={{
+                      maxWidth: "100%",
+                      height: "auto"
+                    }} />
                 </FrontCard>
               </FlyerContainer>
             </FlyerContainerWrapper>
@@ -113,21 +119,27 @@ const Resources = () => {
                 <Image
                   src="/ssa-ownership-map.png"
                   alt="SSA Ownership Map"
-                  objectFit="contain"
                   width={400}
                   height={300}
-                  layout="responsive"
-                />
+                  sizes="100vw"
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    objectFit: "contain"
+                  }} />
               </ZoomAnimation>
               <ZoomAnimation>
                 <Image
                   src="/ssa-ownership-map-legend.png"
                   alt="SSA Ownership Map"
-                  objectFit="contain"
                   width={650}
                   height={350}
-                  layout="responsive"
-                />
+                  sizes="100vw"
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    objectFit: "contain"
+                  }} />
               </ZoomAnimation>
             </Box>
           </Container>
@@ -149,11 +161,14 @@ const Resources = () => {
                   <Image
                     src="/field-scope-monitoring-salton-sea-water-quality.png"
                     alt="Field Scope: Monitoring Salton Sea Water Quality"
-                    objectFit="contain"
                     width={400}
                     height={200}
-                    layout="responsive"
-                  />
+                    sizes="100vw"
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                      objectFit: "contain"
+                    }} />
                 </ImageWrapper>
               </ResourceSection>
             </FlexItem>
@@ -169,18 +184,21 @@ const Resources = () => {
                   <Image
                     src="/field-scope-salton-sea-air-quality.png"
                     alt="Field Scope: Salton Sea Air Quality"
-                    objectFit="contain"
                     width={400}
                     height={200}
-                    layout="responsive"
-                  />
+                    sizes="100vw"
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                      objectFit: "contain"
+                    }} />
                 </ImageWrapper>
               </ResourceSection>
             </FlexItem>
           </FlexContainer>
         </Container>
       </div>
-    </Layout>
+    </Layout>)
   );
 };
 const StyledContainer = styled(Container)(({ theme }) => ({

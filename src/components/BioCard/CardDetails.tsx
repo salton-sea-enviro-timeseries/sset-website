@@ -1,4 +1,4 @@
-import { Typography, Grid, Box } from "@mui/material";
+import { Typography, Grid2, Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useEffect, useRef } from "react";
 import Image from "next/image";
@@ -33,17 +33,20 @@ const CardDetails = ({
 
   return (
     <StyledGridContainer container spacing={0} ref={refHeight}>
-      <Grid item xs={12}>
+      <Grid2 size={{ xs: 12 }}>
         <AvatarWrapper>
           <Image
-            layout="fill"
-            objectFit="cover"
             src={image ? `https:${image}` : "/avatar-placeholder.png"}
             alt={"Avatar"}
+            width={275}
+            height={275}
+            style={{
+              objectFit: "cover"
+            }}
           />
         </AvatarWrapper>
-      </Grid>
-      <Grid item xs={12}>
+      </Grid2>
+      <Grid2 size={{ xs: 12 }}>
         <BioWrapper>
           <Box display="flex" flexWrap="wrap" alignItems="center">
             <NameTextStyles variant="h6">{name}:</NameTextStyles>
@@ -64,14 +67,14 @@ const CardDetails = ({
             <strong>Answer:</strong> {answer}
           </Typography>
         </BioWrapper>
-      </Grid>
+      </Grid2>
     </StyledGridContainer>
   );
 };
 
 export default CardDetails;
 
-const StyledGridContainer = styled(Grid)(() => ({
+const StyledGridContainer = styled(Grid2)(() => ({
   display: "flex",
   alignItems: "center"
 }));

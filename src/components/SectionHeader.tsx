@@ -64,24 +64,26 @@ function SectionHeader(props: SectionHeaderProps) {
       <Image
         src="/graduation-illustration-balloons.svg"
         alt="balloons illustration"
-        layout="intrinsic"
         width={150}
         height={150}
-        objectFit="contain"
+        style={{
+          objectFit: "contain"
+        }}
       />
       <SectionTitle />
       <Image
         src="/graduation-illustration-2.svg"
         alt="graduation celebration"
-        layout="fixed"
         width={150}
         height={150}
-        objectFit="contain"
+        style={{
+          objectFit: "contain"
+        }}
       />
     </StyledGraduationSection>
   );
   const renderAboutUsSection = () => (
-    <Link href="/about-us" passHref>
+    <Link href="/about-us" passHref legacyBehavior>
       <StyledAboutLink>
         <Typography variant={size} gutterBottom={!!subtitle} {...titleProps}>
           {title}

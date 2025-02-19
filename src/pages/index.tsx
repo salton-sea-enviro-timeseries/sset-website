@@ -113,7 +113,7 @@ const Home = ({
   );
   //================== cms end ============================
   return (
-    <Layout>
+    (<Layout>
       <Hero
         bgColor="primary"
         size="large"
@@ -122,7 +122,7 @@ const Home = ({
         subtitle={heroSubTitle && heroSubTitle[currentLocale]}
         cta={
           <>
-            <Link href="/dashboard/water-quality" passHref>
+            <Link href="/dashboard/water-quality" passHref legacyBehavior>
               <Button variant="contained" color="primary">
                 {buttonText && buttonText[currentLocale]}
               </Button>
@@ -153,7 +153,7 @@ const Home = ({
           <SubscriptionForm />
         </Container>
       </Section>
-    </Layout>
+    </Layout>)
   );
 };
 

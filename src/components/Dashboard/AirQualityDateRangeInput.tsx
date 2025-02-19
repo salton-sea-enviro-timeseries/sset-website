@@ -28,7 +28,7 @@ const AirQualityDateRangeInput = ({
 }: DateRangeProps) => {
   return (
     <>
-      <DateContainer component="form" onSubmit={handleFormSubmit}>
+      <DateContainer onSubmit={handleFormSubmit}>
         <Button
           variant="outlined"
           size="small"

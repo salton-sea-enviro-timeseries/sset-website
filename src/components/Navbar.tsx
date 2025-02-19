@@ -71,25 +71,29 @@ function Navbar({ minWidth = "100vw" }: { minWidth?: string }) {
     }
   };
   return (
-    <StyledAppBar color="transparent" position="fixed" elevation={1}>
+    (<StyledAppBar color="transparent" position="fixed" elevation={1}>
       <StyledToolbar sx={{ minWidth: minWidth }}>
         <Box display="flex" alignItems="center">
           <Link href="/" passHref>
-            <a>
-              {/* eslint-disable  @next/next/no-img-element */}
-              <img width={150} src="/logo-red.png" alt="SSET Logo" />
-            </a>
+
+            {/* eslint-disable  @next/next/no-img-element */}
+            <img width={150} src="/logo-red.png" alt="SSET Logo" />
+
           </Link>
           <CloseIcon fontSize="small" sx={{ marginLeft: "2" }} />
-          <Link href="https://thrivingsaltonsea.com/" passHref>
-            <a target="_blank" rel="noopener noreferrer">
-              {/* eslint-disable  @next/next/no-img-element */}
-              <img
-                width={150}
-                src="/thriving-salton-sea-communities.png"
-                alt="Thriving Salton Sea Communities Logo"
-              />
-            </a>
+          <Link
+            href="https://thrivingsaltonsea.com/"
+            passHref
+            target="_blank"
+            rel="noopener noreferrer">
+
+            {/* eslint-disable  @next/next/no-img-element */}
+            <img
+              width={150}
+              src="/thriving-salton-sea-communities.png"
+              alt="Thriving Salton Sea Communities Logo"
+            />
+
           </Link>
         </Box>
         <Box sx={{ flexGrow: 1, minWidth: "1px" }} />
@@ -123,7 +127,7 @@ function Navbar({ minWidth = "100vw" }: { minWidth?: string }) {
               }}
             >
               {Links.map((link, index) => (
-                <Link passHref href={link.href} key={index}>
+                <Link passHref href={link.href} key={index} legacyBehavior>
                   <MenuItem selected={isActiveLink(link.href)}>
                     {link.label}
                   </MenuItem>
@@ -166,7 +170,7 @@ function Navbar({ minWidth = "100vw" }: { minWidth?: string }) {
           </ToggleButtonGroup>
         </Box>
       </StyledToolbar>
-    </StyledAppBar>
+    </StyledAppBar>)
   );
 }
 const StyledAppBar = styled(AppBar)(({ theme }) => ({

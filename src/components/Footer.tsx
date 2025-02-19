@@ -95,11 +95,20 @@ const SocialLinkItem: React.FC<SocialLinkItemProps> = ({
   url,
   label
 }) => (
-  <Link href={url} passHref>
+  <Link href={url} passHref legacyBehavior>
     <StyledBaseLink target="_blank" rel="noreferrer">
       <StyledListItem>
         <SocialIcon>
-          <Image src={icon} alt={label} width="24" height="24" />
+          <Image
+            src={icon}
+            alt={label}
+            width="24"
+            height="24"
+            style={{
+              maxWidth: "100%",
+              height: "auto"
+            }}
+          />
         </SocialIcon>
         <ListItemText>{label}</ListItemText>
       </StyledListItem>
@@ -107,11 +116,10 @@ const SocialLinkItem: React.FC<SocialLinkItemProps> = ({
   </Link>
 );
 const ImageLink: React.FC<ImageLinkProps> = ({ href, src, alt, width }) => (
-  <Link href={href}>
+  <Link href={href} passHref target="_blank" rel="noopener noreferrer">
     {/* eslint-disable @next/next/no-img-element*/}
-    <a target="_blank" rel="noopener noreferrer">
-      <img src={src} width={width} alt={alt} />
-    </a>
+
+    <img src={src} width={width} alt={alt} />
   </Link>
 );
 

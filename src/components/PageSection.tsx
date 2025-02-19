@@ -61,8 +61,11 @@ const generateContent = (
         <Image
           src="/salton-sea-timeline.png"
           alt="salton sea timeline"
-          layout="fill"
-          objectFit="contain"
+          fill
+          sizes="100vw"
+          style={{
+            objectFit: "contain"
+          }}
         />
       </StyledTimeLineImage>
     </>
@@ -80,8 +83,11 @@ const generateGradSection = (gradImages?: GradImages[]) => {
               <Image
                 src={`https:${imageUrl}`}
                 alt={"grad image"}
-                layout="fill"
-                objectFit="cover"
+                width={250}
+                height={250}
+                style={{
+                  objectFit: "cover"
+                }}
               />
             </StyledAvatar>
             <Typography variant="h6">{imageTitle}</Typography>

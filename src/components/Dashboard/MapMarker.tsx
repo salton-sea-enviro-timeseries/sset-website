@@ -1,4 +1,4 @@
-import { Marker } from "react-map-gl";
+import { Marker } from "react-map-gl/mapbox";
 import { Tooltip } from "@mui/material";
 import { MapPinIcon } from "../../constants";
 const PIN_SIZE = 20;

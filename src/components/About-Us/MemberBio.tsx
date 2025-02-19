@@ -1,4 +1,4 @@
-import { Box, Avatar, Typography, makeStyles, Divider } from "@mui/material";
+import { Box, Avatar, Typography, Divider } from "@mui/material";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { styled } from "@mui/material/styles";
 type BioProps = {
