@@ -59,8 +59,7 @@ const StyledCard = styled(Card)({
   height: "100%"
 });
 const StyledCardActionArea = styled(CardActionArea, {
-  shouldForwardProp: (prop) =>
-    prop !== "target" && prop !== "rel" && prop !== "href"
+  shouldForwardProp: (prop) => true
 })<ExtendedCardActionAreaProps>({
   height: "100%"
 });
