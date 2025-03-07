@@ -25,11 +25,15 @@ import {
 } from "types";
 import "chartjs-adapter-date-fns";
 import { Line } from "react-chartjs-2";
-import { Box, Typography, Link, SelectChangeEvent } from "@mui/material";
+import { Box, Typography, Link, Button, Grid2 } from "@mui/material";
+import DownloadIcon from "@mui/icons-material/CloudDownload";
 import { calcParamAQI } from "util/calcParamAQI";
 import useSelect from "hooks/useSelect";
 import SelectMenuList from "./SelectMenuList";
 import { filterParameters } from "util/filterParameterFromCms";
+import AirQualityDateRangeInput from "./AirQualityDateRangeInput";
+import { FormErrorRange } from "hooks/useSensorData";
+import { downloadExcel } from "util/exelUtils";
 
 ChartJS.register(
   CategoryScale,
@@ -75,6 +79,23 @@ type DataItem = {
   O3?: number;
   CO?: number;
   H2S?: number;
+};
+
+type AirQualityPlotsProps = {
+  normalizedData: Record<string, DeviceRawData>;
+  chartMainCaption?: string;
+  parameterListDetailsText?: MenuItemFields[];
+  locale: string;
+  paramSelectionHelperText?: string;
+  handleFormSubmit: (evt: React.FormEvent<HTMLFormElement>) => Promise<void>;
+  isValidating: boolean;
+  formError: FormErrorRange;
+  startDateRef: React.RefObject<HTMLInputElement>;
+  endDateRef: React.RefObject<HTMLInputElement>;
+  buttonText?: string;
+  startDateText?: string;
+  endDateText?: string;
+  modSensorGeneratePlotHelperText?: string;
 };
 // ==============================================================
 //Todo refactor to export?
@@ -239,19 +260,23 @@ function hasNonNullValueForParam<T extends { [key: string]: any }>(
     );
   });
 }
+
 const AirQualityPlots = ({
   normalizedData,
   chartMainCaption,
   parameterListDetailsText,
   locale,
-  paramSelectionHelperText
-}: {
-  normalizedData: Record<string, DeviceRawData>;
-  chartMainCaption?: string;
-  parameterListDetailsText?: MenuItemFields[];
-  locale: string;
-  paramSelectionHelperText?: string;
-}) => {
+  paramSelectionHelperText,
+  handleFormSubmit,
+  isValidating,
+  formError,
+  startDateRef,
+  endDateRef,
+  buttonText,
+  startDateText,
+  endDateText,
+  modSensorGeneratePlotHelperText
+}: AirQualityPlotsProps) => {
   const {
     selectedValue: selectedParam,
     handleSelectChange: handleSelectChangeBase,
@@ -325,14 +350,73 @@ const AirQualityPlots = ({
     datasets
   };
   const shouldRenderChart = hasNonNullValueForParam(chartData, selectedParam);
+  const handleDownload = async () => {
+    if (normalizedData) {
+      try {
+        await downloadExcel(normalizedData);
+      } catch (error) {
+        console.error("Failed to fetch data or download excel: ", error);
+      }
+    } else {
+      console.warn("No data available for download");
+    }
+  };
   return (
     <>
-      <SelectMenuList
-        options={options}
-        helperText={paramSelectionHelperText || "Select Param to Chart"}
-        selectedValue={selectedParam}
-        handleSelectChange={handleSelectChangeBase}
-      />
+      <Grid2 container spacing={3}>
+        {/* Parameter Selector and Download */}
+        <Grid2
+          size={{ xs: 12, md: 6 }}
+          display="flex"
+          // justifyContent="center"
+          alignItems="center"
+        >
+          <Box sx={{ display: "flex" }}>
+            <SelectMenuList
+              options={options}
+              helperText={paramSelectionHelperText || "Select Param to Chart"}
+              selectedValue={selectedParam}
+              handleSelectChange={handleSelectChangeBase}
+            />
+
+            <Button
+              sx={{
+                backgroundColor: "#e0e0e0",
+                color: "black",
+                height: "40px"
+              }}
+              startIcon={<DownloadIcon />}
+              size="small"
+              variant="contained"
+              onClick={handleDownload}
+            >
+              Air Quality Data
+            </Button>
+          </Box>
+        </Grid2>
+
+        {/* Date Selector  */}
+        <Grid2 size={{ xs: 12, md: 6 }}>
+          <Box
+            sx={{
+              width: "100%"
+            }}
+          >
+            <AirQualityDateRangeInput
+              handleFormSubmit={handleFormSubmit}
+              isValidating={isValidating}
+              formError={formError}
+              startDateRef={startDateRef}
+              endDateRef={endDateRef}
+              buttonText={buttonText}
+              startDateText={startDateText}
+              endDateText={startDateText}
+              modSensorGeneratePlotHelperText={modSensorGeneratePlotHelperText}
+            />
+          </Box>
+        </Grid2>
+      </Grid2>
+
       {shouldRenderChart ? (
         <Box minHeight={350} m="2 2 0 2" marginTop={-4} sx={{ paddingTop: 0 }}>
           <Line
