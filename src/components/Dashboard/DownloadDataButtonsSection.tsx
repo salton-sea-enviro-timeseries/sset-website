@@ -1,10 +1,9 @@
-import { Box, Button, styled, Tooltip } from "@mui/material";
+import { Box, Button, Tooltip } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/CloudDownload";
 import WithLoading from "../WithLoading";
 import useSWR from "swr";
 import { useCallback } from "react";
 import { saveAs } from "file-saver";
-import { theme } from "highcharts";
 
 interface DownloadDataButtonsSectionProps {
   isLoading: boolean;
