@@ -19,7 +19,6 @@ import {
   transformSensorData
 } from "util/sensorDataFormating";
 import useSensorData from "hooks/useSensorData";
-import AirQualityDateRangeInput from "components/Dashboard/AirQualityDateRangeInput";
 import AQLegend from "components/Dashboard/AQLegend";
 import AirQualityParameterSection from "components/Dashboard/AirQualityParameterSection";
 import AirQualityPlots from "components/Dashboard/AirQualityPlots";
@@ -97,17 +96,6 @@ const AirQuality = ({
       <Typography gutterBottom component="h1" variant="h4">
         Air Quality
       </Typography>
-      <AirQualityDateRangeInput
-        handleFormSubmit={handleFormSubmit}
-        isValidating={isValidating}
-        formError={formError}
-        startDateRef={startDateRef}
-        endDateRef={endDateRef}
-        buttonText={buttonText}
-        startDateText={startDate}
-        endDateText={endDate}
-        modSensorGeneratePlotHelperText={modSensorGeneratePlotHelperText}
-      />
       <AQLegend />
       {isLoadingParamAndChart ? (
         <AirQualityLoadingSkeleton />
@@ -125,6 +113,15 @@ const AirQuality = ({
               parameterListDetailsText={parameterListDetails}
               locale={locale}
               paramSelectionHelperText={paramSelectionHelperText}
+              handleFormSubmit={handleFormSubmit}
+              isValidating={isValidating}
+              formError={formError}
+              startDateRef={startDateRef}
+              endDateRef={endDateRef}
+              buttonText={buttonText}
+              startDateText={startDate}
+              endDateText={endDate}
+              modSensorGeneratePlotHelperText={modSensorGeneratePlotHelperText}
             />
           </>
         )
