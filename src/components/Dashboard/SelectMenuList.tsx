@@ -23,7 +23,11 @@ const SelectMenuList = <T extends string | number>({
   handleSelectChange
 }: MenuProps<T>) => {
   return (
-    <Box display="flex" justifyContent="center" alignItems="center">
+    <Box
+      sx={{
+        marginRight: 2
+      }}
+    >
       <StyledFormControl size="small">
         <Select
           value={selectedValue}
