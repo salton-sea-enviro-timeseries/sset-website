@@ -26,6 +26,7 @@ import AirQualityLoadingSkeleton from "components/Dashboard/AirQualityLoadingSke
 import { useAppContext } from "components/AppContext";
 import { renderDocument } from "util/contentfulUtils";
 import { Document } from "@contentful/rich-text-types";
+import { Device } from "lib/aqmd";
 
 const AirQuality = ({
   airQualityPageContent
@@ -35,7 +36,7 @@ const AirQuality = ({
   const startDateRef = useRef<HTMLInputElement>(null);
   const endDateRef = useRef<HTMLInputElement>(null);
   //Sensor list with location data for map
-  const { data: sensorList = [], error } = useSWR(
+  const { data: sensorList = [], error } = useSWR<Device[]>(
     [`../api/aq/devices/aqmd`, `../api/aq/devices/quant`],
     multiFetcher
   );

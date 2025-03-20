@@ -39,7 +39,6 @@ function useSensorData({
     const sensorInfoArray = sensorId.split(":");
     return determineSourceOfData(sensorInfoArray[0]);
   });
-
   const [dateRange, setDateRange] = useState<DateRange>({
     startDate: null,
     endDate: null
@@ -50,15 +49,20 @@ function useSensorData({
     endDateErrorMsg: ""
   });
 
+  const swrKey = sensorUrls.length > 0 ? [dateRange, sensorUrls] : null;
   const {
     data: sensorData = [],
     error: fetchError,
     isValidating
-  } = useSWR<DataType>([dateRange, ...sensorUrls], fetchMultipleDeviceDetails, {
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-    dedupingInterval: 60000
-  });
+  } = useSWR<DataType>(
+    swrKey,
+    ([range, urls]) => fetchMultipleDeviceDetails(range, ...urls),
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      dedupingInterval: 60000
+    }
+  );
 
   const handleFormSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();

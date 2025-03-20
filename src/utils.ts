@@ -69,7 +69,7 @@ export const getColorFromScale = (value: number, min: number, max: number) => {
   const color = chromaScale(percent);
   return color.hex();
 };
-
+//TODO look into removing fetcher below
 export const fetcher = async (
   url: string,
   startDate?: string,
@@ -91,14 +91,42 @@ export const fetcher = async (
 
   return res.json();
 };
+// Define a new function to fetch data for a single device
+export const fetchDeviceData = async (
+  device: string,
+  startDate?: string,
+  endDate?: string
+): Promise<any> => {
+  const url = `/devices/${device}`;
+  const res = await fetch(
+    startDate && endDate
+      ? `${url}?startDate=${startDate}&endDate=${endDate}`
+      : url
+  );
+  if (!res.ok) {
+    const error: Error & { info?: any; status?: number } = new Error(
+      `An error occurred while fetching data for ${device}.`
+    );
+    error.info = await res.json();
+    error.status = res.status;
+    throw error;
+  }
+  return res.json();
+};
 
-export async function multiFetcher(...urls: string[]) {
-  const promises: string | Device[] = [];
-  const deviceArrays = await Promise.all(urls.map((url) => fetcher(url)));
-  return promises.concat(...deviceArrays);
-}
+export const multiFetcher = async <T>(
+  devices: string[],
+  startDate?: string,
+  endDate?: string
+): Promise<T[]> => {
+  const promises = devices.map((device) =>
+    fetchDeviceData(device, startDate, endDate)
+  );
+  const results = await Promise.all(promises);
+  return results.flat();
+};
 
-export const shuffleArray = (array: any[]) => {
+export const shuffleArray = <T>(array: T[]) => {
   for (let i = array.length - 1; i > 0; i--) {
     const randomIndex = Math.floor(Math.random() * (i + 1));
     [array[i], array[randomIndex]] = [array[randomIndex], array[i]];
@@ -109,14 +137,11 @@ export const shuffleArray = (array: any[]) => {
 export const truncateQuestion = (
   question: string,
   breakpointMatch: boolean
-) => {
+): string => {
   if (breakpointMatch) {
-    return question.slice(0, 30) + "...";
+    return question.length > 30 ? question.slice(0, 30) + "..." : question;
   }
-  if (question.length <= 80) {
-    return question;
-  }
-  return question.slice(0, 80) + "...";
+  return question.length > 80 ? question.slice(0, 80) + "..." : question;
 };
 const formatInTimeZone = (date: Date, timeZone: string, formatStr: string) => {
   const zonedDate = utcToZonedTime(date, timeZone);

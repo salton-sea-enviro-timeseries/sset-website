@@ -35,8 +35,8 @@ export function groupSensorData(data: DataType): Record<string, DeviceRawData> {
   );
 }
 
-export function transformSensorData(sensorList: Device[]) {
-  return sensorList
+export function transformSensorData(sensorList: Device[] = []) {
+  return (sensorList || [])
     .filter((device) => device.DeviceId && device.DeviceId !== "Unknown")
     .map((device) => {
       let status: string = "";
