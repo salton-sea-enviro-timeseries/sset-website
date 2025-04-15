@@ -21,19 +21,19 @@ import {
   CommonDeviceType,
   LocaleDefault,
   LocaleOption,
-  MenuItemFields
+  MenuItemFields,
+  pollutantKey
 } from "types";
 import "chartjs-adapter-date-fns";
 import { Line } from "react-chartjs-2";
 import { Box, Typography, Link, Button, Grid2 } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/CloudDownload";
 import { calcParamAQI } from "util/calcParamAQI";
-import useSelect from "hooks/useSelect";
 import SelectMenuList from "./SelectMenuList";
 import { filterParameters } from "util/filterParameterFromCms";
 import AirQualityDateRangeInput from "./AirQualityDateRangeInput";
 import { FormErrorRange } from "hooks/useSensorData";
-import { downloadExcel } from "util/exelUtils";
+import { downloadExcel } from "util/excelUtils";
 
 ChartJS.register(
   CategoryScale,
@@ -96,6 +96,8 @@ type AirQualityPlotsProps = {
   startDateText?: string;
   endDateText?: string;
   modSensorGeneratePlotHelperText?: string;
+  selectedPollutant: pollutantKey;
+  onPollutantChange: (value: pollutantKey) => void;
 };
 // ==============================================================
 //Todo refactor to export?
@@ -275,16 +277,10 @@ const AirQualityPlots = ({
   buttonText,
   startDateText,
   endDateText,
-  modSensorGeneratePlotHelperText
+  modSensorGeneratePlotHelperText,
+  selectedPollutant,
+  onPollutantChange
 }: AirQualityPlotsProps) => {
-  const {
-    selectedValue: selectedParam,
-    handleSelectChange: handleSelectChangeBase,
-    options
-  } = useSelect<string>({
-    initialValues: Object.keys(paramAQIStandardMap),
-    defaultValue: "H2S"
-  });
   const plugin: Plugin<"line">[] = [canvasBackgroundColor];
   //Filter selected param to retrieve its details
   const parameterFilter = useMemo(
@@ -292,9 +288,9 @@ const AirQualityPlots = ({
       filterParameters<MenuItemFields>(
         parameterListDetailsText,
         "paramKey",
-        selectedParam
+        selectedPollutant
       ),
-    [parameterListDetailsText, selectedParam]
+    [parameterListDetailsText, selectedPollutant]
   );
   const parameterDescription =
     parameterFilter &&
@@ -314,7 +310,7 @@ const AirQualityPlots = ({
         borderColor: colors[index],
         segment: {
           borderColor: (ctx: { p0DataIndex: any; p1DataIndex: any }) => {
-            if (selectedParam !== "H2S") {
+            if (selectedPollutant !== "H2S") {
               return colors[index];
             }
             const dataIndex = ctx.p0DataIndex as number; // Index of the starting point of the segment
@@ -344,12 +340,15 @@ const AirQualityPlots = ({
         yAxisID: "y" as const
       };
     });
-  }, [normalizedData, selectedParam]);
+  }, [normalizedData, selectedPollutant]);
   // dataset as an object for chart prop
   const chartData = {
     datasets
   };
-  const shouldRenderChart = hasNonNullValueForParam(chartData, selectedParam);
+  const shouldRenderChart = hasNonNullValueForParam(
+    chartData,
+    selectedPollutant
+  );
   const handleDownload = async () => {
     if (normalizedData) {
       try {
@@ -373,10 +372,12 @@ const AirQualityPlots = ({
         >
           <Box sx={{ display: "flex" }}>
             <SelectMenuList
-              options={options}
+              options={Object.keys(paramAQIStandardMap)}
               helperText={paramSelectionHelperText || "Select Param to Chart"}
-              selectedValue={selectedParam}
-              handleSelectChange={handleSelectChangeBase}
+              selectedValue={selectedPollutant}
+              handleSelectChange={(event) =>
+                onPollutantChange(event.target.value as pollutantKey)
+              }
             />
 
             <Button
@@ -410,7 +411,7 @@ const AirQualityPlots = ({
               endDateRef={endDateRef}
               buttonText={buttonText}
               startDateText={startDateText}
-              endDateText={startDateText}
+              endDateText={endDateText}
               modSensorGeneratePlotHelperText={modSensorGeneratePlotHelperText}
             />
           </Box>
@@ -420,15 +421,15 @@ const AirQualityPlots = ({
       {shouldRenderChart ? (
         <Box minHeight={350} m="2 2 0 2" marginTop={-4} sx={{ paddingTop: 0 }}>
           <Line
-            key={selectedParam}
+            key={selectedPollutant}
             plugins={plugin}
-            options={chartOptions(selectedParam)}
+            options={chartOptions(selectedPollutant)}
             data={chartData}
           />
         </Box>
       ) : (
         <Typography align="center" gutterBottom={true}>
-          No data available for <b>{selectedParam}</b> for the date range
+          No data available for <b>{selectedPollutant}</b> for the date range
           selected.
         </Typography>
       )}
@@ -456,7 +457,7 @@ const AirQualityPlots = ({
             target="_blank"
             rel="noopener"
           >
-            <b>{selectedParam}:</b>
+            <b>{selectedPollutant}:</b>
           </Link>{" "}
           {parameterDescription}
         </Typography>

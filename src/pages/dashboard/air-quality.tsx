@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import useSWR from "swr";
 import { styled } from "@mui/material/styles";
+import { Grid2 } from "@mui/material";
 import AeroqualSensor from "aeroqual-sensor.json";
 import { Typography } from "@mui/material";
 import { getCmsContent } from "util/getCmsContent";
@@ -11,13 +12,13 @@ import Meta from "components/Meta";
 import DashboardLayout from "components/Dashboard/DashboardLayout";
 import Map from "components/Dashboard/Map";
 import Legend from "components/Dashboard/Legend";
-import { AirQualityPage } from "types";
+import { AirQualityPage, pollutantKey } from "types";
 import MapMarker from "components/Dashboard/MapMarker";
 import {
   filteredSensors,
   groupSensorData,
   transformSensorData
-} from "util/sensorDataFormating";
+} from "util/sensorDataFormatting";
 import useSensorData from "hooks/useSensorData";
 import AQLegend from "components/Dashboard/AQLegend";
 import AirQualityParameterSection from "components/Dashboard/AirQualityParameterSection";
@@ -27,6 +28,9 @@ import { useAppContext } from "components/AppContext";
 import { renderDocument } from "util/contentfulUtils";
 import { Document } from "@contentful/rich-text-types";
 import { Device } from "lib/aqmd";
+import PollroseGenerator from "components/Dashboard/PollroseGenerator";
+
+const NORTH_AEROQUAL_SENSOR_ID = "AQS1 04072024-2724";
 
 const AirQuality = ({
   airQualityPageContent
@@ -40,6 +44,9 @@ const AirQuality = ({
     [`../api/aq/devices/aqmd`, `../api/aq/devices/quant`],
     multiFetcher
   );
+
+  const [selectedPollutant, setSelectedPollutant] =
+    useState<pollutantKey>("H2S");
   // ====================================================== cms content ===================================================
   const locale = language === "en" ? "en-US" : "es";
   const cmsField = airQualityPageContent?.fields;
@@ -88,9 +95,17 @@ const AirQuality = ({
     //Prepare data for menu list
     return groupSensorData(sensorData);
   }, [sensorData]);
+
+  const northSensor = groupedData?.[NORTH_AEROQUAL_SENSOR_ID];
+  const PollroseDataNorthSensor = northSensor?.data ?? null;
+  const PollroseNorthSensorName = northSensor?.name ?? "Unknown Sensor";
+
   const isLoadingMap = !sensorList.length && !error;
   const isLoadingParamAndChart = isValidating || !isFirstRequestComplete;
+  const isLoading = isLoadingMap || isLoadingParamAndChart;
+
   if (error || fetchError) return <Typography>Error Loading data</Typography>;
+
   return (
     <>
       <Meta title="Dashboard | Salton Sea Environmental Timeseries" />
@@ -98,7 +113,7 @@ const AirQuality = ({
         Air Quality
       </Typography>
       <AQLegend />
-      {isLoadingParamAndChart ? (
+      {isLoading ? (
         <AirQualityLoadingSkeleton />
       ) : (
         Object.keys(groupedData).length > 0 && (
@@ -108,29 +123,52 @@ const AirQuality = ({
               paramAQITitle={paramAQITitle}
               sensorSelectionHelperText={sensorSelectionHelperText}
             />
-            <AirQualityPlots
-              normalizedData={groupedData}
-              chartMainCaption={chartMainCaption}
-              parameterListDetailsText={parameterListDetails}
-              locale={locale}
-              paramSelectionHelperText={paramSelectionHelperText}
-              handleFormSubmit={handleFormSubmit}
-              isValidating={isValidating}
-              formError={formError}
-              startDateRef={startDateRef}
-              endDateRef={endDateRef}
-              buttonText={buttonText}
-              startDateText={startDate}
-              endDateText={endDate}
-              modSensorGeneratePlotHelperText={modSensorGeneratePlotHelperText}
-            />
+
+            <Grid2 container spacing={1} sx={{ mb: 4 }}>
+              {/* Chart Grid*/}
+              <Grid2 size={{ xs: 12, md: 8 }}>
+                <AirQualityPlots
+                  normalizedData={groupedData}
+                  chartMainCaption={chartMainCaption}
+                  parameterListDetailsText={parameterListDetails}
+                  locale={locale}
+                  paramSelectionHelperText={paramSelectionHelperText}
+                  handleFormSubmit={handleFormSubmit}
+                  isValidating={isValidating}
+                  formError={formError}
+                  startDateRef={startDateRef}
+                  endDateRef={endDateRef}
+                  buttonText={buttonText}
+                  startDateText={startDate}
+                  endDateText={endDate}
+                  modSensorGeneratePlotHelperText={
+                    modSensorGeneratePlotHelperText
+                  }
+                  selectedPollutant={selectedPollutant}
+                  onPollutantChange={setSelectedPollutant}
+                />
+                {/* Pollrose Grid */}
+              </Grid2>
+              <Grid2
+                size={{ xs: 12, md: 4 }}
+                display={"flex"}
+                justifyContent="center"
+              >
+                <PollroseGenerator
+                  pollroseData={PollroseDataNorthSensor}
+                  sensorName={PollroseNorthSensorName}
+                  selectedPollutant={selectedPollutant}
+                />
+              </Grid2>
+            </Grid2>
           </>
         )
       )}
       <WithLoading
-        isLoading={isLoadingMap}
+        isLoading={isLoading}
         variant="rectangular"
         height="500px"
+        sx={{ borderRadius: 4 }}
       >
         {sensorList && (
           <Map
