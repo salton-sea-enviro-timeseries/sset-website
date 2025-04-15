@@ -147,6 +147,13 @@ const columns = [
   }
 ];
 type ColumnField = (typeof columns)[number]["field"];
+const useClient = () => {
+  const [isClient, setIsClient] = React.useState(false);
+  React.useEffect(() => {
+    setIsClient(true);
+  }, []);
+  return isClient;
+};
 const descendingComparator = <T,>(a: T, b: T, orderBy: keyof T) => {
   if (b[orderBy] < a[orderBy]) return -1;
   if (b[orderBy] > a[orderBy]) return 1;
@@ -161,6 +168,7 @@ const getComparator = <Key extends keyof any>(
     : (a, b) => -descendingComparator(a, b, orderBy);
 };
 const Table = ({ data }: TableProps) => {
+  const isClient = useClient();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [order, setOrder] = React.useState<Order>("asc");
@@ -184,9 +192,10 @@ const Table = ({ data }: TableProps) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+  if (!isClient) return null;
   return (
     <StyledPaper>
-      <TableContainer sx={{ maxHeight: 550 }}>
+      <TableContainer sx={{ maxHeight: 550, overflow: "auto" }}>
         <CustomTable stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -249,7 +258,7 @@ const Table = ({ data }: TableProps) => {
 const StyledPaper = styled(Paper)(({ theme }) => ({
   width: "100%",
   height: 600,
-  overflow: "auto",
+  overflow: "hidden",
   marginBottom: theme.spacing(4)
 }));
 
