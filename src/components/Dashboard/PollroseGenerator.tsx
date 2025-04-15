@@ -2,7 +2,7 @@ import useSWR, { mutate } from "swr";
 import Image from "next/image";
 import CircularProgress from "@mui/material/CircularProgress";
 import { pollroseFetcher } from "util/pollroseFetcher";
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, Grid2, IconButton, Typography } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import { CommonDeviceType, PollroseResponse, pollutantKey } from "types";
 import { generatePollroseCSV } from "util/excelUtils";
@@ -74,7 +74,15 @@ const PollroseGenerator = ({
         justifyContent="center"
       >
         {isValidating ? (
-          <CircularProgress />
+          <Grid2 container textAlign="center">
+            <Grid2 size={12}>
+              <CircularProgress />
+            </Grid2>
+            <Grid2 size={12}>
+              {" "}
+              <Typography>...Creating Pollrose</Typography>
+            </Grid2>
+          </Grid2>
         ) : pollroseFigure?.image ? (
           <>
             {/* Extracted image URL with cache buster */}
