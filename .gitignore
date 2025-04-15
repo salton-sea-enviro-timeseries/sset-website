@@ -35,3 +35,10 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# backend
+windrose_project
+server.py
+/backend/
+*.pyc
+__pycache__/

@@ -1,21 +1,13 @@
-import { AirQualityDevices, CommonDeviceType } from "types";
+import {
+  AirQualityDevices,
+  CommonDeviceType,
+  DataType,
+  DeviceRawData,
+  PurpleAirSensor
+} from "types";
 import { mapDeviceNames } from "./mapDeviceNames";
 import { Device } from "lib/aqmd";
-type DeviceRawData = {
-  id: string;
-  name: string;
-  data: CommonDeviceType[];
-};
-type DataType = CommonDeviceType[];
-type PurpleAirSensor = {
-  site: string;
-  value: string;
-  sensorId: string;
-  latitude: string;
-  longitude: string;
-  color: string;
-  location: string;
-};
+
 export function groupSensorData(data: DataType): Record<string, DeviceRawData> {
   return data.reduce(
     (sensors: Record<string, DeviceRawData>, curr: CommonDeviceType) => {
@@ -35,8 +27,8 @@ export function groupSensorData(data: DataType): Record<string, DeviceRawData> {
   );
 }
 
-export function transformSensorData(sensorList: Device[]) {
-  return sensorList
+export function transformSensorData(sensorList: Device[] = []) {
+  return (sensorList || [])
     .filter((device) => device.DeviceId && device.DeviceId !== "Unknown")
     .map((device) => {
       let status: string = "";

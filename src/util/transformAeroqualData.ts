@@ -20,6 +20,8 @@ function transformAeroqualData(originalData: OriginalData): TransformedData[] {
         timestamp_local: dataPoint.Time,
         H2S: h2s_ppb,
         NO2: dataPoint.Data.NO2,
+        WS: dataPoint.Data.WS, // m/s
+        WD: dataPoint.Data.WD, // deg
         "VOC L": dataPoint.Data["VOC L"],
         "Battery voltage": dataPoint.Data["Battery voltage"],
         O3: dataPoint.Data.O3,

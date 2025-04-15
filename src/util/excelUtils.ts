@@ -1,4 +1,5 @@
 import ExcelJS from "exceljs";
+import { CommonDeviceType, pollutantKey } from "types";
 
 export async function downloadExcel(data: Record<string, any>): Promise<void> {
   const workbook = new ExcelJS.Workbook();
@@ -15,7 +16,9 @@ export async function downloadExcel(data: Record<string, any>): Promise<void> {
     { header: "PM2.5 (µg/m³)", key: "PM2.5", width: 15 },
     { header: "PM10 (µg/m³)", key: "PM10", width: 15 },
     { header: "PM1 (µg/m³)", key: "PM1", width: 15 },
-    { header: "H2S ppb", key: "H2S", width: 15 }
+    { header: "H2S ppb", key: "H2S", width: 15 },
+    { header: "WS m/s", key: "WS", width: 15 },
+    { header: "WD deg", key: "WD", width: 15 }
   ];
   // Extract data from Json
   Object.values(data).forEach((station: any) => {
@@ -38,4 +41,27 @@ export async function downloadExcel(data: Record<string, any>): Promise<void> {
   a.download = "air_quality_data.xlsx";
   a.click();
   window.URL.revokeObjectURL(url);
+}
+
+export function generatePollroseCSV(
+  data: CommonDeviceType[],
+  pollutant: pollutantKey
+): string {
+  const headers = ["sn", "timestamp_local", "WD", "WS", pollutant];
+  const rows = data
+    .filter(
+      (row) =>
+        row.WD !== undefined &&
+        row.WS !== undefined &&
+        row[pollutant as keyof CommonDeviceType] !== undefined
+    )
+    .map((row) => [
+      row.sn ?? "",
+      row["timestamp_local"] ?? "",
+      row.WD,
+      row.WS,
+      row[pollutant as keyof CommonDeviceType]
+    ]);
+
+  return [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
 }
