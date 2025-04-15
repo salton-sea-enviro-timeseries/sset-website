@@ -1,6 +1,5 @@
 interface PollroseParams {
   site: string;
-  // datafile: string;
   bdate: string;
   edate: string;
   pollv: string;
