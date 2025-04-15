@@ -1,4 +1,5 @@
 import { PollroseResponse } from "types";
+import { fetchWithRetry } from "util/fetchWithRetry";
 const KEY = process.env.FASTAPI_KEY as string;
 const url = "https://pollrose-fastapi.onrender.com/generate-pollrose/";
 //TODO:fix
@@ -30,7 +31,7 @@ export const getPollroseFigure = async ({
   const headers = new Headers();
   headers.append("x-api-key", KEY);
   try {
-    const response = await fetch(url, {
+    const response = await fetchWithRetry(url, {
       method: "POST",
       body: formData,
       headers
