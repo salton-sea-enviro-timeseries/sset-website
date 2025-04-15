@@ -12,8 +12,8 @@ export function mapDeviceNames(id: string) {
     "MOD-00069": "Palm Desert",
     "MOD-PM-00368": "North Shore Yacht Club",
     "MOD-PM-00174": "Salton Sea North Platform",
-    "AQS1 04072024-2724": "Offshore South",
-    "AQS1 13122022-2194": "Offshore North"
+    "AQS1 04072024-2724": "Offshore North",
+    "AQS1 13122022-2194": "Offshore South"
   };
   return DeviceNames[id];
 }
