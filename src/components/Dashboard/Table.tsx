@@ -1,27 +1,34 @@
 import React from "react";
 import { SiteData } from "types";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import { Units } from "types";
 import { isArray } from "lodash";
 import { styled } from "@mui/material/styles";
+import TableBody from "@mui/material/TableBody";
+import { TableSortLabel } from "@mui/material";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+import { Table as CustomTable } from "@mui/material";
 
 interface TableProps {
   data: SiteData[];
 }
-
-const columns: GridColDef[] = [
+type Order = "asc" | "desc";
+const columns = [
   {
     field: "date",
     headerName: "Date",
-    width: 110,
+    minWidth: 110,
     editable: false,
     type: "date"
   },
   {
     field: "site",
     headerName: "Station",
-    width: 150,
+    minWidth: 120,
     editable: false
   },
   {
@@ -29,7 +36,7 @@ const columns: GridColDef[] = [
     headerName: "Lat.",
     sortable: false,
     disableColumnMenu: true,
-    width: 110,
+    minWidth: 110,
     editable: false,
     filterable: false
   },
@@ -39,14 +46,14 @@ const columns: GridColDef[] = [
     sortable: false,
     disableColumnMenu: true,
     filterable: false,
-    width: 110,
+    minWidth: 110,
     editable: false
   },
   {
     field: "salinity",
     headerName: `Salinity (${Units.salinity})`,
     type: "number",
-    width: 180,
+    minWidth: 170,
     editable: false,
     filterable: false
   },
@@ -54,7 +61,7 @@ const columns: GridColDef[] = [
     field: "water_temperature",
     headerName: `Temperature (${Units.water_temperature})`,
     type: "number",
-    width: 190,
+    minWidth: 190,
     editable: false,
     filterable: false
   },
@@ -62,7 +69,7 @@ const columns: GridColDef[] = [
     field: "ph",
     headerName: "pH",
     type: "number",
-    width: 100,
+    minWidth: 100,
     editable: false,
     filterable: false
   },
@@ -70,7 +77,7 @@ const columns: GridColDef[] = [
     field: "turbidity",
     headerName: `Turbidity (${Units.turbidity})`,
     type: "number",
-    width: 180,
+    minWidth: 180,
     editable: false,
     filterable: false
   },
@@ -78,7 +85,7 @@ const columns: GridColDef[] = [
     field: "dissolved_oxygen",
     headerName: `Dissolved Oxygen (${Units["dissolved_oxygen"]})`,
     type: "number",
-    width: 240,
+    minWidth: 240,
     editable: false,
     filterable: false
   },
@@ -86,7 +93,7 @@ const columns: GridColDef[] = [
     field: "chlorophyll",
     headerName: `Chlorophyll (${Units.chlorophyll})`,
     type: "number",
-    width: 200,
+    minWidth: 200,
     editable: false,
     filterable: false
   },
@@ -94,7 +101,7 @@ const columns: GridColDef[] = [
     field: "phycoerythrin",
     headerName: `Phycoerythrin (${Units.phycoerythrin})`,
     type: "number",
-    width: 220,
+    minWidth: 220,
     editable: false,
     filterable: false
   },
@@ -102,7 +109,7 @@ const columns: GridColDef[] = [
     field: "nitrate",
     headerName: `Nitrate (${Units.nitrate})`,
     type: "number",
-    width: 170,
+    minWidth: 170,
     editable: false,
     filterable: false
   },
@@ -110,7 +117,7 @@ const columns: GridColDef[] = [
     field: "ammonia",
     headerName: `Ammonia (${Units.ammonia})`,
     type: "number",
-    width: 190,
+    minWidth: 190,
     editable: false,
     filterable: false
   },
@@ -118,7 +125,7 @@ const columns: GridColDef[] = [
     field: "phosphate",
     headerName: `Phosphate (${Units.phosphate})`,
     type: "number",
-    width: 200,
+    minWidth: 200,
     editable: false,
     filterable: false
   },
@@ -126,7 +133,7 @@ const columns: GridColDef[] = [
     field: "sulphate",
     headerName: `Sulphate (${Units.sulphate})`,
     type: "number",
-    width: 180,
+    minWidth: 180,
     editable: false,
     filterable: false
   },
@@ -134,41 +141,116 @@ const columns: GridColDef[] = [
     field: "sulphide",
     headerName: `Sulphide (${Units.sulphide})`,
     type: "number",
-    width: 180,
+    minWidth: 180,
     editable: false,
     filterable: false
   }
 ];
-const Table = (props: TableProps) => {
+type ColumnField = (typeof columns)[number]["field"];
+const descendingComparator = <T,>(a: T, b: T, orderBy: keyof T) => {
+  if (b[orderBy] < a[orderBy]) return -1;
+  if (b[orderBy] > a[orderBy]) return 1;
+  return 0;
+};
+const getComparator = <Key extends keyof any>(
+  order: Order,
+  orderBy: Key
+): ((a: { [key in Key]: any }, b: { [key in Key]: any }) => number) => {
+  return order === "desc"
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
+};
+const Table = ({ data }: TableProps) => {
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [order, setOrder] = React.useState<Order>("asc");
+  const [orderBy, setOrderBy] = React.useState<ColumnField>("date");
   // HACK: need to handle error when google api key isnt set
-  const rows = (isArray(props.data) ? props.data : []).map((row, index) => ({
-    ...row,
-    id: index,
-    date: new Date(row.date)
-  }));
+  const rows: Record<string, any>[] = (isArray(data) ? data : []).map(
+    (row, index) => ({
+      ...row,
+      id: index,
+      date: new Date(row.date).toLocaleDateString()
+    })
+  );
+  const sortedRows = [...rows].sort(getComparator(order, orderBy));
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
   return (
-    <Paper>
-      <StyledDataGrid
-        density="compact"
-        rows={rows}
-        pagination
-        rowCount={rows.length}
-        columns={columns}
-        rowSelection={false}
-        paginationModel={{ pageSize: 100, page: 0 }}
-        sortModel={[{ field: "date", sort: "desc" }]}
-        paginationMode="server"
+    <StyledPaper>
+      <TableContainer sx={{ maxHeight: 550 }}>
+        <CustomTable stickyHeader aria-label="sticky table">
+          <TableHead>
+            <TableRow>
+              {columns.map((column) => (
+                <TableCell
+                  key={column.field}
+                  style={{ minWidth: column.minWidth }}
+                  sortDirection={orderBy === column.field ? order : false}
+                  sx={{
+                    backgroundColor:
+                      orderBy === column.field ? "#f5f5f5" : "inherit",
+                    fontWeight: orderBy === column.field ? "bold" : "normal"
+                  }}
+                >
+                  <TableSortLabel
+                    active={orderBy === column.field}
+                    direction={orderBy === column.field ? order : "asc"}
+                    onClick={() => {
+                      const isAsc = orderBy === column.field && order === "asc";
+                      setOrder(isAsc ? "desc" : "asc");
+                      setOrderBy(column.field);
+                    }}
+                  >
+                    {column.headerName}
+                  </TableSortLabel>
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {sortedRows
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row) => (
+                <TableRow hover tabIndex={-1} key={row.id}>
+                  {columns.map((column) => {
+                    const value = row[column.field];
+                    return (
+                      <TableCell key={column.field}>
+                        {typeof value === "number" ? value.toFixed(2) : value}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              ))}
+          </TableBody>
+        </CustomTable>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 100]}
+        component="div"
+        count={rows.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
       />
-    </Paper>
+    </StyledPaper>
   );
 };
-const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
+const StyledPaper = styled(Paper)(({ theme }) => ({
   width: "100%",
-  minHeight: 500,
-  maxHeight: 600,
-  height: "100%",
+  height: 600,
   overflow: "auto",
-  marginBottom: 4
+  marginBottom: theme.spacing(4)
 }));
 
 export default Table;
