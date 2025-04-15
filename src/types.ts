@@ -414,9 +414,19 @@ export interface TransformedData {
   timestamp_local: string;
   H2S: number;
   NO2: number;
+  WS: number; // m/s
+  WD: number; // deg
   "VOC L": number;
   "Battery voltage": number;
 }
+export type pollutantKey =
+  | "NO2"
+  | "O3"
+  | "PM2.5"
+  | "PM10"
+  | "PM1"
+  | "H2S"
+  | "CO";
 export type CommonDeviceType = DeviceDataResponse &
   MODRawDeviceDataResponse &
   TransformedData;
@@ -438,11 +448,13 @@ interface OriginalInstrumentData {
   Data: Array<{
     Time: string;
     Data: {
-      O3: number;
-      "PM2.5": number;
-      PM10?: number;
-      H2S: number;
-      NO2: number;
+      O3: number; // not yet available
+      "PM2.5": number; // not yet available
+      PM10?: number; // not yet available
+      H2S: number; // ppm
+      NO2: number; // ppb
+      WS: number; // m/s
+      WD: number; // deg
       "VOC L": number;
       "Battery voltage": number;
     };
@@ -462,3 +474,28 @@ export interface OriginalData {
   AveragingPeriod: number;
   Instruments: OriginalInstrumentData[];
 }
+// ============================== sensorDataFormatting Types ===============
+export type DeviceRawData = {
+  id: string;
+  name: string;
+  data: CommonDeviceType[];
+};
+export type DataType = CommonDeviceType[];
+export type PurpleAirSensor = {
+  site: string;
+  value: string;
+  sensorId: string;
+  latitude: string;
+  longitude: string;
+  color: string;
+  location: string;
+};
+
+// =============================== sensroDataFormatting Types end ===========
+// ======================= pollrose ===================================
+export interface PollroseResponse {
+  message: string;
+  image: string;
+}
+
+// ======================= pollrose end =================================
