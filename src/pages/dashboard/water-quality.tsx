@@ -295,12 +295,13 @@ const WaterQuality = ({
                     return (
                       latitude &&
                       longitude && (
+                        //TODO Refactor
                         <Marker
                           key={`${i}-${latitude}-${longitude}`}
                           latitude={latitude}
                           longitude={longitude}
                         >
-                          <CustomTooltip
+                          <Tooltip
                             title={
                               <>
                                 <b>{site}</b>
@@ -321,6 +322,23 @@ const WaterQuality = ({
                                   pointerEvents: "unset"
                                 },
                                 disablePortal: true
+                              },
+                              tooltip: {
+                                sx: {
+                                  fontSize: 11,
+                                  padding: 0,
+                                  width: 60,
+                                  display: "flex",
+                                  justifyContent: "center",
+
+                                  backgroundColor: "rgba(66, 66, 66, 0.9)",
+                                  color: "#fff"
+                                }
+                              },
+                              arrow: {
+                                sx: {
+                                  color: "rgba(66, 66, 66, 0.9)"
+                                }
                               }
                             }}
                           >
@@ -335,13 +353,10 @@ const WaterQuality = ({
                                   -PIN_SIZE / 2
                                 }px,${-PIN_SIZE}px)`
                               }}
-                              // onClick={() => {
-                              //   setSelectedPin(pins[i]);
-                              // }}
                             >
                               <path d={MapPinIcon} />
                             </svg>
-                          </CustomTooltip>
+                          </Tooltip>
                         </Marker>
                       )
                     );
@@ -395,20 +410,6 @@ const DownloadButton = styled(Button)(({ theme }) => ({
   padding: 0,
   "&:hover": {
     backgroundColor: "transparent"
-  }
-}));
-
-const CustomTooltip = styled(Tooltip)(({ theme }) => ({
-  "& .MuiTooltip-arrow": {
-    color: theme.palette.background.paper
-  },
-  "& .MuiTooltip-tooltip": {
-    fontSize: 11,
-    width: 70,
-    display: "flex",
-    justifyContent: "center",
-    backgroundColor: theme.palette.background.paper,
-    color: theme.palette.text.primary
   }
 }));
 
