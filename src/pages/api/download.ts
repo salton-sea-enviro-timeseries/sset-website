@@ -2,6 +2,7 @@ import { downloadFile } from "lib/sheets";
 import type { NextApiRequest, NextApiResponse } from "next";
 import stream from "stream";
 import { promisify } from "util";
+
 const pipeline = promisify(stream.pipeline);
 
 export default async function handler(
@@ -28,6 +29,7 @@ export default async function handler(
   try {
     const response = await downloadFile(range as "probe_surface" | "nutrients");
     console.log(response);
+    res.setHeader("Cache-Control", "no-store");
     res.setHeader("Content-Type", "text/csv");
     res.setHeader("Content-Disposition", `attachment; filename=${filename}`);
     await pipeline(stream.Readable.from(Buffer.from(response)), res);
