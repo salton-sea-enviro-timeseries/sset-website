@@ -174,14 +174,35 @@ const Table = ({ data }: TableProps) => {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<ColumnField>("date");
   // HACK: need to handle error when google api key isnt set
-  const rows: Record<string, any>[] = (isArray(data) ? data : []).map(
+  const rows: Record<string, any>[] = (Array.isArray(data) ? data : []).map(
     (row, index) => ({
       ...row,
       id: index,
-      date: new Date(row.date).toLocaleDateString()
+      date: new Date(row.date).toISOString().split("T")[0]
     })
   );
-  const sortedRows = [...rows].sort(getComparator(order, orderBy));
+
+  const sortedRows: Record<string, any>[] = rows.slice().sort((a, b) => {
+    const aValue = a[orderBy];
+    const bValue = b[orderBy];
+
+    if (orderBy === "date") {
+      const dateA = new Date(aValue);
+      const dateB = new Date(bValue);
+      return order === "asc"
+        ? dateA.getTime() - dateB.getTime()
+        : dateB.getTime() - dateA.getTime();
+    }
+
+    if (typeof aValue === "number" && typeof bValue === "number") {
+      return order === "asc" ? aValue - bValue : bValue - aValue;
+    }
+
+    return order === "asc"
+      ? String(aValue).localeCompare(String(bValue))
+      : String(bValue).localeCompare(String(aValue));
+  });
+
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -202,13 +223,13 @@ const Table = ({ data }: TableProps) => {
               {columns.map((column) => (
                 <TableCell
                   key={column.field}
-                  style={{ minWidth: column.minWidth }}
-                  sortDirection={orderBy === column.field ? order : false}
                   sx={{
+                    minWidth: column.minWidth,
+                    fontWeight: orderBy === column.field ? "bold" : "normal",
                     backgroundColor:
-                      orderBy === column.field ? "#f5f5f5" : "inherit",
-                    fontWeight: orderBy === column.field ? "bold" : "normal"
+                      orderBy === column.field ? "#f5f5f5" : "#fff"
                   }}
+                  sortDirection={orderBy === column.field ? order : false}
                 >
                   <TableSortLabel
                     active={orderBy === column.field}
@@ -234,7 +255,15 @@ const Table = ({ data }: TableProps) => {
                     const value = row[column.field];
                     return (
                       <TableCell key={column.field}>
-                        {typeof value === "number" ? value.toFixed(2) : value}
+                        {column.field === "date"
+                          ? new Date(value).toLocaleDateString("en-US", {
+                              year: "2-digit",
+                              month: "2-digit",
+                              day: "2-digit"
+                            })
+                          : typeof value === "number"
+                          ? value.toFixed(2)
+                          : value}
                       </TableCell>
                     );
                   })}
@@ -244,7 +273,7 @@ const Table = ({ data }: TableProps) => {
         </CustomTable>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
+        rowsPerPageOptions={[25, 50, 100, 200, 260]}
         component="div"
         count={rows.length}
         rowsPerPage={rowsPerPage}
