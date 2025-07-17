@@ -69,6 +69,9 @@ export const getColorFromScale = (value: number, min: number, max: number) => {
   const color = chromaScale(percent);
   return color.hex();
 };
+// Basic fetcher for water quality data
+export const waterQualityDataFetcher = (url: string) =>
+  fetch(url).then((res) => res.json());
 //TODO look into removing fetcher below
 export const fetcher = async (
   url: string,

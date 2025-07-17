@@ -9,7 +9,7 @@ interface DownloadDataButtonsSectionProps {
   isLoading: boolean;
   nutrientButtonText?: string;
   sensorButtonText?: string;
-  readMeSrc: string;
+  readMeSrc?: string;
 }
 const fetcher = (url: string) => fetch(url).then((r) => r.blob());
 const DownloadDataButtonsSection = ({
