@@ -2,7 +2,6 @@ import React from "react";
 import { SiteData } from "types";
 import Paper from "@mui/material/Paper";
 import { Units } from "types";
-import { isArray } from "lodash";
 import { styled } from "@mui/material/styles";
 import TableBody from "@mui/material/TableBody";
 import { TableSortLabel } from "@mui/material";
@@ -55,7 +54,8 @@ const columns = [
     type: "number",
     minWidth: 170,
     editable: false,
-    filterable: false
+    filterable: false,
+    hidden: true
   },
   {
     field: "water_temperature",
@@ -154,23 +154,48 @@ const useClient = () => {
   }, []);
   return isClient;
 };
-const descendingComparator = <T,>(a: T, b: T, orderBy: keyof T) => {
-  if (b[orderBy] < a[orderBy]) return -1;
-  if (b[orderBy] > a[orderBy]) return 1;
-  return 0;
+
+const renderCellValue = (field: string, value: any) => {
+  if (field === "date") {
+    return new Date(value).toLocaleDateString("en-US", {
+      year: "2-digit",
+      month: "2-digit",
+      day: "2-digit"
+    });
+  }
+  if (typeof value === "number") {
+    return value.toFixed(2);
+  }
+  return value;
 };
-const getComparator = <Key extends keyof any>(
-  order: Order,
-  orderBy: Key
-): ((a: { [key in Key]: any }, b: { [key in Key]: any }) => number) => {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
+const getSortedRows = (
+  rows: Record<string, any>[],
+  orderBy: string,
+  order: "asc" | "desc"
+) => {
+  return rows.slice().sort((a, b) => {
+    const aValue = a[orderBy];
+    const bValue = b[orderBy];
+
+    if (orderBy === "date") {
+      return order === "asc"
+        ? new Date(aValue).getTime() - new Date(bValue).getTime()
+        : new Date(bValue).getTime() - new Date(aValue).getTime();
+    }
+
+    if (typeof aValue === "number" && typeof bValue === "number") {
+      return order === "asc" ? aValue - bValue : bValue - aValue;
+    }
+
+    return order === "asc"
+      ? String(aValue).localeCompare(String(bValue))
+      : String(bValue).localeCompare(String(aValue));
+  });
 };
 const Table = ({ data }: TableProps) => {
   const isClient = useClient();
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(25);
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<ColumnField>("date");
   // HACK: need to handle error when google api key isnt set
@@ -182,27 +207,8 @@ const Table = ({ data }: TableProps) => {
     })
   );
 
-  const sortedRows: Record<string, any>[] = rows.slice().sort((a, b) => {
-    const aValue = a[orderBy];
-    const bValue = b[orderBy];
-
-    if (orderBy === "date") {
-      const dateA = new Date(aValue);
-      const dateB = new Date(bValue);
-      return order === "asc"
-        ? dateA.getTime() - dateB.getTime()
-        : dateB.getTime() - dateA.getTime();
-    }
-
-    if (typeof aValue === "number" && typeof bValue === "number") {
-      return order === "asc" ? aValue - bValue : bValue - aValue;
-    }
-
-    return order === "asc"
-      ? String(aValue).localeCompare(String(bValue))
-      : String(bValue).localeCompare(String(aValue));
-  });
-
+  const sortedRows = getSortedRows(rows, orderBy, order);
+  const visibleColumns = columns.filter((c) => !c.hidden);
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -220,7 +226,7 @@ const Table = ({ data }: TableProps) => {
         <CustomTable stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {columns.map((column) => (
+              {visibleColumns.map((column) => (
                 <TableCell
                   key={column.field}
                   sx={{
@@ -251,19 +257,11 @@ const Table = ({ data }: TableProps) => {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => (
                 <TableRow hover tabIndex={-1} key={row.id}>
-                  {columns.map((column) => {
+                  {visibleColumns.map((column) => {
                     const value = row[column.field];
                     return (
                       <TableCell key={column.field}>
-                        {column.field === "date"
-                          ? new Date(value).toLocaleDateString("en-US", {
-                              year: "2-digit",
-                              month: "2-digit",
-                              day: "2-digit"
-                            })
-                          : typeof value === "number"
-                          ? value.toFixed(2)
-                          : value}
+                        {renderCellValue(column.field, value)}
                       </TableCell>
                     );
                   })}
@@ -280,6 +278,14 @@ const Table = ({ data }: TableProps) => {
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
+        slotProps={{
+          select: {
+            inputProps: {
+              id: "rows-per-page",
+              name: "rowsPerPage"
+            }
+          }
+        }}
       />
     </StyledPaper>
   );
