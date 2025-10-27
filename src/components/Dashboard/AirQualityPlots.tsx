@@ -429,8 +429,8 @@ const AirQualityPlots = ({
         </Box>
       ) : (
         <Typography align="center" gutterBottom={true}>
-          No data available for <b>{selectedPollutant}</b> for the date range
-          selected.
+          No data available for <b>{selectedPollutant}</b>. Please select a
+          different date.
         </Typography>
       )}
       <Box

@@ -49,7 +49,7 @@ export default interface ApiResponse {
 }
 
 export async function getQuantDevices() {
-  const DEVICES = ["MOD-PM-00174", "MOD-PM-00368", "MOD-00069"];
+  const DEVICES = ["MOD-PM-00174", "MOD-PM-00368", "MOD-00069", "MOD-PM-00376"];
   const DEFAULT_DATA = {
     Latitude: null,
     Longitude: null,
@@ -140,7 +140,6 @@ export async function getQuantDeviceData(
       };
     }
     const data: { data: RawMODDeviceDataResponse[] } = await response.json();
-    console.log("data: ", data);
     return { data: data.data };
   } catch (err: unknown) {
     let errorMsg = "Unexpected error occurred.";
