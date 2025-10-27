@@ -10,7 +10,7 @@ interface PollroseResponse {
   message: string;
   image: string;
 }
-
+// NOTE: Pollrose from plotly.js see /Rose.tsx
 export async function pollroseFetcher(
   url: string,
   params: PollroseParams

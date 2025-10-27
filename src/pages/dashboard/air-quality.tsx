@@ -29,8 +29,15 @@ import { renderDocument } from "util/contentfulUtils";
 import { Document } from "@contentful/rich-text-types";
 import { Device } from "lib/aqmd";
 import PollroseGenerator from "components/Dashboard/PollroseGenerator";
+// TODO:Tooltip for map
+// import { TooltipLegend } from "components/Dashboard/tooltipLegend";
 
 const NORTH_AEROQUAL_SENSOR_ID = "AQS1 04072024-2724";
+type Id = string | number;
+const makeId = (
+  m: { id?: Id; site: string; latitude: number; longitude: number },
+  i: number
+): Id => m.id ?? `${m.site}-${m.latitude}-${m.longitude}-${i}`;
 
 const AirQuality = ({
   airQualityPageContent
@@ -39,6 +46,7 @@ const AirQuality = ({
   const { language } = useAppContext();
   const startDateRef = useRef<HTMLInputElement>(null);
   const endDateRef = useRef<HTMLInputElement>(null);
+
   //Sensor list with location data for map
   const { data: sensorList = [], error } = useSWR<Device[]>(
     [`../api/aq/devices/aqmd`, `../api/aq/devices/quant`],
@@ -66,6 +74,7 @@ const AirQuality = ({
     cmsField?.sensor_selection_helper_text[locale];
   const modSensorGeneratePlotHelperText =
     cmsField?.mod_sensor_warning_text[locale];
+  const [activeId, setActiveId] = useState<Id | null>(null);
   // === cms content end ======================================================================================
   const airQualityDevices = useMemo(() => {
     const transformedSensorData = transformSensorData(sensorList);
@@ -104,8 +113,11 @@ const AirQuality = ({
   const isLoadingParamAndChart = isValidating || !isFirstRequestComplete;
   const isLoading = isLoadingMap || isLoadingParamAndChart;
 
+  // TODO : Part of tooltip legend on map
+  // const devicesWithId = airQualityDevices.map((m, i) => ({
+  //   ...m
+  // }));
   if (error || fetchError) return <Typography>Error Loading data</Typography>;
-
   return (
     <>
       <Meta title="Dashboard | Salton Sea Environmental Timeseries" />
@@ -126,7 +138,7 @@ const AirQuality = ({
 
             <Grid2 container spacing={1} sx={{ mb: 4 }}>
               {/* Chart Grid*/}
-              <Grid2 size={{ xs: 12, md: 8 }}>
+              <Grid2 size={{ xs: 12, md: PollroseDataNorthSensor ? 8 : 12 }}>
                 <AirQualityPlots
                   normalizedData={groupedData}
                   chartMainCaption={chartMainCaption}
@@ -154,11 +166,13 @@ const AirQuality = ({
                 display={"flex"}
                 justifyContent="center"
               >
-                <PollroseGenerator
-                  pollroseData={PollroseDataNorthSensor}
-                  sensorName={PollroseNorthSensorName}
-                  selectedPollutant={selectedPollutant}
-                />
+                {PollroseDataNorthSensor && (
+                  <PollroseGenerator
+                    pollroseData={PollroseDataNorthSensor}
+                    sensorName={PollroseNorthSensorName}
+                    selectedPollutant={selectedPollutant}
+                  />
+                )}
               </Grid2>
             </Grid2>
           </>
@@ -179,9 +193,23 @@ const AirQuality = ({
             ZOOM={10}
           >
             {airQualityDevices.map((marker, i) => (
-              <MapMarker {...marker} i={i} key={i} />
+              <MapMarker
+                {...marker}
+                id={marker.sensorId}
+                i={i}
+                key={marker.sensorId}
+                activeId={activeId}
+                setActiveId={setActiveId}
+              />
             ))}
+            {/* TODO: Update Legend with new tooltip */}
             <Legend />
+
+            {/* <TooltipLegend
+              devices={airQualityDevices}
+              activeId={activeId}
+              setActiveId={setActiveId}
+            /> */}
           </Map>
         )}
       </WithLoading>

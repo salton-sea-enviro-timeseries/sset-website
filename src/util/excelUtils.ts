@@ -42,26 +42,26 @@ export async function downloadExcel(data: Record<string, any>): Promise<void> {
   a.click();
   window.URL.revokeObjectURL(url);
 }
+// NOTE: Poll Rose now from plotly.js not fastapi see /Rose.tsx
+// export function generatePollroseCSV(
+//   data: CommonDeviceType[],
+//   pollutant: pollutantKey
+// ): string {
+//   const headers = ["sn", "timestamp_local", "WD", "WS", pollutant];
+//   const rows = data
+//     .filter(
+//       (row) =>
+//         row.WD !== undefined &&
+//         row.WS !== undefined &&
+//         row[pollutant as keyof CommonDeviceType] !== undefined
+//     )
+//     .map((row) => [
+//       row.sn ?? "",
+//       row["timestamp_local"] ?? "",
+//       row.WD,
+//       row.WS,
+//       row[pollutant as keyof CommonDeviceType]
+//     ]);
 
-export function generatePollroseCSV(
-  data: CommonDeviceType[],
-  pollutant: pollutantKey
-): string {
-  const headers = ["sn", "timestamp_local", "WD", "WS", pollutant];
-  const rows = data
-    .filter(
-      (row) =>
-        row.WD !== undefined &&
-        row.WS !== undefined &&
-        row[pollutant as keyof CommonDeviceType] !== undefined
-    )
-    .map((row) => [
-      row.sn ?? "",
-      row["timestamp_local"] ?? "",
-      row.WD,
-      row.WS,
-      row[pollutant as keyof CommonDeviceType]
-    ]);
-
-  return [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
-}
+//   return [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
+// }
