@@ -1,6 +1,6 @@
 import { maxBy, minBy, meanBy, isNumber } from "lodash";
 import chroma from "chroma-js";
-import { Data, SiteData } from "types";
+import { Data, SiteData } from "@/types";
 import { startOfHour, subHours, addHours, format } from "date-fns";
 import { utcToZonedTime } from "date-fns-tz";
 import { Device } from "lib/aqmd";

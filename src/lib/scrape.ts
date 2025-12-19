@@ -1,6 +1,6 @@
 import getMetaData from "metadata-scraper";
 import { MetaData } from "metadata-scraper/lib/types";
-import { MediaObject } from "types";
+import { MediaObject } from "@/types";
 
 async function scrape(urls: string[]) {
   let promises: Promise<MetaData>[] = [];

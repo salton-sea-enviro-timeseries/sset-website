@@ -1,7 +1,7 @@
 import { parseISO } from "date-fns";
 import { format, utcToZonedTime } from "date-fns-tz";
-import { AeroqualDeviceDataParams, OriginalData } from "types";
-import { getEndDate, getStartDate } from "utils";
+import { AeroqualDeviceDataParams, OriginalData } from "@/types";
+import { getEndDate, getStartDate } from "@/utils";
 const ENDPOINT_BASE_URL = "https://cloud.aeroqual.com/v2/instruments";
 
 function getDefaultOriginalData(): OriginalData {

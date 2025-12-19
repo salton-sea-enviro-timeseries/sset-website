@@ -6,7 +6,7 @@ import {
   subDays
 } from "date-fns";
 import { format, utcToZonedTime } from "date-fns-tz";
-import { getEndDate, getStartDate } from "utils";
+import { getEndDate, getStartDate } from "@/utils";
 //NOTE: To keep the endpoint fast, at most 31 days of data can be requested at a time.
 //TODO : create group to query all sensors
 const ENDPOINT_BASE_URL = "https://api.quant-aq.com";
