@@ -12,13 +12,13 @@ import {
   ToggleButtonGroup,
   styled
 } from "@mui/material";
-import Link from "next/link";
+import NextLink from "next/link";
 import { useRouter } from "next/router";
 import CloseIcon from "@mui/icons-material/Close";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useAppContext } from "./AppContext";
-import { Language } from "types";
-import { getContent } from "util/getContent";
+import { Language } from "@/types";
+import { getContent } from "@/util/getContent";
 
 function Navbar({ minWidth = "100vw" }: { minWidth?: string }) {
   const router = useRouter();
@@ -71,30 +71,26 @@ function Navbar({ minWidth = "100vw" }: { minWidth?: string }) {
     }
   };
   return (
-    (<StyledAppBar color="transparent" position="fixed" elevation={1}>
+    <StyledAppBar color="transparent" position="fixed" elevation={1}>
       <StyledToolbar sx={{ minWidth: minWidth }}>
         <Box display="flex" alignItems="center">
-          <Link href="/" passHref>
-
-            {/* eslint-disable  @next/next/no-img-element */}
+          {/* eslint-disable  @next/next/no-img-element */}
+          <NextLink href="/">
             <img width={150} src="/logo-red.png" alt="SSET Logo" />
-
-          </Link>
+          </NextLink>
           <CloseIcon fontSize="small" sx={{ marginLeft: "2" }} />
-          <Link
+          <a
             href="https://thrivingsaltonsea.com/"
-            passHref
             target="_blank"
-            rel="noopener noreferrer">
-
-            {/* eslint-disable  @next/next/no-img-element */}
+            rel="noopener noreferrer"
+          >
+            {/* eslint-disable @next/next/no-img-element */}
             <img
               width={150}
               src="/thriving-salton-sea-communities.png"
               alt="Thriving Salton Sea Communities Logo"
             />
-
-          </Link>
+          </a>
         </Box>
         <Box sx={{ flexGrow: 1, minWidth: "1px" }} />
         {/* Hidden on mobile */}
@@ -126,12 +122,15 @@ function Navbar({ minWidth = "100vw" }: { minWidth?: string }) {
                 horizontal: "left"
               }}
             >
-              {Links.map((link, index) => (
-                <Link passHref href={link.href} key={index} legacyBehavior>
-                  <MenuItem selected={isActiveLink(link.href)}>
-                    {link.label}
-                  </MenuItem>
-                </Link>
+              {Links.map((link) => (
+                <MenuItem
+                  key={link.href}
+                  component={NextLink}
+                  href={link.href}
+                  selected={isActiveLink(link.href)}
+                >
+                  {link.label}
+                </MenuItem>
               ))}
             </Menu>
           </Box>
@@ -170,7 +169,7 @@ function Navbar({ minWidth = "100vw" }: { minWidth?: string }) {
           </ToggleButtonGroup>
         </Box>
       </StyledToolbar>
-    </StyledAppBar>)
+    </StyledAppBar>
   );
 }
 const StyledAppBar = styled(AppBar)(({ theme }) => ({

@@ -10,7 +10,7 @@ import {
 import FeaturedNewsFeed from "components/InTheNews/FeaturedNewsFeed";
 import Section from "components/Section";
 import SectionHeader from "components/SectionHeader";
-import { ArticleFields } from "types";
+import { ArticleFields } from "@/types";
 import Image from "next/image";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 // TODO: add links to definitions
