@@ -1,12 +1,12 @@
 import { useMemo } from "react";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import WithLoading from "components/WithLoading";
 import { useAppContext } from "components/AppContext";
-import { colorScale } from "utils";
+import { colorScale } from "@/utils";
 import DownloadDataButtonsSection from "components/Dashboard/DownloadDataButtonsSection";
 import { Box, MenuItem, TextField, Typography } from "@mui/material";
-import { Parameter, MenuItemFields } from "types";
-import { filterParameters } from "util/filterParameterFromCms";
+import { Parameter, MenuItemFields } from "@/types";
+import { filterParameters } from "@/util/filterParameterFromCms";
 import ContinuousColorLegend from "components/ContinuousColorLegend";
 
 interface ParameterControlsProps {
@@ -52,16 +52,16 @@ const ParameterControls = ({
   };
 
   return (
-    <Grid2 container alignItems="center" size={{ xs: 12 }}>
+    <Grid container alignItems="center" size={{ xs: 12 }}>
       {/* Param and legend section */}
-      <Grid2
+      <Grid
         container
         display={"flex"}
         alignItems="center"
         size={{ xs: 12, md: 6 }}
       >
         {/* Parameter dropdown */}
-        <Grid2 size={6}>
+        <Grid size={6}>
           <WithLoading
             variant="rectangular"
             height={40}
@@ -88,9 +88,9 @@ const ParameterControls = ({
               ))}
             </TextField>
           </WithLoading>
-        </Grid2>
+        </Grid>
         {/* Parameter Legend */}
-        <Grid2 size={6}>
+        <Grid size={6}>
           <WithLoading
             variant="rectangular"
             height={40}
@@ -115,11 +115,11 @@ const ParameterControls = ({
                 )}
             </Box>
           </WithLoading>
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
       {/* Param and legend section end */}
       {/* Download section */}
-      <Grid2
+      <Grid
         container
         display={"flex"}
         alignItems="center"
@@ -132,9 +132,9 @@ const ParameterControls = ({
           sensorButtonText={downloadTexts.sensor}
           readMeSrc={downloadTexts.readMeUrl}
         />
-      </Grid2>
+      </Grid>
       {/* Download section end */}
-    </Grid2>
+    </Grid>
   );
 };
 

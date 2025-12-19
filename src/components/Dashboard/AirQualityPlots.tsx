@@ -23,17 +23,17 @@ import {
   LocaleOption,
   MenuItemFields,
   pollutantKey
-} from "types";
+} from "@/types";
 import "chartjs-adapter-date-fns";
 import { Line } from "react-chartjs-2";
-import { Box, Typography, Link, Button, Grid2 } from "@mui/material";
+import { Box, Typography, Link, Button, Grid } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/CloudDownload";
-import { calcParamAQI } from "util/calcParamAQI";
+import { calcParamAQI } from "@/util/calcParamAQI";
 import SelectMenuList from "./SelectMenuList";
-import { filterParameters } from "util/filterParameterFromCms";
+import { filterParameters } from "@/util/filterParameterFromCms";
 import AirQualityDateRangeInput from "./AirQualityDateRangeInput";
-import { FormErrorRange } from "hooks/useSensorData";
-import { downloadExcel } from "util/excelUtils";
+import { FormErrorRange } from "@/hooks/useSensorData";
+import { downloadExcel } from "@/util/excelUtils";
 
 ChartJS.register(
   CategoryScale,
@@ -362,9 +362,9 @@ const AirQualityPlots = ({
   };
   return (
     <>
-      <Grid2 container spacing={3}>
+      <Grid container spacing={3}>
         {/* Parameter Selector and Download */}
-        <Grid2
+        <Grid
           size={{ xs: 12, md: 6 }}
           display="flex"
           // justifyContent="center"
@@ -394,10 +394,10 @@ const AirQualityPlots = ({
               Air Quality Data
             </Button>
           </Box>
-        </Grid2>
+        </Grid>
 
         {/* Date Selector  */}
-        <Grid2 size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Box
             sx={{
               width: "100%"
@@ -415,8 +415,8 @@ const AirQualityPlots = ({
               modSensorGeneratePlotHelperText={modSensorGeneratePlotHelperText}
             />
           </Box>
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
 
       {shouldRenderChart ? (
         <Box minHeight={350} m="2 2 0 2" marginTop={-4} sx={{ paddingTop: 0 }}>

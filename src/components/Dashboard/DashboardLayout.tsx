@@ -1,11 +1,10 @@
 import React from "react";
-import Link from "next/link";
+import NextLink from "next/link";
 import {
   Box,
   Container,
   Drawer,
   List,
-  ListItem,
   ListItemIcon,
   ListItemText,
   styled,
@@ -48,31 +47,36 @@ const DashboardLayout: React.FC = ({ children }) => {
     return router.pathname === pathname;
   };
 
-  return (<>
-    <Navbar />
-    <Box display="flex" flex={1} pb={5}>
-      <MuiDrawer open={open} variant="permanent">
-        <DrawerHeader>
-          <IconButton
-            aria-label="open drawer"
-            onClick={toggleDrawer}
-            color="inherit"
-            edge="end"
-            sx={{ paddingTop: 2 }}
-          >
-            <ListItemIcon>
-              {!open ? <ArrowRightIcon /> : <ArrowLeftIcon />}
-            </ListItemIcon>
-          </IconButton>
-        </DrawerHeader>
-        <List>
-          {" "}
-          {DASHBOARD_LINKS.map(({ href, label, Icon }) => (
-            <Link key={label} href={href} passHref legacyBehavior>
-              <ListItemButton component="a">
+  return (
+    <>
+      <Navbar />
+      <Box display="flex" flex={1} pb={5}>
+        <MuiDrawer open={open} variant="permanent">
+          <DrawerHeader>
+            <IconButton
+              aria-label="open drawer"
+              onClick={toggleDrawer}
+              color="inherit"
+              edge="end"
+              sx={{ paddingTop: 2 }}
+            >
+              <ListItemIcon>
+                {!open ? <ArrowRightIcon /> : <ArrowLeftIcon />}
+              </ListItemIcon>
+            </IconButton>
+          </DrawerHeader>
+          <List>
+            {DASHBOARD_LINKS.map(({ href, label, Icon }) => (
+              <ListItemButton
+                key={label}
+                component={NextLink}
+                href={href}
+                selected={isActive(href)}
+              >
                 <ListItemIcon>
                   <Icon color={isActive(href) ? "primary" : undefined} />
                 </ListItemIcon>
+
                 <ListItemText
                   primary={label}
                   slotProps={{
@@ -80,18 +84,18 @@ const DashboardLayout: React.FC = ({ children }) => {
                   }}
                 />
               </ListItemButton>
-            </Link>
-          ))}
-        </List>
-      </MuiDrawer>
-      <StyledMain>
-        <StyledContainer maxWidth="lg">
-          <>{children}</>
-        </StyledContainer>
-      </StyledMain>
-    </Box>
-    <Footer />
-  </>);
+            ))}
+          </List>
+        </MuiDrawer>
+        <StyledMain>
+          <StyledContainer maxWidth="lg">
+            <>{children}</>
+          </StyledContainer>
+        </StyledMain>
+      </Box>
+      <Footer />
+    </>
+  );
 };
 const openedMixin = (theme: Theme): CSSObject => ({
   width: DRAWER_WIDTH,
