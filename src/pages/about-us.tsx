@@ -429,7 +429,7 @@ const MEMBER_LIST = [
     lastName: "Sinclair",
     title: "Associate Professor of Environmental Microbiology",
     bio: `Dr. Ryan G. Sinclair is an Associate Professor of Environmental Microbiology in the Loma Linda University School of Public Health, holding a joint appointment in the Department of Earth and Biological Sciences. He earned his PhD in water quality from Tulane University and completed postdoctoral research in environmental microbiology at the University of Arizona. Afterward, he worked as a Research Associate with the National Research Council on water infrastructure. His commitment to environmental justice is reflected throughout his research, and he now works as a scientist and advocate on several projects in the inland desert region of Southern California. His dedication earned him the prestigious 2021 SCAQMD Dr. Robert M. Zweig Clean Air Award.`,
-    headShotPath: "",
+    headShotPath: "/avatar-pics/ryan-sinclair-avatar.jpeg",
     employment: "",
     socials: {}
   },

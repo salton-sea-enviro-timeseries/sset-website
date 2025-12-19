@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { InferGetStaticPropsType } from "next";
 import { Button, Container } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import Link from "next/link";
+import NextLink from "next/link";
 import { getCmsContent } from "@/util/getCmsContent";
 import {
   ArticleFields,
@@ -122,11 +122,14 @@ const Home = ({
         subtitle={heroSubTitle && heroSubTitle[currentLocale]}
         cta={
           <>
-            <Link href="/dashboard/water-quality" passHref legacyBehavior>
-              <Button variant="contained" color="primary">
-                {buttonText && buttonText[currentLocale]}
-              </Button>
-            </Link>
+            <Button
+              component={NextLink}
+              href="/dashboard/water-quality"
+              variant="contained"
+              color="primary"
+            >
+              {buttonText && buttonText[currentLocale]}
+            </Button>
             <StyledTutorialButton
               variant="text"
               size="large"
