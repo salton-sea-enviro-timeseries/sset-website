@@ -10,9 +10,9 @@ import { styled, useTheme } from "@mui/material/styles";
 import CardDetails from "components/BioCard/CardDetails";
 import CardFront from "./CardFront";
 import ProfileNav from "./ProfileNav";
-import useCardHeight from "hooks/useCardHeight";
-import useWindowResize from "hooks/useWindowResize";
-import useProfileNavigation from "hooks/useProfileNavigation";
+import useCardHeight from "@/hooks/useCardHeight";
+import useWindowResize from "@/hooks/useWindowResize";
+import useProfileNavigation from "@/hooks/useProfileNavigation";
 
 interface ProfileResponse {
   image: string;
