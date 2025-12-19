@@ -1,5 +1,5 @@
-import { CommonDeviceType } from "types";
-import { fetcher } from "utils";
+import { CommonDeviceType } from "@/types";
+import { fetcher } from "@/utils";
 type DataType = CommonDeviceType[];
 type DateRange = {
   startDate?: string | null;

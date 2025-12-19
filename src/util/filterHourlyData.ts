@@ -1,4 +1,4 @@
-import { CommonDeviceType } from "types";
+import { CommonDeviceType } from "@/types";
 
 export function filterHourlyData(data: CommonDeviceType[]): CommonDeviceType[] {
   return data.reduce((filteredData: CommonDeviceType[], currentItem) => {

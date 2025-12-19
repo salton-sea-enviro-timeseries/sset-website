@@ -4,7 +4,7 @@ import {
   DataType,
   DeviceRawData,
   PurpleAirSensor
-} from "types";
+} from "@/types";
 import { mapDeviceNames } from "./mapDeviceNames";
 import { Device } from "lib/aqmd";
 

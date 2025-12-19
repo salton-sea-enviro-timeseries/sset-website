@@ -1,6 +1,6 @@
 import { RawDeviceAverageDataResponse } from "lib/aqmd";
 import { MODRawDeviceDataResponse } from "lib/quant";
-import { CommonDeviceType } from "types";
+import { CommonDeviceType } from "@/types";
 
 interface NoDataAvailable {
   DeviceId: string;

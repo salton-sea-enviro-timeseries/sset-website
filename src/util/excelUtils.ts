@@ -1,5 +1,5 @@
 import ExcelJS from "exceljs";
-import { CommonDeviceType, pollutantKey } from "types";
+import { CommonDeviceType, pollutantKey } from "@/types";
 
 export async function downloadExcel(data: Record<string, any>): Promise<void> {
   const workbook = new ExcelJS.Workbook();
