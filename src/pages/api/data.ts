@@ -1,6 +1,6 @@
 import { getProbeData, getNutrientsData } from "lib/sheets";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { SiteData } from "types";
+import { SiteData } from "@/types";
 
 export default async function handler(
   req: NextApiRequest,

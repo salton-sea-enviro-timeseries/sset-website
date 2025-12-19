@@ -10,7 +10,6 @@ import {
   ListItemText
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
 import Hero from "components/Hero";
 import Section from "components/Section";
 import Layout from "components/Layout";

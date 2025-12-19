@@ -8,7 +8,7 @@ import Document, {
   DocumentInitialProps
 } from "next/document";
 import createEmotionServer from "@emotion/server/create-instance";
-import createEmotionCache from "util/createEmotionCache";
+import createEmotionCache from "@/util/createEmotionCache";
 import { GA_TRACKING_ID } from "../util/gtag";
 import { EmotionCache } from "@emotion/react";
 

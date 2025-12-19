@@ -1,24 +1,24 @@
 import { useEffect, useState } from "react";
 import {
   Container,
-  Grid2,
+  Grid,
   Paper,
   Button,
   Typography,
   useMediaQuery
 } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
-import { useAppContext } from "components/AppContext";
-import Hero from "components/Hero";
-import Section from "components/Section";
-import Layout from "components/Layout";
-import Meta from "components/Meta";
-import Translation from "components/Translation";
-import AboutCard from "components/BioCard/AboutCard";
-import { getCmsContent } from "util/getCmsContent";
-import SectionHeader from "components/SectionHeader";
-import { AboutPage, Profile, Question } from "types";
-import { shuffleArray, truncateQuestion } from "utils";
+import { useAppContext } from "@/components/AppContext";
+import Hero from "@/components/Hero";
+import Section from "@/components/Section";
+import Layout from "@/components/Layout";
+import Meta from "@/components/Meta";
+import Translation from "@/components/Translation";
+import AboutCard from "@/components/BioCard/AboutCard";
+import { getCmsContent } from "@/util/getCmsContent";
+import SectionHeader from "@/components/SectionHeader";
+import { AboutPage, Profile, Question } from "@/types";
+import { shuffleArray, truncateQuestion } from "@/utils";
 import { Entry } from "contentful";
 
 interface AboutUsPageProps {
@@ -110,7 +110,7 @@ const OurCommunity = ({ listOfProfiles }: AboutUsPageProps) => {
             size={"h4"}
             sectionId={"ourCommunity-section"}
           />
-          <Grid2 container spacing={1} justifyContent="center">
+          <Grid container spacing={1} justifyContent="center">
             <QuestionWrapper size={{ xs: 12 }}>
               {Object.entries(questionList).map(
                 ([key, value]) =>
@@ -140,7 +140,7 @@ const OurCommunity = ({ listOfProfiles }: AboutUsPageProps) => {
                 />
               )}
             </AboutCardsWrapper>
-          </Grid2>
+          </Grid>
         </StyledContainer>
       </Section>
     </Layout>
@@ -160,13 +160,13 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   }
 }));
 
-const QuestionWrapper = styled(Grid2)(({ theme }) => ({
+const QuestionWrapper = styled(Grid)(({ theme }) => ({
   display: "flex",
   flexWrap: "wrap",
   justifyContent: "center"
 }));
 
-const AboutCardsWrapper = styled(Grid2)({
+const AboutCardsWrapper = styled(Grid)({
   display: "flex",
   flexDirection: "column"
 });

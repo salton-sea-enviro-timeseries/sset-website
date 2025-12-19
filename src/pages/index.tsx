@@ -3,24 +3,24 @@ import type { InferGetStaticPropsType } from "next";
 import { Button, Container } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Link from "next/link";
-import { getCmsContent } from "util/getCmsContent";
+import { getCmsContent } from "@/util/getCmsContent";
 import {
   ArticleFields,
   Content1,
   Content2,
   HomePage,
   PageContent
-} from "types";
-import Layout from "components/Layout";
-import Hero from "components/Hero";
-import PageSection from "components/PageSection";
-import TutorialModal from "../components/TutorialModal";
-import { useAppContext } from "components/AppContext";
-import { LocaleOption, NestedObjBodyText } from "types";
+} from "@/types";
+import Layout from "@/components/Layout";
+import Hero from "@/components/Hero";
+import PageSection from "@/components/PageSection";
+import TutorialModal from "@/components/TutorialModal";
+import { useAppContext } from "@/components/AppContext";
+import { LocaleOption, NestedObjBodyText } from "@/types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { Document } from "@contentful/rich-text-types";
-import SubscriptionForm from "components/SubscriptionForm";
-import Section from "components/Section";
+import SubscriptionForm from "@/components/SubscriptionForm";
+import Section from "@/components/Section";
 
 // Contentful rich text helper
 const renderDocument = (document: Document) => {
@@ -113,7 +113,7 @@ const Home = ({
   );
   //================== cms end ============================
   return (
-    (<Layout>
+    <Layout>
       <Hero
         bgColor="primary"
         size="large"
@@ -153,7 +153,7 @@ const Home = ({
           <SubscriptionForm />
         </Container>
       </Section>
-    </Layout>)
+    </Layout>
   );
 };
 

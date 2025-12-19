@@ -3,9 +3,9 @@ import Script from "next/script";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import { CacheProvider, EmotionCache } from "@emotion/react";
-import createEmotionCache from "util/createEmotionCache";
+import createEmotionCache from "@/util/createEmotionCache";
 import * as gtag from "../util/gtag";
-import { ThemeProvider } from "util/theme.js";
+import { ThemeProvider } from "@/util/theme.js";
 import AppContextProvider from "components/AppContext";
 import { useRouter } from "next/router";
 

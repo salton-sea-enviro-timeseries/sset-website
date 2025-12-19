@@ -2,7 +2,7 @@ import _ from "lodash";
 import type { NextApiRequest, NextApiResponse } from "next";
 import CookieManager from "lib/CookieManager";
 import { getAeroqualDeviceData } from "lib/aeroqual";
-import transformAeroqualData from "util/transformAeroqualData";
+import transformAeroqualData from "@/util/transformAeroqualData";
 const credentials = {
   username: process.env.AEROQUAL_USERNAME,
   password: process.env.AEROQUAL_PASSWORD

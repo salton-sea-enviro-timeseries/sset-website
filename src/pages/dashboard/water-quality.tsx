@@ -1,24 +1,24 @@
 import { useEffect, useMemo, useState } from "react";
 import { Box, Typography } from "@mui/material";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import {
   Parameter,
   Data,
   SiteData,
   DashboardPage,
   MenuItemFields
-} from "types";
-import { getColorFromScale, getRange, waterQualityDataFetcher } from "utils";
+} from "@/types";
+import { getColorFromScale, getRange, waterQualityDataFetcher } from "@/utils";
 import DashboardLayout from "components/Dashboard/DashboardLayout";
 import Map from "components/Dashboard/Map";
 import Table from "components/Dashboard/Table";
 import WithLoading from "components/WithLoading";
 import Meta from "components/Meta";
-import { getCmsContent } from "util/getCmsContent";
+import { getCmsContent } from "@/util/getCmsContent";
 import { InferGetStaticPropsType } from "next";
 import { useAppContext } from "components/AppContext";
-import { filterParameters } from "util/filterParameterFromCms";
-import { getMapData } from "util/getMapData";
+import { filterParameters } from "@/util/filterParameterFromCms";
+import { getMapData } from "@/util/getMapData";
 import MapMarkers from "components/Dashboard/MapMarkers";
 import {
   DownloadButton,
@@ -112,7 +112,7 @@ const WaterQuality = ({
       {/* TODO: Refactor: Move to separate component */}
       <Box pb={1}>
         {/* outside wrapper  */}
-        <Grid2 container spacing={1}>
+        <Grid container spacing={1}>
           {/* Parameter and download section container*/}
 
           <ParameterControls
@@ -128,7 +128,7 @@ const WaterQuality = ({
             }}
           />
           {/* Captions 1 & 2 */}
-          <Grid2 size={{ xs: 12 }}>
+          <Grid size={{ xs: 12 }}>
             <WithLoading isLoading={isLoading} width="100%">
               <Typography
                 variant="caption"
@@ -142,8 +142,8 @@ const WaterQuality = ({
                 {parameterDescription}
               </Typography>
             </WithLoading>
-          </Grid2>
-          <Grid2 size={{ xs: 12 }}>
+          </Grid>
+          <Grid size={{ xs: 12 }}>
             <WithLoading isLoading={isLoading} width="100%">
               <Typography
                 variant="caption"
@@ -155,12 +155,12 @@ const WaterQuality = ({
                 {mapSecondaryCaption}
               </Typography>
             </WithLoading>
-          </Grid2>
+          </Grid>
           {/* Caption 1 & 2 end */}
-        </Grid2>
+        </Grid>
       </Box>
-      <Grid2 container>
-        <Grid2
+      <Grid container>
+        <Grid
           size={{ xs: 12 }}
           sx={{
             height: "auto"
@@ -182,8 +182,8 @@ const WaterQuality = ({
               </Map>
             )}
           </WithLoading>
-        </Grid2>
-        <Grid2 size={{ xs: 12 }} sx={{ minHeight: "500px", height: "auto" }}>
+        </Grid>
+        <Grid size={{ xs: 12 }} sx={{ minHeight: "500px", height: "auto" }}>
           <WithLoading
             isLoading={isLoading}
             variant="rectangular"
@@ -191,8 +191,8 @@ const WaterQuality = ({
           >
             <Table data={tableData} />
           </WithLoading>
-        </Grid2>
-        <Grid2 size={{ xs: 12 }}>
+        </Grid>
+        <Grid size={{ xs: 12 }}>
           <a download href="/sset-protocols.pdf">
             <DownloadButton
               variant="text"
@@ -205,8 +205,8 @@ const WaterQuality = ({
               </DownloadText>
             </DownloadButton>
           </a>
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
     </>
   );
 };

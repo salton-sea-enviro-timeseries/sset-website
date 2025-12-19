@@ -1,31 +1,31 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import useSWR from "swr";
 import { styled } from "@mui/material/styles";
-import { Grid2 } from "@mui/material";
-import AeroqualSensor from "aeroqual-sensor.json";
+import { Grid } from "@mui/material";
+import AeroqualSensor from "@/aeroqual-sensor.json";
 import { Typography } from "@mui/material";
-import { getCmsContent } from "util/getCmsContent";
-import { multiFetcher } from "utils";
+import { getCmsContent } from "@/util/getCmsContent";
+import { multiFetcher } from "@/utils";
 import WithLoading from "components/WithLoading";
 import { InferGetStaticPropsType } from "next";
 import Meta from "components/Meta";
 import DashboardLayout from "components/Dashboard/DashboardLayout";
 import Map from "components/Dashboard/Map";
 import Legend from "components/Dashboard/Legend";
-import { AirQualityPage, pollutantKey } from "types";
+import { AirQualityPage, pollutantKey } from "@/types";
 import MapMarker from "components/Dashboard/MapMarker";
 import {
   filteredSensors,
   groupSensorData,
   transformSensorData
-} from "util/sensorDataFormatting";
-import useSensorData from "hooks/useSensorData";
+} from "@/util/sensorDataFormatting";
+import useSensorData from "@/hooks/useSensorData";
 import AQLegend from "components/Dashboard/AQLegend";
 import AirQualityParameterSection from "components/Dashboard/AirQualityParameterSection";
 import AirQualityPlots from "components/Dashboard/AirQualityPlots";
 import AirQualityLoadingSkeleton from "components/Dashboard/AirQualityLoadingSkeleton";
 import { useAppContext } from "components/AppContext";
-import { renderDocument } from "util/contentfulUtils";
+import { renderDocument } from "@/util/contentfulUtils";
 import { Document } from "@contentful/rich-text-types";
 import { Device } from "lib/aqmd";
 import PollroseGenerator from "components/Dashboard/PollroseGenerator";
@@ -136,9 +136,9 @@ const AirQuality = ({
               sensorSelectionHelperText={sensorSelectionHelperText}
             />
 
-            <Grid2 container spacing={1} sx={{ mb: 4 }}>
+            <Grid container spacing={1} sx={{ mb: 4 }}>
               {/* Chart Grid*/}
-              <Grid2 size={{ xs: 12, md: PollroseDataNorthSensor ? 8 : 12 }}>
+              <Grid size={{ xs: 12, md: PollroseDataNorthSensor ? 8 : 12 }}>
                 <AirQualityPlots
                   normalizedData={groupedData}
                   chartMainCaption={chartMainCaption}
@@ -160,8 +160,8 @@ const AirQuality = ({
                   onPollutantChange={setSelectedPollutant}
                 />
                 {/* Pollrose Grid */}
-              </Grid2>
-              <Grid2
+              </Grid>
+              <Grid
                 size={{ xs: 12, md: 4 }}
                 display={"flex"}
                 justifyContent="center"
@@ -173,8 +173,8 @@ const AirQuality = ({
                     selectedPollutant={selectedPollutant}
                   />
                 )}
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
           </>
         )
       )}
