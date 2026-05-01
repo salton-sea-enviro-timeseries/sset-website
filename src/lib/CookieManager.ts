@@ -46,7 +46,7 @@ export class CookieManager {
     return cookie;
   }
   private async fetchCookie(credentials: Credentials): Promise<string> {
-    const loginUrl = "https://cloud.aeroqual.com/V2/login";
+    const loginUrl = "https://api.cloud.aeroqual.com/v2/login";
     const loginResponse = await fetch(loginUrl, {
       method: "POST",
       headers: {
