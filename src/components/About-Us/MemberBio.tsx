@@ -1,6 +1,7 @@
 import { Box, Avatar, Typography, Divider } from "@mui/material";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { styled } from "@mui/material/styles";
+// This component was replaced by using just Member.tsx
 type BioProps = {
   firstName: string;
   lastName: string;

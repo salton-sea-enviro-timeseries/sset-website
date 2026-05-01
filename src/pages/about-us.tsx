@@ -1,6 +1,4 @@
 import { Box, Container, Typography } from "@mui/material";
-// import { styled } from "@mui/material/styles";
-// import { Timeline } from "@mui/lab";
 import EmblaCarousel from "@/components/Embla/EmblaCarousel";
 import { EmblaOptionsType } from "embla-carousel";
 import Hero from "@/components/Hero";
@@ -577,6 +575,7 @@ const AboutUs = () => {
         </Container>
       </Section> */}
       {/* Timeline end */}
+      {/* TODO: Move this as a component  */}
       <Section>
         <Container>
           <SectionHeader
@@ -599,7 +598,7 @@ const AboutUs = () => {
             columnSpacing={4}
             centerRows
             rowSpacing={4}
-            sizes={{ xs: 12, sm: 6, md: 12 / COLUMNS }}
+            sizes={{ xs: 6, sm: 6, md: 12 / COLUMNS }}
             items={MEMBER_LIST.map(
               (
                 {
