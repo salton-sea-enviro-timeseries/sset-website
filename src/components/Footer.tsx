@@ -8,10 +8,9 @@ import {
   ListItemText,
   ListItemIcon
 } from "@mui/material";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import { styled } from "@mui/material/styles";
 import Image from "next/image";
-import Link from "next/link";
 const socialMediaIcons = [
   {
     icon: "/icon-facebook.svg",
@@ -95,41 +94,37 @@ const SocialLinkItem: React.FC<SocialLinkItemProps> = ({
   url,
   label
 }) => (
-  <Link href={url} passHref legacyBehavior>
-    <StyledBaseLink target="_blank" rel="noreferrer">
-      <StyledListItem>
-        <SocialIcon>
-          <Image
-            src={icon}
-            alt={label}
-            width="24"
-            height="24"
-            style={{
-              maxWidth: "100%",
-              height: "auto"
-            }}
-          />
-        </SocialIcon>
-        <ListItemText>{label}</ListItemText>
-      </StyledListItem>
-    </StyledBaseLink>
-  </Link>
+  <StyledBaseLink href={url} target="_blank" rel="noreferrer">
+    <StyledListItem>
+      <SocialIcon>
+        <Image
+          src={icon}
+          alt={label}
+          width="24"
+          height="24"
+          style={{
+            maxWidth: "100%",
+            height: "auto"
+          }}
+        />
+      </SocialIcon>
+      <ListItemText>{label}</ListItemText>
+    </StyledListItem>
+  </StyledBaseLink>
 );
 const ImageLink: React.FC<ImageLinkProps> = ({ href, src, alt, width }) => (
-  <Link href={href} passHref target="_blank" rel="noopener noreferrer">
-    {/* eslint-disable @next/next/no-img-element*/}
-
+  <a href={href} target="_blank" rel="noopener noreferrer">
+    {/* eslint-disable-next-line @next/next/no-img-element */}
     <img src={src} width={width} alt={alt} />
-  </Link>
+  </a>
 );
-
 const Footer: React.FC<LayoutProps> = ({ className, sx }) => {
   return (
     <StyledFooter as="footer" className={className}>
       <Container>
-        <Grid2 container spacing={4}>
+        <Grid container spacing={4}>
           {/* Socials Section */}
-          <Grid2 size={{ xs: 12, md: 2 }}>
+          <Grid size={{ xs: 12, md: 2 }}>
             <List disablePadding>
               <StyledListItem as="div">
                 <HeaderText variant="overline">Socials</HeaderText>
@@ -140,14 +135,14 @@ const Footer: React.FC<LayoutProps> = ({ className, sx }) => {
                 ))}
               </SocialsContainer>
             </List>
-          </Grid2>
+          </Grid>
           {/* Logos Section */}
           <LogoContainer>
             {logos.map((logoData) => (
               <ImageLink key={logoData.alt} {...logoData} />
             ))}
           </LogoContainer>
-        </Grid2>
+        </Grid>
         <Box pt={10}>
           <Typography align="center" variant="caption" component="p">
             Built in the Coachella Valley ☀️
@@ -177,7 +172,7 @@ const SocialsContainer = styled(Box)(({ theme }) => ({
   }
 }));
 
-const LogoContainer = styled(Grid2)(({ theme }) => ({
+const LogoContainer = styled(Grid)(({ theme }) => ({
   display: "flex",
   flexGrow: 1,
   alignItems: "center",

@@ -1,6 +1,6 @@
 import { stringify } from "csv-stringify/sync";
 import { google } from "googleapis";
-import { RawNutrientsData, RawProbeData } from "types";
+import { RawNutrientsData, RawProbeData } from "@/types";
 
 const target = ["https://www.googleapis.com/auth/spreadsheets.readonly"];
 const jwt = new google.auth.JWT(

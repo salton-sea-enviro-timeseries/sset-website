@@ -1,5 +1,5 @@
 import { get } from "lodash";
-import { Language } from "types";
+import { Language } from "@/types";
 import content from "../content.json";
 import contact from "../../__store__/pages/contact.json";
 import dashboard from "../../__store__/pages/dashboard.json";

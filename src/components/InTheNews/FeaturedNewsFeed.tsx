@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useAppContext } from "components/AppContext";
 import { Box, Collapse, Link, Typography } from "@mui/material";
-import Grid2 from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import DoubleArrowSharpIcon from "@mui/icons-material/DoubleArrowSharp";
 import { styled } from "@mui/material/styles";
-import { ArticleFields } from "types";
+import { ArticleFields } from "@/types";
 import NewsCard from "./NewsCard";
 import VideoCard from "./VideoCard";
 
@@ -71,25 +71,25 @@ const FeaturedNewsFeed = ({ newsArticleList }: FeaturedNewsFeedProps) => {
           <React.Fragment key={index}>
             {index === 0 && (
               <>
-                <Grid2 size={{ xs: 12, sm: 6, md: 8 }}>
+                <Grid size={{ xs: 12, sm: 6, md: 8 }}>
                   <NewsCard {...article} />
-                </Grid2>
-                <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                   <NewsCard {...firstFiveArticles[1]} />
-                </Grid2>
+                </Grid>
               </>
             )}
             {index === 1 && (
               <ContainerSpacing container spacing={2}>
-                <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
+                <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                   <NewsCard {...firstFiveArticles[2]} />
-                </Grid2>
-                <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                   <NewsCard {...firstFiveArticles[3]} />
-                </Grid2>
-                <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                   <NewsCard {...firstFiveArticles[4]} />
-                </Grid2>
+                </Grid>
               </ContainerSpacing>
             )}
           </React.Fragment>
@@ -107,7 +107,7 @@ const FeaturedNewsFeed = ({ newsArticleList }: FeaturedNewsFeedProps) => {
             const articleDescription =
               article?.articleDescriptionLong?.[currentLocale];
             return (
-              <Grid2 size={{ xs: 12, sm: 6, md: 4 }} key={index}>
+              <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
                 {isVideoLink(imageUrl) ? (
                   <VideoCard
                     src={imageUrl}
@@ -119,7 +119,7 @@ const FeaturedNewsFeed = ({ newsArticleList }: FeaturedNewsFeedProps) => {
                 ) : (
                   <NewsCard {...article} />
                 )}
-              </Grid2>
+              </Grid>
             );
           })}
         </ContainerSpacing>
@@ -139,7 +139,7 @@ const FeaturedNewsFeed = ({ newsArticleList }: FeaturedNewsFeedProps) => {
     </div>
   );
 };
-const ContainerSpacing = styled(Grid2)(({ theme }) => ({
+const ContainerSpacing = styled(Grid)(({ theme }) => ({
   marginBottom: theme.spacing(2),
   marginTop: theme.spacing(2)
 }));

@@ -4,20 +4,19 @@ import {
   Typography,
   Box,
   MenuItem,
-  TextField,
   FormControl,
   InputLabel,
   Select,
   FormHelperText,
   SelectChangeEvent
 } from "@mui/material";
-import { CommonDeviceType } from "types";
+import { CommonDeviceType } from "@/types";
 import {
   inspectData,
   isMODRawDeviceDataResponse,
   isRawDeviceAverageDataResponse,
   safeAccess
-} from "util/typeGuardFunctions";
+} from "@/util/typeGuardFunctions";
 import WithLoading from "../WithLoading";
 import { RawDeviceAverageDataResponse } from "lib/aqmd";
 import AirQualityParamBox from "./AirQualityParamBox";

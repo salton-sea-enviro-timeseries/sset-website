@@ -1,7 +1,7 @@
 import React from "react";
-import { SiteData } from "types";
+import { SiteData } from "@/types";
 import Paper from "@mui/material/Paper";
-import { Units } from "types";
+import { Units } from "@/types";
 import { styled } from "@mui/material/styles";
 import TableBody from "@mui/material/TableBody";
 import { TableSortLabel } from "@mui/material";

@@ -1,6 +1,6 @@
 import { groupBy } from "lodash";
-import { Data, SiteData } from "types";
-import { getAverage } from "utils";
+import { Data, SiteData } from "@/types";
+import { getAverage } from "@/utils";
 
 export const getMapData = (data: SiteData[]) => {
   const dataBySite = groupBy(data, (item) => item.site.trim().toLowerCase());

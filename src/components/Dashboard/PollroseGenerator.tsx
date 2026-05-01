@@ -10,11 +10,11 @@ import {
   Tooltip,
   Typography
 } from "@mui/material";
-import { CommonDeviceType, PollroseResponse, pollutantKey } from "types";
-import { getDateRangeFromSensor } from "util/getDateRangeFromSensor";
+import { CommonDeviceType, pollutantKey } from "@/types";
+import { getDateRangeFromSensor } from "@/util/getDateRangeFromSensor";
 import { useMemo, useState } from "react";
 import { InfoOutlined } from "@mui/icons-material";
-import { buildRows } from "util/roseBuildRows";
+import { buildRows } from "@/util/roseBuildRows";
 
 type PollroseGeneratorProps = {
   pollroseData: CommonDeviceType[];

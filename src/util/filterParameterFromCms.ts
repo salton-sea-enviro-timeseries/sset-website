@@ -1,4 +1,4 @@
-import { LocaleDefault, LocaleOption } from "types";
+import { LocaleDefault, LocaleOption } from "@/types";
 
 export function filterParameters<
   T extends { [key: string]: LocaleOption<any> | LocaleDefault<string> }

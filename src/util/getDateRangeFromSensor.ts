@@ -1,4 +1,4 @@
-import { CommonDeviceType } from "types";
+import { CommonDeviceType } from "@/types";
 
 export function getDateRangeFromSensor(data: CommonDeviceType[]): {
   bdate: string;

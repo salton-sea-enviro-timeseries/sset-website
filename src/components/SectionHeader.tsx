@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Image from "next/image";
 import { LaunchOutlined } from "@mui/icons-material";
-import Link from "next/link";
+import NextLink from "next/link";
 import { styled } from "@mui/material/styles";
 // type variantText = TypographyVariant;
 interface SectionHeaderProps {
@@ -83,14 +83,12 @@ function SectionHeader(props: SectionHeaderProps) {
     </StyledGraduationSection>
   );
   const renderAboutUsSection = () => (
-    <Link href="/about-us" passHref legacyBehavior>
-      <StyledAboutLink>
-        <Typography variant={size} gutterBottom={!!subtitle} {...titleProps}>
-          {title}
-        </Typography>
-        <LaunchOutlined />
-      </StyledAboutLink>
-    </Link>
+    <StyledAboutLink href="/about-us">
+      <Typography variant={size} gutterBottom={!!subtitle} {...titleProps}>
+        {title}
+      </Typography>
+      <LaunchOutlined />
+    </StyledAboutLink>
   );
   return (
     <StyledHeader id={sectionId} className={className} {...otherProps}>
@@ -135,7 +133,7 @@ const StyledGraduationSection = styled(Box)({
   alignItems: "center"
 });
 
-const StyledAboutLink = styled("a")(({ theme }) => ({
+const StyledAboutLink = styled(NextLink)(({ theme }) => ({
   color: "inherit",
   textDecoration: "none",
   display: "flex",

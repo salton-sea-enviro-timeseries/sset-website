@@ -1,4 +1,4 @@
-import { CommonDeviceType } from "types";
+import { CommonDeviceType } from "@/types";
 import _ from "lodash";
 //TODO check with group to see how they want to round values
 //TODO review AirQualitySection aqi is being calculated twice

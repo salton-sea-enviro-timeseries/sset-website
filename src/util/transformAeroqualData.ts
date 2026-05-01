@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { OriginalData, TransformedData } from "types";
+import { OriginalData, TransformedData } from "@/types";
 
 function ppmToPpb(ppm: number): number {
   return _.round(ppm * 1000, 2);

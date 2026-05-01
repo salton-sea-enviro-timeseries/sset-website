@@ -1,4 +1,4 @@
-import { Box, Grid2 } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import Skeleton from "@mui/material/Skeleton";
 import LoadingChart from "./LoadingChart";
 import Image from "next/image";
@@ -23,16 +23,12 @@ const AirQualityLoadingSkeleton = () => {
         </Box>
       </Box>
       {/* Chart and Pollrose Grids */}
-      <Grid2 container spacing={1} sx={{ mb: 4 }}>
-        <Grid2 size={{ xs: 12, md: 8 }}>
+      <Grid container spacing={1} sx={{ mb: 4 }}>
+        <Grid size={{ xs: 12, md: 8 }}>
           <LoadingChart />
-        </Grid2>
+        </Grid>
 
-        <Grid2
-          size={{ xs: 12, md: 4 }}
-          display={"flex"}
-          justifyContent="center"
-        >
+        <Grid size={{ xs: 12, md: 4 }} display={"flex"} justifyContent="center">
           <Box
             position="relative"
             width={350}
@@ -68,8 +64,8 @@ const AirQualityLoadingSkeleton = () => {
               }}
             />
           </Box>
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
     </>
   );
 };

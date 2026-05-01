@@ -4,7 +4,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActionArea, CardActionAreaProps } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { ArticleFields } from "types";
+import { ArticleFields } from "@/types";
 import { useAppContext } from "components/AppContext";
 // TODO: add articleProvider to the end of card and add custom links to end of card
 interface ExtendedCardActionAreaProps extends CardActionAreaProps {

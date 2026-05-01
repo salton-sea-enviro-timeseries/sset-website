@@ -2,8 +2,8 @@ import { differenceInDays } from "date-fns";
 import determineSourceOfData from "lib/determineSourceOfData";
 import { useState } from "react";
 import useSWR from "swr";
-import { AirQualityDevices, CommonDeviceType } from "types";
-import { fetchMultipleDeviceDetails } from "util/fetchMultipleDeviceDetails";
+import { AirQualityDevices, CommonDeviceType } from "@/types";
+import { fetchMultipleDeviceDetails } from "@/util/fetchMultipleDeviceDetails";
 
 type UseSensorDataProps = {
   filterOutPurpleAirSensor: AirQualityDevices[];
