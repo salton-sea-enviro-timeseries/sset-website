@@ -1,7 +1,9 @@
 // src/lib/data-pipeline/aq/aeroqual/normalize.ts
-import { AeroqualOriginalData } from "./types";
+import { AeroqualOriginalData, NormalizedAeroqualRow } from "./types";
 
-export function normalizeAeroqualData(originalData: AeroqualOriginalData) {
+export function normalizeAeroqualData(
+  originalData: AeroqualOriginalData
+): NormalizedAeroqualRow[] {
   const rows = [];
 
   for (const instrument of originalData.Instruments ?? []) {
