@@ -1,8 +1,5 @@
 // src/lib/data-pipeline/aq/aeroqual/fetch.ts
 import { getAeroqualAuthCookie } from "./auth";
-import { parseISO } from "date-fns";
-import { format, utcToZonedTime } from "date-fns-tz";
-import { getEndDate, getStartDate } from "@/utils";
 import { AeroqualOriginalData, FetchAeroqualDeviceDataParams } from "./types";
 
 const ENDPOINT_BASE_URL = "https://api.cloud.aeroqual.com/v2/instruments";
@@ -32,18 +29,13 @@ export async function fetchAeroqualDeviceData({
       }
     };
 
-    const timeZone = "America/Los_Angeles";
-    const today = utcToZonedTime(new Date(), timeZone);
-
     let from = startDate;
     let to = endDate;
 
     if (!from || !to) {
-      from = getStartDate(today, 8, "aeroqual");
-      to = getEndDate(today, "aeroqual");
-    } else {
-      from = format(parseISO(from), "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-      to = format(parseISO(to), "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+      const today = new Date().toISOString().split("T")[0];
+      from = today;
+      to = today;
     }
 
     const url = new URL(
@@ -52,6 +44,7 @@ export async function fetchAeroqualDeviceData({
 
     url.searchParams.append("from", from);
     url.searchParams.append("to", to);
+    url.searchParams.append("averagingPeriod", "60");
     url.searchParams.append("includeDiagnostics", "false");
     url.searchParams.append("rawValues", "false");
     url.searchParams.append("utc", "false");
