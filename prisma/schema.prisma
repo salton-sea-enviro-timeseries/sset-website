@@ -1,0 +1,42 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Device {
+  id        String   @id @default(cuid())
+  deviceId  String   @unique
+  name      String
+  createdAt DateTime @default(now())
+
+  measurements Measurement[]
+}
+
+model Measurement {
+  id        String   @id @default(cuid())
+  timestamp DateTime
+
+  h2s     Float?
+  no2     Float?
+  ws      Float?
+  wd      Float?
+  rain    Float?
+  airT    Float?
+  airRH   Float?
+  battery Float?
+
+  deviceId String
+  device   Device @relation(fields: [deviceId], references: [id])
+
+  @@unique([deviceId, timestamp])
+  @@index([timestamp])
+  @@index([deviceId, timestamp])
+}
