@@ -11,11 +11,7 @@
 import dotenv from "dotenv";
 dotenv.config({ path: ".env.local" });
 
-import {
-  fetchAeroqualDeviceData,
-  cleanAeroqualData,
-  normalizeAeroqualData
-} from "@/lib/data-pipeline/aq/aeroqual";
+import { runAeroqualPipeline } from "@/lib/data-pipeline/aq/aeroqual";
 
 const sensorId = "AQS1 04072024-2724";
 
@@ -41,6 +37,7 @@ const ranges = [
     endDate: "2024-08-01"
   }
   // Not for this sensor  ID
+  // id:AQS1 13122022-2194
   // {
   //   label: "older month test",
   //   startDate: "2023-11-01",
@@ -53,31 +50,13 @@ async function testRange(startDate: string, endDate: string, label: string) {
   console.log(`Testing: ${label}`);
   console.log(`Range: ${startDate} → ${endDate}`);
 
-  const rawData = await fetchAeroqualDeviceData({
+  const result = await runAeroqualPipeline({
     sensorId,
     startDate,
     endDate
   });
 
-  const cleanedData = cleanAeroqualData(rawData);
-  const normalizedData = normalizeAeroqualData(cleanedData);
-
-  const instrument = rawData.Instruments?.[0];
-  const rawRows = instrument?.Data ?? [];
-
-  const firstRow = rawRows[0];
-  const lastRow = rawRows[rawRows.length - 1];
-
-  console.log("Device:", instrument?.Serial ?? "No device returned");
-  console.log("Device name:", instrument?.Name ?? "No device name returned");
-  console.log("Raw timestamp rows:", rawRows.length);
-  console.log("Normalized rows:", normalizedData.length);
-  console.log("First timestamp:", firstRow?.Time ?? null);
-  console.log("Last timestamp:", lastRow?.Time ?? null);
-  console.log("Metrics:", Object.keys(firstRow?.Data ?? {}));
-
-  console.log("First 5 normalized rows:");
-  console.log(JSON.stringify(normalizedData.slice(0, 5), null, 2));
+  console.log("Pipeline result:", result);
 }
 
 async function run() {
