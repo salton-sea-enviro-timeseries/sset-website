@@ -214,3 +214,11 @@ export const getDefaultDateRange = () => {
     endDate
   };
 };
+
+export const getDateInTimeZone = (date: Date, timeZone: string) => {
+  return new Date(
+    date.toLocaleString("en-US", {
+      timeZone
+    })
+  );
+};
