@@ -17,9 +17,11 @@ export async function fetchAeroqualDeviceData({
   sensorId,
   startDate,
   endDate,
-  cookies
+  cookies,
+  credentials
 }: FetchAeroqualDeviceDataParams): Promise<AeroqualOriginalData> {
-  const authCookie = cookies ?? (await getAeroqualAuthCookie());
+  const authCookie = cookies ?? (await getAeroqualAuthCookie(credentials));
+
   try {
     const options: RequestInit = {
       method: "GET",

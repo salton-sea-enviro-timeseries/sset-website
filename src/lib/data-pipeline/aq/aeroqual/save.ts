@@ -81,6 +81,13 @@ export async function saveAeroqualMeasurements(
         airRH: row.airRH ?? null,
         battery: row.battery ?? null,
 
+        o3: row.o3 ?? null,
+        pm25: row.pm25 ?? null,
+        pm10: row.pm10 ?? null,
+        temp: row.temp ?? null,
+        rh: row.rh ?? null,
+        dp: row.dp ?? null,
+
         deviceId: dbDeviceId
       };
     })

@@ -2,7 +2,7 @@ import { maxBy, minBy, meanBy, isNumber } from "lodash";
 import chroma from "chroma-js";
 import { Data, SiteData } from "@/types";
 import { startOfHour, subHours, addHours, format } from "date-fns";
-import { utcToZonedTime } from "date-fns-tz";
+// import { utcToZonedTime } from "date-fns-tz";
 import { Device } from "lib/aqmd";
 
 export const getAverage = (prop: string, collection: any[]) => {
@@ -78,11 +78,17 @@ export const fetcher = async (
   startDate?: string,
   endDate?: string
 ) => {
-  const res = await fetch(
-    startDate && endDate
-      ? `${url}?startDate=${startDate}&endDate=${endDate}`
-      : url
-  );
+  const queryParams = new URLSearchParams();
+
+  if (startDate) queryParams.set("startDate", startDate);
+  if (endDate) queryParams.set("endDate", endDate);
+
+  const requestUrl = queryParams.toString()
+    ? `${url}?${queryParams.toString()}`
+    : url;
+
+  const res = await fetch(requestUrl);
+
   if (!res.ok) {
     const error = new Error("An error occurred while fetching the data.");
     // @ts-ignore
@@ -147,8 +153,11 @@ export const truncateQuestion = (
   return question.length > 80 ? question.slice(0, 80) + "..." : question;
 };
 const formatInTimeZone = (date: Date, timeZone: string, formatStr: string) => {
-  const zonedDate = utcToZonedTime(date, timeZone);
-  return format(zonedDate, formatStr);
+  const zonedDateString = date.toLocaleString("en-US", {
+    timeZone
+  });
+
+  return format(new Date(zonedDateString), formatStr);
 };
 
 const getAdjustedHour = (baseDate: Date, hoursDiff: number) => {
@@ -192,4 +201,16 @@ export const getEndDate = (baseDate: Date, deviceType: string): string => {
     "UTC",
     formatDeviceDate(deviceType, deviceType !== "quant")
   );
+};
+
+export const getDefaultDateRange = () => {
+  const endDate = new Date();
+  const startDate = new Date();
+
+  startDate.setDate(endDate.getDate() - 7);
+
+  return {
+    startDate,
+    endDate
+  };
 };

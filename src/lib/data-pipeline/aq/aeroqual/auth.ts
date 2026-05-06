@@ -1,8 +1,10 @@
 // src/lib/data-pipeline/aq/aeroqual/auth.ts
 
+import type { AeroqualCredentials } from "./types";
+
 const LOGIN_URL = "https://api.cloud.aeroqual.com/v2/login";
 
-let cachedCookie: string | null = null;
+const cachedCookies = new Map<string, string>();
 
 function formatCookieHeader(setCookie: string): string {
   return setCookie
@@ -11,7 +13,27 @@ function formatCookieHeader(setCookie: string): string {
     .join("; ");
 }
 
-export async function getAeroqualAuthCookie(): Promise<string> {
+function getDefaultCredentials(): AeroqualCredentials {
+  return {
+    username: process.env.AEROQUAL_USERNAME,
+    password: process.env.AEROQUAL_PASSWORD
+  };
+}
+
+function getCredentialCacheKey(credentials: AeroqualCredentials) {
+  return credentials.username ?? "unknown-user";
+}
+
+export async function getAeroqualAuthCookie(
+  credentials: AeroqualCredentials = getDefaultCredentials()
+): Promise<string> {
+  if (!credentials.username || !credentials.password) {
+    throw new Error("Missing Aeroqual username or password");
+  }
+
+  const cacheKey = getCredentialCacheKey(credentials);
+  const cachedCookie = cachedCookies.get(cacheKey);
+
   if (cachedCookie) return cachedCookie;
 
   const response = await fetch(LOGIN_URL, {
@@ -21,8 +43,8 @@ export async function getAeroqualAuthCookie(): Promise<string> {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      Username: process.env.AEROQUAL_USERNAME,
-      Password: process.env.AEROQUAL_PASSWORD,
+      Username: credentials.username,
+      Password: credentials.password,
       RememberMe: true
     })
   });
@@ -39,7 +61,9 @@ export async function getAeroqualAuthCookie(): Promise<string> {
     throw new Error("No cookie returned from Aeroqual login");
   }
 
-  cachedCookie = formatCookieHeader(setCookie);
+  const formattedCookie = formatCookieHeader(setCookie);
 
-  return cachedCookie;
+  cachedCookies.set(cacheKey, formattedCookie);
+
+  return formattedCookie;
 }

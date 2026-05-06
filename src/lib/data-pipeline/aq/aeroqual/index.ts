@@ -4,21 +4,29 @@ import { normalizeAeroqualData } from "./normalize";
 import { reshapeAeroqualRowsToWide } from "./reshape";
 import { saveAeroqualMeasurements } from "./save";
 
+type AeroqualCredentials = {
+  username?: string;
+  password?: string;
+};
+
 export async function runAeroqualPipeline({
   sensorId,
   startDate,
-  endDate
+  endDate,
+  credentials
 }: {
   sensorId: string;
   startDate: string;
   endDate: string;
+  credentials?: AeroqualCredentials;
 }) {
   console.log("Fetching Aeroqual data...");
 
   const rawData = await fetchAeroqualDeviceData({
     sensorId,
     startDate,
-    endDate
+    endDate,
+    credentials
   });
 
   console.log("Cleaning Aeroqual data...");

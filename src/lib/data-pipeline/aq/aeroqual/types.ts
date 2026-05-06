@@ -1,17 +1,17 @@
 // src/lib/data-pipeline/aq/aeroqual/types.ts
 
-export interface AeroqualCredentials {
+export type AeroqualCredentials = {
   username?: string;
   password?: string;
-}
+};
 
-export interface FetchAeroqualDeviceDataParams {
+export type FetchAeroqualDeviceDataParams = {
   sensorId: string;
   startDate?: string;
   endDate?: string;
   cookies?: string;
-}
-
+  credentials?: AeroqualCredentials;
+};
 export interface AeroqualOriginalData {
   From: string;
   To: string;
@@ -30,12 +30,12 @@ export interface NormalizedAeroqualRow {
   inlet: string | null;
 }
 
-export interface WideAeroqualMeasurementRow {
+export type WideAeroqualMeasurementRow = {
   device_id: string;
   device_name: string;
   timestamp_local: string;
-  location_id: string | null;
-  inlet: string | null;
+  location_id?: string | null;
+  inlet?: string | null;
 
   h2s?: number;
   no2?: number;
@@ -45,4 +45,12 @@ export interface WideAeroqualMeasurementRow {
   airT?: number;
   airRH?: number;
   battery?: number;
-}
+
+  o3?: number;
+  pm25?: number;
+  pm10?: number;
+  temp?: number;
+  rh?: number;
+  dp?: number;
+  no2Historic?: number;
+};

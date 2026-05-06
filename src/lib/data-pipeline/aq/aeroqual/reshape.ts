@@ -8,7 +8,13 @@ type WideMetricField =
   | "rain"
   | "airT"
   | "airRH"
-  | "battery";
+  | "battery"
+  | "o3"
+  | "pm25"
+  | "pm10"
+  | "temp"
+  | "rh"
+  | "dp";
 
 const METRIC_TO_FIELD: Record<string, WideMetricField> = {
   H2S: "h2s",
@@ -16,9 +22,17 @@ const METRIC_TO_FIELD: Record<string, WideMetricField> = {
   WS: "ws",
   WD: "wd",
   RAIN: "rain",
+
   "AIR T": "airT",
   "AIR RH": "airRH",
-  "Battery voltage": "battery"
+  "Battery voltage": "battery",
+
+  O3: "o3",
+  "PM2.5": "pm25",
+  PM10: "pm10",
+  TEMP: "temp",
+  RH: "rh",
+  DP: "dp"
 };
 
 export function reshapeAeroqualRowsToWide(
