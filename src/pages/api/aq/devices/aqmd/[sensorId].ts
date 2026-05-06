@@ -1,43 +1,84 @@
-import { getAeroqualDeviceData } from "lib/aeroqual";
-import CookieManager from "lib/CookieManager";
 import type { NextApiRequest, NextApiResponse } from "next";
-import transformAeroqualData from "@/util/transformAeroqualData";
-//Ryan has aqmd sensors on a different aeroqual account
-const credentials = {
-  username: process.env.AQMD_AEROQUAL_USERNAME,
-  password: process.env.AQMD_AEROQUAL_PASSWORD
-};
+import { getMeasurementsByExternalDeviceId } from "@/lib/queries/aq/measurements";
+import transformPrismaAeroqualData from "@/util/transformPrismaAeroqualData";
+import { getDefaultDateRange } from "@/utils";
+
+function parseDateParam(value: string | string[] | undefined) {
+  if (typeof value !== "string") return undefined;
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return undefined;
+  }
+
+  return date;
+}
+
+function parseTakeParam(value: string | string[] | undefined) {
+  if (typeof value !== "string") return 1000;
+
+  const parsed = Number(value);
+
+  if (Number.isNaN(parsed) || parsed <= 0) {
+    return 1000;
+  }
+
+  return parsed;
+}
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   const { method, query } = req;
-  if (method !== "GET")
-    return res.status(405).end(`Method ${method} Not Allowed`);
-  const sensorId = query.sensorId as string;
-  try {
-    const cookieManager = CookieManager.getInstance();
-    const cookies = await cookieManager.getCookie(credentials);
 
-    const data = await getAeroqualDeviceData({
-      sensorId: query.sensorId as string,
-      startDate: query.startDate as string,
-      endDate: query.endDate as string,
-      cookies
+  if (method !== "GET") {
+    return res.status(405).end(`Method ${method} Not Allowed`);
+  }
+
+  const { sensorId, startDate, endDate, take } = query;
+
+  if (typeof sensorId !== "string") {
+    return res.status(400).json({
+      message: "Invalid sensorId"
     });
-    const reformatData = transformAeroqualData(data);
+  }
+
+  try {
+    const parsedStartDate = parseDateParam(startDate);
+    const parsedEndDate = parseDateParam(endDate);
+
+    const defaultRange = getDefaultDateRange();
+
+    const measurements = await getMeasurementsByExternalDeviceId({
+      externalDeviceId: sensorId,
+      startDate: parsedStartDate ?? defaultRange.startDate,
+      endDate: parsedEndDate ?? defaultRange.endDate,
+      take: parseTakeParam(take)
+    });
+
+    const reformatData = transformPrismaAeroqualData({
+      sensorId,
+      measurements
+    });
+
     return res.status(200).json(reformatData);
   } catch (err) {
     if (err instanceof Error) {
-      console.error(`Error processing request for sensor: ${sensorId}`, err);
-      return res.status(500).json({ message: err.message });
-    } else {
       console.error(
-        `An unexpected error occurred for sensor: ${sensorId}`,
+        `Error processing AQMD request for sensor: ${sensorId}`,
         err
       );
-      return res.status(500).json({ message: "An unexpected error occurred" });
+      return res.status(500).json({ message: err.message });
     }
+
+    console.error(
+      `An unexpected error occurred for AQMD sensor: ${sensorId}`,
+      err
+    );
+    return res.status(500).json({
+      message: "An unexpected error occurred"
+    });
   }
 }
