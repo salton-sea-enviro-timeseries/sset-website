@@ -32,6 +32,12 @@ model Measurement {
   airT    Float?
   airRH   Float?
   battery Float?
+  o3      Float?
+  pm25    Float?
+  pm10    Float?
+  temp    Float?
+  rh      Float?
+  dp      Float?
 
   deviceId String
   device   Device @relation(fields: [deviceId], references: [id])
