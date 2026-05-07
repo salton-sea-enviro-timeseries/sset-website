@@ -1,6 +1,5 @@
 // src/lib/data-pipeline/aq/aeroqual/save.ts
 import { prisma } from "@/lib/prisma/client";
-import type { Device } from "@prisma/client";
 import { WideAeroqualMeasurementRow } from "./types";
 
 export async function saveAeroqualMeasurements(
@@ -38,7 +37,7 @@ export async function saveAeroqualMeasurements(
   /**
    * 2. Get database IDs for those devices
    */
-  const devices: Device[] = await prisma.device.findMany({
+  const devices = await prisma.device.findMany({
     where: {
       deviceId: {
         in: Array.from(uniqueDevices.keys())
@@ -47,9 +46,11 @@ export async function saveAeroqualMeasurements(
   });
 
   const deviceMap = new Map<string, string>(
-    devices.map((device) => [device.deviceId, device.id])
+    devices.map((device: { deviceId: string; id: string }) => [
+      device.deviceId,
+      device.id
+    ])
   );
-
   /**
    * 3. Convert wide pipeline rows into Prisma Measurement rows
    */
