@@ -54,9 +54,9 @@ async function main() {
 Missing required arguments.
 
 Usage:
-  npx tsx scripts/backfill-aeroqual.ts --account sset --sensor "AQS1 04072024-2724" --start 2026-04-01 --end 2026-05-01 --chunk-days 7
+  npx tsx scripts/backfill-aq.ts --account sset --sensor "AQS1 AQS1 13122022-2194" --start 2026-04-01 --end 2026-05-01 --chunk-days 7
 
-  npx tsx scripts/backfill-aeroqual.ts --account aqmd --sensor "AQY BD-1074" --start 2025-06-01 --end 2025-07-01 --chunk-days 7
+  npx tsx scripts/backfill-aq.ts --account aqmd --sensor "AQY BD-1074" --start 2025-06-01 --end 2025-07-01 --chunk-days 7
 `);
     process.exit(1);
   }

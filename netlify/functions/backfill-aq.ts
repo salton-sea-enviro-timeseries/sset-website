@@ -18,6 +18,10 @@ const SENSORS: SensorConfig[] = [
     sensorId: "AQS1 04072024-2724"
   },
   {
+    account: "sset",
+    sensorId: "AQS1 13122022-2194"
+  },
+  {
     account: "aqmd",
     sensorId: "AQY BD-1074"
   },
