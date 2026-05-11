@@ -27,3 +27,11 @@ export default async function handler(
     return res.status(500).json({ message: err.message });
   }
 }
+
+// import type { NextApiRequest, NextApiResponse } from "next";
+
+// export default function handler(req: NextApiRequest, res: NextApiResponse) {
+//   return res.status(503).json({
+//     message: "AQMD route is temporarily disabled."
+//   });
+// }

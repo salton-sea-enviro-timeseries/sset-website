@@ -1,12 +1,12 @@
 import {
   differenceInDays,
   endOfDay,
+  format,
   parse,
   startOfDay,
   subDays
 } from "date-fns";
-import { format, utcToZonedTime } from "date-fns-tz";
-import { getEndDate, getStartDate } from "@/utils";
+import { getDateInTimeZone, getEndDate, getStartDate } from "@/utils";
 //NOTE: To keep the endpoint fast, at most 31 days of data can be requested at a time.
 //TODO : create group to query all sensors
 const ENDPOINT_BASE_URL = "https://api.quant-aq.com";
@@ -37,8 +37,10 @@ export interface MODRawDeviceDataResponse {
   period_end: string;
 }
 //TODO move common types
-interface RawMODDeviceDataResponse
-  extends Omit<MODRawDeviceDataResponse, "CO" | "NO2" | "O3"> {
+interface RawMODDeviceDataResponse extends Omit<
+  MODRawDeviceDataResponse,
+  "CO" | "NO2" | "O3"
+> {
   co: number;
   no2: number;
   o3: number;
@@ -92,7 +94,7 @@ export async function getQuantDeviceData(
   endDate?: string
 ) {
   const timeZone = "America/Los_Angeles";
-  const today = utcToZonedTime(new Date(), timeZone);
+  const today = getDateInTimeZone(new Date(), timeZone);
   const yesterday = subDays(today, 1);
 
   if (!startDate || !endDate) {

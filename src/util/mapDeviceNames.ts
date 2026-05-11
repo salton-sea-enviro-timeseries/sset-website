@@ -18,3 +18,15 @@ export function mapDeviceNames(id: string) {
   };
   return DeviceNames[id];
 }
+
+// Instruments found
+// "AQY BD-1074",
+//   "AQY BD-1092",
+
+// TODO: Need to verify the sensors below
+//   "AQY-R AB 0266",
+//   "AQY-R AB 0267",
+//   "AQY-R AB 0268",
+//   "AQY-R AB 0269",
+//   "AQY-R AB 0270",
+//   "AQY-R AB 0271"

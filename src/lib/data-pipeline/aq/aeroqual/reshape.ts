@@ -1,0 +1,70 @@
+import { NormalizedAeroqualRow, WideAeroqualMeasurementRow } from "./types";
+
+type WideMetricField =
+  | "h2s"
+  | "no2"
+  | "ws"
+  | "wd"
+  | "rain"
+  | "airT"
+  | "airRH"
+  | "battery"
+  | "o3"
+  | "pm25"
+  | "pm10"
+  | "temp"
+  | "rh"
+  | "dp";
+
+const METRIC_TO_FIELD: Record<string, WideMetricField> = {
+  H2S: "h2s",
+  NO2: "no2",
+  WS: "ws",
+  WD: "wd",
+  RAIN: "rain",
+
+  "AIR T": "airT",
+  "AIR RH": "airRH",
+  "Battery voltage": "battery",
+
+  O3: "o3",
+  "PM2.5": "pm25",
+  PM10: "pm10",
+  TEMP: "temp",
+  RH: "rh",
+  DP: "dp"
+};
+
+export function reshapeAeroqualRowsToWide(
+  rows: NormalizedAeroqualRow[]
+): WideAeroqualMeasurementRow[] {
+  const grouped = new Map<string, WideAeroqualMeasurementRow>();
+
+  for (const row of rows) {
+    const key = [
+      row.device_id,
+      row.timestamp_local,
+      row.location_id ?? "",
+      row.inlet ?? ""
+    ].join("|");
+
+    if (!grouped.has(key)) {
+      grouped.set(key, {
+        device_id: row.device_id,
+        device_name: row.device_name,
+        timestamp_local: row.timestamp_local,
+        location_id: row.location_id,
+        inlet: row.inlet
+      });
+    }
+
+    const wideRow = grouped.get(key)!;
+    const field = METRIC_TO_FIELD[row.metric];
+
+    if (!field) continue;
+
+    wideRow[field] = row.value;
+  }
+
+  return Array.from(grouped.values());
+}

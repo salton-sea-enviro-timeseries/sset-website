@@ -35,10 +35,15 @@ function useSensorData({
   startDateRef,
   endDateRef
 }: UseSensorDataProps) {
-  const sensorUrls = filterOutPurpleAirSensor.map(({ sensorId }) => {
-    const sensorInfoArray = sensorId.split(":");
-    return determineSourceOfData(sensorInfoArray[0]);
-  });
+  // TODO : add back AQY sensors
+  const sensorUrls = filterOutPurpleAirSensor
+    .map(({ sensorId }) => {
+      const sensorInfoArray = sensorId.split(":");
+      const cleanSensorId = sensorInfoArray[0];
+
+      return determineSourceOfData(cleanSensorId);
+    })
+    .filter((url): url is string => Boolean(url));
   const [dateRange, setDateRange] = useState<DateRange>({
     startDate: null,
     endDate: null
