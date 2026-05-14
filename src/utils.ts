@@ -222,3 +222,11 @@ export const getDateInTimeZone = (date: Date, timeZone: string) => {
     })
   );
 };
+
+export const formatDate = (date: Date) => {
+  return date.toISOString().slice(0, 10);
+};
+
+export const formatDateInputValue = (date: Date) => {
+  return date.toISOString().split("T")[0];
+};

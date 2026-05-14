@@ -8,6 +8,15 @@ export default async function handler(
   const { method, query } = req;
   if (method !== "GET")
     return res.status(405).end(`Method ${method} Not Allowed`);
+
+  res.setHeader(
+    "Cache-Control",
+    "no-store, no-cache, must-revalidate, proxy-revalidate"
+  );
+  res.setHeader("CDN-Cache-Control", "no-store");
+  res.setHeader("Netlify-CDN-Cache-Control", "no-store");
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Expires", "0");
   try {
     const result: ApiResponse = await getQuantDeviceData(
       query.model as string,

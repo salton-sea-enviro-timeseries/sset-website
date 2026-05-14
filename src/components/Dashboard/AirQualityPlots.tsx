@@ -165,7 +165,11 @@ const canvasBackgroundColor: Plugin<"line"> = {
   }
 };
 // all chart options and selected param as y axis
-const chartOptions = (selectedParam: string): ChartOptions<"line"> => {
+const chartOptions = (
+  selectedParam: string,
+  startDate?: string | null,
+  endDate?: string | null
+): ChartOptions<"line"> => {
   return {
     responsive: true,
     maintainAspectRatio: false,
@@ -235,16 +239,17 @@ const chartOptions = (selectedParam: string): ChartOptions<"line"> => {
         }
       },
       x: {
-        type: "time" as any,
+        type: "time" as const,
+        min: startDate ? `${startDate}T00:00:00` : undefined,
+        max: endDate ? `${endDate}T23:59:59` : undefined,
         time: {
-          unit: "day"
+          unit: "day" as const
         },
-
         ticks: {
           minRotation: 0,
           maxRotation: 0
         },
-        beginAtZero: false,
+
         grid: {
           drawOnChartArea: false
         }
@@ -345,6 +350,22 @@ const AirQualityPlots = ({
   const chartData = {
     datasets
   };
+
+  const chartKey = useMemo(() => {
+    const dataSignature = datasets
+      .map((dataset) => {
+        const data = dataset.data as DataItem[];
+
+        const first = data[0]?.x ?? "";
+        const last = data[data.length - 1]?.x ?? "";
+
+        return `${dataset.label}-${data.length}-${first}-${last}`;
+      })
+      .join("|");
+
+    return `${selectedPollutant}-${dataSignature}`;
+  }, [datasets, selectedPollutant]);
+
   const shouldRenderChart = hasNonNullValueForParam(
     chartData,
     selectedPollutant
@@ -421,7 +442,7 @@ const AirQualityPlots = ({
       {shouldRenderChart ? (
         <Box minHeight={350} m="2 2 0 2" marginTop={-4} sx={{ paddingTop: 0 }}>
           <Line
-            key={selectedPollutant}
+            key={chartKey}
             plugins={plugin}
             options={chartOptions(selectedPollutant)}
             data={chartData}

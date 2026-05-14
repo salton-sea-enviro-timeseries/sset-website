@@ -37,6 +37,15 @@ export default async function handler(
     return res.status(405).end(`Method ${method} Not Allowed`);
   }
 
+  res.setHeader(
+    "Cache-Control",
+    "no-store, no-cache, must-revalidate, proxy-revalidate"
+  );
+  res.setHeader("CDN-Cache-Control", "no-store");
+  res.setHeader("Netlify-CDN-Cache-Control", "no-store");
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Expires", "0");
+
   const { sensorId, startDate, endDate, take } = query;
 
   if (typeof sensorId !== "string") {

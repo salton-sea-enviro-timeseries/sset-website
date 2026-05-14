@@ -2,6 +2,7 @@
 
 import type { Config } from "@netlify/functions";
 import { runAeroqualPipeline } from "../../src/lib/data-pipeline/aq/aeroqual";
+import { formatDate } from "@/utils";
 
 type AeroqualAccount = "sset" | "aqmd";
 
@@ -49,10 +50,6 @@ function addDays(date: Date, days: number) {
   const next = new Date(date);
   next.setDate(next.getDate() + days);
   return next;
-}
-
-function formatDate(date: Date) {
-  return date.toISOString().slice(0, 10);
 }
 
 export default async function handler() {
