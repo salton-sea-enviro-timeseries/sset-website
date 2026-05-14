@@ -351,17 +351,19 @@ const AirQualityPlots = ({
     datasets
   };
 
-  // Testing
-  console.log("chartData datasets", chartData.datasets);
+  console.log("AIR QUALITY PLOTS DEBUG", {
+    selectedPollutant,
+    datasets: chartData.datasets.map((dataset) => {
+      const data = dataset.data as DataItem[];
 
-  chartData.datasets.forEach((dataset) => {
-    console.log(dataset.label, {
-      first: dataset.data?.[0],
-      last: dataset.data?.[dataset.data.length - 1],
-      count: dataset.data?.length
-    });
+      return {
+        label: dataset.label,
+        count: data.length,
+        first: data[0]?.x,
+        last: data[data.length - 1]?.x
+      };
+    })
   });
-  // ========
 
   const chartKey = useMemo(() => {
     const dataSignature = datasets
