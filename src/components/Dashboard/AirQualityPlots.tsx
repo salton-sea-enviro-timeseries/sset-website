@@ -351,20 +351,6 @@ const AirQualityPlots = ({
     datasets
   };
 
-  console.log("AIR QUALITY PLOTS DEBUG", {
-    selectedPollutant,
-    datasets: chartData.datasets.map((dataset) => {
-      const data = dataset.data as DataItem[];
-
-      return {
-        label: dataset.label,
-        count: data.length,
-        first: data[0]?.x,
-        last: data[data.length - 1]?.x
-      };
-    })
-  });
-
   const chartKey = useMemo(() => {
     const dataSignature = datasets
       .map((dataset) => {

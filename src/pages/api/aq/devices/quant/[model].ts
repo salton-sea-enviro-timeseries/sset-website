@@ -18,12 +18,6 @@ export default async function handler(
   res.setHeader("Pragma", "no-cache");
   res.setHeader("Expires", "0");
   try {
-    console.log("QUANT API DEBUG", {
-      model: query.model,
-      startDate: query.startDate,
-      endDate: query.endDate
-    });
-
     const result: ApiResponse = await getQuantDeviceData(
       query.model as string,
       query.startDate as string,
