@@ -165,7 +165,11 @@ const canvasBackgroundColor: Plugin<"line"> = {
   }
 };
 // all chart options and selected param as y axis
-const chartOptions = (selectedParam: string): ChartOptions<"line"> => {
+const chartOptions = (
+  selectedParam: string,
+  startDate?: string | null,
+  endDate?: string | null
+): ChartOptions<"line"> => {
   return {
     responsive: true,
     maintainAspectRatio: false,
@@ -235,16 +239,17 @@ const chartOptions = (selectedParam: string): ChartOptions<"line"> => {
         }
       },
       x: {
-        type: "time" as any,
+        type: "time" as const,
+        min: startDate ? `${startDate}T00:00:00` : undefined,
+        max: endDate ? `${endDate}T23:59:59` : undefined,
         time: {
-          unit: "day"
+          unit: "day" as const
         },
-
         ticks: {
           minRotation: 0,
           maxRotation: 0
         },
-        beginAtZero: false,
+
         grid: {
           drawOnChartArea: false
         }
@@ -345,6 +350,18 @@ const AirQualityPlots = ({
   const chartData = {
     datasets
   };
+
+  // Testing
+  console.log("chartData datasets", chartData.datasets);
+
+  chartData.datasets.forEach((dataset) => {
+    console.log(dataset.label, {
+      first: dataset.data?.[0],
+      last: dataset.data?.[dataset.data.length - 1],
+      count: dataset.data?.length
+    });
+  });
+  // ========
 
   const chartKey = useMemo(() => {
     const dataSignature = datasets
