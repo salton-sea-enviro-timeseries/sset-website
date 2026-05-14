@@ -4,6 +4,7 @@ import { useState } from "react";
 import useSWR from "swr";
 import { AirQualityDevices, CommonDeviceType } from "@/types";
 import { fetchMultipleDeviceDetails } from "@/util/fetchMultipleDeviceDetails";
+import { formatDateInputValue, getDefaultDateRange } from "@/utils";
 
 type UseSensorDataProps = {
   filterOutPurpleAirSensor: AirQualityDevices[];
@@ -44,10 +45,16 @@ function useSensorData({
       return determineSourceOfData(cleanSensorId);
     })
     .filter((url): url is string => Boolean(url));
-  const [dateRange, setDateRange] = useState<DateRange>({
-    startDate: null,
-    endDate: null
+
+  const [dateRange, setDateRange] = useState<DateRange>(() => {
+    const defaultRange = getDefaultDateRange();
+
+    return {
+      startDate: formatDateInputValue(defaultRange.startDate),
+      endDate: formatDateInputValue(defaultRange.endDate)
+    };
   });
+
   const [formError, setFormError] = useState<FormErrorRange>({
     error: false,
     startDateErrorMsg: "",
