@@ -54,14 +54,19 @@ function useSensorData({
     endDateErrorMsg: ""
   });
 
-  const swrKey = sensorUrls.length > 0 ? [dateRange, sensorUrls] : null;
+  const swrKey =
+    sensorUrls.length > 0
+      ? ["sensor-data", dateRange.startDate, dateRange.endDate, ...sensorUrls]
+      : null;
+
   const {
     data: sensorData = [],
     error: fetchError,
     isValidating
   } = useSWR<DataType>(
     swrKey,
-    ([range, urls]) => fetchMultipleDeviceDetails(range, ...urls),
+    ([, startDate, endDate, ...urls]) =>
+      fetchMultipleDeviceDetails({ startDate, endDate }, ...urls),
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
